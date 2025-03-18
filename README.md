@@ -6,8 +6,9 @@ OpenViva is an open-source continuation of Project Viva, originally made by Sir 
 
 # Notice
 We want to get the ball rolling again. In order to do so, we made this new repositary to get ourselves organized and increase productivity. This should also help us avoid confusion.
-This repo was made after the V0.3.0 update and was made by a contributer.
-I, the creator of this repositary, take no credit for any of the work done here. 
+This repositary was made after the V0.3.0 update.
+I, the creator of this repo, take no credit for any of the work done here. 
+
 All the work prior to the creation of this was courtesy of SolidStonee (main dev), Fun Maker, Foxify52, Trylk2481, moon2324 and other contributers. 
 
 # Community
