@@ -1,0 +1,8 @@
+﻿      
+      [HideInInspector]_TerrainDesc("Terrain Desc", 2D) = "black" {}
+      [HideInInspector]_TerrainBounds("Terrain Bounds", Vector) = (0,0,512,512)
+      [PerRendererData]_TerrainBlendParams("Terrain Blend Distance", Vector) = (1, 0.4, 0, 0)
+      [PerRendererData]_TerrainBlendParams2("Terrain Blend Params2", Vector) = (40, 0, 0, 0)
+      _TerrainHeightmapTexture("Terrain Height Map", 2D) = "black" {}
+      _TerrainNormalmapTexture("Terrain Normal Map", 2D) = "bump" {}
+      _TerrainHeightmapScale("Terrain Height Map Scale", Vector) = (0,0,100,0)
