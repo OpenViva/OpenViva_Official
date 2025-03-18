@@ -36,6 +36,12 @@ We currently have translations for:
 - Unity 2022.1.21f1
 - 3rd Party assets (you will have to ask for them manually from SolidStonee or Foxify52 since we cannot share them publically)
 
+# New Repositary
+
+We want to get the ball rolling again. In order to do so, we made this new repositary to get ourselves organized and increase productivity. This should also help us avoid confusion.
+This repo was made after the V0.3.0 update and was made by 39sai¥ (Discord).
+All the work in the commits named "Initialization" was done by Foxify52 (Discord) and the OpenViva development team.
+
 ## Copyrights
 
 This repository is based on original Viva source code. Sir Hal shared
