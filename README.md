@@ -6,8 +6,9 @@ OpenViva is an open-source continuation of Project Viva, originally made by Sir 
 
 # Notice
 We want to get the ball rolling again. In order to do so, we made this new repositary to get ourselves organized and increase productivity. This should also help us avoid confusion.
-This repo was made after the V0.3.0 update and was made by 39sai¥ (Discord).
-All the work in the commits named "Initialization" was done by Foxify52 (Discord) and the OpenViva development team.
+This repo was made after the V0.3.0 update and was made by a contributer.
+I, the creator of this repositary, take no credit for any of the work done here. 
+All the work prior to the creation of this was courtesy of SolidStonee (main dev), Fun Maker, Foxify52, Trylk2481, moon2324 and other contributers. 
 
 # Community
 We are a group of users dedicated to continuing Viva project as a free and open-source game under the name "OpenViva". Our goal is to polish 0.8.03 and replace any and all third-party paid assets with either free or custom assets. All assets and scripts are available to anyone who wants to download them or fork the project on our GitHub. If you have any questions or want to help us, you can join our community on Discord.
