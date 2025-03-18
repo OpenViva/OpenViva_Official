@@ -1,0 +1,145 @@
+﻿
+
+      #if _TBOBJECTNORMALBLEND
+      sampler2D _NormalOriginal;
+      #endif
+
+      
+
+      float4 SampleInstancedTerrainDesc(float2 uv)
+      {
+         float2 origUV = uv;
+         // because unity uses power of 2 + 1 texture sizes, the last pixel is a wrap pixel, so we have to
+         // futz the UVs
+         uv = (uv * (_PerPixelNormal_TexelSize.zw - 1.0f) + 0.5f) * _PerPixelNormal_TexelSize.xy;
+
+         // unity also only uses 0 to 0.5 in the texture, wasting half the precision for no reason and making
+         // us have to multiply by 2, which is undocumented of course. 
+         float height = UnpackHeightmap(SAMPLE_TEXTURE2D(_TerrainHeightmapTexture, shared_linear_clamp_sampler, origUV)) * 2;
+         
+         height *= _TerrainHeightmapScale.y; 
+         float4 normSamp = SAMPLE_TEXTURE2D(_PerPixelNormal, shared_linear_clamp_sampler, uv);
+         float3 normal = normalize(normSamp.xyz * 2 - 1);
+
+         return float4(normal, height);
+      }
+      
+      float4 SampleTerrainDesc(inout ShaderData d, out float normBlend)
+      {
+         float2 worldUV = (d.worldSpacePosition.xz - _TerrainBounds.xy);
+         float2 uv = worldUV / max(float2(0.001, 0.001), _TerrainBounds.zw);
+         
+         float4 th = SampleInstancedTerrainDesc(uv);
+         
+         th.w += _TerrainBlendParams.z; // add terrain height and center..
+
+         float db = abs(th.w - d.worldSpacePosition.y);
+         normBlend = saturate(db / _SlopeBlendParams.w);
+         th.w = saturate(db / _TerrainBlendParams.x);
+         th.w = pow(th.w, _TerrainBlendParams.w);
+         #if !_SNOW
+         clip(0.999-th.w * _FeatureFilters.y < 1);
+         #endif
+         return th;
+
+      }
+
+      float3x3 ComputeTerrainTBN(float4 th, out float3 terrainTangent, out float3 terrainBitangent)
+      {
+         terrainTangent = (cross(th.xyz, float3(0,0,1)));
+         terrainBitangent = (cross(th.xyz, terrainTangent));
+         float3x3 tbn = float3x3(terrainTangent, terrainBitangent, th.xyz);
+         return tbn;
+      }
+
+      float3 GetWorldNormalBlend(ShaderData d, float4 th, float normBlend)
+      {
+         float3 worldNormalBlend = th.xyz;
+         #if _SNOW || _TRIPLANAR
+            worldNormalBlend = lerp(th.xyz, d.worldSpaceNormal, normBlend);
+         #endif
+         return worldNormalBlend;
+      }
+
+
+
+      MicroSplatLayer DoTerrainLayer(inout ShaderData d, float4 th, inout float3 worldNormalBlend, float3x3 tbn, out float rawalpha)
+      {
+         MicroSplatLayer terrainS = (MicroSplatLayer)0;
+         terrainS.Normal = half3(0, 1, 0);
+         Input input = DescToInput(d);
+
+         float2 worldUV = (d.worldSpacePosition.xz - _TerrainBounds.xy);
+         float2 uv = worldUV / max(float2(0.001, 0.001), _TerrainBounds.zw);
+         input.uv_Control0 = uv;
+
+         float alpha = 1;
+         float slope = 1;
+         rawalpha = 1;
+         if (_FeatureFilters.x < 1)
+         {
+            terrainS = SurfImpl(input, worldNormalBlend);
+            alpha = (1.0-th.w);
+
+            // slope
+            #if _TBOBJECTNORMALBLEND
+               float3 normalCustom = UnpackNormal (tex2D (_NormalOriginal, d.texcoord0.xy));
+               half3 slopeNormal = WorldNormalVector (input, normalCustom);
+            #else
+               half3 slopeNormal = d.worldSpaceNormal;
+            #endif
+            slopeNormal.xz += terrainS.Normal.xy * _SlopeBlendParams.z;
+            slopeNormal = normalize(slopeNormal);
+            slope = max(0, (dot(slopeNormal, half3(0, 1, 0)) - _SlopeBlendParams.x) * _SlopeBlendParams.y);
+            
+            half noiseHeight = 0.5;
+            
+            #if _TBNOISE
+               noiseHeight = Noise3D(d.worldSpacePosition * _TBNoiseScale);
+            #elif _TBNOISEFBM
+               noiseHeight = FBM3D(d.worldSpacePosition * _TBNoiseScale);
+            #endif
+            rawalpha = min(alpha, 1);
+            alpha = min(alpha + slope, 1);
+            alpha = lerp(alpha, HeightBlend(noiseHeight, terrainS.Height, alpha, _TerrainBlendParams.y), _TerrainBlendParams.y);
+            
+            #if !_TBDISABLE_ALPHACONTROL
+               alpha *= d.vertexColor.a;
+            #endif
+         }
+
+
+         #if _SNOW
+            if (_FeatureFilters.y < 1)
+            {
+               worldNormalBlend = lerp(worldNormalBlend, half3(0,1,0), _SnowBlendParams.x);
+               alpha = max(alpha, DoSnowSimple(input, terrainS, uv, mul(terrainS.Normal, tbn), worldNormalBlend, d.worldSpacePosition, 0, 0.4));
+            }
+         #endif
+
+         terrainS.Alpha = alpha;
+         return terrainS;
+      }
+
+
+      MicroSplatLayer BlendWithTerrain(inout ShaderData d)
+      {
+         float normBlend;
+         float4 th = SampleTerrainDesc(d, normBlend);
+         float3 tang; float3 bitang;
+         float3x3 tbn = ComputeTerrainTBN(th, tang, bitang);
+         float3 worldNormalBlend = GetWorldNormalBlend(d, th, normBlend);
+         float rawalpha = 1;
+         MicroSplatLayer l = DoTerrainLayer(d, th, worldNormalBlend, tbn, rawalpha);
+
+         rawalpha = pow(rawalpha, _TerrainBlendParams2.x);
+         rawalpha *= 1.0 - saturate(_TerrainBlendParams2.x / 80);
+         // blend matrix
+
+         d.TBNMatrix = lerp(d.TBNMatrix, tbn, rawalpha);
+         d.worldSpaceNormal = d.TBNMatrix[2];
+         d.worldSpaceTangent = d.TBNMatrix[0];
+         return l;
+      }
+
+
