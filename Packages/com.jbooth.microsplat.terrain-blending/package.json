@@ -1,0 +1,29 @@
+{
+  "name": "com.jbooth.microsplat.terrain-blending",
+  "displayName": "MicroSplat-Terrain Blending",
+  "version": "3.9.0",
+  "author": {
+    "name": "Jason Booth",
+    "email": "slipster216@gmail.com",
+    "url": "http://jdbtechservices.com/"
+  },
+  "unity": "2019.4",
+  "samples": [
+    {
+      "displayName": "Terrain Blending Example",
+      "description": "Example of the terrain blending module",
+      "path": "Samples~/TerrainBlending"
+    }
+  ],
+  "dependencies": {
+    "com.jbooth.microsplat.core": "3.9.0"
+  },
+  "description": "The Terrain Blending module for MicroSplat allows you to blend objects into the terrain.",
+  "keywords": [
+    "MicroSplat",
+    "Terrain",
+    "Shader"
+  ],
+  "documentationUrl": "https://docs.google.com/document/d/1mH3uCP8jNQpaHjbSYdxW4cDWZNHlKWdvNR7ASmiOwYU/edit?usp=sharing",
+  "type": "tool"
+}
