@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Objective Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: Objective
+  m_TableCollectionNameGuidString: 33f66a27af04e844a80ce7f9bd8b12ef
+  m_Entries:
+  - m_Id: 332423581696
+    m_Key: RELAX_ONSEN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 340199821312
+    m_Key: WASH_HAIR
+    m_Metadata:
+      m_Items: []
+  - m_Id: 344033415168
+    m_Key: POKE_ANGRY
+    m_Metadata:
+      m_Items: []
+  - m_Id: 347107840000
+    m_Key: MAKE_ANGRY_WITH_HEADPAT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 614394056704
+    m_Key: MAKE_HAPPY_WITH_HEADPAT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 682492776448
+    m_Key: KISS_ANGRY_WIPE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683360997376
+    m_Key: KISS_MAKE_HAPPY
+    m_Metadata:
+      m_Items: []
+  - m_Id: 684556374016
+    m_Key: THROW_DUCK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1330030399488
+    m_Key: HOLD_HANDS_AND_WALK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 795105644544
+    m_Key: LOOK_UP_SKIRT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 829859647488
+    m_Key: GIVE_2_DONUTS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 889733337088
+    m_Key: FIND_CHARACTER_A_WATER_REED
+    m_Metadata:
+      m_Items: []
+  - m_Id: 952584982528
+    m_Key: WATER_REED_SMACK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 954438864896
+    m_Key: FIND_HAT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 955793625088
+    m_Key: POUR_FLOUR_ON_HEAD
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1083925417984
+    m_Key: BAKE_A_PASTRY
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 7063549114744832005
+  references:
+    version: 2
+    RefIds:
+    - rid: 7063549114744832005
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables,
+        asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1674528928026
