@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9a6db46ea1f40743af6eb0ed0193136, type: 3}
+  m_Name: Sky
+  m_EditorClassIdentifier: 
+  defaultPeriod:
+    description: 
+    startTime: 0
+    daySegment: 0
+    horizonColor: {r: 0, g: 0, b: 0, a: 0}
+    zenithColor: {r: 0, g: 0, b: 0, a: 0}
+    groundColor: {r: 0, g: 0, b: 0, a: 0}
+    fogColor: {r: 0, g: 0, b: 0, a: 0}
+    fogDensity: 0
+  periodsOfDay:
+  - description: Night End
+    startTime: 5.5
+    daySegment: 2
+    horizonColor: {r: 0.011764706, g: 0.011764706, b: 0.02745098, a: 0}
+    zenithColor: {r: 0.011764706, g: 0.011764706, b: 0.043137256, a: 0}
+    groundColor: {r: 0.019607844, g: 0.015686275, b: 0.019607844, a: 0}
+    fogColor: {r: 0.95686275, g: 0.69803923, b: 0.49019608, a: 1}
+    fogDensity: 0.003
+  - description: Dawn
+    startTime: 6
+    daySegment: 0
+    horizonColor: {r: 0.4528302, g: 0.24195907, b: 0.087575644, a: 0}
+    zenithColor: {r: 0.8867924, g: 0.32084104, b: 0.11294055, a: 0}
+    groundColor: {r: 0.07008724, g: 0.07290534, b: 0.084905684, a: 0}
+    fogColor: {r: 0.95686275, g: 0.69803923, b: 0.49019608, a: 0}
+    fogDensity: 0.004
+  - description: Day
+    startTime: 9.1
+    daySegment: 1
+    horizonColor: {r: 0.376958, g: 0.394621, b: 0.4056604, a: 0}
+    zenithColor: {r: 1, g: 0.68453795, b: 0.5330188, a: 0}
+    groundColor: {r: 1, g: 0.9764706, b: 0.9764706, a: 0}
+    fogColor: {r: 0.95686275, g: 0.69803923, b: 0.49019608, a: 0}
+    fogDensity: 0.003
+  - description: Day End
+    startTime: 16.5
+    daySegment: 1
+    horizonColor: {r: 0.3529412, g: 0.47843137, b: 0.5568628, a: 1}
+    zenithColor: {r: 0.77254903, g: 0.49803922, b: 0.3764706, a: 0}
+    groundColor: {r: 1, g: 0.9764706, b: 0.9764706, a: 0}
+    fogColor: {r: 0.95686275, g: 0.69803923, b: 0.49019608, a: 0}
+    fogDensity: 0.003
+  - description: Evening
+    startTime: 18.6
+    daySegment: 1
+    horizonColor: {r: 0.6603774, g: 0.45372912, b: 0.3270737, a: 0}
+    zenithColor: {r: 0.6226415, g: 0.1967782, b: 0.38605088, a: 0}
+    groundColor: {r: 0.066037714, g: 0.040888004, b: 0.02953007, a: 0}
+    fogColor: {r: 0.957, g: 0.6982, b: 0.489, a: 0}
+    fogDensity: 0.003
+  - description: Night
+    startTime: 20.1
+    daySegment: 2
+    horizonColor: {r: 0.011709091, g: 0.012727273, b: 0.027999999, a: 0}
+    zenithColor: {r: 0.013523999, g: 0.013523999, b: 0.042, a: 0}
+    groundColor: {r: 0.019, g: 0.017642858, b: 0.019, a: 0}
+    fogColor: {r: 0.023153365, g: 0.023153365, b: 0.086500466, a: 0}
+    fogDensity: 0.002
+  initialTime: 12
+  editorTime: 12
+  timeSystem: 30.025131
+  dayNightCycleDuration: 120
+  currentSegment: 0
