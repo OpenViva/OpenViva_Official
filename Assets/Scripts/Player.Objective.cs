@@ -1,6 +1,4 @@
-﻿using Steamworks.Data;
-
-namespace Viva
+﻿namespace Viva
 {
 
 
@@ -27,6 +25,11 @@ namespace Viva
             //TODO: Implement these
             //LIGHT_CAMPFIRE,
             //DRAW_ON_FACE_WHILE_ASLEEP
+        }
+
+        public enum Achievement
+        {
+            Placeholder,
         }
         
         [VivaFileAttribute]
