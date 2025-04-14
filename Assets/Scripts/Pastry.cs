@@ -97,7 +97,7 @@ namespace Viva
                 {
                     FinishBaking();
                     oven.playBakedReadySound();
-                    GameDirector.player.CompleteAchievement(Player.ObjectiveType.BAKE_A_PASTRY, new Achievement("HOLD_HANDS_AND_WALK"));
+                    GameDirector.player.CompleteAchievement(Player.ObjectiveType.BAKE_A_PASTRY);
                     return;
                 }
                 else if (timeBaked >= timeToBakeFully + 12.0f)

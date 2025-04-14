@@ -31,7 +31,7 @@ namespace Viva
             }
             if (substanceType == SubstanceSpill.Substance.FLOUR)
             {
-                GameDirector.player.CompleteAchievement(Player.ObjectiveType.POUR_FLOUR_ON_HEAD, new Achievement("POUR_FLOUR_ON_HEAD"));
+                GameDirector.player.CompleteAchievement(Player.ObjectiveType.POUR_FLOUR_ON_HEAD);
             }
 
             Vector3 forceDir = self.floorPos - particlePosition;

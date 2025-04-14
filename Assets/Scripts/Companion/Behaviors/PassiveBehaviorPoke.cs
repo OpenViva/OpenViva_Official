@@ -326,7 +326,7 @@ namespace Viva
                     {
                         //set up block poke
                         self.ShiftHappiness(-2);
-                        GameDirector.player.CompleteAchievement(Player.ObjectiveType.POKE_ANGRY, new Achievement("POKE_ANGRY"));
+                        GameDirector.player.CompleteAchievement(Player.ObjectiveType.POKE_ANGRY);
 
                         if (self.active.RequestPermission(ActiveBehaviors.Permission.ALLOW_IMPULSE_ANIMATION))
                         {

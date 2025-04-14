@@ -301,12 +301,12 @@ namespace Viva
                 if (companion.rightHandState.heldItem.settings.itemType == Item.Type.DONUT &&
                     companion.leftHandState.heldItem.settings.itemType == Item.Type.DONUT)
                 {
-                    GameDirector.player.CompleteAchievement(Player.ObjectiveType.GIVE_2_DONUTS, new Achievement("GIVE_2_DONUTS"));
+                    GameDirector.player.CompleteAchievement(Player.ObjectiveType.GIVE_2_DONUTS);
                 }
             }
             if (item.settings.itemType == Item.Type.WATER_REED)
             {
-                GameDirector.player.CompleteAchievement(Player.ObjectiveType.FIND_CHARACTER_A_WATER_REED, new Achievement("FIND_CHARACTER_A_WATER_REED"));
+                GameDirector.player.CompleteAchievement(Player.ObjectiveType.FIND_CHARACTER_A_WATER_REED);
             }
         }
     }

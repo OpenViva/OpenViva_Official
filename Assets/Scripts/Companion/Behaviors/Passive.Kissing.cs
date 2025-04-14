@@ -168,11 +168,11 @@ namespace Viva
             {
                 case Companion.Animation.STAND_KISS_ANGRY_LEFT_TO_ANGRY:
                 case Companion.Animation.STAND_KISS_ANGRY_RIGHT_TO_ANGRY:
-                    GameDirector.player.CompleteAchievement(Player.ObjectiveType.KISS_ANGRY_WIPE, new Achievement("KISS_ANGRY_WIPE"));
+                    GameDirector.player.CompleteAchievement(Player.ObjectiveType.KISS_ANGRY_WIPE);
                     break;
                 case Companion.Animation.STAND_KISS_ANGRY_LEFT_TO_HAPPY:
                 case Companion.Animation.STAND_KISS_ANGRY_RIGHT_TO_HAPPY:
-                    GameDirector.player.CompleteAchievement(Player.ObjectiveType.KISS_MAKE_HAPPY, new Achievement("KISS_MAKE_HAPPY"));
+                    GameDirector.player.CompleteAchievement(Player.ObjectiveType.KISS_MAKE_HAPPY);
                     break;
             }
         }

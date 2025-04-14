@@ -30,7 +30,7 @@ namespace Viva
                     {
                         AttemptPlaySmackSound(self.leftHandState);
                     }
-                    GameDirector.player.CompleteAchievement(Player.ObjectiveType.WATER_REED_SMACK, new Achievement("WATER_REED_SMACK"));
+                    GameDirector.player.CompleteAchievement(Player.ObjectiveType.WATER_REED_SMACK);
                     if (Random.value > 0.5f && self.happiness == Companion.Happiness.VERY_ANGRY)
                     {
                         self.ShiftHappiness(1);

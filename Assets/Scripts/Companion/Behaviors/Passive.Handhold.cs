@@ -169,7 +169,7 @@ namespace Viva
                     if (slowHandholdTimer == 1.0f && matchWalkEase.value == 0.0f)
                     {
 
-                        GameDirector.player.CompleteAchievement(Player.ObjectiveType.HOLD_HANDS_AND_WALK, new Achievement("HOLD_HANDS_AND_WALK"));
+                        GameDirector.player.CompleteAchievement(Player.ObjectiveType.HOLD_HANDS_AND_WALK);
                         matchWalkEase.StartBlend(1.0f, 0.6f);
                         matchWalkSide = side;
                         currentOrthoDirDeg = InitCurrentMatchWalkOrthoDeg();

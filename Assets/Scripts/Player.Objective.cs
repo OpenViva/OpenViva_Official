@@ -27,14 +27,9 @@
             //DRAW_ON_FACE_WHILE_ASLEEP
         }
 
-        public enum Achievement
-        {
-            Placeholder,
-        }
-        
         [VivaFileAttribute]
         public bool[] objectives { get { return m_objectives; } protected set { m_objectives = value; } }
-        
+
         private bool[] m_objectives = new bool[System.Enum.GetValues(typeof(ObjectiveType)).Length];
 
         public string GetAchievementDescription(ObjectiveType type)
@@ -69,10 +64,10 @@
                     return "Pour Flour on your characters Head";
                 case ObjectiveType.BAKE_A_PASTRY:
                     return "Bake a pastry";
-                // case ObjectiveType.LIGHT_CAMPFIRE:
-                //     return "Light a campfire and roast marshmallows with a character";
-                // case ObjectiveType.DRAW_ON_FACE_WHILE_ASLEEP:
-                //     return "Draw something silly on a character's face while they sleep";
+                    // case ObjectiveType.LIGHT_CAMPFIRE:
+                    //     return "Light a campfire and roast marshmallows with a character";
+                    // case ObjectiveType.DRAW_ON_FACE_WHILE_ASLEEP:
+                    //     return "Draw something silly on a character's face while they sleep";
             }
             return "";
         }
@@ -81,19 +76,21 @@
         {
             return m_objectives[(int)type];
         }
-        public void CompleteAchievement(ObjectiveType objective, Achievement ach)
+
+        public void CompleteAchievement(ObjectiveType objective)
         {
+            Achievement ach = new Achievement("");
 
             if (IsAchievementComplete(objective))
             {
                 return;
             }
-            
+
             if (SteamSetup.main.initalized)
             {
                 ach.Trigger();
             }
-            
+
             m_objectives[(int)objective] = true;
             pauseMenu.DisplayHUDMessage(GetAchievementDescription(objective), true, PauseMenu.HintType.ACHIEVEMENT);
         }

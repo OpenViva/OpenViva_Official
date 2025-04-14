@@ -271,7 +271,7 @@ namespace Viva
 
                 var perpetuate = new AutonomyEmpty(self.autonomy, "perpetuate relax", delegate { return null; });
                 var relax = new AutonomyPlayAnimation(self.autonomy, "relax", Companion.Animation.SQUAT_TO_RELAX);
-                GameDirector.player.CompleteAchievement(Player.ObjectiveType.RELAX_ONSEN, new Achievement("RELAX_ONSEN"));
+                GameDirector.player.CompleteAchievement(Player.ObjectiveType.RELAX_ONSEN);
 
                 moveToRelax.onRegistered += delegate { relax.Reset(); };
 

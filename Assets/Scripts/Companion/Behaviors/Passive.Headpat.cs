@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine;
 using Viva.Util;
 
 
@@ -182,7 +183,7 @@ namespace Viva
             wantsMoreHeadpats = false;
             self.ShiftHappiness(-2);
             StopHeadpat(GetHeadpatEndRoughAnimation(), 1.0f);
-            GameDirector.player.CompleteAchievement(Player.ObjectiveType.MAKE_ANGRY_WITH_HEADPAT, new Achievement("MAKE_ANGRY_WITH_HEADPAT"));
+            GameDirector.player.CompleteAchievement(Player.ObjectiveType.MAKE_ANGRY_WITH_HEADPAT);
         }
 
         private void SucceedInProperHeadpat()
@@ -211,7 +212,7 @@ namespace Viva
                         self.SetTargetAnimation(successAnimation);
                     }
                     self.ShiftHappiness(4);
-                    GameDirector.player.CompleteAchievement(Player.ObjectiveType.MAKE_HAPPY_WITH_HEADPAT, new Achievement("MAKE_HAPPY_WITH_HEADPAT"));
+                    GameDirector.player.CompleteAchievement(Player.ObjectiveType.MAKE_HAPPY_WITH_HEADPAT);
                 }
                 refuseGoingHappy = !refuseGoingHappy;
             }

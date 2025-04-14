@@ -352,7 +352,7 @@ namespace Viva
             }
             self.headState.WearOnHead(item, self.headModel.hatLocalPosAndPitch, 1.0f);
 
-            GameDirector.player.CompleteAchievement(Player.ObjectiveType.FIND_HAT, new Achievement("FIND_HAT"));
+            GameDirector.player.CompleteAchievement(Player.ObjectiveType.FIND_HAT);
         }
 
         public void ThrowHandObject(CompanionHandState handState)
@@ -365,7 +365,7 @@ namespace Viva
             Item item = handState.heldItem;
             if (item.settings.itemType == Item.Type.DUCKY)
             {
-                GameDirector.player.CompleteAchievement(Player.ObjectiveType.THROW_DUCK, new Achievement("THROW_DUCK"));
+                GameDirector.player.CompleteAchievement(Player.ObjectiveType.THROW_DUCK);
             }
 
             handState.AttemptDrop();
