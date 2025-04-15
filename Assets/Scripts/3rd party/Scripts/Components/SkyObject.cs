@@ -122,9 +122,11 @@ namespace OccaSoftware.Altos.Runtime
                     material = new Material(s);
                 }
             }
-
+            
             return material;
+
         }
+
 
         public float CalculateSize()
         {
