@@ -79,7 +79,7 @@ namespace Viva
             {
                 if (XRGeneralSettings.Instance.Manager.isInitializationComplete)
                 {
-                    Debug.LogError("#VR Disabled " + XRGeneralSettings.Instance.Manager.isInitializationComplete);
+                    Debug.LogWarning("#VR Disabled " + XRGeneralSettings.Instance.Manager.isInitializationComplete);
                     XRGeneralSettings.Instance.Manager.StopSubsystems();
                     Camera.main.ResetAspect();
                     XRGeneralSettings.Instance.Manager.DeinitializeLoader();

@@ -256,10 +256,6 @@ namespace OccaSoftware.Altos.Runtime
                 Shader.SetGlobalFloat(ShaderParams._SunIntensity, GetLightIntensity());
                 Shader.SetGlobalFloat(ShaderParams._SunFalloff, falloff);
             }
-
-            GetMaterial().SetTexture(ShaderParams._MainTex, texture);
-
-            GetMaterial().SetColor(ShaderParams._Color, objectColor);
         }
 
         internal static class ShaderParams

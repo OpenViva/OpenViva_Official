@@ -131,14 +131,11 @@ namespace OccaSoftware.Altos.Runtime
 
             if (weathermapIntegrationSettings.onlyPrecipitateBelowCloudLayer)
             {
-                float intensityModifierByHeight = 1.0f - Tools.RemapTo01(transform.position.y, 
-                    AltosSkyDirector.Instance.cloudDefinition.GetCloudFloor(),
-                    AltosSkyDirector.Instance.cloudDefinition.GetCloudCenter());
-
+                float intensityModifierByHeight = 1.0f - Tools.RemapTo01(transform.position.y, 600f * 1000f, (600f + 4000f * 0.5f) * 1000f);
                 intensity *= intensityModifierByHeight;
             }
 
-            visualEffect.SetFloat(weathermapIntegrationSettings.intensityPropertyName, intensity);
+            visualEffect.SetFloat(weathermapIntegrationSettings.intensityPropertyName, 0);
         }
         
 
