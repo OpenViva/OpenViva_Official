@@ -135,7 +135,7 @@ namespace Viva
             }
             else
             {
-                GameSettings.main.ShiftWorldTime(Time.deltaTime * dayNightCycleSpeed);
+                GameSettings.main.ShiftWorldTime(Time.deltaTime * dayNightCycleSpeeds[1]);
             }
 #else
         GameSettings.main.ShiftWorldTime( Time.deltaTime*dayNightCycleSpeed );

@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 using UnityEngine;
 using UnityEngine.Profiling;
 using Viva;
+using System.Runtime.InteropServices;
 
 namespace OccaSoftware.Altos.Runtime
 {
@@ -68,14 +69,16 @@ namespace OccaSoftware.Altos.Runtime
 
         public static int sWorldPositionOffset = Shader.PropertyToID("altos_WorldPositionOffset");
         public static int sDaytimeFactor = Shader.PropertyToID("altos_DaytimeFactor");
-        
-        private PeriodOfDay _skyOverride = null;
 
-        public PeriodOfDay skyOverride => Instance._skyOverride;
+        public PeriodOfDay skyOverride = new PeriodOfDay("Default", 12f, DaySegment.DAY, GetDayColor(), GetDayColor(), GetDayColor(), GetDayColor(), 0f);
+        protected static Color GetDayColor()
+        {
+            return Color.Lerp(Color.white, Color.black, 0.1f);
+        }
 
         public void SetSkyOverride(PeriodOfDay overridePeriod)
         {
-            _skyOverride = overridePeriod;
+            skyOverride = overridePeriod;
         }
 
         public float GetCurrentPrecipitation()

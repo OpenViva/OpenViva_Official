@@ -1,7 +1,9 @@
+using OccaSoftware.Altos.Runtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -189,7 +191,10 @@ namespace Viva
         }
         public void ShiftWorldTime(float timeAmount)
         {
-            GameDirector.newSkyDirector.skyDefinition.timeSystem += timeAmount;
+            PeriodOfDay timeChange = AltosSkyDirector.Instance.skyOverride;
+            timeChange.startTime += timeAmount;
+            AltosSkyDirector.Instance.SetSkyOverride(timeChange);
+
         }
         public void SetWorldTime(float newTime)
         {
