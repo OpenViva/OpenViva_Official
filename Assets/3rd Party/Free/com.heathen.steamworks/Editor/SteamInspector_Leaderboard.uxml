@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="background-color: rgba(0, 170, 255, 0.15);">
+        <ui:VisualElement style="flex-direction: row;">
+            <ui:Label text="Label" name="lblName" style="width: 200px;" />
+            <ui:Label text="Label" name="lblId" style="width: 100px;" />
+            <ui:Label text="Label" name="lblScore" style="width: 150px;" />
+            <ui:Label text="Label" name="lblRank" style="width: 100px;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="height: 1px; background-color: rgba(0, 170, 255, 0.5);" />
+    </ui:VisualElement>
+</ui:UXML>

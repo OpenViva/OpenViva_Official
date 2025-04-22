@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="flex-direction: column; justify-content: flex-start; background-color: rgba(0, 170, 255, 0.15);">
+        <ui:VisualElement style="flex-direction: row;">
+            <ui:Label text="Label" name="lblAchName" style="width: 200px;" />
+            <ui:Label text="Label" name="lblAchId" style="width: 200px;" />
+            <ui:Label text="Label" name="lblStatus" style="width: 50px;" />
+            <ui:Button text="Unlock" name="btnUnlock" />
+            <ui:Button text="Reset" name="btnReset" style="display: none;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="background-color: rgba(0, 170, 255, 0.5); height: 1px;" />
+    </ui:VisualElement>
+</ui:UXML>

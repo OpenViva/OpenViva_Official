@@ -1,0 +1,27 @@
+{
+  "name": "com.heathen.steamworks",
+  "displayName": "Toolkit for Steamworks 2025",
+  "version": "4.0.4",
+  "unity": "6.0",
+  "author": {
+    "name": "Heathen Group",
+    "email": "support@heathen.group",
+    "url": "https://heathen.group"
+  },
+  "documentationUrl": "https://kb.heathenengineering.com/assets/steamworks",
+  "keywords": [],
+  "description": "A powerful toolkit consisting of ready-made systems, quality of life features, API extensions and editor extensions to make your integration with the Steamworks SDK easier, faster, and more robust. Make the most of Steam for your game!",
+  "license": "LICENSE.md",
+  "samples": 
+	[
+	{
+		"displayName": "Prefabs",
+		"description": "Unity uGUI Prefabs to help you prototype common use cases faster!.",
+		"path": "Samples~/Prefabs"
+	},
+	{
+		"displayName": "Example Scenes",
+		"description": "A scene demonstrating initial set-up, using UserData, Stats and Achievements, Leaderboards, Lobbies, Steam Input, Workshop Browser, Steam Inventory basics, Creating an Item Store using Steam Inventory, Using Steam's Remote Storage and configuring a Steam Game Server",
+		"path": "Samples~/Examples"
+	 }]
+}

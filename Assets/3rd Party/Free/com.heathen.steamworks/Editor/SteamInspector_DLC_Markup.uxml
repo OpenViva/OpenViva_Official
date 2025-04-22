@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="flex-direction: column; align-items: stretch; background-color: rgba(0, 170, 255, 0.15);">
+        <ui:VisualElement style="flex-direction: row;">
+            <ui:Label text="DLC Name" name="lblDlcName" style="align-items: auto; max-width: initial; max-height: initial; width: 200px;" />
+            <ui:Label text="Id: 0" name="lblAppId" style="max-width: initial; max-height: initial; width: 150px;" />
+            <ui:Label text="Subscribed: True" name="lblSubscribed" />
+        </ui:VisualElement>
+        <ui:VisualElement style="height: 1px; background-color: rgba(0, 170, 255, 0.5); align-items: stretch; width: auto;" />
+    </ui:VisualElement>
+</ui:UXML>
