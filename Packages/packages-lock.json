@@ -22,13 +22,6 @@
         "com.jbooth.microsplat.core": "3.9.0"
       }
     },
-    "com.rlabrecque.steamworks.net": {
-      "version": "https://github.com/rlabrecque/Steamworks.NET.git?path=/com.rlabrecque.steamworks.net",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "6b097c14dcf52cf139c79f8d882e5c87a4a6efb7"
-    },
     "com.unity.addressables": {
       "version": "1.22.3",
       "depth": 1,
@@ -248,6 +241,15 @@
       "dependencies": {
         "com.unity.test-framework": "1.1.31",
         "com.unity.modules.jsonserialize": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.textmeshpro": {
+      "version": "3.0.9",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
