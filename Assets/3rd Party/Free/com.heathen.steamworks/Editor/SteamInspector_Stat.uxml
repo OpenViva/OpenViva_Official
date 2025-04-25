@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="flex-direction: column; align-items: stretch;">
+        <ui:VisualElement style="flex-direction: row; background-color: rgba(0, 170, 255, 0.15);">
+            <ui:Label text="Int" name="lblDataType" style="width: 50px;" />
+            <ui:Label text="Name" name="lblStatName" style="width: 200px;" />
+            <ui:Label text="0" name="lblValue" style="width: 75px;" />
+            <ui:Button text="Set" name="btnSet" />
+            <ui:TextField picking-mode="Ignore" value="filter text" text="0" name="inputValue" style="width: 75px;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="background-color: rgba(0, 170, 255, 0.5); height: 1px;" />
+    </ui:VisualElement>
+</ui:UXML>

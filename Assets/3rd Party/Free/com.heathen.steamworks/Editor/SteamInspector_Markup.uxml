@@ -1,0 +1,113 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Toolkits/com.heathen.steamworks/Editor/SteamInspector_Style.uss?fileID=7433441132597879392&amp;guid=b4b522fffefce954e9e9d576476de7af&amp;type=3#SteamInspector_Style" />
+    <uie:Toolbar style="overflow: hidden; position: relative; width: 100%; flex-direction: row; min-height: 18px;">
+        <uie:ToolbarToggle label="Home" name="tglCmn" tooltip="Inspect the applicaiton as seen by Valve&apos;s Steamworks API" value="true" style="width: 100px; flex-shrink: 1; flex-grow: 0; max-width: none; justify-content: flex-start; flex-direction: row; left: -1px; margin-left: -1px;" />
+        <uie:ToolbarToggle label="Stats" name="tglStats" tooltip="Inspect the known stats for this app" value="false" style="width: 100px; flex-shrink: 1; flex-grow: 0; max-width: none; justify-content: flex-start; flex-direction: row; left: -1px; margin-left: -1px; display: flex;" />
+        <uie:ToolbarToggle label="Achievements" name="tglAch" tooltip="Inspect the known achievements for this app" value="false" style="width: 100px; flex-shrink: 1; flex-grow: 0; max-width: none; justify-content: flex-start; flex-direction: row; left: -1px; margin-left: -1px; display: flex;" />
+        <uie:ToolbarToggle label="Leaderboard" name="tglLeaderboard" tooltip="Inspect the known leaderboards for this app" value="false" style="width: 100px; flex-shrink: 1; flex-grow: 0; max-width: none; justify-content: flex-start; flex-direction: row; left: -1px; margin-left: -1px; display: flex;" />
+        <uie:ToolbarToggle label="DLC" name="tglDlc" tooltip="Inspect the known DLC for this app" value="false" style="width: 100px; flex-shrink: 1; flex-grow: 0; max-width: none; justify-content: flex-start; flex-direction: row; left: -1px; margin-left: -1px; display: flex;" />
+        <uie:ToolbarToggle label="Inventory" name="tglInventory" tooltip="Inspect the known inventory items for this app" value="false" style="width: 100px; flex-shrink: 1; flex-grow: 0; max-width: none; justify-content: flex-start; flex-direction: row; left: -1px; margin-left: -1px; display: flex;" />
+        <uie:ToolbarToggle label="Lobbies" name="tglLby" tooltip="Inspect the connected lobbies" value="false" style="width: 100px; flex-shrink: 1; flex-grow: 0; max-width: none; justify-content: flex-start; flex-direction: row; left: -1px; margin-left: -1px; display: flex;" />
+    </uie:Toolbar>
+    <ui:ScrollView name="pgCommon" show-vertical-scroller="false" show-horizontal-scroller="false" mode="VerticalAndHorizontal" style="flex-grow: 1; bottom: 0; display: flex; visibility: visible;">
+        <ui:VisualElement style="flex-direction: row; justify-content: space-between;">
+            <ui:VisualElement style="flex-direction: row;">
+                <ui:VisualElement style="flex-direction: column;">
+                    <ui:Label text="Initalization Status:" />
+                    <ui:Label text="Reported App Id:" />
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-direction: column; margin-left: 15px;">
+                    <ui:Label text="pending" name="lblInit" style="margin-left: 0;" />
+                    <ui:Label text="unknown" name="lblRptAppId" style="margin-left: 0;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="VisualElement" style="flex-direction: row; justify-content: flex-start;">
+                <ui:VisualElement name="imgAvatar" style="width: 64px; height: 64px;" />
+                <ui:VisualElement style="align-items: flex-end;">
+                    <ui:Label text="CSteamID:" />
+                    <ui:Label text="Name:" />
+                    <ui:Label text="Level:" />
+                    <ui:Label text="Rich Presence:" />
+                </ui:VisualElement>
+                <ui:VisualElement style="-unity-slice-left: 0; margin-left: 15px; min-width: 100px;">
+                    <ui:Label text="0" name="lblCsteamId" />
+                    <ui:Label text="unknown" name="lblUserName" />
+                    <ui:Label text="1" name="lblUserLevel" />
+                    <ui:Label text="NOT SET" name="lblUserPresence" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:ScrollView>
+    <ui:VisualElement name="pgLobby" style="display: none; flex-grow: 1;">
+        <ui:IMGUIContainer name="lobbyContainer" />
+    </ui:VisualElement>
+    <ui:VisualElement name="pgDlc" style="display: none;">
+        <ui:VisualElement style="flex-direction: column;">
+            <ui:VisualElement style="flex-direction: row;">
+                <ui:Label text="Name" style="width: 200px;" />
+                <ui:Label text="App Id" style="width: 150px;" />
+                <ui:Label text="Subscribed" />
+            </ui:VisualElement>
+            <ui:VisualElement style="height: 1px; background-color: rgb(32, 32, 32);" />
+        </ui:VisualElement>
+        <ui:ScrollView style="display: flex;">
+            <ui:VisualElement name="dlcContent" usage-hints="GroupTransform" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+    <ui:VisualElement name="pgStats" style="display: none;">
+        <ui:VisualElement style="flex-direction: column;">
+            <ui:Button text="Reset All" name="btResetAll" style="width: 75px;" />
+            <ui:VisualElement style="flex-direction: row;">
+                <ui:Label text="Type" style="width: 50px;" />
+                <ui:Label text="Name" style="width: 200px;" />
+                <ui:Label text="Score" />
+            </ui:VisualElement>
+            <ui:VisualElement style="height: 1px; background-color: rgb(32, 32, 32);" />
+        </ui:VisualElement>
+        <ui:ScrollView style="display: flex;">
+            <ui:VisualElement name="statContent" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+    <ui:VisualElement name="pgAchievements" style="display: none;">
+        <ui:VisualElement style="flex-direction: column;">
+            <ui:VisualElement style="flex-direction: row;">
+                <ui:Label text="Name" style="width: 200px;" />
+                <ui:Label text="Id" style="width: 200px;" />
+                <ui:Label text="Unlocked" />
+            </ui:VisualElement>
+            <ui:VisualElement style="height: 1px; background-color: rgb(32, 32, 32);" />
+        </ui:VisualElement>
+        <ui:ScrollView style="display: flex;">
+            <ui:VisualElement name="achContent" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+    <ui:VisualElement name="pgLeaderboard" style="display: none;">
+        <ui:VisualElement style="flex-direction: column;">
+            <ui:Button text="Refresh" name="btBoardRefresh" style="width: 75px;" />
+            <ui:VisualElement style="flex-direction: row;">
+                <ui:Label text="Name" style="width: 200px;" />
+                <ui:Label text="Id" style="width: 100px;" />
+                <ui:Label text="Score" style="width: 150px;" />
+                <ui:Label text="Rank" style="width: 200px;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="height: 1px; background-color: rgb(32, 32, 32);" />
+        </ui:VisualElement>
+        <ui:ScrollView style="display: flex;">
+            <ui:VisualElement name="ldrBoardContent" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+    <ui:VisualElement name="pgInventory" style="display: none;">
+        <ui:ScrollView style="display: flex;">
+            <ui:VisualElement style="flex-direction: column;">
+                <ui:VisualElement style="flex-direction: row;">
+                    <ui:Label text="Name" style="width: 200px;" />
+                    <ui:Label text="Id" style="width: 65px;" />
+                    <ui:Label text="Type" style="width: 50px;" />
+                    <ui:Label text="Owned" style="width: 150px;" />
+                </ui:VisualElement>
+                <ui:VisualElement style="height: 1px; background-color: rgb(32, 32, 32);" />
+            </ui:VisualElement>
+            <ui:VisualElement name="InvItemContent" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,32 @@
+{
+    "name": "Heathen.Steamworks.Examples",
+    "rootNamespace": "",
+    "references": [
+        "com.rlabrecque.steamworks.net",
+        "Heathen.Steamworks",
+        "Unity.TextMeshPro",
+        "Unity.Mathematics",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "LinuxStandalone64",
+        "macOSStandalone",
+        "WindowsStandalone32",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.rlabrecque.steamworks.net",
+            "expression": "",
+            "define": "STEAMWORKSNET"
+        }
+    ],
+    "noEngineReferences": false
+}

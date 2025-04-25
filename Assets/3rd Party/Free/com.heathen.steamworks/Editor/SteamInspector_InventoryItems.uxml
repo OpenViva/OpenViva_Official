@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement style="flex-direction: column; background-color: rgba(0, 170, 255, 0.15);">
+        <ui:VisualElement style="flex-direction: row;">
+            <ui:Label text="Label" name="LblInvItemName" style="width: 200px;" />
+            <ui:Label text="1000000" name="LblInvItemId" style="width: 65px;" />
+            <ui:Label text="Label" name="LblInvItemType" style="width: 50px;" />
+            <ui:Label text="Label" name="LblInvItemCount" style="width: 50px;" />
+            <ui:Button text="Grant" name="btnGrant" />
+            <ui:Button text="Clear" name="btnClear" style="display: none;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="height: 1px; background-color: rgba(0, 170, 255, 0.5);" />
+    </ui:VisualElement>
+</ui:UXML>
