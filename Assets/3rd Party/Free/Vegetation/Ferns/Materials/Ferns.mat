@@ -21,14 +21,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Ferns
-  m_Shader: {fileID: -6465566751694194690, guid: 6e2661f16c830432e8c6d4024ace4dd8,
-    type: 3}
+  m_Shader: {fileID: 10509, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_ValidKeywords: []
+  m_InvalidKeywords:
   - _ALPHA_CUT
   - _BRUSHLIGHTING
-  m_InvalidKeywords:
   - _FOLIAGERENDERER
   - _TERRAINBLENDALBEDO_NONE
   m_LightmapFlags: 4
@@ -409,6 +408,7 @@ Material:
     - Vector1_4babde9763a447578f6ad83667af1001: 1
     - Vector1_ad440c58dab6433491532f1da2144f82: 0.635
     - Vector1_d3a1a2e335c3421e9bc59ab504957b06: 0.2
+    - _AO: 2.4
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1
@@ -422,6 +422,7 @@ Material:
     - _Anisotropy: 0
     - _Asperity: 0
     - _BackfaceSmoothnessScale: 1
+    - _BaseLight: 0.35
     - _BaseMapEncoding: 0
     - _BillboardMode: 0
     - _BillboardShadowMode: 0
@@ -539,6 +540,7 @@ Material:
     - _SpecularAAScreenSpaceVariance: 0.1
     - _SpecularAAThreshold: 0.2
     - _SpecularHighlights: 1
+    - _SquashAmount: 1
     - _SrcBlend: 1
     - _StencilRef: 2
     - _StencilRefMV: 128
@@ -638,6 +640,8 @@ Material:
     - _ThicknessRemap: {r: 0.6142028, g: 0.8207547, b: 0.25938943, a: 0}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}
     - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TreeInstanceColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TreeInstanceScale: {r: 1, g: 1, b: 1, a: 1}
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
