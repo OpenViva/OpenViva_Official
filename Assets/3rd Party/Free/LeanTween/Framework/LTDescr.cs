@@ -66,8 +66,8 @@ public class LTDescr
 	internal Vector3 diff;
 	internal Vector3 diffDiv2;
 	public TweenAction type;
-    private LeanTweenType easeType;
-    public LeanTweenType loopType;
+	private LeanTweenType easeType;
+	public LeanTweenType loopType;
 
 	public bool hasUpdateCallback;
 
@@ -95,7 +95,7 @@ public class LTDescr
         }
     }
 
-	public LTDescrOptional _optional = new LTDescrOptional();
+	public LTDescrOptional _optional = new();
 
 	public override string ToString(){
 		return (trans!=null ? "name:"+trans.gameObject.name : "gameObject:null")+" toggle:"+toggle+" passed:"+passed+" time:"+time+" delay:"+delay+" direction:"+direction+" from:"+from+" to:"+to+" diff:"+diff+" type:"+type+" ease:"+easeType+" useEstimatedTime:"+useEstimatedTime+" id:"+id+" hasInitiliazed:"+hasInitiliazed;
@@ -147,7 +147,7 @@ public class LTDescr
 		this.trans = null;
 		this.spriteRen = null;
 		this.passed = this.delay = this.lastVal = 0.0f;
-		this.hasUpdateCallback = this.useEstimatedTime = this.useFrames = this.hasInitiliazed = this.onCompleteOnRepeat = this.destroyOnComplete = this.onCompleteOnStart = this.useManualTime = this.hasExtraOnCompletes = this.toggle = false;
+		this.hasUpdateCallback = this.useEstimatedTime = this.useFrames = this.hasInitiliazed = this.onCompleteOnRepeat = this.destroyOnComplete = this.onCompleteOnStart = this.useManualTime = this.hasExtraOnCompletes = false;
 		this.easeType = LeanTweenType.linear;
 		this.loopType = LeanTweenType.once;
 		this.loopCount = 0;
@@ -467,7 +467,7 @@ public class LTDescr
 			Vector3[] vertices = mesh.vertices;
 			Color32[] colors = new Color32[vertices.Length];
 			if (colors.Length == 0){ //MaxFW fix: add vertex colors if the mesh doesn't have any             
-				Color32 transparentWhiteColor32 = new Color32(0xff, 0xff, 0xff, 0x00);
+				Color32 transparentWhiteColor32 = new(0xff, 0xff, 0xff, 0x00);
 				colors = new Color32[mesh.vertices.Length];
 				for (int k=0; k<colors.Length; k++)
 					colors[k] = transparentWhiteColor32;
