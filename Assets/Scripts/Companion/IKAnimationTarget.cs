@@ -1,0 +1,18 @@
+using UnityEngine;
+
+namespace Viva
+{
+
+    [System.Serializable]
+    [CreateAssetMenu(fileName = "IKAnimationTarget", menuName = "Logic/IK Animation Target", order = 1)]
+    public class IKAnimationTarget : ScriptableObject
+    {
+
+        [SerializeField]
+        public Vector3 target;
+        [SerializeField]
+        public Vector3 pole;
+        [SerializeField]
+        public Vector3 eulerRotation;
+    }
+}
