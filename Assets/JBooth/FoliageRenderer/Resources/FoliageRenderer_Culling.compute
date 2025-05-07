@@ -1,0 +1,644 @@
+//////////////////////////////////////////////////////
+// Foliage Renderer
+// Copyright (c) Jason Booth
+//////////////////////////////////////////////////////
+
+
+// takes a float4x4 of matrixes, outputs a uint array of indexes and lod data packed (24 bit index, 8 bit lod data)
+
+#pragma kernel CullKernel
+
+#pragma multi_compile _ _USELOD1 _USELOD2 _USELOD3
+#pragma multi_compile _ _USEHIZ
+#pragma multi_compile _ _USELODCROSSFADE
+#pragma multi_compile _ _NOSHADOWCULL
+#pragma multi_compile _ _SKIP_SHADOWS
+#pragma multi_compile _ _MAXSHADOWLOD1 _MAXSHADOWLOD2 _MAXSHADOWLOD3
+
+
+StructuredBuffer<float4x4> _InputBuffer;
+
+float3 _CameraWorldPosition;
+float _CameraFOV;
+float3 _CameraDirection;
+uint _PositionCount;
+float _CullDistance;
+
+float4x4 _ViewProjection;
+float3 _BoundsCenter;
+float3 _BoundsExtents;
+float _WorldMinY;
+float _LodBias;
+float4 _LODScreenHeights;
+float4 _LODTransitionWidth;
+float2 _Shrink;
+float3 _BoundsExpand;
+float3 _PlaneOrigin;
+
+float4 _CameraFrustumPlane0;
+float4 _CameraFrustumPlane1;
+float4 _CameraFrustumPlane2;
+float4 _CameraFrustumPlane3;
+float4 _CameraFrustumPlane4;
+float4 _CameraFrustumPlane5;
+
+AppendStructuredBuffer<uint> _OutputBufferLOD0; // 24 bit index into matrix array, 8 bit lod
+AppendStructuredBuffer<uint> _OutputBufferLOD1;
+AppendStructuredBuffer<uint> _OutputBufferLOD2;
+AppendStructuredBuffer<uint> _OutputBufferLOD3;
+#if !_SKIP_SHADOWS
+    AppendStructuredBuffer<uint> _ShadowBufferLOD0;
+    AppendStructuredBuffer<uint> _ShadowBufferLOD1;
+    AppendStructuredBuffer<uint> _ShadowBufferLOD2;
+    AppendStructuredBuffer<uint> _ShadowBufferLOD3;
+#endif
+
+float _ShadowDistance;
+float3 _LightDir;
+float4 _HiZTextureSize;
+
+#if !_HDRP
+    Texture2D<float4> _HiZTexture;
+#endif
+SamplerState sampler_linear_clamp;
+
+struct Ray
+{
+    float3 origin;
+    float3 direction;
+};
+
+Ray CreateRay(float3 origin, float3 direction)
+{
+    Ray newRay;
+    newRay.origin = origin;
+    newRay.direction = direction;
+    return newRay;
+}
+
+struct Bounds
+{
+    float3 center;
+    float3 extents;
+
+    float3 GetMin()
+    {
+        return center - extents;
+    }
+
+    float3 GetMax()
+    {
+        return center + extents;
+    }
+
+    void SetMinMax(float3 min, float3 max)
+    {
+        extents = (max - min) * 0.5f;
+        center = min + extents;
+    }
+
+    void Encapsulate(float3 targetPoint)
+    {
+        SetMinMax(min(GetMin(), targetPoint), max(GetMax(), targetPoint));
+    }
+};
+
+struct Plane
+{
+    float3 normal;
+    float3 pnt;
+};
+
+bool IntersectPlane(Ray ray, float3 pnt, out float3 hitPoint)
+{
+    float3 toPlane = pnt - ray.origin;
+    float denominator = dot(ray.direction, float3(0, 1, 0));
+    hitPoint = 0;
+    float returnVal = false;
+    // Avoid division by zero and check for an intersection.
+    if (abs(denominator) > 0.00001f)
+    {
+        float t = dot(toPlane, float3(0, 1, 0)) / denominator;
+        // Only proceed if t is positive; we don't want intersections behind the ray origin.
+        if (t > 0.0f)
+        {
+            hitPoint = ray.origin + ray.direction * t;
+            returnVal = true;
+        }
+    }
+    return returnVal;
+}
+
+
+Bounds GetShadowBounds(Bounds bounds, float3 _LightDirection, out bool hitPlane)
+{
+    Bounds extrudedBounds = bounds;
+    float3 mn = bounds.GetMin();
+    float3 mx = bounds.GetMax();
+    // Consider all 8 points of the bounds.
+    float3 points[8];
+    points[0] = float3(mn.x, mn.y, mn.z);
+    points[1] = float3(mx.x, mn.y, mn.z);
+    points[2] = float3(mn.x, mx.y, mn.z);
+    points[3] = float3(mx.x, mx.y, mn.z);
+    points[4] = float3(mn.x, mn.y, mx.z);
+    points[5] = float3(mx.x, mn.y, mx.z);
+    points[6] = float3(mn.x, mx.y, mx.z);
+    points[7] = float3(mx.x, mx.y, mx.z);
+
+    float3 planeOrigin = _PlaneOrigin;
+    // Extrude each point along the light direction and check for intersection with the ground plane.
+    for (int i = 0; i < 8; ++i)
+    {
+        Ray ray = CreateRay(points[i], _LightDirection);
+        float3 hitPoint;
+        if (IntersectPlane(ray, planeOrigin, hitPoint))
+        {
+            extrudedBounds.Encapsulate(hitPoint);
+        }
+    }
+
+    hitPlane = true;
+    return extrudedBounds;
+}
+
+bool DoesPlaneIntersect(Bounds bounds, float4 plane)
+{
+    float3 planeNormal = plane.xyz;
+    float planeDistance = plane.w;
+
+    float3 absNormal = abs(planeNormal);
+    float3 rabs = bounds.extents * absNormal;
+    float3 pc = planeNormal * bounds.center;
+    float r = rabs.x + rabs.y + rabs.z;
+
+    float s = pc.x + pc.y + pc.z;
+    return !(s + r < -planeDistance);
+}
+
+bool BoundsIntersectsFrustum(Bounds bounds)
+{
+    return !((DoesPlaneIntersect(bounds, _CameraFrustumPlane0) == false) ||
+       (DoesPlaneIntersect(bounds, _CameraFrustumPlane1) == false) ||
+       (DoesPlaneIntersect(bounds, _CameraFrustumPlane2) == false) ||
+       (DoesPlaneIntersect(bounds, _CameraFrustumPlane3) == false) ||
+       (DoesPlaneIntersect(bounds, _CameraFrustumPlane4) == false) ||
+       (DoesPlaneIntersect(bounds, _CameraFrustumPlane5) == false));
+}
+
+bool IsShadowVisible(Bounds objectBounds, float3 _LightDirection, out Bounds shadowBounds)
+{
+    bool hitPlane;
+    shadowBounds = GetShadowBounds(objectBounds, _LightDirection, hitPlane);
+    return hitPlane && BoundsIntersectsFrustum(shadowBounds);
+}
+
+bool HIZCull(Bounds worldBounds)
+{
+    float3 minPos = worldBounds.GetMin();
+    float3 maxPos = worldBounds.GetMax();
+
+    float4 boxCorners[8];
+    boxCorners[0] = float4(minPos.x, minPos.y, minPos.z, 1.0);
+    boxCorners[1] = float4(minPos.x, minPos.y, maxPos.z, 1.0);
+    boxCorners[2] = float4(minPos.x, maxPos.y, minPos.z, 1.0);
+    boxCorners[3] = float4(minPos.x, maxPos.y, maxPos.z, 1.0);
+    boxCorners[4] = float4(maxPos.x, minPos.y, minPos.z, 1.0);
+    boxCorners[5] = float4(maxPos.x, minPos.y, maxPos.z, 1.0);
+    boxCorners[6] = float4(maxPos.x, maxPos.y, minPos.z, 1.0);
+    boxCorners[7] = float4(maxPos.x, maxPos.y, maxPos.z, 1.0);
+
+    float4 clipPos = mul(_ViewProjection, boxCorners[0]);
+    clipPos.xyz = clipPos.xyz / clipPos.w;
+    float clipMinX = clipPos.x;
+    float clipMaxX = clipPos.x;
+    float clipMinY = clipPos.y;
+    float clipMaxY = clipPos.y;
+    float clipMinZ = clipPos.z;
+
+    [unroll]
+    for (int i = 1; i < 8; i++)
+    {
+        clipPos = mul(_ViewProjection, boxCorners[i]);
+        // For HiZ
+        clipPos.xyz = clipPos.xyz / clipPos.w;
+        clipMinX = min(clipPos.x, clipMinX);
+        clipMaxX = max(clipPos.x, clipMaxX);
+        clipMinY = min(clipPos.y, clipMinY);
+        clipMaxY = max(clipPos.y, clipMaxY);
+        clipMinZ = min(clipPos.z, clipMinZ);
+    }
+
+    // Change it to 0 - 1 range 
+    float2 minXY = float2(clipMinX, clipMinY) * 0.5 + 0.5;
+    float2 maxXY = float2(clipMaxX, clipMaxY) * 0.5 + 0.5;
+
+#if !_HDRP
+    // Calculate mip lookup
+    int2 size = (maxXY - minXY) * _HiZTextureSize.xy;
+    float mip = ceil(log2(max(size.x, size.y)));
+    mip = clamp(mip - 1, 0, 10);  // Adjusting mip level based on bounding box size
+#endif
+
+     // Sample corners at the calculated mip level
+    float HIZdepth = 1.0f;
+    float2 corners[4] = {minXY, float2(minXY.x, maxXY.y), float2(maxXY.x, minXY.y), maxXY};
+    
+    [unroll]
+    for (int j = 0; j < 4; ++j)
+    {
+        float2 uv = corners[j];
+#if _HDRP
+        HIZdepth = min(HIZdepth,SampleCameraDepth(clamp(uv, _ScreenSize.zw, 1 - _ScreenSize.zw)).r);
+#else
+        HIZdepth = min(HIZdepth, _HiZTexture.SampleLevel(sampler_linear_clamp, uv, mip).r);
+#endif
+    }
+
+    return (1.0 - clipMinZ) >= HIZdepth - 0.000015;
+}
+
+// taken from https://github.com/Unity-Technologies/Graphics/commit/e23606ac43245be74c2607dd1dd58aab21fc03ad?diff=unified#diff-e0115f263ed0ba768d8986fe15e739579fcb5813451fbfc65931255e3b310667
+
+float CalculateSqrPerspectiveDistance(float3 objPosition, float3 camPosition, float sqrScreenRelativeMetric)
+{
+    return length(objPosition - camPosition) * sqrScreenRelativeMetric;
+}
+
+// based on https://github.com/Unity-Technologies/Graphics/blob/27341ce4f5c8853d7f15e9420bff499f1087aceb/Packages/com.unity.render-pipelines.core/Runtime/GPUDriven/LODGroupRenderingUtils.cs
+// but still doesn't match, and needs 0.7 mult to get close in the FR test scene, but this culls to early in the example scene. 
+float ComputeScreenSizeY(Bounds worldBounds)
+{ 
+    // Determine the largest extent of the bounding box
+    float size = max(max(worldBounds.extents.x, worldBounds.extents.y), worldBounds.extents.z) * 2;
+    // Computing this on the GPU causes things to freak out and not render at all on certain angles,
+    // so computed on the CPU and passed in as _CameraFOV now
+    //float halfAngle = tan(57.2957795131 * _CameraFOV * 0.5);
+
+    float screenRelativeMetric = 2.0f * _CameraFOV;
+    
+    screenRelativeMetric /= _LodBias;
+
+    // Calculate distance between camera and object's center
+    float dist = CalculateSqrPerspectiveDistance(worldBounds.center, _CameraWorldPosition, screenRelativeMetric);
+
+    float screenSpaceHeight = (size / dist);
+
+    return screenSpaceHeight;
+}
+
+
+void CalculateCrossfadeFactors(float screenY, float lodThreshold, float crossfadePercent, out float crossfadeFactor, out bool isInCrossfadeZone)
+{
+    float crossfadeRange = (lodThreshold) * crossfadePercent;
+    float crossfadeStart = lodThreshold - crossfadeRange;
+    float crossfadeEnd = lodThreshold;
+    
+    isInCrossfadeZone = screenY >= crossfadeStart && screenY < crossfadeEnd;
+    crossfadeFactor = isInCrossfadeZone ? (screenY - crossfadeStart) / max(crossfadeRange, 0.001) : 0.0;
+}
+
+uint PackUInt24AndByte(uint value, float byteValue)
+{
+    // Clamp and scale the float from -1 to 1 range to 0 to 255
+    uint byteValPacked = (uint)((byteValue * 127.0f) + 128.0f) & 0xFF;
+
+    // Mask the uint value to ensure it only has 24 bits
+    uint maskedValue = value & 0xFFFFFF;
+
+    // Combine the two values
+    return (maskedValue << 8) | byteValPacked;
+}
+
+
+void SetCrossfade(uint id, inout uint d, float crossFade)
+{
+    d = PackUInt24AndByte(id, crossFade);
+}
+
+void AppendShadowBuffer0(uint d)
+{
+#if !_SKIP_SHADOWS
+    #if _MAXSHADOWLOD1
+        _ShadowBufferLOD1.Append(d);
+    #elif _MAXSHADOWLOD2
+        _ShadowBufferLOD2.Append(d);
+    #elif _MAXSHADOWLOD3
+        _ShadowBufferLOD3.Append(d);
+    #else
+        _ShadowBufferLOD0.Append(d);
+    #endif
+#endif
+}
+
+void AppendShadowBuffer1(uint d)
+{
+#if !_SKIP_SHADOWS
+    #if _MAXSHADOWLOD2
+        _ShadowBufferLOD2.Append(d);
+    #elif _MAXSHADOWLOD3
+        _ShadowBufferLOD3.Append(d);
+    #else
+        _ShadowBufferLOD1.Append(d);
+    #endif
+#endif
+}
+
+void AppendShadowBuffer2(uint d)
+{
+#if !_SKIP_SHADOWS
+    #if _MAXSHADOWLOD3
+        _ShadowBufferLOD3.Append(d);
+    #else
+        _ShadowBufferLOD2.Append(d);
+    #endif
+#endif
+}
+
+void AddToDrawBuffer(float screenY, uint id, uint d, float4 crossfadeFactors, float4 isInCrossFadeZone,
+    bool inFrustum, bool inShadow)
+{
+    float crossfadeFactor0 = crossfadeFactors.x;
+    float crossfadeFactor1 = crossfadeFactors.y;
+    float crossfadeFactor2 = crossfadeFactors.z;
+    float crossfadeFactor3 = crossfadeFactors.w;
+    bool isInCrossfadeZone0 = isInCrossFadeZone.x;
+    bool isInCrossfadeZone1 = isInCrossFadeZone.y;
+    bool isInCrossfadeZone2 = isInCrossFadeZone.z;
+    bool isInCrossfadeZone3 = isInCrossFadeZone.w;
+
+    SetCrossfade(id, d, 0);
+    #if !_USELOD1 && !_USELOD2 && !_USELOD3
+        if (isInCrossfadeZone0)
+        {
+            SetCrossfade(id, d, crossfadeFactor0);
+            if (inFrustum) _OutputBufferLOD0.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow) _ShadowBufferLOD0.Append(d);
+#endif
+        }
+        else if (screenY >= _LODScreenHeights.x)
+        {
+            if (inFrustum) _OutputBufferLOD0.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  _ShadowBufferLOD0.Append(d);
+#endif
+        }
+    #elif _USELOD3
+        if (isInCrossfadeZone0)
+        {
+            SetCrossfade(id, d, crossfadeFactor0);
+            if (inFrustum) _OutputBufferLOD0.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer0(d);
+#endif
+            SetCrossfade(id, d, -crossfadeFactor0);
+            if (inFrustum) _OutputBufferLOD1.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer1(d);
+#endif
+        }
+        else if (isInCrossfadeZone1)
+        {
+            SetCrossfade(id, d, crossfadeFactor1);
+            if (inFrustum) _OutputBufferLOD1.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer1(d);
+#endif
+            SetCrossfade(id, d, -crossfadeFactor1);
+            if (inFrustum) _OutputBufferLOD2.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer2(d);
+#endif
+        }
+        else if (isInCrossfadeZone2)
+        {
+            SetCrossfade(id, d, crossfadeFactor2);
+            if (inFrustum) _OutputBufferLOD2.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer2(d);
+#endif
+            SetCrossfade(id, d, -crossfadeFactor2);
+            if (inFrustum) _OutputBufferLOD3.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  _ShadowBufferLOD3.Append(d);
+#endif
+        }
+        else if (isInCrossfadeZone3)
+        {
+            if (crossfadeFactor3 > 0.01)
+            {
+                SetCrossfade(id, d, crossfadeFactor3);
+                if (inFrustum) _OutputBufferLOD3.Append(d);
+#if !_SKIP_SHADOWS
+                if (inShadow) _ShadowBufferLOD3.Append(d);
+#endif
+            }
+        }
+        else if (screenY > _LODScreenHeights.x)
+        {
+            if (inFrustum) _OutputBufferLOD0.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer0(d);
+#endif
+        }
+        else if (screenY > _LODScreenHeights.y)
+        {
+            if (inFrustum) _OutputBufferLOD1.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer1(d);
+#endif
+        }
+        else if (screenY > _LODScreenHeights.z)
+        {
+            if (inFrustum) _OutputBufferLOD2.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer2(d);
+#endif
+        }
+        else if (screenY > _LODScreenHeights.w)
+        {
+            if (inFrustum) _OutputBufferLOD3.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  _ShadowBufferLOD3.Append(d);
+#endif
+        }
+
+
+    #elif _USELOD2
+        if (isInCrossfadeZone0)
+        {
+            SetCrossfade(id, d, crossfadeFactor0);
+            if (inFrustum) _OutputBufferLOD0.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer0(d);
+#endif
+            SetCrossfade(id, d, -crossfadeFactor0);
+            if (inFrustum) _OutputBufferLOD1.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer1(d);
+#endif
+        }
+        else if (isInCrossfadeZone1)
+        {
+            SetCrossfade(id, d, crossfadeFactor1);
+            if (inFrustum) _OutputBufferLOD1.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer1(d);
+#endif
+            SetCrossfade(id, d, -crossfadeFactor1);
+            if (inFrustum) _OutputBufferLOD2.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer2(d);
+#endif
+        }
+        else if (isInCrossfadeZone2)
+        {
+            if (crossfadeFactor2 > 0.01)
+            {
+                SetCrossfade(id, d, crossfadeFactor2);
+                if (inFrustum) _OutputBufferLOD2.Append(d);
+#if !_SKIP_SHADOWS
+                if (inShadow)  AppendShadowBuffer2(d);
+#endif
+            }
+        }
+        else if (screenY > _LODScreenHeights.x)
+        {
+            if (inFrustum) _OutputBufferLOD0.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer0(d);
+#endif
+        }
+        else if (screenY > _LODScreenHeights.y)
+        {
+            if (inFrustum) _OutputBufferLOD1.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer1(d);
+#endif
+        }
+        else if (screenY > _LODScreenHeights.z)
+        {
+            if (inFrustum) _OutputBufferLOD2.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer2(d);
+#endif
+        }
+    #elif _USELOD1
+        if (isInCrossfadeZone0)
+        {
+            SetCrossfade(id, d, crossfadeFactor0);
+            if (inFrustum) _OutputBufferLOD0.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer0(d);
+#endif
+            SetCrossfade(id, d, -crossfadeFactor0);
+            if (inFrustum) _OutputBufferLOD1.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow) AppendShadowBuffer1(d);
+#endif
+        }
+        else if (isInCrossfadeZone1)
+        {
+            if (crossfadeFactor1 > 0.01)
+            {
+                SetCrossfade(id, d, crossfadeFactor1);
+                if (inFrustum) _OutputBufferLOD1.Append(d);
+#if !_SKIP_SHADOWS
+                if (inShadow)  AppendShadowBuffer1(d);
+#endif
+            }
+        }
+        else if (screenY > _LODScreenHeights.x)
+        {
+            if (inFrustum) _OutputBufferLOD0.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer0(d);
+#endif
+        }
+        else if (screenY > _LODScreenHeights.y)
+        {
+            if (inFrustum) _OutputBufferLOD1.Append(d);
+#if !_SKIP_SHADOWS
+            if (inShadow)  AppendShadowBuffer1(d);
+#endif
+        }
+    #endif
+}
+
+
+[numthreads(256, 1, 1)]
+void CullKernel(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= _PositionCount)
+        return;
+
+    float4x4 positionMatrix = _InputBuffer[id.x];// mul(_LocalToWorld, _InputBuffer[id.x]);
+
+    float3 worldPosition = float3(positionMatrix[0][3], positionMatrix[1][3], positionMatrix[2][3]);
+
+    // Calculate the distance from the camera to the position.
+    float dist = distance(worldPosition, _CameraWorldPosition);
+
+    Bounds worldBounds;
+    worldBounds.center = mul(positionMatrix, float4(_BoundsCenter, 1)).xyz;
+    float3 worldExtentX = mul((float3x3)positionMatrix, float3(_BoundsExtents.x + _BoundsExpand.x, 0, 0));
+    float3 worldExtentY = mul((float3x3)positionMatrix, float3(0, _BoundsExtents.y + _BoundsExpand.y, 0));
+    float3 worldExtentZ = mul((float3x3)positionMatrix, float3(0, 0, _BoundsExtents.z + _BoundsExpand.z));
+    worldBounds.extents = abs(worldExtentX) + abs(worldExtentY) + abs(worldExtentZ);
+
+    bool isInsideFrustum = (dist <= _CullDistance);
+    bool isInsideShadow = false;
+
+    #if !_SKIP_SHADOWS
+        isInsideShadow = (dist <= _ShadowDistance);
+    #endif
+    //This is goofy because the keywords opt OUT of doing stuff...
+    //so if we don't need to cull OR we are skipping shadows don't
+    //do this section
+    #if !_NOSHADOWCULL || !_SKIP_SHADOWS
+    if (isInsideShadow)
+    {
+        Bounds shadowBounds;
+        isInsideShadow = IsShadowVisible(worldBounds, _LightDir, shadowBounds);       
+    }
+    #endif
+
+    if (isInsideFrustum)
+    {
+        isInsideFrustum = BoundsIntersectsFrustum(worldBounds);
+
+        #if _USEHIZ
+            if (isInsideFrustum && dist > 10) // umm..
+                isInsideFrustum = HIZCull(worldBounds);
+        #endif
+    }
+
+    if (isInsideShadow || isInsideFrustum)
+    {
+        float screenY = ComputeScreenSizeY(worldBounds);
+        float crossfadeFactor0;
+        float crossfadeFactor1;
+        float crossfadeFactor2;
+        float crossfadeFactor3;
+        bool isInCrossfadeZone0 = false;
+        bool isInCrossfadeZone1 = false;
+        bool isInCrossfadeZone2 = false;
+        bool isInCrossfadeZone3 = false;
+        
+        #if _USELODCROSSFADE
+            CalculateCrossfadeFactors(screenY, _LODScreenHeights.x, _LODTransitionWidth.x, crossfadeFactor0, isInCrossfadeZone0);
+            CalculateCrossfadeFactors(screenY, _LODScreenHeights.y, _LODTransitionWidth.y, crossfadeFactor1, isInCrossfadeZone1);
+            CalculateCrossfadeFactors(screenY, _LODScreenHeights.z, _LODTransitionWidth.z, crossfadeFactor2, isInCrossfadeZone2);
+            CalculateCrossfadeFactors(screenY, _LODScreenHeights.w, _LODTransitionWidth.w, crossfadeFactor3, isInCrossfadeZone3);
+        #endif
+        
+        float4 crossfadeFactors = float4(crossfadeFactor0, crossfadeFactor1, crossfadeFactor2, crossfadeFactor3);
+        bool4 inCrossfades = float4(isInCrossfadeZone0, isInCrossfadeZone1, isInCrossfadeZone2, isInCrossfadeZone3);
+
+        uint d = id.x;
+
+        AddToDrawBuffer(screenY, id.x, d, crossfadeFactors, inCrossfades, isInsideFrustum, isInsideShadow);
+    }
+}
+
