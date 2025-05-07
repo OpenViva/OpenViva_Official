@@ -11,7 +11,7 @@ namespace UnityEditor.Localization.Samples
     /// </summary>
     public class LocalizedStringTableExample : MonoBehaviour
     {
-        public LocalizedStringTable stringTable = new LocalizedStringTable { TableReference = "My Strings" };
+        public LocalizedStringTable stringTable = new() { TableReference = "My Strings" };
 
         // We will cache our translated strings
         string m_TranslatedStringHello;

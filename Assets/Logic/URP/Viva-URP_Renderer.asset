@@ -123,11 +123,10 @@ MonoBehaviour:
   - {fileID: -7382292691052397058}
   - {fileID: -3403770539973920601}
   - {fileID: -4255186446054167466}
-  - {fileID: 0}
+  - {fileID: -3789186993131621832}
   - {fileID: 8140670815720994578}
-  - {fileID: 0}
-  - {fileID: 0}
-  m_RendererFeatureMap: 62a95a7d5987dbf2fefddb19e9d38c99a738ea53ba60c3d0566ce2e5788af2c438f2db76811a6acb127770ccf978f970eca5d23dc3e3f39f2653ae4f54d03c14
+  - {fileID: -6920937774642977300}
+  m_RendererFeatureMap: 62a95a7d5987dbf2fefddb19e9d38c99a738ea53ba60c3d0566ce2e5788af2c438f2db76811a6acb127770ccf978f970eca5d23dc3e3f39f
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -150,12 +149,6 @@ MonoBehaviour:
       type: 3}
     dataDrivenLensFlare: {fileID: 4800000, guid: 6cda457ac28612740adb23da5d39ea92,
       type: 3}
-    terrainDetailLitPS: {fileID: 4800000, guid: f6783ab646d374f94b199774402a5144,
-      type: 3}
-    terrainDetailGrassPS: {fileID: 4800000, guid: e507fdfead5ca47e8b9a768b51c291a1,
-      type: 3}
-    terrainDetailGrassBillboardPS: {fileID: 4800000, guid: 29868e73b638e48ca99a19ea58c48d90,
-      type: 3}
   m_AssetVersion: 2
   m_OpaqueLayerMask:
     serializedVersion: 2
@@ -176,18 +169,6 @@ MonoBehaviour:
   m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
---- !u!114 &1458269439893852966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c9f41732cc70a04eb52129eb7c4600a, type: 3}
-  m_Name: DeNorSob Outline
-  m_EditorClassIdentifier: 
 --- !u!114 &8140670815720994578
 MonoBehaviour:
   m_ObjectHideFlags: 0

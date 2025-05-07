@@ -12,7 +12,7 @@ namespace UnityEditor.Localization.Samples
         // A LocalizedString provides an interface to retrieving translated strings.
         // This example assumes a String Table Collection with the name "My String Table" and an entry with the Key "Hello World" exists.
         // You can change the Table Collection and Entry target in the inspector.
-        public LocalizedString stringRef = new LocalizedString() { TableReference = "My String Table", TableEntryReference = "Hello World" };
+        public LocalizedString stringRef = new() { TableReference = "My String Table", TableEntryReference = "Hello World" };
         string m_TranslatedString;
 
         void OnEnable()
