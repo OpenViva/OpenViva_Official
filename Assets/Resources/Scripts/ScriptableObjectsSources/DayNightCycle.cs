@@ -1,0 +1,34 @@
+using UnityEngine;
+
+
+namespace Viva
+{
+
+
+    [System.Serializable]
+    [CreateAssetMenu(fileName = "Day Night Cycle", menuName = "Day Night Cycle", order = 1)]
+    public class DayNightCycle : ScriptableObject
+    {
+
+        [System.Serializable]
+        public class Phase
+        {
+
+            public Color ambience = Color.black;
+            public Color sunColor = Color.white;
+            public float atmosphereThickness = 1.5f;
+            public Color toonAmbience = Color.black;
+            public float exposure = 1.0f;
+            public Color skyTint = Color.white;
+            public Color nightSky = Color.black;
+            public Color cloudColorA = Color.grey;
+            public Color cloudColorB = Color.white;
+            public Color fogColor;
+            public Cubemap environmentMap;
+        }
+
+        [SerializeField]
+        public Phase[] phases = new Phase[10];
+    }
+
+}
