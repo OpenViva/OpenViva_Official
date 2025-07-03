@@ -93,8 +93,8 @@ namespace Viva
             if( rightSide ) {
                 vivaControls.VRRightHand.Position.performed += ctx => trackedPosition = ctx.ReadValue<Vector3>();
                 vivaControls.VRRightHand.Rotation.performed += ctx => trackedRotation = ctx.ReadValue<Quaternion>();
-                vivaControls.VRRightHand.Move.performed += ctx => trackpadPos = ctx.ReadValue<Vector2>();
-                vivaControls.VRRightHand.Move.canceled += ctx => trackpadPos = ctx.ReadValue<Vector2>();
+                //vivaControls.VRRightHand.Move.performed += ctx => trackpadPos = ctx.ReadValue<Vector2>();
+                //vivaControls.VRRightHand.Move.canceled += ctx => trackpadPos = ctx.ReadValue<Vector2>();
                 vivaControls.VRRightHand.Select.performed += ctx => trackpadButtonState.UpdateState( ctx.ReadValueAsButton() );
                 vivaControls.VRRightHand.Select.canceled += ctx => trackpadButtonState.UpdateState( ctx.ReadValueAsButton() );
                 vivaControls.VRRightHand.Interact.performed += ctx => actionState.UpdateState( ctx.ReadValueAsButton() );
@@ -117,7 +117,7 @@ namespace Viva
                 vivaControls.VRLeftHand.Interact.performed += ctx => actionState.UpdateState( ctx.ReadValueAsButton() );
                 vivaControls.VRLeftHand.Interact.canceled += ctx => actionState.UpdateState( ctx.ReadValueAsButton() );
                 vivaControls.VRLeftHand.Grab.performed += ctx => gripState.UpdateState( ctx.ReadValue<float>()>0.5f );
-                vivaControls.VRLeftHand.Pause.performed += ctx => player.TogglePauseMenu();
+                //vivaControls.VRLeftHand.Pause.performed += ctx => player.TogglePauseMenu();
 
                 vivaControls.Keyboard.extendLeft.performed += ctx => player.OnInputTogglePresentHand( this );
                 //vivaControls.Keyboard.leftInteract.performed += ctx => UpdateKeyboardGripAndAction( ctx.ReadValueAsButton(), player.keyboardAlt );
