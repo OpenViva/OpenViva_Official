@@ -103,8 +103,8 @@ namespace Viva
                 vivaControls.VRRightHand.Pause.performed += ctx => player.TogglePauseMenu();
 
                 vivaControls.Keyboard.extendRight.performed += ctx => player.OnInputTogglePresentHand( this );
-                vivaControls.Keyboard.rightInteract.performed += ctx => UpdateKeyboardGripAndAction( ctx.ReadValueAsButton(), player.keyboardAlt );
-                vivaControls.Keyboard.rightInteract.canceled += ctx => UpdateKeyboardGripAndAction( ctx.ReadValueAsButton(), player.keyboardAlt );
+                //vivaControls.Keyboard.rightInteract.performed += ctx => UpdateKeyboardGripAndAction( ctx.ReadValueAsButton(), player.keyboardAlt );
+                //vivaControls.Keyboard.rightInteract.canceled += ctx => UpdateKeyboardGripAndAction( ctx.ReadValueAsButton(), player.keyboardAlt );
                 vivaControls.Keyboard.rightInteract.performed += ctx => actionState.UpdateState( ctx.ReadValueAsButton() );
                 vivaControls.Keyboard.rightInteract.canceled += ctx => actionState.UpdateState( ctx.ReadValueAsButton() );
             } else {
@@ -120,8 +120,8 @@ namespace Viva
                 vivaControls.VRLeftHand.Pause.performed += ctx => player.TogglePauseMenu();
 
                 vivaControls.Keyboard.extendLeft.performed += ctx => player.OnInputTogglePresentHand( this );
-                vivaControls.Keyboard.leftInteract.performed += ctx => UpdateKeyboardGripAndAction( ctx.ReadValueAsButton(), player.keyboardAlt );
-                vivaControls.Keyboard.leftInteract.canceled += ctx => UpdateKeyboardGripAndAction( ctx.ReadValueAsButton(), player.keyboardAlt );
+                //vivaControls.Keyboard.leftInteract.performed += ctx => UpdateKeyboardGripAndAction( ctx.ReadValueAsButton(), player.keyboardAlt );
+                //vivaControls.Keyboard.leftInteract.canceled += ctx => UpdateKeyboardGripAndAction( ctx.ReadValueAsButton(), player.keyboardAlt );
                 vivaControls.Keyboard.leftInteract.performed += ctx => actionState.UpdateState( ctx.ReadValueAsButton() );
                 vivaControls.Keyboard.leftInteract.canceled += ctx => actionState.UpdateState( ctx.ReadValueAsButton() );
             }
@@ -375,7 +375,7 @@ namespace Viva
             rawAnimationLocalRot = fingerAnimator.hand.parent.localRotation;
         }
 
-        public void UpdateKeyboardGripAndAction(bool keyboardMain, bool keyboardAlt)
+        /*public void UpdateKeyboardGripAndAction(bool keyboardMain, bool keyboardAlt)
         {
             if (holdType == HoldType.OBJECT)
             {
@@ -400,8 +400,8 @@ namespace Viva
                 gripState.UpdateState(keyboardMain);
                 actionState.UpdateState(false);
             }
-        }
-
+        }/
+    */
         Collider CalculateNearbyGrabCollider(Vector3 dir, float length, ref Vector3 colliderPos, ref Vector3 colliderNormal)
         {
             Vector3 handCenter = selfItem.rigidBody.worldCenterOfMass;
