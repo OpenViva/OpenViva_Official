@@ -1,5 +1,4 @@
 using System.Collections;
-using OccaSoftware.Altos.Runtime;
 using UnityEngine;
 
 
@@ -17,9 +16,10 @@ namespace Viva
         private float bellTimer = Mathf.NegativeInfinity;
 
 
+
         private bool AllowedToPlayBell()
         {
-            if (GameDirector.newSkyDirector.skyDefinition.currentSegment == DaySegment.NIGHT)
+            if (GameDirector.skyDirector.GetDaySegment().Equals(DaySegment.DAY))
             {
                 return false;
             }

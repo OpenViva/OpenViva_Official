@@ -136,10 +136,10 @@ namespace Viva
         public Music GetDefaultMusic()
         {
             if (overrideMusic.HasValue) return overrideMusic.Value;
-            switch (GameDirector.newSkyDirector.skyDefinition.currentSegment)
+            switch (GameDirector.skyDirector.GetDaySegment())
             {
-                case DaySegment.MORNING:
-                case DaySegment.DAY:
+                case SkyDirector.DaySegment.MORNING:
+                case SkyDirector.DaySegment.DAY:
 
                     if (userIsExploring)
                     {
@@ -172,9 +172,8 @@ namespace Viva
                     {
                         return Music.DAY_OUTDOOR;
                     }
-                //case SkyDirector.DaySegment.MORNING:
-                //	return Music.NONE;
-                case DaySegment.NIGHT:
+
+                case SkyDirector.DaySegment.NIGHT:
 
                     if (userIsExploring)
                     {

@@ -18,9 +18,8 @@ namespace Viva
         public delegate bool BoolReturnCharacterFunc(Character character);
 
         public static GameDirector instance;
-        
+
         public static SkyDirector skyDirector;
-        public static AltosSkyDirector newSkyDirector;
         public static LampDirector lampDirector;
         public static Transform utilityTransform;
         private static Set<DynamicBone> m_dynamicBones = new();
@@ -42,8 +41,6 @@ namespace Viva
         public AmbienceDirector ambienceDirector { get { return m_ambienceDirector; } }
         [SerializeField]
         private SkyDirector m_skyDirector;
-        [SerializeField]
-        private AltosSkyDirector m_newSkyDirector;
         [SerializeField]
         private LampDirector m_lampDirector;
         [SerializeField]
@@ -70,7 +67,6 @@ namespace Viva
         public AudioMixer audioMixer { get { return m_audioMixer; } }
 
         public List<GameObject> spawnablePrefabs;
-
         public void AddOnFinishLoadingCallback(OnVivaFileCallback callback)
         {
             onFinishLoadingVivaFile -= callback;
@@ -94,13 +90,11 @@ namespace Viva
             instance = this;
             input = new InputManager();
             skyDirector = m_skyDirector;
-            newSkyDirector = m_newSkyDirector;
             lampDirector = m_lampDirector;
             utilityTransform = new GameObject("UTILITY").transform;
             player = m_player;
             mainCamera = Camera.main;   //cache for usage
 
-            //load Game Settings
             var savedSettings = Tools.LoadJson<GameSettings>(System.IO.Path.GetFullPath(System.IO.Directory.GetParent(Application.dataPath) + "/settings.cfg"));
             if (savedSettings == null)
             {

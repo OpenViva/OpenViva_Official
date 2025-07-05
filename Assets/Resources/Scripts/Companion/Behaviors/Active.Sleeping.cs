@@ -230,7 +230,7 @@ namespace Viva
            
             var playSleepAnim = new AutonomyPlayAnimation(self.autonomy, "play sleep anim", sleepAnim);;
             playSleepAnim.AddRequirement(GenerateEnsureNearBed());
-            sleepTimeStart = GameDirector.newSkyDirector.skyDefinition.CurrentTime;
+            sleepTimeStart = GameDirector.skyDirector.GetWorldTime();
             
             
             
@@ -390,7 +390,7 @@ namespace Viva
                     Debug.Log("on right side");
                     break;
                 case Companion.Animation.SLEEP_PILLOW_SIDE_IDLE_LEFT:
-                    sleepTimeStart = GameDirector.newSkyDirector.skyDefinition.CurrentTime;
+                    sleepTimeStart = GameDirector.skyDirector.GetWorldTime();
                     layingOnRightSide = false;
                     Debug.Log("on left side");
                     break;
@@ -403,12 +403,12 @@ namespace Viva
                     Debug.Log("on right side");
                     break;
                 case Companion.Animation.SLEEP_PILLOW_SIDE_IDLE_RIGHT:
-                    sleepTimeStart = GameDirector.newSkyDirector.skyDefinition.CurrentTime;
+                    sleepTimeStart = GameDirector.skyDirector.GetWorldTime();
                     layingOnRightSide = true;
                     Debug.Log("on right side");
                     break;
                 case Companion.Animation.SLEEP_PILLOW_UP_IDLE:
-                    sleepTimeStart = GameDirector.newSkyDirector.skyDefinition.CurrentTime;
+                    sleepTimeStart = GameDirector.skyDirector.GetWorldTime();
                     layingOnRightSide = null;
                     break;
                 case Companion.Animation.SLEEP_PILLOW_SIDE_TO_SLEEP_PILLOW_UP_RIGHT:

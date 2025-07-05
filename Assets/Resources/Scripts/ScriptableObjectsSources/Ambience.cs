@@ -1,4 +1,5 @@
 ﻿using OccaSoftware.Altos.Runtime;
+using System;
 using UnityEngine;
 
 namespace Viva
@@ -20,11 +21,19 @@ namespace Viva
 
         public int priority;
 
-        public AudioClip GetAudio(DaySegment daySegment, bool indoor)
+        public enum DaySegment
+        {
+            MORNING,
+            DAY,
+            NIGHT,
+            NONE,
+        }
+
+        public AudioClip GetAudio(DaySegment current, bool indoor)
         {
             if (indoor)
             {
-                switch (daySegment)
+                switch (current)
                 {
                     case DaySegment.MORNING:
                         return morningIndoor;
@@ -36,7 +45,7 @@ namespace Viva
             }
             else
             {
-                switch (daySegment)
+                switch (current)
                 {
                     case DaySegment.MORNING:
                         return morningOutdoor;
@@ -47,6 +56,11 @@ namespace Viva
                 }
             }
             return null;
+        }
+
+        internal AudioClip GetAudio(Func<SkyDirector.DaySegment> getDaySegment, bool userIsIndoors)
+        {
+            throw new NotImplementedException();
         }
     }
 

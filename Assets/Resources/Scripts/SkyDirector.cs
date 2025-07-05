@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization.PropertyVariants.TrackedProperties;
 using Viva.Util;
 
 namespace Viva
@@ -40,6 +41,7 @@ namespace Viva
             NIGHT,
             NONE,
         }
+
         private const float M_PI2 = Mathf.PI * 2.0f;
 
         [Header("Day Night Cycle")]
@@ -53,7 +55,7 @@ namespace Viva
         private Material sunMaterial;
         [SerializeField]
         private float sunYaw = 100.0f;
-        public float worldTime = 0.0f;
+        private float worldTime = 0.0f;
         [SerializeField]
         private ReflectionProbe environmentMapProbe;
         [SerializeField]
@@ -75,6 +77,21 @@ namespace Viva
             {
                 ApplyDayNightCyclePhase(CalculatePhaseIndex());
             }
+        }
+
+        public void SetWorldTime(float _worldTime)
+        {
+            worldTime = _worldTime;
+        }
+
+        public float GetWorldTime()
+        {
+            return worldTime; 
+        }
+
+        public void SetSunIntensity(float _intensity)
+        {
+            sun.intensity = _intensity;
         }
 
         private float[] dayNightCycleSpeeds = new float[]{  //every M_PI2 is a day cycle
@@ -148,14 +165,14 @@ namespace Viva
             ///TODO: Fix why some mechanisms are awaking TWICE
         }
 
-        private void onEnable()
+        private void OnEnable()
         {
             UpdateWorldTime();
             GameDirector.instance.ambienceDirector.InitializeAmbience();
             UpdateDayNightCycleSpeed();
             GameDirector.lampDirector.UpdateDaySegmentLampState(true);
-            //m_currentDaySegment = DaySegment.DAY;
-            // DebugModeInit();
+            m_currentDaySegment = DaySegment.DAY;
+            DebugModeInit();
 
             nightModeSet = !isNight;
         }
@@ -192,6 +209,22 @@ namespace Viva
             else
             {
                 return DaySegment.DAY;
+            }
+        }
+
+        public DaySegment GetDaySegment()
+        {
+            if (m_sunPitchRadian < M_PI2 * 0.175f)
+            {
+                return DaySegment.MORNING;
+            }
+            else if (m_sunPitchRadian > M_PI2 * 0.5f)
+            {
+                return DaySegment.DAY;
+            }
+            else
+            {
+                return DaySegment.NIGHT;
             }
         }
 

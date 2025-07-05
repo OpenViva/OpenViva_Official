@@ -961,7 +961,7 @@
             ]
         },
         {
-            "name": "VR LeftHand",
+            "name": "VR Left",
             "id": "fa62b563-0233-4b28-a9f3-6855cee5f00b",
             "actions": [
                 {
@@ -1202,7 +1202,7 @@
             ]
         },
         {
-            "name": "VR RightHand",
+            "name": "VR Right",
             "id": "323774f6-5cf8-4eac-b974-11d66f32775e",
             "actions": [
                 {
@@ -1242,7 +1242,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Look",
+                    "name": "Turn",
                     "type": "Value",
                     "id": "af03a2d5-d425-48d0-aae1-66b02c5962a9",
                     "expectedControlType": "Vector2",
@@ -1335,7 +1335,7 @@
                     "interactions": "",
                     "processors": "StickDeadzone",
                     "groups": "",
-                    "action": "Look",
+                    "action": "Turn",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

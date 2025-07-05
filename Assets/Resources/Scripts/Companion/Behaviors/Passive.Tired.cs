@@ -25,7 +25,7 @@ namespace Viva
 
             if (!tired)
             {
-                float currentTime = GameDirector.newSkyDirector.skyDefinition.CurrentTime;
+                float currentTime = GameDirector.skyDirector.GetWorldTime();
                 if ((currentTime >= tiredTimeStart || currentTime < tiredTimeEnd) && AltosSkyDirector.Instance == null)
                 {
                     BecomeTired();

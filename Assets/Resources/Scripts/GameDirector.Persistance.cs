@@ -188,19 +188,14 @@ namespace Viva
         {
             lodDistance = Mathf.Clamp(amount, 0.1f, 2.0f);
         }
-        public void ShiftWorldTime(float timeAmount)
-        {
-            AltosSkyDirector newSkyDirector = AltosSkyDirector.Instance;
-            newSkyDirector.skyDefinition.timeSystem += timeAmount;
-        }
         public void SetWorldTime(float newTime)
         {
-            GameDirector.newSkyDirector.skyDefinition.timeSystem = newTime;
+            GameDirector.skyDirector.SetWorldTime(newTime);
         }
         public string AdjustDayTimeSpeedIndex(int direction)
         {
             SetDayNightCycleSpeedIndex(dayNightCycleSpeedIndex + direction);
-            GameDirector.newSkyDirector.skyDefinition.ApplyDaySpeed();
+            GameDirector.skyDirector.UpdateDayNightCycleSpeed();
             return dayNightCycleSpeedDesc[dayNightCycleSpeedIndex];
         }
         public void SetDayNightCycleSpeedIndex(int index)
@@ -451,7 +446,7 @@ namespace Viva
                     }
                 }
             }
-            StartCoroutine(LoadVivaFile(file));
+                StartCoroutine(LoadVivaFile(file));
         }
 
         private IEnumerator LoadVivaFile(VivaFile file)
@@ -464,7 +459,7 @@ namespace Viva
             if (file == null)
             {
                 //defaults if no file present
-                GameSettings.main.SetWorldTime(GameDirector.newSkyDirector.skyDefinition.initialTime);
+                GameSettings.main.SetWorldTime(Mathf.PI * 2.0f * 0.175f);
                 StartCoroutine(FirstLoadTutorial());
 
                 yield return null;

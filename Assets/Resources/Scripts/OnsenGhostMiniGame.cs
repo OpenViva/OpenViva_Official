@@ -62,7 +62,7 @@ namespace Viva
         {
 //            GameDirector.newSkyDirector.SetSkyOverride(spookySkyPeriod);
 //            GameDirector.newSkyDirector.enabled = false;
-            GameDirector.newSkyDirector.Sun.GetLight().intensity = 0f;
+            GameDirector.skyDirector.SetSunIntensity(1.0f);
             GameDirector.instance.SetMusic(GameDirector.Music.SUSPENSE, 1.0f);
             GameDirector.instance.LockMusic(true);
 

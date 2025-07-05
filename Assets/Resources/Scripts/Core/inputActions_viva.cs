@@ -984,7 +984,7 @@ public partial class @InputActions_viva: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""VR LeftHand"",
+            ""name"": ""VR Left"",
             ""id"": ""fa62b563-0233-4b28-a9f3-6855cee5f00b"",
             ""actions"": [
                 {
@@ -1225,7 +1225,7 @@ public partial class @InputActions_viva: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""VR RightHand"",
+            ""name"": ""VR Right"",
             ""id"": ""323774f6-5cf8-4eac-b974-11d66f32775e"",
             ""actions"": [
                 {
@@ -1265,7 +1265,7 @@ public partial class @InputActions_viva: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Look"",
+                    ""name"": ""Turn"",
                     ""type"": ""Value"",
                     ""id"": ""af03a2d5-d425-48d0-aae1-66b02c5962a9"",
                     ""expectedControlType"": ""Vector2"",
@@ -1358,7 +1358,7 @@ public partial class @InputActions_viva: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": ""StickDeadzone"",
                     ""groups"": """",
-                    ""action"": ""Look"",
+                    ""action"": ""Turn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1521,39 +1521,39 @@ public partial class @InputActions_viva: IInputActionCollection2, IDisposable
         m_UI_move = m_UI.FindAction("move", throwIfNotFound: true);
         m_UI_trackedPosition = m_UI.FindAction("trackedPosition", throwIfNotFound: true);
         m_UI_trackedOrientation = m_UI.FindAction("trackedOrientation", throwIfNotFound: true);
-        // VR LeftHand
-        m_VRLeftHand = asset.FindActionMap("VR LeftHand", throwIfNotFound: true);
-        m_VRLeftHand_Position = m_VRLeftHand.FindAction("Position", throwIfNotFound: true);
-        m_VRLeftHand_Rotation = m_VRLeftHand.FindAction("Rotation", throwIfNotFound: true);
-        m_VRLeftHand_TrackingState = m_VRLeftHand.FindAction("Tracking State", throwIfNotFound: true);
-        m_VRLeftHand_HapticDevice = m_VRLeftHand.FindAction("Haptic Device", throwIfNotFound: true);
-        m_VRLeftHand_Move = m_VRLeftHand.FindAction("Move", throwIfNotFound: true);
-        m_VRLeftHand_Select = m_VRLeftHand.FindAction("Select", throwIfNotFound: true);
-        m_VRLeftHand_Grab = m_VRLeftHand.FindAction("Grab", throwIfNotFound: true);
-        m_VRLeftHand_Interact = m_VRLeftHand.FindAction("Interact", throwIfNotFound: true);
-        m_VRLeftHand_Run = m_VRLeftHand.FindAction("Run", throwIfNotFound: true);
-        m_VRLeftHand_Click = m_VRLeftHand.FindAction("Click", throwIfNotFound: true);
-        // VR RightHand
-        m_VRRightHand = asset.FindActionMap("VR RightHand", throwIfNotFound: true);
-        m_VRRightHand_Position = m_VRRightHand.FindAction("Position", throwIfNotFound: true);
-        m_VRRightHand_Rotation = m_VRRightHand.FindAction("Rotation", throwIfNotFound: true);
-        m_VRRightHand_TrackingState = m_VRRightHand.FindAction("Tracking State", throwIfNotFound: true);
-        m_VRRightHand_HapticDevice = m_VRRightHand.FindAction("Haptic Device", throwIfNotFound: true);
-        m_VRRightHand_Look = m_VRRightHand.FindAction("Look", throwIfNotFound: true);
-        m_VRRightHand_Select = m_VRRightHand.FindAction("Select", throwIfNotFound: true);
-        m_VRRightHand_Grab = m_VRRightHand.FindAction("Grab", throwIfNotFound: true);
-        m_VRRightHand_Interact = m_VRRightHand.FindAction("Interact", throwIfNotFound: true);
-        m_VRRightHand_Pause = m_VRRightHand.FindAction("Pause", throwIfNotFound: true);
-        m_VRRightHand_Click = m_VRRightHand.FindAction("Click", throwIfNotFound: true);
-        m_VRRightHand_Scroll = m_VRRightHand.FindAction("Scroll", throwIfNotFound: true);
+        // VR Left
+        m_VRLeft = asset.FindActionMap("VR Left", throwIfNotFound: true);
+        m_VRLeft_Position = m_VRLeft.FindAction("Position", throwIfNotFound: true);
+        m_VRLeft_Rotation = m_VRLeft.FindAction("Rotation", throwIfNotFound: true);
+        m_VRLeft_TrackingState = m_VRLeft.FindAction("Tracking State", throwIfNotFound: true);
+        m_VRLeft_HapticDevice = m_VRLeft.FindAction("Haptic Device", throwIfNotFound: true);
+        m_VRLeft_Move = m_VRLeft.FindAction("Move", throwIfNotFound: true);
+        m_VRLeft_Select = m_VRLeft.FindAction("Select", throwIfNotFound: true);
+        m_VRLeft_Grab = m_VRLeft.FindAction("Grab", throwIfNotFound: true);
+        m_VRLeft_Interact = m_VRLeft.FindAction("Interact", throwIfNotFound: true);
+        m_VRLeft_Run = m_VRLeft.FindAction("Run", throwIfNotFound: true);
+        m_VRLeft_Click = m_VRLeft.FindAction("Click", throwIfNotFound: true);
+        // VR Right
+        m_VRRight = asset.FindActionMap("VR Right", throwIfNotFound: true);
+        m_VRRight_Position = m_VRRight.FindAction("Position", throwIfNotFound: true);
+        m_VRRight_Rotation = m_VRRight.FindAction("Rotation", throwIfNotFound: true);
+        m_VRRight_TrackingState = m_VRRight.FindAction("Tracking State", throwIfNotFound: true);
+        m_VRRight_HapticDevice = m_VRRight.FindAction("Haptic Device", throwIfNotFound: true);
+        m_VRRight_Turn = m_VRRight.FindAction("Turn", throwIfNotFound: true);
+        m_VRRight_Select = m_VRRight.FindAction("Select", throwIfNotFound: true);
+        m_VRRight_Grab = m_VRRight.FindAction("Grab", throwIfNotFound: true);
+        m_VRRight_Interact = m_VRRight.FindAction("Interact", throwIfNotFound: true);
+        m_VRRight_Pause = m_VRRight.FindAction("Pause", throwIfNotFound: true);
+        m_VRRight_Click = m_VRRight.FindAction("Click", throwIfNotFound: true);
+        m_VRRight_Scroll = m_VRRight.FindAction("Scroll", throwIfNotFound: true);
     }
 
     ~@InputActions_viva()
     {
         Debug.Assert(!m_Keyboard.enabled, "This will cause a leak and performance issues, InputActions_viva.Keyboard.Disable() has not been called.");
         Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputActions_viva.UI.Disable() has not been called.");
-        Debug.Assert(!m_VRLeftHand.enabled, "This will cause a leak and performance issues, InputActions_viva.VRLeftHand.Disable() has not been called.");
-        Debug.Assert(!m_VRRightHand.enabled, "This will cause a leak and performance issues, InputActions_viva.VRRightHand.Disable() has not been called.");
+        Debug.Assert(!m_VRLeft.enabled, "This will cause a leak and performance issues, InputActions_viva.VRLeft.Disable() has not been called.");
+        Debug.Assert(!m_VRRight.enabled, "This will cause a leak and performance issues, InputActions_viva.VRRight.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -1920,42 +1920,42 @@ public partial class @InputActions_viva: IInputActionCollection2, IDisposable
     }
     public UIActions @UI => new UIActions(this);
 
-    // VR LeftHand
-    private readonly InputActionMap m_VRLeftHand;
-    private List<IVRLeftHandActions> m_VRLeftHandActionsCallbackInterfaces = new List<IVRLeftHandActions>();
-    private readonly InputAction m_VRLeftHand_Position;
-    private readonly InputAction m_VRLeftHand_Rotation;
-    private readonly InputAction m_VRLeftHand_TrackingState;
-    private readonly InputAction m_VRLeftHand_HapticDevice;
-    private readonly InputAction m_VRLeftHand_Move;
-    private readonly InputAction m_VRLeftHand_Select;
-    private readonly InputAction m_VRLeftHand_Grab;
-    private readonly InputAction m_VRLeftHand_Interact;
-    private readonly InputAction m_VRLeftHand_Run;
-    private readonly InputAction m_VRLeftHand_Click;
-    public struct VRLeftHandActions
+    // VR Left
+    private readonly InputActionMap m_VRLeft;
+    private List<IVRLeftActions> m_VRLeftActionsCallbackInterfaces = new List<IVRLeftActions>();
+    private readonly InputAction m_VRLeft_Position;
+    private readonly InputAction m_VRLeft_Rotation;
+    private readonly InputAction m_VRLeft_TrackingState;
+    private readonly InputAction m_VRLeft_HapticDevice;
+    private readonly InputAction m_VRLeft_Move;
+    private readonly InputAction m_VRLeft_Select;
+    private readonly InputAction m_VRLeft_Grab;
+    private readonly InputAction m_VRLeft_Interact;
+    private readonly InputAction m_VRLeft_Run;
+    private readonly InputAction m_VRLeft_Click;
+    public struct VRLeftActions
     {
         private @InputActions_viva m_Wrapper;
-        public VRLeftHandActions(@InputActions_viva wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Position => m_Wrapper.m_VRLeftHand_Position;
-        public InputAction @Rotation => m_Wrapper.m_VRLeftHand_Rotation;
-        public InputAction @TrackingState => m_Wrapper.m_VRLeftHand_TrackingState;
-        public InputAction @HapticDevice => m_Wrapper.m_VRLeftHand_HapticDevice;
-        public InputAction @Move => m_Wrapper.m_VRLeftHand_Move;
-        public InputAction @Select => m_Wrapper.m_VRLeftHand_Select;
-        public InputAction @Grab => m_Wrapper.m_VRLeftHand_Grab;
-        public InputAction @Interact => m_Wrapper.m_VRLeftHand_Interact;
-        public InputAction @Run => m_Wrapper.m_VRLeftHand_Run;
-        public InputAction @Click => m_Wrapper.m_VRLeftHand_Click;
-        public InputActionMap Get() { return m_Wrapper.m_VRLeftHand; }
+        public VRLeftActions(@InputActions_viva wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Position => m_Wrapper.m_VRLeft_Position;
+        public InputAction @Rotation => m_Wrapper.m_VRLeft_Rotation;
+        public InputAction @TrackingState => m_Wrapper.m_VRLeft_TrackingState;
+        public InputAction @HapticDevice => m_Wrapper.m_VRLeft_HapticDevice;
+        public InputAction @Move => m_Wrapper.m_VRLeft_Move;
+        public InputAction @Select => m_Wrapper.m_VRLeft_Select;
+        public InputAction @Grab => m_Wrapper.m_VRLeft_Grab;
+        public InputAction @Interact => m_Wrapper.m_VRLeft_Interact;
+        public InputAction @Run => m_Wrapper.m_VRLeft_Run;
+        public InputAction @Click => m_Wrapper.m_VRLeft_Click;
+        public InputActionMap Get() { return m_Wrapper.m_VRLeft; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(VRLeftHandActions set) { return set.Get(); }
-        public void AddCallbacks(IVRLeftHandActions instance)
+        public static implicit operator InputActionMap(VRLeftActions set) { return set.Get(); }
+        public void AddCallbacks(IVRLeftActions instance)
         {
-            if (instance == null || m_Wrapper.m_VRLeftHandActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_VRLeftHandActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_VRLeftActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_VRLeftActionsCallbackInterfaces.Add(instance);
             @Position.started += instance.OnPosition;
             @Position.performed += instance.OnPosition;
             @Position.canceled += instance.OnPosition;
@@ -1988,7 +1988,7 @@ public partial class @InputActions_viva: IInputActionCollection2, IDisposable
             @Click.canceled += instance.OnClick;
         }
 
-        private void UnregisterCallbacks(IVRLeftHandActions instance)
+        private void UnregisterCallbacks(IVRLeftActions instance)
         {
             @Position.started -= instance.OnPosition;
             @Position.performed -= instance.OnPosition;
@@ -2022,60 +2022,60 @@ public partial class @InputActions_viva: IInputActionCollection2, IDisposable
             @Click.canceled -= instance.OnClick;
         }
 
-        public void RemoveCallbacks(IVRLeftHandActions instance)
+        public void RemoveCallbacks(IVRLeftActions instance)
         {
-            if (m_Wrapper.m_VRLeftHandActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_VRLeftActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(IVRLeftHandActions instance)
+        public void SetCallbacks(IVRLeftActions instance)
         {
-            foreach (var item in m_Wrapper.m_VRLeftHandActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_VRLeftActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_VRLeftHandActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_VRLeftActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public VRLeftHandActions @VRLeftHand => new VRLeftHandActions(this);
+    public VRLeftActions @VRLeft => new VRLeftActions(this);
 
-    // VR RightHand
-    private readonly InputActionMap m_VRRightHand;
-    private List<IVRRightHandActions> m_VRRightHandActionsCallbackInterfaces = new List<IVRRightHandActions>();
-    private readonly InputAction m_VRRightHand_Position;
-    private readonly InputAction m_VRRightHand_Rotation;
-    private readonly InputAction m_VRRightHand_TrackingState;
-    private readonly InputAction m_VRRightHand_HapticDevice;
-    private readonly InputAction m_VRRightHand_Look;
-    private readonly InputAction m_VRRightHand_Select;
-    private readonly InputAction m_VRRightHand_Grab;
-    private readonly InputAction m_VRRightHand_Interact;
-    private readonly InputAction m_VRRightHand_Pause;
-    private readonly InputAction m_VRRightHand_Click;
-    private readonly InputAction m_VRRightHand_Scroll;
-    public struct VRRightHandActions
+    // VR Right
+    private readonly InputActionMap m_VRRight;
+    private List<IVRRightActions> m_VRRightActionsCallbackInterfaces = new List<IVRRightActions>();
+    private readonly InputAction m_VRRight_Position;
+    private readonly InputAction m_VRRight_Rotation;
+    private readonly InputAction m_VRRight_TrackingState;
+    private readonly InputAction m_VRRight_HapticDevice;
+    private readonly InputAction m_VRRight_Turn;
+    private readonly InputAction m_VRRight_Select;
+    private readonly InputAction m_VRRight_Grab;
+    private readonly InputAction m_VRRight_Interact;
+    private readonly InputAction m_VRRight_Pause;
+    private readonly InputAction m_VRRight_Click;
+    private readonly InputAction m_VRRight_Scroll;
+    public struct VRRightActions
     {
         private @InputActions_viva m_Wrapper;
-        public VRRightHandActions(@InputActions_viva wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Position => m_Wrapper.m_VRRightHand_Position;
-        public InputAction @Rotation => m_Wrapper.m_VRRightHand_Rotation;
-        public InputAction @TrackingState => m_Wrapper.m_VRRightHand_TrackingState;
-        public InputAction @HapticDevice => m_Wrapper.m_VRRightHand_HapticDevice;
-        public InputAction @Look => m_Wrapper.m_VRRightHand_Look;
-        public InputAction @Select => m_Wrapper.m_VRRightHand_Select;
-        public InputAction @Grab => m_Wrapper.m_VRRightHand_Grab;
-        public InputAction @Interact => m_Wrapper.m_VRRightHand_Interact;
-        public InputAction @Pause => m_Wrapper.m_VRRightHand_Pause;
-        public InputAction @Click => m_Wrapper.m_VRRightHand_Click;
-        public InputAction @Scroll => m_Wrapper.m_VRRightHand_Scroll;
-        public InputActionMap Get() { return m_Wrapper.m_VRRightHand; }
+        public VRRightActions(@InputActions_viva wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Position => m_Wrapper.m_VRRight_Position;
+        public InputAction @Rotation => m_Wrapper.m_VRRight_Rotation;
+        public InputAction @TrackingState => m_Wrapper.m_VRRight_TrackingState;
+        public InputAction @HapticDevice => m_Wrapper.m_VRRight_HapticDevice;
+        public InputAction @Turn => m_Wrapper.m_VRRight_Turn;
+        public InputAction @Select => m_Wrapper.m_VRRight_Select;
+        public InputAction @Grab => m_Wrapper.m_VRRight_Grab;
+        public InputAction @Interact => m_Wrapper.m_VRRight_Interact;
+        public InputAction @Pause => m_Wrapper.m_VRRight_Pause;
+        public InputAction @Click => m_Wrapper.m_VRRight_Click;
+        public InputAction @Scroll => m_Wrapper.m_VRRight_Scroll;
+        public InputActionMap Get() { return m_Wrapper.m_VRRight; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(VRRightHandActions set) { return set.Get(); }
-        public void AddCallbacks(IVRRightHandActions instance)
+        public static implicit operator InputActionMap(VRRightActions set) { return set.Get(); }
+        public void AddCallbacks(IVRRightActions instance)
         {
-            if (instance == null || m_Wrapper.m_VRRightHandActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_VRRightHandActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_VRRightActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_VRRightActionsCallbackInterfaces.Add(instance);
             @Position.started += instance.OnPosition;
             @Position.performed += instance.OnPosition;
             @Position.canceled += instance.OnPosition;
@@ -2088,9 +2088,9 @@ public partial class @InputActions_viva: IInputActionCollection2, IDisposable
             @HapticDevice.started += instance.OnHapticDevice;
             @HapticDevice.performed += instance.OnHapticDevice;
             @HapticDevice.canceled += instance.OnHapticDevice;
-            @Look.started += instance.OnLook;
-            @Look.performed += instance.OnLook;
-            @Look.canceled += instance.OnLook;
+            @Turn.started += instance.OnTurn;
+            @Turn.performed += instance.OnTurn;
+            @Turn.canceled += instance.OnTurn;
             @Select.started += instance.OnSelect;
             @Select.performed += instance.OnSelect;
             @Select.canceled += instance.OnSelect;
@@ -2111,7 +2111,7 @@ public partial class @InputActions_viva: IInputActionCollection2, IDisposable
             @Scroll.canceled += instance.OnScroll;
         }
 
-        private void UnregisterCallbacks(IVRRightHandActions instance)
+        private void UnregisterCallbacks(IVRRightActions instance)
         {
             @Position.started -= instance.OnPosition;
             @Position.performed -= instance.OnPosition;
@@ -2125,9 +2125,9 @@ public partial class @InputActions_viva: IInputActionCollection2, IDisposable
             @HapticDevice.started -= instance.OnHapticDevice;
             @HapticDevice.performed -= instance.OnHapticDevice;
             @HapticDevice.canceled -= instance.OnHapticDevice;
-            @Look.started -= instance.OnLook;
-            @Look.performed -= instance.OnLook;
-            @Look.canceled -= instance.OnLook;
+            @Turn.started -= instance.OnTurn;
+            @Turn.performed -= instance.OnTurn;
+            @Turn.canceled -= instance.OnTurn;
             @Select.started -= instance.OnSelect;
             @Select.performed -= instance.OnSelect;
             @Select.canceled -= instance.OnSelect;
@@ -2148,21 +2148,21 @@ public partial class @InputActions_viva: IInputActionCollection2, IDisposable
             @Scroll.canceled -= instance.OnScroll;
         }
 
-        public void RemoveCallbacks(IVRRightHandActions instance)
+        public void RemoveCallbacks(IVRRightActions instance)
         {
-            if (m_Wrapper.m_VRRightHandActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_VRRightActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(IVRRightHandActions instance)
+        public void SetCallbacks(IVRRightActions instance)
         {
-            foreach (var item in m_Wrapper.m_VRRightHandActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_VRRightActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_VRRightHandActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_VRRightActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public VRRightHandActions @VRRightHand => new VRRightHandActions(this);
+    public VRRightActions @VRRight => new VRRightActions(this);
     public interface IKeyboardActions
     {
         void OnMiniprofiler(InputAction.CallbackContext context);
@@ -2198,7 +2198,7 @@ public partial class @InputActions_viva: IInputActionCollection2, IDisposable
         void OnTrackedPosition(InputAction.CallbackContext context);
         void OnTrackedOrientation(InputAction.CallbackContext context);
     }
-    public interface IVRLeftHandActions
+    public interface IVRLeftActions
     {
         void OnPosition(InputAction.CallbackContext context);
         void OnRotation(InputAction.CallbackContext context);
@@ -2211,13 +2211,13 @@ public partial class @InputActions_viva: IInputActionCollection2, IDisposable
         void OnRun(InputAction.CallbackContext context);
         void OnClick(InputAction.CallbackContext context);
     }
-    public interface IVRRightHandActions
+    public interface IVRRightActions
     {
         void OnPosition(InputAction.CallbackContext context);
         void OnRotation(InputAction.CallbackContext context);
         void OnTrackingState(InputAction.CallbackContext context);
         void OnHapticDevice(InputAction.CallbackContext context);
-        void OnLook(InputAction.CallbackContext context);
+        void OnTurn(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
         void OnGrab(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);

@@ -23,7 +23,7 @@ namespace Viva
         public void UpdateDaySegmentLampState(bool instant)
         {
 
-            bool turnOn = (GameDirector.newSkyDirector.skyDefinition.currentSegment == DaySegment.NIGHT);
+            bool turnOn = (GameDirector.skyDirector.GetDaySegment().Equals(DaySegment.NIGHT));
 
             if (turnOnLampsCoroutine != null)
             {

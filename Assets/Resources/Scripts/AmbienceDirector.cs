@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using OccaSoftware.Altos.Runtime;
 using UnityEngine;
 
 namespace Viva
@@ -38,6 +37,14 @@ namespace Viva
 
         private Dictionary<Ambience, int> activeAmbienceCounts = new();
 
+        private SkyDirector skyDirector = GameDirector.skyDirector;
+        public enum DaySegment
+        {
+            MORNING,
+            DAY,
+            NIGHT,
+            NONE,
+        }
 
         public void InitializeAmbience()
         {
@@ -193,13 +200,13 @@ namespace Viva
             {
                 fadeInSources = globalAmbienceSourcesB;
                 fadeOutSources = globalAmbienceSourcesA;
-                SetAndPlayLoopAudioSources(globalAmbienceSourcesB, currentAmbience.GetAudio(GameDirector.newSkyDirector.skyDefinition.currentSegment, GameDirector.instance.userIsIndoors));
+                SetAndPlayLoopAudioSources(globalAmbienceSourcesB, currentAmbience.GetAudio(skyDirector.GetDaySegment, GameDirector.instance.userIsIndoors));
             }
             else
             {
                 fadeInSources = globalAmbienceSourcesA;
                 fadeOutSources = globalAmbienceSourcesB;
-                SetAndPlayLoopAudioSources(globalAmbienceSourcesA, currentAmbience.GetAudio(GameDirector.newSkyDirector.skyDefinition.currentSegment, GameDirector.instance.userIsIndoors));
+                SetAndPlayLoopAudioSources(globalAmbienceSourcesA, currentAmbience.GetAudio(skyDirector.GetDaySegment, GameDirector.instance.userIsIndoors));
             }
             usingAmbienceSourcesA = !usingAmbienceSourcesA;
 
@@ -247,7 +254,7 @@ namespace Viva
 
             if (GameDirector.instance.userIsIndoors)
             {
-                SetAndPlayLoopAudioSources(fadeInSources, currentAmbience.GetAudio(GameDirector.newSkyDirector.skyDefinition.currentSegment, false));
+                SetAndPlayLoopAudioSources(fadeInSources, currentAmbience.GetAudio(skyDirector.GetDaySegment, false));
             }
             else
             {
@@ -291,7 +298,7 @@ namespace Viva
 
                     SetAudioSourcesVolume(fadeInSources, fadeInStartSound.Value);
                     SetAudioSourcesVolume(fadeOutSources, 1.0f - fadeInStartSound.Value);
-                    SetDaySegmentSounds(GameDirector.newSkyDirector.skyDefinition.currentSegment, fadeInStartSound.Value);
+                    SetDaySegmentSounds( (DaySegment) skyDirector.GetDaySegment(), fadeInStartSound.Value);
                     yield return new WaitForSeconds(interval);
                 }
             }
