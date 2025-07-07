@@ -6,30 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/canyon.unity
-    guid: c6fec7833473f9f41939f30373ae702f
+    path: Assets/Scenes/SampleScene.unity
+    guid: 55daccc09a3b69647bbab145b54a3ab3
   m_configObjects:
-    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 99f37be55dfcd2c4e9649dbfc16e3c96,
-      type: 2}
-    Unity.XR.OpenVR.Settings: {fileID: 11400000, guid: d23c09d1c45db264ca7a4f3fbcd53d65,
-      type: 2}
-    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 4e930fb898abd6547b59ae4c9c2716fc,
-      type: 2}
-    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: a2e13b64ff64e0546a8ea1f8e6e59c45,
-      type: 2}
-    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
-      guid: fdf9c8b38a8f73c44b34615ba64b4dc8, type: 2}
-    com.unity.addressableassets: {fileID: 11400000, guid: 8999a42ad14417344ba87a36f455366d,
-      type: 2}
-    com.unity.input.settings: {fileID: 11400000, guid: 8b0be70a9ccfd19469b5e80d3aa62282,
-      type: 2}
-    com.unity.localization.settings: {fileID: 11400000, guid: 1241fa79cb1539b49b2e291e216b5ef2,
-      type: 2}
-    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: f9f4bc87e6b72ab4db3715e1cf47decb,
-      type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 08dd485950628844c81f08f1489466f3,
-      type: 2}
-    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: b0cb10e782039904495e2f27de552d0e,
-      type: 2}
-    xr.sdk.mock-hmd.settings: {fileID: 11400000, guid: 80309c9f4f4a3914f9c1a70c66e5ccef,
-      type: 2}
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
+    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba, type: 2}
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 9bec1ce6a03ccba4b9a8215241b32e63, type: 2}
+    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: a49cadc1a815591479693b955ccf08c1, type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 985fdffee33a5944396199c6b7145dd4, type: 3}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 1a4c68ca72a83449f938d669337cb305, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: a9a6963505ddf7f4d886008c6dc86122, type: 2}
