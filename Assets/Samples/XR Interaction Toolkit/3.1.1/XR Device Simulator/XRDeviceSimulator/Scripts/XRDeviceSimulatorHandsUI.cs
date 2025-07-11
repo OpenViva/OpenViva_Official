@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityEngine.XR.Interaction.Toolkit.Inputs.Readers;
 using UnityEngine.XR.Interaction.Toolkit.Inputs.Simulation;
 
 namespace UnityEngine.XR.Interaction.Toolkit.Samples.DeviceSimulator
@@ -35,7 +34,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.DeviceSimulator
             public void Initialize(InputAction action, string name, Sprite icon)
             {
                 m_Action = action;
-                m_BindText.text = m_Action?.controls[0].displayName;
+                m_BindText.text = m_Action.controls[0].displayName;
                 m_TitleText.text = $"[{name}]";
                 if (icon != null)
                     m_Sprite = icon;
@@ -52,7 +51,6 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.DeviceSimulator
 
                 m_Icon.transform.localScale = Vector3.one;
                 m_Icon.sprite = uiManager.GetInputIcon(m_Action?.controls[0]);
-                m_Icon.enabled = m_Icon.sprite != null;
             }
 
             public void SetButtonColor(Color color)
@@ -81,7 +79,6 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.DeviceSimulator
 
         XRDeviceSimulatorUI m_MainUIManager;
         HandExpressionUI m_ActiveExpression;
-        SimulatedHandExpressionManager m_HandExpressionManager;
 
         protected void Awake()
         {
@@ -90,37 +87,16 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.DeviceSimulator
 
         internal void Initialize(XRDeviceSimulator simulator)
         {
-            if (!simulator.gameObject.TryGetComponent(out m_HandExpressionManager))
+            for (var index = 0; index < simulator.simulatedHandExpressions.Count; ++index)
             {
-                Debug.LogError($"Could not find SimulatedHandExpressionManager component on {simulator.name}, disabling simulator UI.");
-                gameObject.SetActive(false);
-                return;
-            }
-
-            for (var index = 0; index < m_HandExpressionManager.simulatedHandExpressions.Count; ++index)
-            {
-                var simulatedExpression = m_HandExpressionManager.simulatedHandExpressions[index];
+                var simulatedExpression = simulator.simulatedHandExpressions[index];
                 if (index >= m_Expressions.Count)
                 {
                     Debug.LogWarning("The Device Simulator has more expressions than the UI can display.", this);
                 }
                 else
                 {
-                    InputAction action = null;
-                    switch (simulatedExpression.toggleInput.inputSourceMode)
-                    {
-                        case XRInputButtonReader.InputSourceMode.InputActionReference:
-                            action = simulatedExpression.toggleInput.inputActionReferencePerformed;
-                            break;
-                        case XRInputButtonReader.InputSourceMode.InputAction:
-                            action = simulatedExpression.toggleInput.inputActionPerformed;
-                            break;
-                        default:
-                            Debug.LogWarning($"Toggle Input for Simulated Hand Expression \"{simulatedExpression.name}\" is not an input action, cannot display binding or icon in UI.", this);
-                            break;
-                    }
-
-                    m_Expressions[index].Initialize(action, simulatedExpression.name, simulatedExpression.icon);
+                    m_Expressions[index].Initialize(simulatedExpression.toggleAction, simulatedExpression.name, simulatedExpression.icon);
                 }
             }
 
@@ -159,11 +135,10 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.DeviceSimulator
             }
         }
 
-        internal void ToggleExpression(SimulatedHandExpression simulatedExpression, XRDeviceSimulator simulator)
+        internal void ToggleExpression(XRDeviceSimulator.SimulatedHandExpression simulatedExpression, XRDeviceSimulator simulator)
         {
             // The index of the hand expression corresponds 1:1 with the index of the UI button
-            var index = m_HandExpressionManager.simulatedHandExpressions.IndexOf(simulatedExpression);
-
+            var index = simulator.simulatedHandExpressions.IndexOf(simulatedExpression);
             if (index >= m_Expressions.Count)
             {
                 Debug.LogWarning("The Device Simulator has more expressions than the UI can display.", this);

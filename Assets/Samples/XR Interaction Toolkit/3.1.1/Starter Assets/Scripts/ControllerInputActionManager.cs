@@ -3,8 +3,6 @@ using Unity.XR.CoreUtils.Bindings;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
-using UnityEngine.XR.Interaction.Toolkit.Attachment;
-using UnityEngine.XR.Interaction.Toolkit.Inputs.Readers;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using UnityEngine.XR.Interaction.Toolkit.UI;
 
@@ -132,7 +130,6 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
 
         bool m_StartCalled;
         bool m_PostponedDeactivateTeleport;
-        bool m_PostponedNearRegionLocomotion;
         bool m_HoveringScrollableUI;
 
         readonly HashSet<InputAction> m_LocomotionUsers = new HashSet<InputAction>();
@@ -280,6 +277,15 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
             m_RayInteractorChanged?.Invoke(m_RayInteractor);
         }
 
+        void OnNearFarSelectionRegionChanged(NearFarInteractor.Region selectionRegion)
+        {
+            if (selectionRegion == NearFarInteractor.Region.Far ||
+                (selectionRegion == NearFarInteractor.Region.Near && !m_NearFarEnableTeleportDuringNearInteraction))
+                DisableTeleportActions();
+            else
+                UpdateLocomotionActions();
+        }
+
         void OnStartLocomotion(InputAction.CallbackContext context)
         {
             m_LocomotionUsers.Add(context.action);
@@ -293,52 +299,6 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
             {
                 DisableAllLocomotionActions();
                 UpdateUIActions();
-            }
-        }
-
-        void OnNearFarSelectionRegionChanged(NearFarInteractor.Region selectionRegion)
-        {
-            m_PostponedNearRegionLocomotion = false;
-
-            if (selectionRegion == NearFarInteractor.Region.None)
-            {
-                UpdateLocomotionActions();
-                return;
-            }
-
-            var manipulateAttachTransform = false;
-            var attachController = m_NearFarInteractor.interactionAttachController as InteractionAttachController;
-            if (attachController != null)
-            {
-                manipulateAttachTransform = attachController.useManipulationInput &&
-                    (attachController.manipulationInput.inputSourceMode == XRInputValueReader.InputSourceMode.InputActionReference && attachController.manipulationInput.inputActionReference != null) ||
-                    (attachController.manipulationInput.inputSourceMode != XRInputValueReader.InputSourceMode.InputActionReference && attachController.manipulationInput.inputSourceMode != XRInputValueReader.InputSourceMode.Unused);
-            }
-
-            if (selectionRegion == NearFarInteractor.Region.Far)
-            {
-                if (manipulateAttachTransform)
-                    DisableAllLocomotionActions();
-                else
-                    DisableTeleportActions();
-            }
-            else if (selectionRegion == NearFarInteractor.Region.Near)
-            {
-                // Determine if the user entered the near region due to pulling back on the thumbstick.
-                // If so, postpone enabling locomotion until the user releases the thumbstick
-                // in order to avoid an immediate snap turn around from triggering on region change.
-                var hasStickInput = manipulateAttachTransform && HasStickInput(attachController);
-                if (hasStickInput)
-                {
-                    m_PostponedNearRegionLocomotion = true;
-                    DisableAllLocomotionActions();
-                }
-                else
-                {
-                    UpdateLocomotionActions();
-                    if (!m_NearFarEnableTeleportDuringNearInteraction)
-                        DisableTeleportActions();
-                }
             }
         }
 
@@ -421,6 +381,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
 
         protected void Update()
         {
+            // Start the coroutine that executes code after the Update phase (during yield null).
             // Since this behavior has the default execution order, it runs after the XRInteractionManager,
             // so selection events have been finished by now this frame. This means that the teleport interactor
             // has had a chance to process its select interaction event and teleport if needed.
@@ -430,28 +391,6 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
                     m_TeleportInteractor.gameObject.SetActive(false);
 
                 m_PostponedDeactivateTeleport = false;
-            }
-
-            // If stick input caused the near region to be entered,
-            // wait until the stick is released before enabling locomotion.
-            if (m_PostponedNearRegionLocomotion)
-            {
-                var hasStickInput = false;
-                if (m_NearFarInteractor != null &&
-                    m_NearFarInteractor.interactionAttachController is InteractionAttachController attachController
-                    && attachController != null)
-                {
-                    hasStickInput = HasStickInput(attachController);
-                }
-
-                if (!hasStickInput)
-                {
-                    m_PostponedNearRegionLocomotion = false;
-
-                    UpdateLocomotionActions();
-                    if (!m_NearFarEnableTeleportDuringNearInteraction)
-                        DisableTeleportActions();
-                }
             }
         }
 
@@ -491,15 +430,6 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
             SetEnabled(m_UIScroll, m_UIScrollingEnabled && m_HoveringScrollableUI && m_LocomotionUsers.Count == 0);
         }
 
-        static bool HasStickInput(InteractionAttachController attachController)
-        {
-            // 75% of default 0.5 press threshold
-            const float sqrStickReleaseThreshold = 0.375f * 0.375f;
-
-            return attachController.manipulationInput.TryReadValue(out var stickInput) &&
-                stickInput.sqrMagnitude > sqrStickReleaseThreshold;
-        }
-
         static void SetEnabled(InputActionReference actionReference, bool enabled)
         {
             if (enabled)
@@ -511,13 +441,15 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
         static void EnableAction(InputActionReference actionReference)
         {
             var action = GetInputAction(actionReference);
-            action?.Enable();
+            if (action != null && !action.enabled)
+                action.Enable();
         }
 
         static void DisableAction(InputActionReference actionReference)
         {
             var action = GetInputAction(actionReference);
-            action?.Disable();
+            if (action != null && action.enabled)
+                action.Disable();
         }
 
         static InputAction GetInputAction(InputActionReference actionReference)

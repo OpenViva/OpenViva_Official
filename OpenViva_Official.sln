@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{58CFF429-D110-6537-62AF-EF2D0FB93006}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.XR.Interaction.Toolkit.Samples.Hands", "Unity.XR.Interaction.Toolkit.Samples.Hands.csproj", "{5CB2753C-FB85-CEF8-487A-AA286DBC8B83}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{A3D09195-7ADB-B44A-4775-733AD1FBCA62}"
@@ -21,6 +23,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{58CFF429-D110-6537-62AF-EF2D0FB93006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58CFF429-D110-6537-62AF-EF2D0FB93006}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58CFF429-D110-6537-62AF-EF2D0FB93006}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58CFF429-D110-6537-62AF-EF2D0FB93006}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5CB2753C-FB85-CEF8-487A-AA286DBC8B83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5CB2753C-FB85-CEF8-487A-AA286DBC8B83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CB2753C-FB85-CEF8-487A-AA286DBC8B83}.Release|Any CPU.ActiveCfg = Release|Any CPU
