@@ -8,28 +8,25 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Foliage_Atlas
-  m_Shader: {fileID: -6465566751694194690, guid: 6e2661f16c830432e8c6d4024ace4dd8,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _ALPHA_CUT
-  - _BRUSHLIGHTING
-  - _TERRAINALIGNEDDETAIL
-  - _TERRAINBLENDALBEDO_HEIGHTTINT
-  - _VERTEXWIND
-  m_InvalidKeywords:
-  - _FOLIAGERENDERER
-  - _METALLICGLOSSMAP
+  - _ALPHAPREMULTIPLY_ON
   - _METALLICSPECGLOSSMAP
   - _NORMALMAP
+  - _SURFACE_TYPE_TRANSPARENT
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    RenderType: Transparent
   disabledShaderPasses:
   - MOTIONVECTORS
+  - DepthOnly
+  - SHADOWCASTER
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -193,6 +190,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AO: 2.4
+    - _AddPrecomputedVelocity: 0
     - _Alpha: 1
     - _AlphaClip: 0
     - _AlphaThreshold: 0.007
@@ -214,8 +212,8 @@ Material:
     - _DetailSmoothnessStrength: 1
     - _DoubleSidedNormalMode: 2
     - _Drag: 1
-    - _DstBlend: 0
-    - _DstBlendAlpha: 0
+    - _DstBlend: 10
+    - _DstBlendAlpha: 10
     - _EmissionStrength: 1
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0.7
@@ -241,7 +239,7 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Stiffness: 0.67
-    - _Surface: 0
+    - _Surface: 1
     - _TerrainAlbedoProvided: 0
     - _TerrainAlignedDetail: 1
     - _TerrainBlendAlbedo: 2
@@ -257,7 +255,7 @@ Material:
     - _WindNormalInfluence: 1.92
     - _WindQuality: 0
     - _WorkflowMode: 1
-    - _ZWrite: 1
+    - _ZWrite: 0
     m_Colors:
     - _BaseColor: {r: 0.8602941, g: 0.8602941, b: 0.8602941, a: 1}
     - _Color: {r: 0.8602941, g: 0.8602941, b: 0.8602941, a: 1}
@@ -273,6 +271,7 @@ Material:
     - _TreeInstanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _TreeInstanceScale: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &1186648646336594647
 MonoBehaviour:
   m_ObjectHideFlags: 11
@@ -285,4 +284,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 9
+  version: 10

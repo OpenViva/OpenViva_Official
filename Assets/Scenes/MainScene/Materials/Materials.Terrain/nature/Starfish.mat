@@ -8,31 +8,35 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Starfish
-  m_Shader: {fileID: -6465566751694194690, guid: 6e2661f16c830432e8c6d4024ace4dd8,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _ALPHA_NONE
-  - _FOLIAGERENDERER
-  - _TERRAINBLENDALBEDO_NONE
+  m_ValidKeywords:
+  - _ALPHAPREMULTIPLY_ON
+  - _NORMALMAP
+  - _SPECULAR_SETUP
+  - _SURFACE_TYPE_TRANSPARENT
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    RenderType: Transparent
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  - DepthOnly
+  - SHADOWCASTER
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 62d01d95dde7fe949b928e11a82edb82, type: 3}
+        m_Texture: {fileID: 2800000, guid: 295631ce709854547829ba5db1809a49, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: a111eae57a92213498a6b55d09e2a893, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -56,7 +60,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 62d01d95dde7fe949b928e11a82edb82, type: 3}
+        m_Texture: {fileID: 2800000, guid: 295631ce709854547829ba5db1809a49, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
@@ -64,7 +68,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 66f39a93a93feaf48bf98d5ce37c8dd3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
@@ -169,6 +173,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AddPrecomputedVelocity: 0
     - _Alpha: 0
     - _AlphaClip: 0
     - _AlphaThreshold: 0.5
@@ -189,8 +194,8 @@ Material:
     - _DetailSmoothnessStrength: 1
     - _DoubleSidedNormalMode: 1
     - _Drag: 1
-    - _DstBlend: 0
-    - _DstBlendAlpha: 0
+    - _DstBlend: 10
+    - _DstBlendAlpha: 10
     - _EmissionStrength: 1
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
@@ -211,7 +216,7 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Stiffness: 1
-    - _Surface: 0
+    - _Surface: 1
     - _TerrainAlbedoProvided: 0
     - _TerrainAlignedDetail: 0
     - _TerrainBlendAlbedo: 0
@@ -223,8 +228,8 @@ Material:
     - _UseMaskMap: 0
     - _VertexWind: 0
     - _WindNormalInfluence: 0
-    - _WorkflowMode: 1
-    - _ZWrite: 1
+    - _WorkflowMode: 0
+    - _ZWrite: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
@@ -236,6 +241,7 @@ Material:
     - _TerrainSize: {r: 0, g: 0, b: 0, a: 0}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &8753986935883077323
 MonoBehaviour:
   m_ObjectHideFlags: 11
@@ -248,4 +254,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 7
+  version: 10
