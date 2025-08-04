@@ -8,10 +8,11 @@ public class PlayerVR_BasicActions: MonoBehaviour
 
     // FIELDS
     [SerializeField] private InputActionReference[] inputActionReferences = new InputActionReference[3];
-    [SerializeField] private Animator animator;
+    [SerializeField] private Animator animatorL;
+    [SerializeField] private Animator animatorR;
     private bool LeftTriggerDown = false;
-    private bool RightTriggerDown = false;
     private bool LeftGripDown = false;
+    private bool RightTriggerDown = false;
     private bool RightGripDown = false;
 
     // PROPERTIES
@@ -41,95 +42,98 @@ public class PlayerVR_BasicActions: MonoBehaviour
         inputActionReferences[0].action.canceled -= LeftPointEnd;
         inputActionReferences[1].action.performed -= LeftGrab;
         inputActionReferences[1].action.canceled -= LeftGrabEnd;
-        inputActionReferences[2].action.performed -= RightPoint;
-        inputActionReferences[2].action.canceled -= RightPointEnd;
-        inputActionReferences[3].action.performed -= RightGrab;
-        inputActionReferences[3].action.canceled -= RightGrabEnd;
 
     }
 
     
     private void LeftPoint(InputAction.CallbackContext context)
     {
+        LeftGripDown = true;
         if (!LeftTriggerDown)
         {
-            animator.Play("Player_LeftPoint_Ani");
+            animatorL.Play("Player_LeftPoint");
         }
-        LeftGripDown = true;
     }
 
     private void LeftGrab(InputAction.CallbackContext context)
     {
+        LeftTriggerDown = true;
         if (LeftGripDown)
         {
-            animator.Play("Player_LeftPointToGrab_Ani");
+            animatorL.Play("Player_LeftPointToGrab");
         } else
         {
-            animator.Play("Player_LeftGrab_Ani");
+            animatorL.Play("Player_LeftGrab");
         }
-        LeftTriggerDown = true;
-    }
-
-    private void RightPoint(InputAction.CallbackContext context)
-    {
-        if (!RightTriggerDown)
-        {
-            animator.Play("Player_RightPoint_Ani");
-        }
-        RightGripDown = true;
-    }
-
-    private void RightGrab(InputAction.CallbackContext context)
-    {
-        if (RightGripDown)
-        {
-            animator.Play("Player_RightPointToGrab_Ani");
-        } else
-        {
-            animator.Play("Player_RightGrab_Ani");
-        }
-        RightTriggerDown = true;
     }
 
     private void LeftPointEnd(InputAction.CallbackContext context)
     {
-        if (!LeftTriggerDown)
-        {
-            animator.Play("Player_LeftPoint_End");
-        }
         LeftGripDown = false;
+        if (LeftTriggerDown)
+        {
+            animatorL.Play("Player_LeftPointToGrab");
+        } else
+        {
+            animatorL.Play("Player_LeftPointEnd");
+        }
+
     }
 
     private void LeftGrabEnd(InputAction.CallbackContext context)
     {
-        if(LeftGripDown)
+        LeftTriggerDown = false;
+        if (LeftGripDown)
         {
-            animator.Play("Player_LeftGrabToPoint_Ani");
+            animatorL.Play("Player_LeftGrabToPoint");
         } else
         {
-            animator.Play("Player_LeftGrab_End");
+            animatorL.Play("Player_LeftGrabEnd");
         }
-        LeftTriggerDown = false;
+    }
+
+    private void RightPoint(InputAction.CallbackContext context)
+    {
+        RightGripDown = true;
+        if (!RightTriggerDown)
+        {
+            animatorR.Play("Player_RightPoint");
+        }
+    }
+
+    private void RightGrab(InputAction.CallbackContext context)
+    {
+        RightTriggerDown = true;
+        if (RightGripDown)
+        {
+            animatorR.Play("Player_RightPointToGrab");
+        } else
+        {
+            animatorR.Play("Player_RightGrab");
+        }
     }
 
     private void RightPointEnd(InputAction.CallbackContext context)
     {
-        if (!RightTriggerDown)
-        {
-            animator.Play("Player_RightPoint_End");
-        }
         RightGripDown = false;
+        if (RightTriggerDown)
+        {
+            animatorR.Play("Player_RightPointToGrab");
+        } else
+        {
+            animatorR.Play("Player_RightPointEnd");
+        }
     }
 
     private void RightGrabEnd(InputAction.CallbackContext context)
     {
-        if(RightGripDown)
+        RightTriggerDown = false;
+        if (RightGripDown)
         {
-            animator.Play("Player_RightGrabToPoint_Ani");
+            animatorR.Play("Player_RightGrabToPoint");
         } else
         {
-            animator.Play("Player_RightGrab_End");
+            animatorR.Play("Player_RightGrabEnd");
         }
-        RightTriggerDown = false;
     }
 }
