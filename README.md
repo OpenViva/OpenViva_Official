@@ -6,7 +6,7 @@ OpenViva is an open-source continuation of Project Viva, originally made by Sir 
 We want to get the ball rolling again. In order to do so, we made this new repositary to get ourselves organized and increase productivity. This should also help us avoid confusion.
 This repositary was made after the V0.3.0 update.
 
-All the work up until v0.3.0 was courtesy of SolidStonee (main dev), Fun Maker, Foxify52, Trylk2481, moon2324 and other contributers. If you see a commit titled "Initialization", it was originally authored by SolidStonee. Otherwise, the original author of every commit can be found in it's description.
+All the work up until v0.3.0 was courtesy of SolidStonee (main dev), Fun Maker, Foxify52, Trylk2481, moon2324 and other contributers.
 
 For the time being, all work on the Unreal Engine 5 port has been halted due to various reasons. We are continuing all work on the Unity version of the game.
 
@@ -38,7 +38,7 @@ We currently have translations for:
 Required:
 - Unity 2022.1.21f1
 - Microsoft Visual Studio
-- 3rd Party assets (you will have to ask for them manually from Foxify52 since we cannot share them publically)
+- 3rd Party assets (You will have to ask for them personally from Foxify52 since we cannot share them publically)
 
 Recommended:
 - GitHub Desktop (For better Git management)
