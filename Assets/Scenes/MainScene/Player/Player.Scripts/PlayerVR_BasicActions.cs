@@ -2,9 +2,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
-public class PlayerVR_BasicActions: MonoBehaviour
+public class PlayerVR_BasicActions : MonoBehaviour
 {
     // This class detects a VR player's inputs and executes the correct response.
+    // Code by Saien
 
     // FIELDS
     [SerializeField] private InputActionReference[] inputActionReferences = new InputActionReference[3];
