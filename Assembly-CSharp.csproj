@@ -121,6 +121,7 @@
     <None Include="Assets\Scenes\MainScene\Shaders\Shaders.House\water\bathtubWater.shader" />
     <None Include="Assets\Scenes\MainScene\Terrain\MicroSplatData\MicroSplat_Base.shader" />
     <None Include="Assets\Scenes\MainScene\Shaders\Shaders.Town\UI\BillboardIconAnimation.shader" />
+    <None Include="Assets\3rd Party\Uber Stylized Water\SubGraphs\CubeMap.hlsl" />
     <None Include="Assets\3rd Party\Facepunch.Steamworks\Facepunch.Steamworks.Win64.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
@@ -142,7 +143,9 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\Scenes\MainScene\Shaders\Shaders.House\effects\mirror.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\3rd Party\Uber Stylized Water\Guide.txt" />
     <None Include="Assets\3rd Party\Facepunch.Steamworks\Facepunch.Steamworks.Win32.dll" />
+    <None Include="Assets\3rd Party\Uber Stylized Water\Third Party\URP_ShaderGraphCustomLighting-main\CustomLighting.hlsl" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\3rd Party\Facepunch.Steamworks\Facepunch.Steamworks.Posix.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
@@ -1490,6 +1493,10 @@
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
       <Project>{16BE4670-2957-4A26-A79E-902A57AF9E02}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
+    <ProjectReference Include="UberWaterPlannerReflection.csproj">
+      <Project>{99D3120E-7BE0-E83F-4244-683DC6031340}</Project>
+      <Name>UberWaterPlannerReflection</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.XR.Interaction.Toolkit.Samples.Hands.Editor.csproj">
       <Project>{4BBE17DC-82E1-BD05-B0F8-DBB20D24A00F}</Project>
