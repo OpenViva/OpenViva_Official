@@ -6,130 +6,40 @@ public class CropPlant : MonoBehaviour
     // This class manages all crops in the game.
     // Code by Saien
 
-    [SerializeField] private CropTypes.CropType cropType;
+    [SerializeField] private static CropTypes.CropType cropType;
     [SerializeField] private GameObject cropPrefab;
+    [SerializeField] private CropPositions cropPositions;
+
     private CropProduce[] crops;
     private Timer[] timers;
-
+    private TimerCallback timerCallback = new TimerCallback((object o) => { timerElapsed(o); });
     private Vector3[] positions;
     private int growTime = 20 * 60; // This will later be changed to be dependent on the set DayNightCycle
-
-    private TimerCallback timerCallback = new TimerCallback((object o) => { timerElapsed(o); });
 
     private void Start()
     {
         switch (cropType)
         {
             case CropTypes.CropType.Cantaloupe:
-
-                positions = new Vector3[4] 
-                    {
-                    new Vector3(1, 0, 1),
-                    new Vector3(1, 0, -1),
-                    new Vector3(-1, 0, 1),
-                    new Vector3(-1, 0, -1)
-                    };
-                
-                initCrops(4);
-
+                initCrops(4, cropPositions);
                 break;
-
-            case CropTypes.CropType.Wheat:
-
-                positions = new Vector3[7]
-                    {
-                    new Vector3(3, 0, 1),
-                    new Vector3(3, 0, -1),
-                    new Vector3(1, 0, 1),
-                    new Vector3(1, 0, -1),
-                    new Vector3(-1, 0, 1),
-                    new Vector3(-1, 0, -1),
-                    new Vector3(-3, 0, 0)
-                    };
-                
-                initCrops(7);
-
-                break;
-
-            case CropTypes.CropType.Blueberry:
-
-                positions = new Vector3[12]
-                    {
-                    new Vector3(3, 0, 3),
-                    new Vector3(3, 0, 1),
-                    new Vector3(3, 0, -1),
-                    new Vector3(3, 0, -3),
-                    new Vector3(-3, 0, 3),
-                    new Vector3(-3, 0, 1),
-                    new Vector3(-3, 0, -1),
-                    new Vector3(-3, 0, -3),
-                    new Vector3(1, 0, 0),
-                    new Vector3(-1, 0, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(0, 0, -1)
-                    };
-                
-                initCrops(12);
-
-                break;
-
-            case CropTypes.CropType.Peach:
-
-                positions = new Vector3[16]
-                    {
-                    new Vector3(3, 0, 3),
-                    new Vector3(3, 0, 1),
-                    new Vector3(3, 0, -1),
-                    new Vector3(3, 0, -3),
-                    new Vector3(1, 0, 3),
-                    new Vector3(1, 0, -3),
-                    new Vector3(-1, 0, 3),
-                    new Vector3(-1, 0, -3),
-                    new Vector3(-3, 0, 3),
-                    new Vector3(-3, 0, 1),
-                    new Vector3(-3, 0, -1),
-                    new Vector3(-3, 0, -3),
-                    new Vector3(0, 0, 1),
-                    new Vector3(0, 0, -1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(-1, 0, 0)
-                    };
-                
-                initCrops(16);
-
-                break;
-
-            case CropTypes.CropType.Strawberry:
-
-                positions = new Vector3[8]
-                    {
-                    new Vector3(2, 0, 2),
-                    new Vector3(2, 0, -2),
-                    new Vector3(-2, 0, 2),
-                    new Vector3(-2, 0, -2),
-                    new Vector3(0, 0, 2),
-                    new Vector3(0, 0, -2),
-                    new Vector3(2, 0, 0),
-                    new Vector3(-2, 0, 0)
-                    };
-
-                initCrops(8);
-
-                break;
-
+                // To do: Add more crop types here
         }
     }
 
-    private void initCrops(int count)
+    private void initCrops(int count, CropPositions positions)
     {
         crops = new CropProduce[count];
         timers = new Timer[count];
+        this.positions = positions.getPositions(cropType);
+
         for (int i = 0; i < count; i++)
         {
             timers[i] = new Timer(timerCallback, i, growTime, Timeout.Infinite);
             GameObject cropObject = Instantiate(cropPrefab);
-            cropObject.transform.position = positions[i];
-            crops[i] = cropObject.GetComponent<CropProduce>();
+            cropObject.transform.position = this.positions[positions.getCurrentPosition()];
+            positions.setCurrentPosition();
+            crops[i] = new CropProduce(cropType, positions.getCurrentPosition());
         }
     }
 

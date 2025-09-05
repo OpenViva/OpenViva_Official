@@ -8,7 +8,7 @@ public class CropProduce : MonoBehaviour
     // Code by Saien
 
     private CropTypes.CropType cropType;
-    [SerializeField] private int position;
+    private int position;
     private bool isPicked = false;
 
     public CropProduce(CropTypes.CropType cropType, int position)

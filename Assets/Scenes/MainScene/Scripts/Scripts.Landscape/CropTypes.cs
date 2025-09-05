@@ -5,10 +5,10 @@ public class CropTypes : ScriptableObject
 {
     public enum CropType
     {
-        Cantaloupe,
-        Wheat,
-        Blueberry,
-        Peach,
-        Strawberry
+        Cantaloupe//,
+        //Wheat,
+        //Blueberry,
+        //Peach,
+        //Strawberry
     }
 }
