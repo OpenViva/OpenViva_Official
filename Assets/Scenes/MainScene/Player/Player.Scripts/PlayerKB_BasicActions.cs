@@ -48,13 +48,4 @@ public class PlayerKB_BasicActions : MonoBehaviour
             isCrouching = false;
         }
     }
-
-    void OnDestory()
-    {
-        for (int i = 0; i < inputActionReferences.Length; i++)
-        {
-            inputActionReferences[i].action.Disable();
-        }
-        inputActionReferences[0].action.performed -= crouch;
-    }
 }
