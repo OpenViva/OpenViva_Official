@@ -13,7 +13,6 @@ public class Player_Manager : MonoBehaviour
     [SerializeField] private GameObject PlayerKB;
 
     // PROPERTIES
-
     void Start()
     {
         changeInputType.action.Enable();

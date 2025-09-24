@@ -1,8 +1,4 @@
-using System;
-using Unity.XR.CoreUtils;
-using UnityEditor.Search;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class DayNightCycle : MonoBehaviour
 {

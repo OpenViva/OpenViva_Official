@@ -62,4 +62,21 @@ public class PlayerKB_Movement : MonoBehaviour
             characterController.Move(movement * Time.deltaTime * _runMultiplier);
         }
     }
+
+    public void setMovementSpeed(float newSpeed)
+    {
+        _movementSpeed = newSpeed;
+    }
+
+    public void disableRunning(bool crouching)
+    {
+        if(crouching)
+        {
+            _runMultiplier = 1f;
+        }
+        else
+        {
+            _runMultiplier = 2.5f;
+        }
+    }
 }
