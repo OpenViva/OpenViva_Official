@@ -7,10 +7,15 @@ public class PlayerKB_BasicActions : MonoBehaviour
     // Code by Saien
 
     // FIELDS
-    [SerializeField] private InputActionReference[] inputActionReferences = new InputActionReference[1];
     [SerializeField] private CharacterController characterController;
     [SerializeField] private PlayerKB_Movement playerMovement;
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private GameObject map;
+
+    [SerializeField] private InputActionReference[] inputActionReferences = new InputActionReference[4];
     private bool isCrouching = false;
+    private int currentHandPos = 10;
+    private bool mapOpen = false;
 
     // PROPERTIES
     void Start()
@@ -20,6 +25,9 @@ public class PlayerKB_BasicActions : MonoBehaviour
             inputActionReferences[i].action.Enable();
         }
         inputActionReferences[0].action.performed += crouch;
+        inputActionReferences[1].action.performed += extendHands;
+        inputActionReferences[2].action.performed += retractHands;
+        inputActionReferences[3].action.performed += changeMapVisibility;
     }
 
     void OnDestroy()
@@ -29,6 +37,9 @@ public class PlayerKB_BasicActions : MonoBehaviour
             inputActionReferences[i].action.Disable();
         }
         inputActionReferences[0].action.performed -= crouch;
+        inputActionReferences[1].action.performed -= extendHands;
+        inputActionReferences[2].action.performed -= retractHands;
+        inputActionReferences[3].action.performed -= changeMapVisibility;
     }
 
     private void crouch(InputAction.CallbackContext context)
@@ -47,5 +58,30 @@ public class PlayerKB_BasicActions : MonoBehaviour
             characterController.height *= 4;
             isCrouching = false;
         }
+    }
+
+    private void extendHands(InputAction.CallbackContext context)
+    {
+        if (currentHandPos <= 50)
+        {
+            playerPrefab.transform.Translate(Vector3.right * 0.01f);
+            currentHandPos++;
+        }
+        
+    }
+
+    private void retractHands(InputAction.CallbackContext context)
+    {
+        if (currentHandPos >= 0)
+        {
+            playerPrefab.transform.Translate(Vector3.left * 0.01f);
+            currentHandPos--;
+        }
+    }
+
+    private void changeMapVisibility(InputAction.CallbackContext context)
+    {
+        mapOpen = !mapOpen;
+        map.SetActive(mapOpen);
     }
 }
