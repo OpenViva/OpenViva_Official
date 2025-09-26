@@ -4,7 +4,7 @@ using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
 public class PlayerVR_BasicActions : MonoBehaviour
 {
-    // This class detects a VR player's inputs and executes the correct response.
+    // This class detects a VR player's inputs and plays the corresponding animations.
     // Code by Saien
 
     // FIELDS

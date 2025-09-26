@@ -19,6 +19,18 @@ public class Player_Manager : MonoBehaviour
         changeInputType.action.performed += ChangeInputType;
     }
 
+    void Update()
+    {
+        if (_inputType == Player_InputTypes.InputType.KBM)
+        {
+            this.transform.position = PlayerKB.transform.position;
+        }
+        else
+        {
+            this.transform.position = PlayerVR.transform.position;
+        }
+    }
+
     void OnDestroy()
     {
         changeInputType.action.Disable();

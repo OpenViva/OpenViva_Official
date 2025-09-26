@@ -16,16 +16,10 @@ public class PlayerKB_Movement : MonoBehaviour
     [Range(1f, 20f)]
     [SerializeField] private float _jumpHeight;
 
-    private CharacterController characterController;
+    [SerializeField] private CharacterController characterController;
     Vector3 _controllerVelocity;
 
     // PROPERTIES
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        characterController = GetComponent<CharacterController>();
-    }
 
     // Update is called once per frame
     void Update()

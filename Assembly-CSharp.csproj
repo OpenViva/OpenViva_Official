@@ -92,6 +92,7 @@
     <Compile Include="Assets\3rd Party\nTools\PrefabPainter\Scripts\PrefabPainterSceneSettings.cs" />
     <Compile Include="Assets\Samples\OpenXR Plugin\1.4.2\Controller\Scripts\DisplayDeviceInfoFromActionISX.cs" />
     <Compile Include="Assets\Scenes\MainScene\Player\Player.Scripts\PlayerKB_Movement.cs" />
+    <Compile Include="Assets\Scenes\MainScene\Player\Player.Scripts\PlayerKB_HUD.cs" />
     <Compile Include="Assets\Samples\OpenXR Plugin\1.4.2\Controller\Scripts\ActionToVisibilityISX.cs" />
     <Compile Include="Assets\VRTemplateAssets\Scripts\DestroyObject.cs" />
     <Compile Include="Assets\VRTemplateAssets\Scripts\VideoTimeScrubControl.cs" />
@@ -104,7 +105,6 @@
     <Compile Include="Assets\VRTemplateAssets\Scripts\Callout.cs" />
     <Compile Include="Assets\VRTemplateAssets\Scripts\CalloutGazeController.cs" />
     <Compile Include="Assets\Scenes\MainScene\Player\Player.Scripts\PlayerKB_BasicActions.cs" />
-    <Compile Include="Assets\Scenes\MainScene\Player\Player.Scripts\PlayerKB_GrabObjects.cs" />
     <Compile Include="Assets\3rd Party\nTools\PrefabPainter\Scripts\PrefabPainterSettings.cs" />
     <Compile Include="Assets\Scenes\MainScene\Scripts\Scripts.Landscape\CropProduce.cs" />
     <Compile Include="Assets\Samples\OpenXR Plugin\1.4.2\Controller\Scripts\ActionToVector2SliderISX.cs" />
@@ -1283,6 +1283,10 @@
     </Reference>
     <Reference Include="Unity.AdaptivePerformance.UI.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.AdaptivePerformance.UI.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.XR.OpenXR.Features.MetaQuestSupport.Editor">
