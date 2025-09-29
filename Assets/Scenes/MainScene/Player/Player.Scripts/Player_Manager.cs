@@ -23,11 +23,11 @@ public class Player_Manager : MonoBehaviour
     {
         if (_inputType == Player_InputTypes.InputType.KBM)
         {
-            this.transform.position = PlayerKB.transform.position;
+            PlayerVR.transform.position = PlayerKB.transform.position;
         }
         else
         {
-            this.transform.position = PlayerVR.transform.position;
+            PlayerKB.transform.position = PlayerVR.transform.position;
         }
     }
 

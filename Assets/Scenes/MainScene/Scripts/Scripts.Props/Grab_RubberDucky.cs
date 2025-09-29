@@ -1,8 +1,5 @@
-using System;
-using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.EnhancedTouch;
 
 public class Grab_RubberDucky : MonoBehaviour
 {
