@@ -7,7 +7,8 @@ public class PlayerKB_BasicActions : MonoBehaviour
     // Code by Saien
 
     // FIELDS
-    [SerializeField] private CharacterController characterController;
+    [SerializeField] private GameObject player;
+    private CharacterController playerController;
     [SerializeField] private PlayerKB_Movement playerMovement;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject map;
@@ -20,6 +21,8 @@ public class PlayerKB_BasicActions : MonoBehaviour
     // PROPERTIES
     void Start()
     {
+        playerController = player.GetComponent<CharacterController>();
+
         for (int i = 0; i < inputActionReferences.Length; i++)
         {
             inputActionReferences[i].action.Enable();
@@ -48,14 +51,15 @@ public class PlayerKB_BasicActions : MonoBehaviour
         {
             playerMovement.setMovementSpeed(1f);
             playerMovement.disableRunning(true);
-            characterController.height /= 4;
+            playerController.height /= 4;
             isCrouching = true;
         }
         else
         {
+            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 0.1f, player.transform.position.z);
             playerMovement.setMovementSpeed(3.5f);
             playerMovement.disableRunning(false);
-            characterController.height *= 4;
+            playerController.height *= 4;
             isCrouching = false;
         }
     }

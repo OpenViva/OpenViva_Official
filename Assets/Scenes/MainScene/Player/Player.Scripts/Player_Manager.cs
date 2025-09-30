@@ -17,6 +17,7 @@ public class Player_Manager : MonoBehaviour
     {
         changeInputType.action.Enable();
         changeInputType.action.performed += ChangeInputType;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()

@@ -1,5 +1,4 @@
 {
-    "version": 1,
     "name": "Custom Input Actions",
     "maps": [
         {
@@ -14,6 +13,60 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Crouch",
+                    "type": "Button",
+                    "id": "545e3f92-a93a-4953-8906-35b38fabf8f8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Open Map",
+                    "type": "Button",
+                    "id": "b7667242-8528-4459-b083-127c670e0354",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Left Grab",
+                    "type": "Button",
+                    "id": "6ce205d8-9933-471b-a8cc-f5c28e4b4e88",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Right Grab",
+                    "type": "Button",
+                    "id": "88da38ea-1011-47bd-9ba5-03712550e605",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Extend Hands",
+                    "type": "Value",
+                    "id": "d320a995-535e-42db-b028-fa94a415368a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Retract Hands",
+                    "type": "Value",
+                    "id": "59741620-b9b4-41cb-8067-d24c4febce24",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -25,6 +78,72 @@
                     "processors": "",
                     "groups": "",
                     "action": "Change Input Type",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7c0e44da-11a2-4457-b85b-c04979079a55",
+                    "path": "<Keyboard>/#(C)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7c4fc177-2ef3-4dd8-aa65-d723d476fb20",
+                    "path": "<Keyboard>/#(M)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Open Map",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f8721327-0acf-44a1-abe7-12b9a6d1c7ae",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left Grab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d287169a-3d13-4a63-8a93-5a99a581157f",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right Grab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "65df585e-c873-4143-8da1-8a9a4af02e7e",
+                    "path": "<Mouse>/scroll/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Extend Hands",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "77edee5e-640f-4fd1-91c0-70bb6acd3112",
+                    "path": "<Mouse>/scroll/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Retract Hands",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
