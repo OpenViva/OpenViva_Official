@@ -1,68 +1,78 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerKB_Movement : MonoBehaviour
 {
     // This class is responsible for the movement of the player using keyboard.
     // Code by Edenity on Unity Asset Store
 
-    //FIELDS
-    [Range(1f, 20f)]
-    [SerializeField] private float _movementSpeed;
-    [Tooltip("run multiplier of the movement speed")]
-    [Range(1f, 20f)]
-    [SerializeField] private float _runMultiplier;
+    // --- Movement ---
+    [Header("Movement")]
+    [SerializeField, Range(1f, 20f)] private float _movementSpeed;
+
+    [Tooltip("How much faster do you want to go when running?")]
+    [SerializeField, Range(1f, 20f)] private float _runMultiplier;
+
+    // --- Jump & Gravity ---
+    [Header("Jump & Gravity")]
+    [SerializeField, Range(1f, 20f)] private float _jumpHeight;
+
     [SerializeField] private float _gravity = -9.81f;
-    [Range(1f, 20f)]
-    [SerializeField] private float _jumpHeight;
 
-    [SerializeField] private CharacterController characterController;
-    Vector3 _controllerVelocity;
+    // --- References ---
+    [Header("References")]
+    [SerializeField] private CharacterController _characterController;
 
-    // PROPERTIES
+    // --- Fields ---
+    public Vector2 moveInput;
+    public Vector2 lookInput;
+    private Vector3 _controllerVelocity;
+    private bool _isRunning = false;
 
-    // Update is called once per frame
     void Update()
     {
-        // stops the y velocity when player is on the ground and the velocity has reached 0
-        if (characterController.isGrounded && _controllerVelocity.y < 0)
+        HandleGravity();
+
+        Vector3 move = (transform.right * moveInput.x + transform.forward * moveInput.y) * GetCurrentSpeed();
+        Vector3 totalMove = (move + _controllerVelocity) * Time.deltaTime;
+
+        _characterController.Move(totalMove);
+    }
+
+    public void HandleJump()
+    {
+        if (_characterController.isGrounded)
+        {
+            _controllerVelocity.y = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
+        }
+    }
+
+    public void HandleRun(bool running)
+    {
+        _isRunning = running;
+    }
+
+    void HandleGravity()
+    {
+        // Fix for instantly snapping to the ground off edges
+        if (_characterController.isGrounded && _controllerVelocity.y < 0)
         {
             _controllerVelocity.y = 0;
         }
 
-        // get the movement input
-        float moveX = Input.GetAxis("Horizontal");
-        float moveZ = Input.GetAxis("Vertical");
-
-        // moves the controller in the desired direction on the x- and z-axis
-        Vector3 movement = transform.right * moveX + transform.forward * moveZ;
-        characterController.Move(movement * _movementSpeed * Time.deltaTime);
-
-        // gravity affects the controller on the y-axis
         _controllerVelocity.y += _gravity * Time.deltaTime;
-
-        // moves the controller on the y-axis
-        characterController.Move(_controllerVelocity * Time.deltaTime);
-
-        // the controller is able to jump when on the ground
-        if (Input.GetButton("Jump") && characterController.isGrounded)
-        {
-            _controllerVelocity.y = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
-        }
-
-        // the controller is able to run
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            characterController.Move(movement * Time.deltaTime * _runMultiplier);
-        }
     }
 
-    public void setMovementSpeed(float newSpeed)
+    float GetCurrentSpeed()
+    {
+        return _isRunning ? _movementSpeed * _runMultiplier : _movementSpeed;
+    }
+
+    public void SetMovementSpeed(float newSpeed)
     {
         _movementSpeed = newSpeed;
     }
 
-    public void disableRunning(bool crouching)
+    public void DisableRunning(bool crouching)
     {
         if(crouching)
         {
