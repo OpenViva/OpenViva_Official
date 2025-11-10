@@ -1,3 +1,4 @@
+using UnityEditor.ShaderGraph;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,58 +14,66 @@ public class PlayerKB_BasicActions : MonoBehaviour
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject map;
 
-    [SerializeField] private InputActionReference[] inputActionReferences = new InputActionReference[4];
     private bool isCrouching = false;
     private int currentHandPos = 10;
     private bool mapOpen = false;
 
+    private DesktopInput playerInput;
+
     // PROPERTIES
+    private void Awake()
+    {
+        playerInput = new DesktopInput();
+
+        // Move binding
+        playerInput.Viva.Move.performed += ctx => playerMovement.moveInput = ctx.ReadValue<Vector2>();
+        playerInput.Viva.Move.canceled += ctx => playerMovement.moveInput = Vector2.zero;
+
+        // Look binding
+        playerInput.Viva.Look.performed += ctx => playerMovement.lookInput = ctx.ReadValue<Vector2>();
+        playerInput.Viva.Look.canceled += ctx => playerMovement.lookInput = Vector2.zero;
+
+        // Run binding
+        playerInput.Viva.Run.performed += ctx => playerMovement.HandleRun(true);
+        playerInput.Viva.Run.canceled += ctx => playerMovement.HandleRun(false);
+
+        // Jump binding
+        playerInput.Viva.Jump.performed += ctx => playerMovement.HandleJump();
+
+        // Other bindings
+        playerInput.Viva.Crouch.performed += OnCrouch;
+        playerInput.Viva.ExtendHands.performed += OnExtendHands;
+        playerInput.Viva.RetractHands.performed += OnRetractHands;
+        playerInput.Viva.OpenMap.performed += OnChangeMapVisibility;
+    }
     void Start()
     {
         playerController = player.GetComponent<CharacterController>();
-
-        for (int i = 0; i < inputActionReferences.Length; i++)
-        {
-            inputActionReferences[i].action.Enable();
-        }
-        inputActionReferences[0].action.performed += crouch;
-        inputActionReferences[1].action.performed += extendHands;
-        inputActionReferences[2].action.performed += retractHands;
-        inputActionReferences[3].action.performed += changeMapVisibility;
     }
 
-    void OnDestroy()
-    {
-        for (int i = 0; i < inputActionReferences.Length; i++)
-        {
-            inputActionReferences[i].action.Disable();
-        }
-        inputActionReferences[0].action.performed -= crouch;
-        inputActionReferences[1].action.performed -= extendHands;
-        inputActionReferences[2].action.performed -= retractHands;
-        inputActionReferences[3].action.performed -= changeMapVisibility;
-    }
+    private void OnEnable() => playerInput.Viva.Enable();
+    private void OnDisable() => playerInput.Viva.Disable();
 
-    private void crouch(InputAction.CallbackContext context)
+    private void OnCrouch(InputAction.CallbackContext context)
     {
         if (!isCrouching)
         {
-            playerMovement.setMovementSpeed(1f);
-            playerMovement.disableRunning(true);
+            playerMovement.SetMovementSpeed(1f);
+            playerMovement.DisableRunning(true);
             playerController.height /= 4;
             isCrouching = true;
         }
         else
         {
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 0.1f, player.transform.position.z);
-            playerMovement.setMovementSpeed(3.5f);
-            playerMovement.disableRunning(false);
+            playerMovement.SetMovementSpeed(3.5f);
+            playerMovement.DisableRunning(false);
             playerController.height *= 4;
             isCrouching = false;
         }
     }
 
-    private void extendHands(InputAction.CallbackContext context)
+    private void OnExtendHands(InputAction.CallbackContext context)
     {
         if (currentHandPos <= 50)
         {
@@ -74,7 +83,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
         
     }
 
-    private void retractHands(InputAction.CallbackContext context)
+    private void OnRetractHands(InputAction.CallbackContext context)
     {
         if (currentHandPos >= 0)
         {
@@ -83,7 +92,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
         }
     }
 
-    private void changeMapVisibility(InputAction.CallbackContext context)
+    private void OnChangeMapVisibility(InputAction.CallbackContext context)
     {
         mapOpen = !mapOpen;
         map.SetActive(mapOpen);
