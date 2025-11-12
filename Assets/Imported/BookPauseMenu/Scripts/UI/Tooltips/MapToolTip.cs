@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace Viva
 {
@@ -10,7 +9,7 @@ namespace Viva
     public class MapToolTip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField]
-        private Text tooltip;
+        private TextMeshProUGUI tooltip;
         [Tooltip("Specify Enter Fade time.")]
         public float fadetime = 0f;
         [Tooltip("Specify Exit Fade time.")]
@@ -25,7 +24,7 @@ namespace Viva
         {
             StartCoroutine(UnFadeText(Unfadetime, tooltip));          
         }
-        public IEnumerator FadeText(float time, Text text)
+        public IEnumerator FadeText(float time, TextMeshProUGUI text)
         {
             text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
             while (text.color.a < 1.0f)
@@ -35,7 +34,7 @@ namespace Viva
             }
         }
 
-        public IEnumerator UnFadeText(float time, Text text)
+        public IEnumerator UnFadeText(float time, TextMeshProUGUI text)
         {
             text.color = new Color(text.color.r, text.color.g, text.color.b, 1);
             while (text.color.a > 0.0f)
