@@ -18,9 +18,11 @@ public class Player_Manager : MonoBehaviour
         changeInputType.action.Enable();
         changeInputType.action.performed += ChangeInputType;
         Cursor.lockState = CursorLockMode.Locked;
+
+        Globals.isDesktopMode = true;
     }
 
-    void Update()
+    private void FixedUpdate()
     {
         if (_inputType == Player_InputTypes.InputType.KBM)
         {
@@ -46,6 +48,7 @@ public class Player_Manager : MonoBehaviour
             _inputType = Player_InputTypes.InputType.VR;
             PlayerKB.SetActive(false);
             PlayerVR.SetActive(true);
+            Globals.isDesktopMode = true;
             Debug.Log("Input type changed to VR");
         }
         else
@@ -53,6 +56,7 @@ public class Player_Manager : MonoBehaviour
             _inputType = Player_InputTypes.InputType.KBM;
             PlayerVR.SetActive(false);
             PlayerKB.SetActive(true);
+            Globals.isDesktopMode = false;
             Debug.Log("Input type changed to KBM");
         }
     }
