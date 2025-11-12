@@ -42,7 +42,7 @@ public class PlayerKB_Movement : MonoBehaviour
     private void Start()
     {
         // Locks cursor and makes it invisible
-        Cursor.lockState = Cursor.lockState;
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
         if (TryGetComponent(out CharacterController foundController))
@@ -56,11 +56,7 @@ public class PlayerKB_Movement : MonoBehaviour
     {
         HandleGravity();
         HandleLook();
-
-        Vector3 move = (transform.right * moveInput.x + transform.forward * moveInput.y) * GetCurrentSpeed();
-        Vector3 totalMove = (move + _controllerVelocity) * Time.deltaTime;
-
-        _characterController.Move(totalMove);
+        HandleMovement();
     }
 
     private void LateUpdate()
@@ -72,9 +68,19 @@ public class PlayerKB_Movement : MonoBehaviour
         _camera.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
     }
 
+    void HandleMovement()
+    {
+        if (Globals.isMenuOpen) return;
+
+        Vector3 move = (transform.right * moveInput.x + transform.forward * moveInput.y) * GetCurrentSpeed();
+        Vector3 totalMove = (move + _controllerVelocity) * Time.deltaTime;
+
+        _characterController.Move(totalMove);
+    }
+
     void HandleLook()
     {
-        if (lookInput == Vector2.zero) return;
+        if (lookInput == Vector2.zero || Globals.isMenuOpen) return;
 
         _yRotation += lookInput.x * _mouseSensitivity * Time.deltaTime;
         _xRotation -= lookInput.y * _mouseSensitivity * Time.deltaTime;
