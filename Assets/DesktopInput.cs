@@ -190,6 +190,15 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""d8082163-9a68-4974-b3ac-0274c2920ecf"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -566,6 +575,28 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
                     ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""47bccae4-9261-4ec8-8cd2-f98ee8da1f4b"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""92cbb83c-8012-4998-8f36-a9727309752f"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -635,6 +666,7 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
         m_Viva_ExtendHands = m_Viva.FindAction("Extend Hands", throwIfNotFound: true);
         m_Viva_RetractHands = m_Viva.FindAction("Retract Hands", throwIfNotFound: true);
         m_Viva_Run = m_Viva.FindAction("Run", throwIfNotFound: true);
+        m_Viva_Pause = m_Viva.FindAction("Pause", throwIfNotFound: true);
     }
 
     ~@DesktopInput()
@@ -726,6 +758,7 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Viva_ExtendHands;
     private readonly InputAction m_Viva_RetractHands;
     private readonly InputAction m_Viva_Run;
+    private readonly InputAction m_Viva_Pause;
     /// <summary>
     /// Provides access to input actions defined in input action map "Viva".
     /// </summary>
@@ -781,6 +814,10 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Viva/Run".
         /// </summary>
         public InputAction @Run => m_Wrapper.m_Viva_Run;
+        /// <summary>
+        /// Provides access to the underlying input action "Viva/Pause".
+        /// </summary>
+        public InputAction @Pause => m_Wrapper.m_Viva_Pause;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -840,6 +877,9 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
             @Run.started += instance.OnRun;
             @Run.performed += instance.OnRun;
             @Run.canceled += instance.OnRun;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         /// <summary>
@@ -884,6 +924,9 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
             @Run.started -= instance.OnRun;
             @Run.performed -= instance.OnRun;
             @Run.canceled -= instance.OnRun;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         /// <summary>
@@ -1053,5 +1096,12 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRun(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPause(InputAction.CallbackContext context);
     }
 }
