@@ -23,7 +23,7 @@ namespace Unity.VRTemplate
         float m_ArrowAnimationDuration = 0.2f;
 
         [SerializeField, Tooltip("Animation curve of hte arrow transform to and from the target arrow height.")]
-        AnimationCurve m_AnimationCurve;
+        AnimationCurve mbookAnimatorationCurve;
 
         Coroutine m_ArrowCoroutine;
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -43,7 +43,7 @@ namespace Unity.VRTemplate
 #pragma warning disable CS0618 // Type or member is obsolete
             m_ArrowHeight = new Vector3TweenableVariable();
 #pragma warning restore CS0618 // Type or member is obsolete
-            m_ArrowHeight.animationCurve = m_AnimationCurve;
+            m_ArrowHeight.animationCurve = mbookAnimatorationCurve;
             m_InitialArrowScale = m_Arrow.localScale;
         }
 

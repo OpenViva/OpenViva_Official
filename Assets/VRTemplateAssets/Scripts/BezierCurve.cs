@@ -56,10 +56,10 @@ namespace Unity.VRTemplate
         int m_SegmentCount = 50;
 
         [SerializeField, Tooltip("When enabled, the line color gradient will be animated so that an opaque part travels along the line.")]
-        bool m_Animate;
+        bool mbookAnimatorate;
 
         [SerializeField, Tooltip("If animated, this controls the speed that the animation of the line.")]
-        float m_AnimSpeed = 0.25f;
+        float mbookAnimatorSpeed = 0.25f;
 
         [SerializeField, Tooltip("If animated, this color will be the main opaque color of the gradient")]
         Color m_GradientKeyColor = new Color(0.1254902f, 0.5882353f, 0.9529412f);
@@ -108,7 +108,7 @@ namespace Unity.VRTemplate
             if (m_UpdateTrackingType == UpdateType.Update || m_UpdateTrackingType == UpdateType.UpdateAndBeforeRender)
                 DrawCurve();
 
-            if (m_Animate)
+            if (mbookAnimatorate)
             {
                 AnimateCurve();
             }
@@ -193,7 +193,7 @@ namespace Unity.VRTemplate
             newGrad.mode = GradientMode.Blend;
 
             m_LineRenderer.colorGradient = newGrad;
-            m_Time += (Time.unscaledDeltaTime * m_AnimSpeed);
+            m_Time += (Time.unscaledDeltaTime * mbookAnimatorSpeed);
 
             if (m_Time >= 1f)
                 m_Time = 0f;
