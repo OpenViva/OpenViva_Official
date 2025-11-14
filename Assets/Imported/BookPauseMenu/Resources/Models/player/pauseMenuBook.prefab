@@ -1494,9 +1494,9 @@ RectTransform:
   - {fileID: 1097679328229283603}
   m_Father: {fileID: 6697851522507854956}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -249.20001}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 125, y: -249.20001}
   m_SizeDelta: {x: 250, y: 57.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4883263555856836636
@@ -3685,9 +3685,9 @@ RectTransform:
   - {fileID: 64957016721019710}
   m_Father: {fileID: 6697851522507854956}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -325.55002}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 125, y: -325.55002}
   m_SizeDelta: {x: 250, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &426021992369332737
@@ -4376,9 +4376,9 @@ RectTransform:
   - {fileID: 7241787826921015887}
   m_Father: {fileID: 6697851522507854956}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -181.50002}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 125, y: -181.50002}
   m_SizeDelta: {x: 250, y: 57.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7460609322257368518
@@ -4535,7 +4535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 602ea13fbb30925489eca453f6ddbb67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltip: {fileID: 0}
+  tooltip: {fileID: 301480368930037563}
   fadetime: 0.4
   Unfadetime: 0.4
 --- !u!1 &1737067904588514418
@@ -5067,16 +5067,28 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: clickRoot
-        m_Mode: 1
+      - m_Target: {fileID: 6903412565691173355}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: clickCloseMenu
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 9100391925210562747}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1898444945402878243
@@ -5497,7 +5509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 602ea13fbb30925489eca453f6ddbb67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltip: {fileID: 0}
+  tooltip: {fileID: 5189514796722527275}
   fadetime: 0.4
   Unfadetime: 0.4
 --- !u!1 &2247393267569691098
@@ -12060,10 +12072,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: clickControls
-        m_Mode: 1
+      - m_Target: {fileID: 6903412565691173355}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -12071,6 +12083,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 821161697441937764}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &3382485070250779147
 MonoBehaviour:
@@ -16478,10 +16502,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: viva.PauseMenu, Assembly-CSharp
-        m_MethodName: clickGraphics
-        m_Mode: 1
+      - m_Target: {fileID: 6903412565691173355}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -16489,6 +16513,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 9100391925210562747}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &6168634401328296142
 MonoBehaviour:
@@ -23382,15 +23418,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49a5b5d5254221e4cb7b9efe7d1a86e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bookAnimator: {fileID: 117587315241198234}
-  rootPage: {fileID: 6903412565691173355}
-  bookMesh: {fileID: 5982686985603333031}
-  referencePlayer: {fileID: 0}
   offsetLocation: {x: 0, y: 0, z: 1}
   offsetRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  rootPage: {fileID: 6903412565691173355}
+  bookMesh: {fileID: 5982686985603333031}
+  LeftPage: {fileID: 2894622578293896072}
+  RightPage: {fileID: 2633875983606076731}
+  referencePlayer: {fileID: 0}
+  bookAnimator: {fileID: 117587315241198234}
   openAnimationStateName: OpenBook
   closeAnimationStateName: CloseBook
-  maxWaitSeconds: 3
+  extraWaitSeconds: 0.1
+  _openClipLength: 0.6
+  _closeClipLength: 1.2
+  leftPages: []
+  rightPages: []
 --- !u!1 &6800055476114783209
 GameObject:
   m_ObjectHideFlags: 0
@@ -23558,9 +23600,9 @@ RectTransform:
   - {fileID: 3829451004109966161}
   m_Father: {fileID: 6697851522507854956}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -419.05002}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 125, y: -419.05002}
   m_SizeDelta: {x: 160, y: 36}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4845480115990020090
@@ -25649,16 +25691,28 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: clickRoot
-        m_Mode: 1
+      - m_Target: {fileID: 6903412565691173355}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: clickCloseMenu
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 821161697441937764}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &7294890066926247518
@@ -25975,9 +26029,9 @@ RectTransform:
   - {fileID: 5294681005783310490}
   m_Father: {fileID: 6697851522507854956}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -373.05002}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 125, y: -373.05002}
   m_SizeDelta: {x: 160, y: 36}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &5250130143285765408
@@ -29360,9 +29414,9 @@ RectTransform:
   - {fileID: 7660771693368577685}
   m_Father: {fileID: 6697851522507854956}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -113.80001}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 125, y: -113.80001}
   m_SizeDelta: {x: 250, y: 57.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6567647480459460979
