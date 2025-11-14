@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,6 +31,10 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private float _openClipLength = 0.6f;
     [SerializeField] private float _closeClipLength = 1.2f;
 
+    // --- Private Fields ---
+    [SerializeField] private List<GameObject> leftPages = new();
+    [SerializeField] private List<GameObject> rightPages = new();
+
     private void Start()
     {
         if (TryGetComponent(out Animator foundAnimator))
@@ -41,6 +46,9 @@ public class PauseMenu : MonoBehaviour
         bookMesh.SetActive(false);
         LeftPage.SetActive(false);
         RightPage.SetActive(false);
+
+        leftPages = GetDirectChildren(LeftPage);
+        rightPages = GetDirectChildren(RightPage);
     }
 
     #region Input Methods
@@ -128,6 +136,9 @@ public class PauseMenu : MonoBehaviour
         // 1. Hide pages first
         if (rootPage != null && LeftPage != null && RightPage != null)
         {
+            leftPages.DeactivateAllGameobjects();
+            rightPages.DeactivateAllGameobjects();
+
             LeftPage.SetActive(false);
             RightPage.SetActive(false);
         }
@@ -167,6 +178,21 @@ public class PauseMenu : MonoBehaviour
         {
             Debug.LogError("Cannot play animation: Animator missing or state name empty.", this);
         }
+    }
+
+    List<GameObject> GetDirectChildren(GameObject parent)
+    {
+        List<GameObject> children = new List<GameObject>();
+
+        if (parent == null) return children;
+
+        for (int i = 0; i < parent.transform.childCount; i++)
+        {
+            Transform childTransform = parent.transform.GetChild(i);
+            children.Add(childTransform.gameObject);
+        }
+
+        return children;
     }
     #endregion
 
