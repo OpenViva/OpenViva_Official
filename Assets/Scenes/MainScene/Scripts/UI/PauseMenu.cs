@@ -136,8 +136,8 @@ public class PauseMenu : MonoBehaviour
         // 1. Hide pages first
         if (rootPage != null && LeftPage != null && RightPage != null)
         {
-            leftPages.DeactivateAllGameobjects();
-            rightPages.DeactivateAllGameobjects();
+            StartCoroutine(leftPages.DeactivateListAsync(batchSize: 3));
+            StartCoroutine(rightPages.DeactivateListAsync(batchSize: 3));
 
             LeftPage.SetActive(false);
             RightPage.SetActive(false);
