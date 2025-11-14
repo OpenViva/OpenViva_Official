@@ -11,6 +11,17 @@ public class PlayerKB_Movement : MonoBehaviour
     [SerializeField, Range(1f, 20f)] private float _movementSpeed;
     [Tooltip("How much faster do you want to go when running?")]
     [SerializeField, Range(1f, 20f)] private float _runMultiplier;
+    [Tooltip("How steep of an angle is detected as ground")]
+    [SerializeField] private float edgeAngleTolerance = 45f;
+    [Tooltip("Radius for ground detection")]
+    [SerializeField] private float groundCheckRadius = 0.3f;
+    [Tooltip("Distance to check for ground from player center")]
+    [SerializeField] private float groundCheckDistance = 0f;
+    [Tooltip("Length of the edge detection raycasts")]
+    [SerializeField] private float feetOffset = 0f;
+    [SerializeField] private float edgeRaycastLength = 0.53f;
+    [Tooltip("Force applied to push the player off the edge")]
+    [SerializeField] private float edgePushForce = 2f;
 
     // --- Look ---
     [Header("Look")]
@@ -32,6 +43,7 @@ public class PlayerKB_Movement : MonoBehaviour
     [Header("Debug")]
     public Vector2 moveInput;
     public Vector2 lookInput;
+    [SerializeField] private bool isGrounded = false;
 
     // --- Fields ---
     private float _xRotation;
@@ -54,6 +66,8 @@ public class PlayerKB_Movement : MonoBehaviour
 
     void Update()
     {
+        isGrounded = GroundCheck();
+
         HandleGravity();
         HandleLook();
         HandleMovement();
@@ -71,6 +85,11 @@ public class PlayerKB_Movement : MonoBehaviour
     void HandleMovement()
     {
         if (Globals.isMenuOpen) return;
+
+        if (!isGrounded)
+        {
+            DetectAndPushFromEdge();
+        }
 
         Vector3 move = (transform.right * moveInput.x + transform.forward * moveInput.y) * GetCurrentSpeed();
         Vector3 totalMove = (move + _controllerVelocity) * Time.deltaTime;
@@ -91,7 +110,7 @@ public class PlayerKB_Movement : MonoBehaviour
 
     public void HandleJump()
     {
-        if (_characterController.isGrounded)
+        if (isGrounded)
         {
             _controllerVelocity.y = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
         }
@@ -132,6 +151,71 @@ public class PlayerKB_Movement : MonoBehaviour
         else
         {
             _runMultiplier = 2.5f;
+        }
+    }
+
+    #region Helper Methods
+    void DetectAndPushFromEdge()
+    {
+        // Cast rays in 4 directions (forward, backward, left, right) to detect edges at the player's feet
+        Vector3[] directions = { transform.forward, -transform.forward, transform.right, -transform.right };
+
+        // Get the player's feet position
+        Vector3 feetPosition = transform.position + Vector3.up * (feetOffset + 0.1f);
+
+        foreach (var direction in directions)
+        {
+            RaycastHit hit;
+
+            // Cast the ray from the player's feet in the specified direction
+            if (Physics.Raycast(feetPosition, direction, out hit, edgeRaycastLength))
+            {
+                // If the surface is too steep (an edge), push the player away from it
+                if (Vector3.Angle(hit.normal, Vector3.up) > 45f) // Steep surfaces are considered edges
+                {
+                    Vector3 pushDirection = hit.normal.normalized; // Opposite of the platform's surface normal
+                    _characterController.Move(edgePushForce * Time.deltaTime * pushDirection);
+                    return; // Only apply one push per frame
+                }
+            }
+        }
+    }
+
+    bool GroundCheck()
+    {
+        Vector3 sphereOrigin = transform.position + Vector3.up * (groundCheckRadius + 0.1f);
+
+        // Perform a SphereCast slightly below the player to detect the ground
+        if (Physics.SphereCast(sphereOrigin, groundCheckRadius, Vector3.down, out RaycastHit hit, groundCheckDistance))
+        {
+            if (hit.collider.gameObject == gameObject) return false;
+
+            // Ensure the surface normal is facing upward enough to be considered "ground"
+            if (Vector3.Angle(hit.normal, Vector3.up) < edgeAngleTolerance)
+            {
+                return true;
+            }
+        }
+
+        return false; // Not grounded
+    }
+    #endregion
+
+    void OnDrawGizmosSelected()
+    {
+        Vector3 origin = transform.position + Vector3.up * (groundCheckRadius + 0.05f);
+        Gizmos.color = GroundCheck() ? Color.green : Color.red;
+        Gizmos.DrawWireSphere(origin + Vector3.down * groundCheckDistance, groundCheckRadius);
+
+        Gizmos.color = Color.blue;
+        // Get the player's feet position
+        Vector3 feetPosition = transform.position + Vector3.up * (feetOffset + 0.1f);
+
+        // Draw edge detection rays from the player's feet
+        Vector3[] directions = { transform.forward, -transform.forward, transform.right, -transform.right };
+        foreach (var direction in directions)
+        {
+            Gizmos.DrawLine(feetPosition, feetPosition + direction * edgeRaycastLength);
         }
     }
 }
