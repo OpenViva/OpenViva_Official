@@ -17,8 +17,8 @@ public class PlayerKB_Movement : MonoBehaviour
     [SerializeField] private float groundCheckRadius = 0.3f;
     [Tooltip("Distance to check for ground from player center")]
     [SerializeField] private float groundCheckDistance = 0f;
-    [Tooltip("Length of the edge detection raycasts")]
     [SerializeField] private float feetOffset = 0f;
+    [Tooltip("Length of the edge detection raycasts")]
     [SerializeField] private float edgeRaycastLength = 0.53f;
     [Tooltip("Force applied to push the player off the edge")]
     [SerializeField] private float edgePushForce = 2f;
@@ -34,6 +34,12 @@ public class PlayerKB_Movement : MonoBehaviour
     [SerializeField, Range(1f, 20f)] private float _jumpHeight;
     [SerializeField] private float _gravity = -9.81f;
 
+    [Header("Jump Buffer")]
+    [Tooltip("How long (seconds) the jump input is buffered for")]
+    [SerializeField, Range(0f, 0.3f)] private float jumpBufferTime = 0.15f;
+    [Tooltip("Coyote time: How long after leaving ground you can still jump")]
+    [SerializeField, Range(0f, 0.3f)] private float coyoteTime = 0.1f;
+
     // --- References ---
     [Header("References")]
     [SerializeField] private CharacterController _characterController;
@@ -45,11 +51,18 @@ public class PlayerKB_Movement : MonoBehaviour
     public Vector2 lookInput;
     [SerializeField] private bool isGrounded = false;
 
+    [SerializeField] private bool jumpBuffered = false;
+    [SerializeField] private float jumpBufferTimer = 0f;
+    [SerializeField] private bool coyoteActive = false;
+    [SerializeField] private float coyoteTimer = 0f;
+    [SerializeField] private float _timeSinceGrounded = 0f;
+
     // --- Fields ---
     private float _xRotation;
     private float _yRotation;
     private Vector3 _controllerVelocity;
     private bool _isRunning = false;
+    private bool _jumpQueued = false;
 
     private void Start()
     {
@@ -68,6 +81,15 @@ public class PlayerKB_Movement : MonoBehaviour
     {
         isGrounded = GroundCheck();
 
+        UpdateJumpBuffer();
+        UpdateCoyoteTime();
+
+        if (isGrounded && _jumpQueued)
+        {
+            ExecuteJump();
+            _jumpQueued = false;
+        }
+
         HandleGravity();
         HandleLook();
         HandleMovement();
@@ -75,10 +97,10 @@ public class PlayerKB_Movement : MonoBehaviour
 
     private void LateUpdate()
     {
-        // rotates the controller on the y-axis so that it is on the same rotation as the camera
+        // Rotates the controller on the Y-axis so that it is on the same rotation as the camera
         transform.localRotation = Quaternion.Euler(0f, _yRotation, 0f);
 
-        // rotates camera on the y- and x-axis
+        // Rotates camera on the Y and X-axis
         _camera.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
     }
 
@@ -108,13 +130,62 @@ public class PlayerKB_Movement : MonoBehaviour
         _xRotation = Mathf.Clamp(_xRotation, -90, 90);
     }
 
+    #region Jump Logic
     public void HandleJump()
+    {
+        // Can jump if grounded OR within coyote time
+        if (isGrounded || coyoteActive)
+        {
+            ExecuteJump();
+        }
+        else
+        {
+            _jumpQueued = true; // Otherwise buffer the jump input
+        }
+    }
+
+    private void ExecuteJump()
+    {
+        _controllerVelocity.y = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
+    }
+
+    private void UpdateJumpBuffer()
+    {
+        if (_jumpQueued)
+        {
+            jumpBufferTimer -= Time.deltaTime;
+            jumpBuffered = jumpBufferTimer > 0f;
+
+            // Buffer expired
+            if (jumpBufferTimer <= 0f)
+            {
+                _jumpQueued = false;
+                jumpBuffered = false;
+            }
+        }
+        else
+        {
+            jumpBuffered = false;
+            jumpBufferTimer = jumpBufferTime;
+        }
+    }
+  
+    private void UpdateCoyoteTime()
     {
         if (isGrounded)
         {
-            _controllerVelocity.y = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
+            coyoteTimer = coyoteTime;
+            coyoteActive = true;
         }
+        else
+        {
+            coyoteTimer -= Time.deltaTime;
+            coyoteActive = coyoteTimer > 0f;
+        }
+
+        _timeSinceGrounded = isGrounded ? 0f : _timeSinceGrounded + Time.deltaTime;
     }
+    #endregion
 
     public void HandleRun(bool running)
     {
