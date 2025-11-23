@@ -76,7 +76,6 @@ public class PlayerKB_BasicActions : MonoBehaviour
         }
         else
         {
-            _player.transform.position = new Vector3(_player.transform.position.x, _player.transform.position.y + 0.1f, _player.transform.position.z);
             _playerMovement.SetMovementSpeed(3.5f);
             _playerMovement.DisableRunning(false);
             _characterController.height *= 4;
