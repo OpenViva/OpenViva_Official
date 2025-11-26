@@ -1,6 +1,5 @@
-using UnityEngine;
-
-public class GameSettingsData : ScriptableObject, ISerializationCallbackReceiver
+[System.Serializable]
+public class GameSettingsData
 {
     // Keyboard
     public float mouseSensitivity = 10f;
@@ -16,17 +15,14 @@ public class GameSettingsData : ScriptableObject, ISerializationCallbackReceiver
     public float lodDistance = 1f;
     public int antiAliasing = 3;
     public int shadowLevel = 3;
-    public int fpsLimit = 90;
+    public int targetFramerate = 90;
     public bool fullscreen = true;
+    public int resolutionIndex;
     public bool vSync = true;
 
-    public void OnAfterDeserialize()
-    {
-        throw new System.NotImplementedException();
-    }
+    // Post Processing
+    public float brightness;
 
-    public void OnBeforeSerialize()
-    {
-        throw new System.NotImplementedException();
-    }
+    // Misc
+    public string language = "en";
 }
