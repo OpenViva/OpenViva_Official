@@ -71,14 +71,15 @@ public class PlayerKB_BasicActions : MonoBehaviour
         {
             _playerMovement.SetMovementSpeed(1f);
             _playerMovement.DisableRunning(true);
-            _characterController.height /= 4;
+            _characterController.height /= 6;
             _isCrouching = true;
         }
         else
         {
             _playerMovement.SetMovementSpeed(3.5f);
             _playerMovement.DisableRunning(false);
-            _characterController.height *= 4;
+            _characterController.Move(Vector3.up * 0.1f);
+            _characterController.height *= 6;
             _isCrouching = false;
         }
     }
