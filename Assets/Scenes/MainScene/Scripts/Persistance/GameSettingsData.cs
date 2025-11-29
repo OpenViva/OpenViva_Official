@@ -12,12 +12,15 @@ public class GameSettingsData
 
     // Graphics
     public int qualityLevel = 3;
-    public float lodDistance = 1f;
-    public int antiAliasing = 3;
+    public int resolutionScale = 100;
+    public int resolutionIndex;
+    public float reflectionDistance = 100f;
+    public float lodDistance = 200f;
+    public int antiAliasing = 1;
     public int shadowLevel = 3;
     public int targetFramerate = 90;
+    public int[] allowedFpsValues = new int[] { 30, 60, 90, 120, 144, 240, -1 };
     public bool fullscreen = true;
-    public int resolutionIndex;
     public bool vSync = true;
 
     // Post Processing
