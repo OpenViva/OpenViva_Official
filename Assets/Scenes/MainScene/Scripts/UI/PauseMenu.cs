@@ -110,6 +110,16 @@ public class PauseMenu : MonoBehaviour
 
     private IEnumerator OpenSequenceRoutine()
     {
+        // 0. Disable all pages first to prevent showing multiple
+        if (rootPage != null && LeftPage != null && RightPage != null)
+        {
+            StartCoroutine(leftPages.DeactivateListAsync(batchSize: 3));
+            StartCoroutine(rightPages.DeactivateListAsync(batchSize: 3));
+
+            LeftPage.SetActive(false);
+            RightPage.SetActive(false);
+        }
+
         // 1. Activate the book mesh
         if (bookMesh != null) bookMesh.SetActive(true);
         else Debug.LogWarning("bookMesh reference is null!", this);
