@@ -6,17 +6,16 @@ using UnityEngine.InputSystem;
 public class PauseMenu : MonoBehaviour
 {
     [Header("Offsets")]
-    [SerializeField] private Vector3 offsetLocation = new(1f, 0, 0);
-    [SerializeField] private Quaternion offsetRotation = Quaternion.Euler(0, 180, 0);
+    [SerializeField] private Vector3 positionOffset = new(0, -1f, 0f);
+    [SerializeField] private Vector3 rotationOffset = new(45f, 180f, 0f);
+    [SerializeField] private GameObject menuHandleKB;
+    [SerializeField] private GameObject menuHandleVR;
 
     [Header("Pages Settings")]
     [SerializeField] private GameObject rootPage;
     [SerializeField] private GameObject bookMesh;
     [SerializeField] private GameObject LeftPage;
     [SerializeField] private GameObject RightPage;
-
-    [Header("General References")]
-    [SerializeField] private GameObject referencePlayer;
 
     [Header("Animation Settings")]
     [SerializeField] private Animator bookAnimator;
@@ -34,6 +33,9 @@ public class PauseMenu : MonoBehaviour
     // --- Private Fields ---
     [SerializeField] private List<GameObject> leftPages = new();
     [SerializeField] private List<GameObject> rightPages = new();
+
+    private Vector3 targetPosition;
+    private Quaternion targetRotation;
 
     private void Start()
     {
@@ -168,12 +170,20 @@ public class PauseMenu : MonoBehaviour
     #region Helper Methods
     void OrientPauseMenuToPlayer()
     {
-        // Apply position offset in the player's local space
-        Vector3 worldOffset = referencePlayer.transform.rotation * offsetLocation;
-        Vector3 targetPosition = referencePlayer.transform.position + worldOffset;
+        if (menuHandleKB.activeSelf)
+        {
+            menuHandleKB.transform.GetPositionAndRotation(out targetPosition, out targetRotation);
+        }
+        else
+        {
+            menuHandleVR.transform.GetPositionAndRotation(out targetPosition, out targetRotation);
+        }
 
-        // Apply rotation: player's rotation + additional rotation offset
-        Quaternion targetRotation = referencePlayer.transform.rotation * offsetRotation;
+        // Apply rotation offset FIRST (order matters!)
+        targetRotation *= Quaternion.Euler(rotationOffset);
+
+        // Apply position offset in the rotated space (so "forward" respects the new rotation)
+        targetPosition += targetRotation * positionOffset;
 
         transform.SetPositionAndRotation(targetPosition, targetRotation);
     }

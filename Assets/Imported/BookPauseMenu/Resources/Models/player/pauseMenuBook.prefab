@@ -31617,13 +31617,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49a5b5d5254221e4cb7b9efe7d1a86e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offsetLocation: {x: 0, y: 0, z: 1}
-  offsetRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  forwardOffset: 1
+  downOffset: 1.2
+  offsetRotation: {x: 50, y: 0, z: 0}
   rootPage: {fileID: 6903412565691173355}
   bookMesh: {fileID: 5982686985603333031}
   LeftPage: {fileID: 2894622578293896072}
   RightPage: {fileID: 2633875983606076731}
-  referencePlayer: {fileID: 0}
+  KBPlayer: {fileID: 0}
+  VRPlayer: {fileID: 0}
   bookAnimator: {fileID: 117587315241198234}
   openAnimationStateName: OpenBook
   closeAnimationStateName: CloseBook
