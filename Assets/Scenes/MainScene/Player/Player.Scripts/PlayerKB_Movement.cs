@@ -25,9 +25,14 @@ public class PlayerKB_Movement : MonoBehaviour
 
     // --- Look ---
     [Header("Look")]
-    [Range(1f, 20f)]
+    [Range(0.1f, 10f)]
     [Tooltip("speed of the camera movement")]
-    [SerializeField] private float _mouseSensitivity = 10;
+    [SerializeField] private float _mouseSensitivity = 2;
+
+    [Tooltip("Mouse Smoothing (Optional)")]
+    [Range(0f, 0.5f)]
+    public float lookSmoothing = 0f;
+    private Vector2 _currentLookVelocity;
 
     // --- Jump & Gravity ---
     [Header("Jump & Gravity")]
@@ -123,8 +128,16 @@ public class PlayerKB_Movement : MonoBehaviour
     {
         if (lookInput == Vector2.zero || Globals.isMenuOpen) return;
 
-        _yRotation += lookInput.x * _mouseSensitivity * Time.deltaTime;
-        _xRotation -= lookInput.y * _mouseSensitivity * Time.deltaTime;
+        Vector2 input = lookInput;
+
+        if (lookSmoothing > 0f)
+        {
+            input = Vector2.SmoothDamp(Vector2.zero, lookInput, ref _currentLookVelocity,
+                                       lookSmoothing, Mathf.Infinity, Time.unscaledDeltaTime);
+        }
+
+        _yRotation += input.x * _mouseSensitivity;
+        _xRotation -= input.y * _mouseSensitivity;
 
         // Rotate camera up/down with clamp
         _xRotation = Mathf.Clamp(_xRotation, -90, 90);

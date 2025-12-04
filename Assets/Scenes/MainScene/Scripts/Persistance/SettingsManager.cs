@@ -344,7 +344,7 @@ public class SettingsManager : MonoBehaviour
             sfxVolume = 1f,
             voiceVolume = 0.6f,
             brightness = 1f,
-            mouseSensitivity = 5f,
+            mouseSensitivity = 2f,
             language = "en"
         };
     }

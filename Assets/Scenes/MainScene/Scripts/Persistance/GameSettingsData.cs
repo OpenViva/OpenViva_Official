@@ -2,7 +2,7 @@
 public class GameSettingsData
 {
     // Keyboard
-    public float mouseSensitivity = 10f;
+    public float mouseSensitivity = 2f;
 
     // Audio
     public float masterVolume = 1.0f;
