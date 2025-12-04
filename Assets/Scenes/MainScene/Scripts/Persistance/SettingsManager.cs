@@ -240,14 +240,19 @@ public class SettingsManager : MonoBehaviour
 
     private void ApplyGraphicsSettings()
     {
+        // Anti Aliasing set
         QualitySettings.antiAliasing = currentSettings.antiAliasing;
 
+        // Quality Level set
         QualitySettings.SetQualityLevel(currentSettings.qualityLevel, true);
 
+        // Framerate Target set
         Application.targetFrameRate = currentSettings.targetFramerate;
 
+        // LOD Bias set
         QualitySettings.lodBias = currentSettings.lodDistance / 100f;
 
+        // Shadow Level set
         switch (currentSettings.shadowLevel)
         {
             case 0: QualitySettings.shadows = ShadowQuality.Disable; break;
@@ -256,12 +261,15 @@ public class SettingsManager : MonoBehaviour
             case 3: QualitySettings.shadows = ShadowQuality.All; QualitySettings.shadowResolution = ShadowResolution.VeryHigh; break;
         }
 
+        // Resolution Scale set
         UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset urpAsset =
             UnityEngine.Rendering.GraphicsSettings.defaultRenderPipeline as UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset;
         if (urpAsset) urpAsset.renderScale = currentSettings.resolutionScale / 100f;
 
+        // Fullscreen set
         Screen.fullScreen = currentSettings.fullscreen;
 
+        // VSync set
         QualitySettings.vSyncCount = currentSettings.vSync ? 1 : 0;
 
         // TODO: Brightness setup (Post-processing Volume, Material, or RenderSettings)
@@ -324,8 +332,10 @@ public class SettingsManager : MonoBehaviour
         currentSettings = new GameSettingsData
         {
             qualityLevel = QualitySettings.names.Length - 2, // "High" by default
-            resolutionIndex = GetCurrentResolutionIndex(),
-            antiAliasing = 2,
+            shadowLevel = 3,
+            lodDistance = 200f,
+            resolutionScale = 100,
+            antiAliasing = 1,
             fullscreen = true,
             vSync = true,
             targetFramerate = 90,
@@ -334,7 +344,7 @@ public class SettingsManager : MonoBehaviour
             sfxVolume = 1f,
             voiceVolume = 0.6f,
             brightness = 1f,
-            mouseSensitivity = 10f,
+            mouseSensitivity = 5f,
             language = "en"
         };
     }
