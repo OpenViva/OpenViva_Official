@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 public class Player_Manager : MonoBehaviour
 {
     // This script manages the player in the game.
-    // Code by Saien
 
     // FIELDS
     [SerializeField] private Player_InputTypes.InputType _inputType;
