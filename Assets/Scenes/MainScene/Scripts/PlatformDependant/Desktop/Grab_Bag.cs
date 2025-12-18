@@ -1,3 +1,5 @@
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -97,3 +99,5 @@ public class Grab_Bag : MonoBehaviour
     }
 
 }
+
+#endif

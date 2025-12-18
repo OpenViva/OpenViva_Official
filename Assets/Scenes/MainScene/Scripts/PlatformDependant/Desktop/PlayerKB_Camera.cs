@@ -1,3 +1,5 @@
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
+
 using UnityEngine;
 
 public class PlayerKB_Camera : MonoBehaviour
@@ -47,3 +49,5 @@ public class PlayerKB_Camera : MonoBehaviour
         _controller.rotation = Quaternion.Euler(0, _yRotation, 0);
     }
 }
+
+#endif

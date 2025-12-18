@@ -1,3 +1,5 @@
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -109,3 +111,5 @@ public class PlayerKB_BasicActions : MonoBehaviour
         _map.SetActive(_mapOpen);
     }
 }
+
+#endif

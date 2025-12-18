@@ -1,15 +1,18 @@
+#if UNITY_ANDROID || UNITY_EDITOR
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player_Manager : MonoBehaviour
 {
+
     // This script manages the player in the game.
 
     // FIELDS
     [SerializeField] private Player_InputTypes.InputType _inputType;
     [SerializeField] private InputActionReference changeInputType;
-    [SerializeField] private GameObject PlayerVR;
     [SerializeField] private GameObject PlayerKB;
+    [SerializeField] private GameObject PlayerVR;
 
     // PROPERTIES
     void Start()
@@ -60,3 +63,5 @@ public class Player_Manager : MonoBehaviour
         }
     }
 }
+
+#endif

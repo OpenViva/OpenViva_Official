@@ -1,5 +1,6 @@
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
+
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerKB_Movement : MonoBehaviour
 {
@@ -303,3 +304,5 @@ public class PlayerKB_Movement : MonoBehaviour
         }
     }
 }
+
+#endif

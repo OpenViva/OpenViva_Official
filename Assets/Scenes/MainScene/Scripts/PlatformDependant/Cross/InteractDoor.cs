@@ -6,15 +6,19 @@ public class InteractDoor : MonoBehaviour
 
     [SerializeField] private InputActionReference[] inputActionReferences = new InputActionReference[4];
 
+    #if UNITY_STANDALONE_WIN
     [SerializeField] private GameObject playerLeftHandKB;
     [SerializeField] private GameObject playerRightHandKB;
-    [SerializeField] private GameObject playerLeftHandVR;
-    [SerializeField] private GameObject playerRightHandVR;
-
     private Collider playerLeftColliderKB;
     private Collider playerRightColliderKB;
+
+#elif UNITY_ANDROID || UNITY_EDITOR
+    [SerializeField] private GameObject playerLeftHandVR;
+    [SerializeField] private GameObject playerRightHandVR;
     private Collider playerLeftColliderVR;
     private Collider playerRightColliderVR;
+
+#endif
 
     private bool playerInRange = false;
     private bool isOpen = false;
@@ -23,10 +27,16 @@ public class InteractDoor : MonoBehaviour
 
     void Start()
     {
+        #if UNITY_STANDALONE_WIN
+
         playerLeftColliderKB = playerLeftHandKB.GetComponent<Collider>();
         playerRightColliderKB = playerRightHandKB.GetComponent<Collider>();
+
+#elif UNITY_ANDROID || UNITY_EDITOR
         playerLeftColliderVR = playerLeftHandVR.GetComponent<Collider>();
         playerRightColliderVR = playerRightHandVR.GetComponent<Collider>();
+
+#endif
 
         for (int i = 0; i < inputActionReferences.Length; i++)
         {
@@ -54,18 +64,32 @@ public class InteractDoor : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider == playerLeftColliderKB || collider == playerRightColliderKB || collider == playerLeftColliderVR || collider == playerRightColliderVR)
+        #if UNITY_STANDALONE_WIN
+        if (collider == playerLeftColliderKB || collider == playerRightColliderKB)
         {
             playerInRange = true;
         }
+        #elif UNITY_ANDROID || UNITY_EDITOR
+        if (collider == playerLeftColliderVR || collider == playerRightColliderVR)
+        {
+            playerInRange = true;
+        }
+        #endif
     }
 
     private void OnTriggerExit(Collider collider)
     {
-        if (collider == playerLeftColliderKB || collider == playerRightColliderKB || collider == playerLeftColliderVR || collider == playerRightColliderVR)
+        #if UNITY_STANDALONE_WIN
+        if (collider == playerLeftColliderKB || collider == playerRightColliderKB)
         {
             playerInRange = false;
         }
+        #elif UNITY_ANDROID || UNITY_EDITOR
+        if (collider == playerLeftColliderVR || collider == playerRightColliderVR)
+        {
+            playerInRange = false;
+        }
+        #endif
     }
 
     void OnDestroy()

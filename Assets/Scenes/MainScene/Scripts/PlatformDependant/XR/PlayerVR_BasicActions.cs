@@ -1,6 +1,7 @@
+#if UNITY_EDITOR || UNITY_ANDROID
+
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
 public class PlayerVR_BasicActions : MonoBehaviour
 {
@@ -138,3 +139,5 @@ public class PlayerVR_BasicActions : MonoBehaviour
         }
     }
 }
+
+#endif
