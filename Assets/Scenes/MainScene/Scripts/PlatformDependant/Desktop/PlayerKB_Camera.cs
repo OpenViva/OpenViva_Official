@@ -1,11 +1,10 @@
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
 
 using UnityEngine;
+// Controls the camera movement for desktop keyboard controls
 
 public class PlayerKB_Camera : MonoBehaviour
 {
-    // This class is responsible for the camera movement of the player using mouse.
-    // Code by Edenity on Unity Asset Store
 
     // FIELDS
     [Range(1f, 10f)]

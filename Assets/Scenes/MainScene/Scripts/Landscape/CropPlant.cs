@@ -1,24 +1,25 @@
 using System.Threading;
 using UnityEngine;
 
+// This class places crops in the correct positions and regrows them after a certain amount of time
+
 public class CropPlant : MonoBehaviour
 {
-    // This class manages all crops in the game.
-    // Code by Saien
 
-    [SerializeField] private CropTypes.CropType cropType;
-    [SerializeField] private GameObject cropPrefab;
-    [SerializeField] private CropPositions cropPositions;
+    [SerializeField] private CropTypes.CropType cropType; //The type of crop: Cantaloupe, Wheat, Blueberry, Peach, Strawberry
+    [SerializeField] private GameObject cropPrefab; // The prefab belonging to the crop (type dependent)
+    [SerializeField] private CropPositions cropPositions; // Script holding the positions for the crops
 
-    private CropProduce[] crops;
-    private Timer[] timers;
-    private TimerCallback timerCallback = new TimerCallback((object o) => { timerElapsed(o); });
-    private Vector3[] positions;
-    private Quaternion[] rotations;
+    private CropProduce[] crops; //  All crops of this type
+    private Timer[] timers; // Keeps track of the regrow time for every crop
+    private TimerCallback timerCallback = new TimerCallback((object o) => { timerElapsed(o); }); // Callback for when a timer elapses
+    private Vector3[] positions; // Positions of the crops
+    private Quaternion[] rotations; // Rotations of the crops
     private int growTime = 20 * 60; // This will later be changed to be dependent on the set DayNightCycle
 
     private void Start()
     {
+        // Initialize the correct amount of crops depending on the crop type
         switch (cropType)
         {
             case CropTypes.CropType.Cantaloupe:
@@ -43,14 +44,15 @@ public class CropPlant : MonoBehaviour
         }
     }
 
+    // Create a crop and place it in the correct position
     private void initCrops(int count, CropPositions positions)
     {
-        crops = new CropProduce[count];
-        timers = new Timer[count];
-        this.positions = positions.getPositions(cropType);
-        this.rotations = positions.getRotations(cropType);
+        crops = new CropProduce[count]; // Create a new array to hold all crops of this type
+        timers = new Timer[count]; // Create a new array to hold all timers for this crop type
+        this.positions = positions.getPositions(cropType); // Get the positions for this crop type
+        this.rotations = positions.getRotations(cropType); // Get the rotations for this crop type
 
-
+        // For every crop of this type, create a new crop object and place it in the correct position
         for (int i = 0; i < count; i++)
         {
             timers[i] = new Timer(timerCallback, i, growTime, Timeout.Infinite);

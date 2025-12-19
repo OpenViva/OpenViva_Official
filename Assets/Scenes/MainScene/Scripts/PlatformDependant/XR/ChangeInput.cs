@@ -3,22 +3,22 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// Class that manages the player
+
 public class Player_Manager : MonoBehaviour
 {
 
-    // This script manages the player in the game.
+    [SerializeField] private Player_InputTypes.InputType _inputType; // Current input type
+    [SerializeField] private InputActionReference changeInputType; // Keybind to change input type ([1] key)
+    [SerializeField] private GameObject PlayerKB; // Player GameObject for Keyboard/Mouse
+    [SerializeField] private GameObject PlayerVR; // Player GameObject for VR
 
-    // FIELDS
-    [SerializeField] private Player_InputTypes.InputType _inputType;
-    [SerializeField] private InputActionReference changeInputType;
-    [SerializeField] private GameObject PlayerKB;
-    [SerializeField] private GameObject PlayerVR;
-
-    // PROPERTIES
     void Start()
     {
+        // Set up change input type action
         changeInputType.action.Enable();
         changeInputType.action.performed += ChangeInputType;
+        // Lock the cursor to the center of the screen
         Cursor.lockState = CursorLockMode.Locked;
 
         Globals.isDesktopMode = true;
@@ -26,6 +26,7 @@ public class Player_Manager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Sync positions between the KBM and VR player objects
         if (_inputType == Player_InputTypes.InputType.KBM)
         {
             PlayerVR.transform.position = PlayerKB.transform.position;
@@ -38,6 +39,7 @@ public class Player_Manager : MonoBehaviour
 
     void OnDestroy()
     {
+        // Clean up change input type action
         changeInputType.action.Disable();
         changeInputType.action.performed -= ChangeInputType;
     }

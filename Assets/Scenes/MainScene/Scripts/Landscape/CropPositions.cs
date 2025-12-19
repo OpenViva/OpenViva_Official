@@ -1,7 +1,10 @@
 using UnityEngine;
 
+// This class holds the positions and rotations for all crops in the game.
+
 public class CropPositions : MonoBehaviour
 {
+    // Remembers the position for the crop being initialized
     private int currentCantaloupePosition = 0;
     private int currentWheatPosition = 0;
     private int currentBlueberryPosition = 0;
@@ -305,6 +308,7 @@ public class CropPositions : MonoBehaviour
         new Vector3(-277.2371f, 100.1009f, -185.9582f)
     };
 
+    // Remembers the rotation for the crop being initialized
     private int currentCantaloupeRotaton = 0;
     private int currentWheatRotation = 0;
     private int currentBlueberryRotaton = 0;
@@ -609,6 +613,7 @@ public class CropPositions : MonoBehaviour
         Quaternion.Euler(0, 0, 0),
     };
 
+    // Sends the positions array based on the crop type
     public Vector3[] getPositions(CropTypes.CropType cropType)
     {
         switch (cropType)
@@ -633,6 +638,7 @@ public class CropPositions : MonoBehaviour
         }
     }
 
+    // Sends the rotations array based on the crop type
     public Quaternion[] getRotations(CropTypes.CropType cropType)
     {
         switch (cropType)
@@ -657,6 +663,7 @@ public class CropPositions : MonoBehaviour
         }
     }
 
+    // Get the position of the crop being initialized
     public int getCurrentPosition(CropTypes.CropType cropType)
     {
         switch (cropType)
@@ -681,6 +688,7 @@ public class CropPositions : MonoBehaviour
         }
     }
 
+    // Set the position to that of the next crop being initialized
     public void setCurrentPosition(CropTypes.CropType cropType)
     {
         switch (cropType)
@@ -707,6 +715,7 @@ public class CropPositions : MonoBehaviour
         }
     }
 
+    // Get the rotation of the crop being initialized
     public int getCurrentRotation(CropTypes.CropType cropType)
     {
         switch (cropType)
@@ -731,6 +740,7 @@ public class CropPositions : MonoBehaviour
         }
     }
 
+    // Set the rotation to that of the next crop being initialized
     public void setCurrentRotation(CropTypes.CropType cropType)
     {
         switch (cropType)

@@ -3,23 +3,24 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// Allows the player to perform basic actions (KB&M)
+
 public class PlayerVR_BasicActions : MonoBehaviour
 {
-    // This class detects a VR player's inputs and plays the corresponding animations.
-    // Code by Saien
 
     // FIELDS
-    [SerializeField] private InputActionReference[] inputActionReferences = new InputActionReference[3];
-    [SerializeField] private Animator animatorL;
-    [SerializeField] private Animator animatorR;
-    private bool LeftTriggerDown = false;
-    private bool LeftGripDown = false;
-    private bool RightTriggerDown = false;
-    private bool RightGripDown = false;
+    [SerializeField] private InputActionReference[] inputActionReferences = new InputActionReference[4]; // 0: Left Grip, 1: Right Grip, 2: Left Trigger, 3: Right Trigger
+    [SerializeField] private Animator animatorL; // Left hand animator
+    [SerializeField] private Animator animatorR; // Right hand animator
+    private bool LeftTriggerDown = false; // Is left trigger pressed
+    private bool LeftGripDown = false; // Is left grip pressed
+    private bool RightTriggerDown = false; // Is right trigger pressed
+    private bool RightGripDown = false; // Is right grip pressed
 
     // PROPERTIES
     void Start()
     {
+        // Enable input actions and bind events
         for (int i = 0; i < inputActionReferences.Length; i++)
         {
             inputActionReferences[i].action.Enable();
@@ -36,6 +37,7 @@ public class PlayerVR_BasicActions : MonoBehaviour
 
     void OnDestroy()
     {
+        // Disable input actions and unbind events
         for (int i = 0; i < inputActionReferences.Length; i++)
         {
             inputActionReferences[i].action.Disable();
@@ -50,6 +52,7 @@ public class PlayerVR_BasicActions : MonoBehaviour
     
     private void LeftPoint(InputAction.CallbackContext context)
     {
+        // Set left grip down and play point animation if trigger is not down
         LeftGripDown = true;
         if (!LeftTriggerDown)
         {
@@ -59,6 +62,7 @@ public class PlayerVR_BasicActions : MonoBehaviour
 
     private void LeftGrab(InputAction.CallbackContext context)
     {
+        // Set left trigger down and play grab animation or point-to-grab animation if grip is down
         LeftTriggerDown = true;
         if (LeftGripDown)
         {
@@ -71,6 +75,7 @@ public class PlayerVR_BasicActions : MonoBehaviour
 
     private void LeftPointEnd(InputAction.CallbackContext context)
     {
+        // Set left grip up and play point-end animation or point-to-grab animation if trigger is down
         LeftGripDown = false;
         if (LeftTriggerDown)
         {
@@ -84,6 +89,7 @@ public class PlayerVR_BasicActions : MonoBehaviour
 
     private void LeftGrabEnd(InputAction.CallbackContext context)
     {
+        // Set left trigger up and play grab-end animation or grab-to-point animation if grip is down
         LeftTriggerDown = false;
         if (LeftGripDown)
         {
@@ -96,6 +102,7 @@ public class PlayerVR_BasicActions : MonoBehaviour
 
     private void RightPoint(InputAction.CallbackContext context)
     {
+        // Set right grip down and play point animation if trigger is not down
         RightGripDown = true;
         if (!RightTriggerDown)
         {
@@ -105,6 +112,7 @@ public class PlayerVR_BasicActions : MonoBehaviour
 
     private void RightGrab(InputAction.CallbackContext context)
     {
+        // Set right trigger down and play grab animation or point-to-grab animation if grip is down
         RightTriggerDown = true;
         if (RightGripDown)
         {
@@ -117,6 +125,7 @@ public class PlayerVR_BasicActions : MonoBehaviour
 
     private void RightPointEnd(InputAction.CallbackContext context)
     {
+        // Set right grip up and play point-end animation or point-to-grab animation if trigger is down
         RightGripDown = false;
         if (RightTriggerDown)
         {
@@ -129,6 +138,7 @@ public class PlayerVR_BasicActions : MonoBehaviour
 
     private void RightGrabEnd(InputAction.CallbackContext context)
     {
+        // Set right trigger up and play grab-end animation or grab-to-point animation if grip is down
         RightTriggerDown = false;
         if (RightGripDown)
         {

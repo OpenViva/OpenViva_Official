@@ -3,10 +3,10 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// Allows the player to perform basic actions (KB&M)
+
 public class PlayerKB_BasicActions : MonoBehaviour
 {
-    // This class manages basic actions for a keyboard player.
-    // Code by Saien
 
     // --- References ---
     [Header("References")]
@@ -69,6 +69,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
 
     private void OnCrouch(InputAction.CallbackContext context)
     {
+        // Toggle crouch when [C] is pressed
         if (!_isCrouching)
         {
             _playerMovement.SetMovementSpeed(1f);
@@ -88,6 +89,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
 
     private void OnExtendHands(InputAction.CallbackContext context)
     {
+        // Extend the hands forward when when the mouse wheel is scrolled up
         if (_currentHandPos <= 50)
         {
             _playerPrefab.transform.Translate(Vector3.right * 0.01f);
@@ -98,6 +100,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
 
     private void OnRetractHands(InputAction.CallbackContext context)
     {
+        // Retract the hands backward when the mouse wheel is scrolled down
         if (_currentHandPos >= 0)
         {
             _playerPrefab.transform.Translate(Vector3.left * 0.01f);
@@ -107,6 +110,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
 
     private void OnChangeMapVisibility(InputAction.CallbackContext context)
     {
+        // Toggle minimap visibility when [M] is pressed
         _mapOpen = !_mapOpen;
         _map.SetActive(_mapOpen);
     }
