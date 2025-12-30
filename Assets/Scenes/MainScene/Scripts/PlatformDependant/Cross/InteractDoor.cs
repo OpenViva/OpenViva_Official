@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,17 +15,18 @@ public class InteractDoor : MonoBehaviour
     [SerializeField] private GameObject playerRightHandKB;
     private Collider playerLeftColliderKB;
     private Collider playerRightColliderKB;
+#endif
 
-#elif UNITY_ANDROID || UNITY_EDITOR
+#if UNITY_ANDROID || UNITY_EDITOR
     [SerializeField] private GameObject playerLeftHandVR;
     [SerializeField] private GameObject playerRightHandVR;
     private Collider playerLeftColliderVR;
     private Collider playerRightColliderVR;
-
 #endif
 
     private bool playerInRange = false; // To check if the player is in range to interact with the door
     private bool isOpen = false; // Check if the door is open or closed
+    private bool isMoving = false; // The door cannot be interacted with while it is moving
 
     [SerializeField] Animator doorAnimator; // Animator component for the door
 
@@ -32,14 +34,13 @@ public class InteractDoor : MonoBehaviour
     {
         // Set the colliders of the player's hands based on the platform
 #if UNITY_STANDALONE_WIN
-
         playerLeftColliderKB = playerLeftHandKB.GetComponent<Collider>();
         playerRightColliderKB = playerRightHandKB.GetComponent<Collider>();
+#endif
 
-#elif UNITY_ANDROID || UNITY_EDITOR
+#if UNITY_ANDROID || UNITY_EDITOR
         playerLeftColliderVR = playerLeftHandVR.GetComponent<Collider>();
         playerRightColliderVR = playerRightHandVR.GetComponent<Collider>();
-
 #endif
 
         // Enable input actions and subscribe to performed events
@@ -53,19 +54,28 @@ public class InteractDoor : MonoBehaviour
     // Open or close the door when the player interacts if they are in range
     private void interactDoor(InputAction.CallbackContext context)
     {
-        if (playerInRange)
+        if (playerInRange && !isMoving)
         {
+            isMoving = true;
             if (!isOpen)
             {
                 doorAnimator.Play("Opening");
+                StartCoroutine(setIsMoving());
                 isOpen = true;
             }
             else
             {
                 doorAnimator.Play("Closing");
+                StartCoroutine(setIsMoving());
                 isOpen = false;
             }
         }
+    }
+
+    private IEnumerator setIsMoving()
+    {
+        yield return new WaitForSeconds(1.0f);
+        isMoving = false;
     }
 
     // Detect when the player's hand colliders enter the door handle's trigger collider
@@ -76,7 +86,8 @@ public class InteractDoor : MonoBehaviour
         {
             playerInRange = true;
         }
-        #elif UNITY_ANDROID || UNITY_EDITOR
+        #endif
+        #if UNITY_ANDROID || UNITY_EDITOR
         if (collider == playerLeftColliderVR || collider == playerRightColliderVR)
         {
             playerInRange = true;
@@ -92,7 +103,8 @@ public class InteractDoor : MonoBehaviour
         {
             playerInRange = false;
         }
-        #elif UNITY_ANDROID || UNITY_EDITOR
+        #endif
+        #if UNITY_ANDROID || UNITY_EDITOR
         if (collider == playerLeftColliderVR || collider == playerRightColliderVR)
         {
             playerInRange = false;
