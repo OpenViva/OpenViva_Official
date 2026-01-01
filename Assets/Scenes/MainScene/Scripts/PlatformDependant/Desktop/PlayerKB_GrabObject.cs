@@ -8,8 +8,8 @@ using UnityEngine.InputSystem;
 public class PlayerKB_GrabObject : MonoBehaviour
 {
     [SerializeField] private InputActionReference[] inputActionReferences = new InputActionReference[2]; // 0 - LBM, 1 - RMB
-    [SerializeField] private GameObject playerLeftHand; // The player's left hand object
-    [SerializeField] private GameObject playerRightHand; // The player's right hand object
+    private GameObject playerLeftHand; // The player's left hand object
+    private GameObject playerRightHand; // The player's right hand object
     private Collider playerLeftCollider; // The collider of the player's left hand
     private Collider playerRightCollider; // The collider of the player's right hand
     private GameObject grabbableObject; // The object to be grabbed
@@ -24,9 +24,14 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
     private void Start()
     {
+        // Find the player's hand objects in the scene
+        playerLeftHand = GameObject.Find("hand_l");
+        playerRightHand = GameObject.Find("hand_r");
+
         // Set the grabbable object and its Rigidbody
         grabbableObject = this.gameObject;
         grabbableObjectRB = grabbableObject.GetComponent<Rigidbody>();
+
         // Set the colliders of the player's hands
         playerLeftCollider = playerLeftHand.GetComponent<Collider>();
         playerRightCollider = playerRightHand.GetComponent<Collider>();

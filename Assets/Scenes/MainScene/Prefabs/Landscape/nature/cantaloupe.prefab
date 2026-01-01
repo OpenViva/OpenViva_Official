@@ -12,9 +12,11 @@ GameObject:
   - component: {fileID: 7277693492149499931}
   - component: {fileID: 4856133350330690322}
   - component: {fileID: 4105332727549631417}
+  - component: {fileID: -7904480213799495989}
   - component: {fileID: 4537785520586601685}
   - component: {fileID: 8458382276270277787}
   - component: {fileID: 5917692398565594216}
+  - component: {fileID: 5689086620622601233}
   m_Layer: 0
   m_Name: cantaloupe
   m_TagString: Untagged
@@ -100,12 +102,33 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.070027575
+  m_Center: {x: -0.00003169477, y: 0.000082306564, z: 0.0001662448}
+--- !u!135 &-7904480213799495989
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4022507327587062065}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 1
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -127,7 +150,7 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -137,7 +160,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &8458382276270277787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,3 +296,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b415372d68105df43b570bb905313238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5689086620622601233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4022507327587062065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa53ab25af41114397a2b5c34447bd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputActionReferences:
+  - {fileID: -6978633687812840381, guid: e11ac0d8fbe15c14f99019496ae95a6c, type: 3}
+  - {fileID: 4076074286235900454, guid: e11ac0d8fbe15c14f99019496ae95a6c, type: 3}
+  objectIndex: 4
