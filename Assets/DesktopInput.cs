@@ -165,7 +165,7 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Extend Hands"",
+                    ""name"": ""Scroll Up"",
                     ""type"": ""Value"",
                     ""id"": ""d320a995-535e-42db-b028-fa94a415368a"",
                     ""expectedControlType"": """",
@@ -174,7 +174,7 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Retract Hands"",
+                    ""name"": ""Scroll Down"",
                     ""type"": ""Value"",
                     ""id"": ""59741620-b9b4-41cb-8067-d24c4febce24"",
                     ""expectedControlType"": """",
@@ -195,6 +195,24 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
                     ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""d8082163-9a68-4974-b3ac-0274c2920ecf"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Toggle Bag"",
+                    ""type"": ""Button"",
+                    ""id"": ""2af2b0a8-b7dc-4705-b7a1-803e1271e2fb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Take From Bag"",
+                    ""type"": ""Button"",
+                    ""id"": ""a650c215-e420-4366-aa16-723ccae693aa"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -341,7 +359,7 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Extend Hands"",
+                    ""action"": ""Scroll Up"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -352,7 +370,7 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Extend Hands"",
+                    ""action"": ""Scroll Up"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -363,7 +381,7 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Retract Hands"",
+                    ""action"": ""Scroll Down"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -374,7 +392,7 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Retract Hands"",
+                    ""action"": ""Scroll Down"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -597,6 +615,28 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e16f5030-5918-4076-9c59-9f228ee9eb89"",
+                    ""path"": ""<Keyboard>/#(Q)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle Bag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8c6cf395-fbfc-42b7-85ad-20b52ca2333e"",
+                    ""path"": ""<Keyboard>/#(E)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Take From Bag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -663,10 +703,12 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
         m_Viva_OpenMap = m_Viva.FindAction("Open Map", throwIfNotFound: true);
         m_Viva_LeftGrab = m_Viva.FindAction("Left Grab", throwIfNotFound: true);
         m_Viva_RightGrab = m_Viva.FindAction("Right Grab", throwIfNotFound: true);
-        m_Viva_ExtendHands = m_Viva.FindAction("Extend Hands", throwIfNotFound: true);
-        m_Viva_RetractHands = m_Viva.FindAction("Retract Hands", throwIfNotFound: true);
+        m_Viva_ScrollUp = m_Viva.FindAction("Scroll Up", throwIfNotFound: true);
+        m_Viva_ScrollDown = m_Viva.FindAction("Scroll Down", throwIfNotFound: true);
         m_Viva_Run = m_Viva.FindAction("Run", throwIfNotFound: true);
         m_Viva_Pause = m_Viva.FindAction("Pause", throwIfNotFound: true);
+        m_Viva_ToggleBag = m_Viva.FindAction("Toggle Bag", throwIfNotFound: true);
+        m_Viva_TakeFromBag = m_Viva.FindAction("Take From Bag", throwIfNotFound: true);
     }
 
     ~@DesktopInput()
@@ -755,10 +797,12 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Viva_OpenMap;
     private readonly InputAction m_Viva_LeftGrab;
     private readonly InputAction m_Viva_RightGrab;
-    private readonly InputAction m_Viva_ExtendHands;
-    private readonly InputAction m_Viva_RetractHands;
+    private readonly InputAction m_Viva_ScrollUp;
+    private readonly InputAction m_Viva_ScrollDown;
     private readonly InputAction m_Viva_Run;
     private readonly InputAction m_Viva_Pause;
+    private readonly InputAction m_Viva_ToggleBag;
+    private readonly InputAction m_Viva_TakeFromBag;
     /// <summary>
     /// Provides access to input actions defined in input action map "Viva".
     /// </summary>
@@ -803,13 +847,13 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @RightGrab => m_Wrapper.m_Viva_RightGrab;
         /// <summary>
-        /// Provides access to the underlying input action "Viva/ExtendHands".
+        /// Provides access to the underlying input action "Viva/ScrollUp".
         /// </summary>
-        public InputAction @ExtendHands => m_Wrapper.m_Viva_ExtendHands;
+        public InputAction @ScrollUp => m_Wrapper.m_Viva_ScrollUp;
         /// <summary>
-        /// Provides access to the underlying input action "Viva/RetractHands".
+        /// Provides access to the underlying input action "Viva/ScrollDown".
         /// </summary>
-        public InputAction @RetractHands => m_Wrapper.m_Viva_RetractHands;
+        public InputAction @ScrollDown => m_Wrapper.m_Viva_ScrollDown;
         /// <summary>
         /// Provides access to the underlying input action "Viva/Run".
         /// </summary>
@@ -818,6 +862,14 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Viva/Pause".
         /// </summary>
         public InputAction @Pause => m_Wrapper.m_Viva_Pause;
+        /// <summary>
+        /// Provides access to the underlying input action "Viva/ToggleBag".
+        /// </summary>
+        public InputAction @ToggleBag => m_Wrapper.m_Viva_ToggleBag;
+        /// <summary>
+        /// Provides access to the underlying input action "Viva/TakeFromBag".
+        /// </summary>
+        public InputAction @TakeFromBag => m_Wrapper.m_Viva_TakeFromBag;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -868,18 +920,24 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
             @RightGrab.started += instance.OnRightGrab;
             @RightGrab.performed += instance.OnRightGrab;
             @RightGrab.canceled += instance.OnRightGrab;
-            @ExtendHands.started += instance.OnExtendHands;
-            @ExtendHands.performed += instance.OnExtendHands;
-            @ExtendHands.canceled += instance.OnExtendHands;
-            @RetractHands.started += instance.OnRetractHands;
-            @RetractHands.performed += instance.OnRetractHands;
-            @RetractHands.canceled += instance.OnRetractHands;
+            @ScrollUp.started += instance.OnScrollUp;
+            @ScrollUp.performed += instance.OnScrollUp;
+            @ScrollUp.canceled += instance.OnScrollUp;
+            @ScrollDown.started += instance.OnScrollDown;
+            @ScrollDown.performed += instance.OnScrollDown;
+            @ScrollDown.canceled += instance.OnScrollDown;
             @Run.started += instance.OnRun;
             @Run.performed += instance.OnRun;
             @Run.canceled += instance.OnRun;
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @ToggleBag.started += instance.OnToggleBag;
+            @ToggleBag.performed += instance.OnToggleBag;
+            @ToggleBag.canceled += instance.OnToggleBag;
+            @TakeFromBag.started += instance.OnTakeFromBag;
+            @TakeFromBag.performed += instance.OnTakeFromBag;
+            @TakeFromBag.canceled += instance.OnTakeFromBag;
         }
 
         /// <summary>
@@ -915,18 +973,24 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
             @RightGrab.started -= instance.OnRightGrab;
             @RightGrab.performed -= instance.OnRightGrab;
             @RightGrab.canceled -= instance.OnRightGrab;
-            @ExtendHands.started -= instance.OnExtendHands;
-            @ExtendHands.performed -= instance.OnExtendHands;
-            @ExtendHands.canceled -= instance.OnExtendHands;
-            @RetractHands.started -= instance.OnRetractHands;
-            @RetractHands.performed -= instance.OnRetractHands;
-            @RetractHands.canceled -= instance.OnRetractHands;
+            @ScrollUp.started -= instance.OnScrollUp;
+            @ScrollUp.performed -= instance.OnScrollUp;
+            @ScrollUp.canceled -= instance.OnScrollUp;
+            @ScrollDown.started -= instance.OnScrollDown;
+            @ScrollDown.performed -= instance.OnScrollDown;
+            @ScrollDown.canceled -= instance.OnScrollDown;
             @Run.started -= instance.OnRun;
             @Run.performed -= instance.OnRun;
             @Run.canceled -= instance.OnRun;
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @ToggleBag.started -= instance.OnToggleBag;
+            @ToggleBag.performed -= instance.OnToggleBag;
+            @ToggleBag.canceled -= instance.OnToggleBag;
+            @TakeFromBag.started -= instance.OnTakeFromBag;
+            @TakeFromBag.performed -= instance.OnTakeFromBag;
+            @TakeFromBag.canceled -= instance.OnTakeFromBag;
         }
 
         /// <summary>
@@ -1076,19 +1140,19 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRightGrab(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Extend Hands" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Scroll Up" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnExtendHands(InputAction.CallbackContext context);
+        void OnScrollUp(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Retract Hands" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Scroll Down" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnRetractHands(InputAction.CallbackContext context);
+        void OnScrollDown(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Run" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
@@ -1103,5 +1167,19 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPause(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Toggle Bag" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnToggleBag(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Take From Bag" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTakeFromBag(InputAction.CallbackContext context);
     }
 }

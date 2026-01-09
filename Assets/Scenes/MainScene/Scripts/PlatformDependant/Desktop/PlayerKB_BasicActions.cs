@@ -10,7 +10,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
 
     // --- References ---
     [Header("References")]
-    [Tooltip("The object that holds the player movement (PlayerKB/PlayerVR)")]
+    [Tooltip("The object that holds the player movement (_playerKB/_playerVR)")]
     [SerializeField] private GameObject _player;
     [SerializeField] private PlayerKB_Movement _playerMovement;
     [SerializeField] private CharacterController _characterController;
@@ -23,6 +23,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
     private int _currentHandPos = 10;
     private bool _mapOpen = false;
     private DesktopInput _playerInput;
+    private bool _bagOpen = false;
 
     private void Awake()
     {
@@ -45,8 +46,8 @@ public class PlayerKB_BasicActions : MonoBehaviour
 
         // Other bindings
         _playerInput.Viva.Crouch.performed += OnCrouch;
-        _playerInput.Viva.ExtendHands.performed += OnExtendHands;
-        _playerInput.Viva.RetractHands.performed += OnRetractHands;
+        _playerInput.Viva.ScrollUp.performed += OnExtendHands;
+        _playerInput.Viva.ScrollDown.performed += OnRetractHands;
         _playerInput.Viva.OpenMap.performed += OnChangeMapVisibility;
     }
     void Start()
@@ -66,6 +67,11 @@ public class PlayerKB_BasicActions : MonoBehaviour
 
     private void OnEnable() => _playerInput.Viva.Enable();
     private void OnDisable() => _playerInput.Viva.Disable();
+
+    public void SetBagOpen(bool set)
+    {
+        _bagOpen = set;
+    }
 
     private void OnCrouch(InputAction.CallbackContext context)
     {
@@ -90,7 +96,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
     private void OnExtendHands(InputAction.CallbackContext context)
     {
         // Extend the hands forward when when the mouse wheel is scrolled up
-        if (_currentHandPos <= 50)
+        if (_currentHandPos <= 50 && !_bagOpen)
         {
             _playerPrefab.transform.Translate(Vector3.right * 0.01f);
             _currentHandPos++;
@@ -101,7 +107,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
     private void OnRetractHands(InputAction.CallbackContext context)
     {
         // Retract the hands backward when the mouse wheel is scrolled down
-        if (_currentHandPos >= 0)
+        if (_currentHandPos >= 0 && !_bagOpen)
         {
             _playerPrefab.transform.Translate(Vector3.left * 0.01f);
             _currentHandPos--;
