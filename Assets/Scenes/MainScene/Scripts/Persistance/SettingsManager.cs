@@ -23,6 +23,12 @@ public class SettingsManager : MonoBehaviour
 
     private readonly int[] aaValues = { 0, 2, 4, 8 };
 
+    [Header("Sun/Directional Tag")]
+    [SerializeField] private string mainLightTag = "sunLight";
+
+    // Cached reference – never look it up again after this.
+    private Light _mainDirLight;
+
     private void Awake()
     {
         if (Instance == null)
@@ -33,6 +39,21 @@ public class SettingsManager : MonoBehaviour
         else Destroy(gameObject);
 
         savePath = Path.Combine(Application.persistentDataPath, "gamesettings.json");
+
+        // Find the main Light
+        var mainLight = GameObject.FindWithTag(mainLightTag);
+        if (mainLight == null)
+        {
+            Debug.LogError($"No GameObject found with tag '{mainLightTag}'.");
+            return;
+        }
+
+        _mainDirLight = mainLight.GetComponent<Light>();
+        if (_mainDirLight == null || _mainDirLight.type != LightType.Directional)
+        {
+            Debug.LogError($"Tagged object '{mainLight.name}' is not a directional light.");
+            _mainDirLight = null;
+        }
 
         LoadSettings();
         ApplyAllSettings();
