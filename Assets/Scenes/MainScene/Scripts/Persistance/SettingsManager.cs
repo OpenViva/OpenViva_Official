@@ -63,7 +63,7 @@ public class SettingsManager : MonoBehaviour
     #region Structs
     public enum SettingType
     {
-        Fullscreen, VSync, Bloom, AntiAliasing, ShadowQuality, 
+        Fullscreen, VSync, Bloom, AntiAliasing, ShadowQuality,
         Anisotropic, FpsLimit, ReflectionDistance, ResolutionScale, LodDistance
     }
     #endregion
@@ -261,11 +261,18 @@ public class SettingsManager : MonoBehaviour
 
     private void ApplyGraphicsSettings()
     {
-        // Anti Aliasing set
-        QualitySettings.antiAliasing = currentSettings.antiAliasing;
+        // Resolution Scale set
+        UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset urpAsset =
+            UnityEngine.Rendering.GraphicsSettings.defaultRenderPipeline as UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset;
+        if (urpAsset) urpAsset.renderScale = currentSettings.resolutionScale / 100f;
 
         // Quality Level set
         QualitySettings.SetQualityLevel(currentSettings.qualityLevel, true);
+
+        Debug.LogWarning($"-- Setting Quality Level: {currentSettings.qualityLevel}");
+
+        // Anti Aliasing set
+        QualitySettings.antiAliasing = currentSettings.antiAliasing;
 
         // Framerate Target set
         Application.targetFrameRate = currentSettings.targetFramerate;
@@ -276,16 +283,40 @@ public class SettingsManager : MonoBehaviour
         // Shadow Level set
         switch (currentSettings.shadowLevel)
         {
-            case 0: QualitySettings.shadows = ShadowQuality.Disable; break;
-            case 1: QualitySettings.shadows = ShadowQuality.HardOnly; break;
-            case 2: QualitySettings.shadows = ShadowQuality.All; QualitySettings.shadowResolution = ShadowResolution.Low; break;
-            case 3: QualitySettings.shadows = ShadowQuality.All; QualitySettings.shadowResolution = ShadowResolution.VeryHigh; break;
-        }
+            case 0:
+                _mainDirLight.shadows = LightShadows.None;
+                urpAsset.shadowCascadeCount = 1;
+                urpAsset.shadowDistance = 20f;
+                break;
 
-        // Resolution Scale set
-        UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset urpAsset =
-            UnityEngine.Rendering.GraphicsSettings.defaultRenderPipeline as UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset;
-        if (urpAsset) urpAsset.renderScale = currentSettings.resolutionScale / 100f;
+            case 1: // Low (hard shadows, low res)
+                _mainDirLight.shadows = LightShadows.Hard;
+                urpAsset.shadowDistance = 40f;
+                urpAsset.mainLightShadowmapResolution = 256;
+                urpAsset.additionalLightsShadowmapResolution = 256;
+                urpAsset.shadowCascadeCount = 1;
+                break;
+
+            case 2: // Medium (soft shadows, medium res)
+                _mainDirLight.shadows = LightShadows.Soft;
+                urpAsset.shadowDistance = 60f;
+                urpAsset.mainLightShadowmapResolution = 1024;
+                urpAsset.additionalLightsShadowmapResolution = 1024;
+                urpAsset.shadowCascadeCount = 2;
+                break;
+
+            case 3: // High (soft shadows, high res)
+                _mainDirLight.shadows = LightShadows.Soft;
+                urpAsset.shadowDistance = 120f;
+                urpAsset.mainLightShadowmapResolution = 4096;
+                urpAsset.additionalLightsShadowmapResolution = 4096;
+                urpAsset.shadowCascadeCount = 4;
+                break;
+
+            default:
+                Debug.LogWarning("Invalid shadow level.");
+                break;
+        }
 
         // Fullscreen set
         Screen.fullScreen = currentSettings.fullscreen;
@@ -296,6 +327,15 @@ public class SettingsManager : MonoBehaviour
         // TODO: Brightness setup (Post-processing Volume, Material, or RenderSettings)
         // RenderSettings.ambientIntensity = currentSettings.brightness;
         // or PostProcessVolume.profile.GetSetting<Bloom>().intensity = currentSettings.brightness * 50f;
+
+        Debug.LogWarning(
+            $"Quality Level: {QualitySettings.names[QualitySettings.GetQualityLevel()]} | " +
+            $"URP Shadows → " +
+            $"Distance: {urpAsset.shadowDistance:F0}m | " +
+            $"Cascades: {urpAsset.shadowCascadeCount} | " +
+            $"MainRes: {(ShadowResolution)urpAsset.mainLightShadowmapResolution} | " +
+            $"AddRes: {(ShadowResolution)urpAsset.additionalLightsShadowmapResolution} | " +
+            $"LightMode: {_mainDirLight.shadows}");
     }
 
     private void ApplyAudioSettings()
