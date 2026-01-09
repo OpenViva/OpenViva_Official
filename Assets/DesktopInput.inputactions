@@ -79,7 +79,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Extend Hands",
+                    "name": "Scroll Up",
                     "type": "Value",
                     "id": "d320a995-535e-42db-b028-fa94a415368a",
                     "expectedControlType": "",
@@ -88,7 +88,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Retract Hands",
+                    "name": "Scroll Down",
                     "type": "Value",
                     "id": "59741620-b9b4-41cb-8067-d24c4febce24",
                     "expectedControlType": "",
@@ -109,6 +109,24 @@
                     "name": "Pause",
                     "type": "Button",
                     "id": "d8082163-9a68-4974-b3ac-0274c2920ecf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Toggle Bag",
+                    "type": "Button",
+                    "id": "2af2b0a8-b7dc-4705-b7a1-803e1271e2fb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Take From Bag",
+                    "type": "Button",
+                    "id": "a650c215-e420-4366-aa16-723ccae693aa",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -255,7 +273,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Extend Hands",
+                    "action": "Scroll Up",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -266,7 +284,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Extend Hands",
+                    "action": "Scroll Up",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -277,7 +295,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Retract Hands",
+                    "action": "Scroll Down",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -288,7 +306,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Retract Hands",
+                    "action": "Scroll Down",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -509,6 +527,28 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e16f5030-5918-4076-9c59-9f228ee9eb89",
+                    "path": "<Keyboard>/#(Q)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Toggle Bag",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8c6cf395-fbfc-42b7-85ad-20b52ca2333e",
+                    "path": "<Keyboard>/#(E)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Take From Bag",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
