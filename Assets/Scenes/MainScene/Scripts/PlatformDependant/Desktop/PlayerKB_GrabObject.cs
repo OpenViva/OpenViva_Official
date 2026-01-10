@@ -115,7 +115,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         }
     }
 
-    // Checks if the bag is being held and in which hand
+    // Checks if the item is being held and in which hand
     public int GetIsGrabbed()
     {
         if (_isGrabbedInLeft)
