@@ -210,7 +210,7 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Take From Bag"",
+                    ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""a650c215-e420-4366-aa16-723ccae693aa"",
                     ""expectedControlType"": """",
@@ -634,7 +634,7 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Take From Bag"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -708,7 +708,7 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
         m_Viva_Run = m_Viva.FindAction("Run", throwIfNotFound: true);
         m_Viva_Pause = m_Viva.FindAction("Pause", throwIfNotFound: true);
         m_Viva_ToggleBag = m_Viva.FindAction("Toggle Bag", throwIfNotFound: true);
-        m_Viva_TakeFromBag = m_Viva.FindAction("Take From Bag", throwIfNotFound: true);
+        m_Viva_Interact = m_Viva.FindAction("Interact", throwIfNotFound: true);
     }
 
     ~@DesktopInput()
@@ -802,7 +802,7 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Viva_Run;
     private readonly InputAction m_Viva_Pause;
     private readonly InputAction m_Viva_ToggleBag;
-    private readonly InputAction m_Viva_TakeFromBag;
+    private readonly InputAction m_Viva_Interact;
     /// <summary>
     /// Provides access to input actions defined in input action map "Viva".
     /// </summary>
@@ -867,9 +867,9 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @ToggleBag => m_Wrapper.m_Viva_ToggleBag;
         /// <summary>
-        /// Provides access to the underlying input action "Viva/TakeFromBag".
+        /// Provides access to the underlying input action "Viva/Interact".
         /// </summary>
-        public InputAction @TakeFromBag => m_Wrapper.m_Viva_TakeFromBag;
+        public InputAction @Interact => m_Wrapper.m_Viva_Interact;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -935,9 +935,9 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
             @ToggleBag.started += instance.OnToggleBag;
             @ToggleBag.performed += instance.OnToggleBag;
             @ToggleBag.canceled += instance.OnToggleBag;
-            @TakeFromBag.started += instance.OnTakeFromBag;
-            @TakeFromBag.performed += instance.OnTakeFromBag;
-            @TakeFromBag.canceled += instance.OnTakeFromBag;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         /// <summary>
@@ -988,9 +988,9 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
             @ToggleBag.started -= instance.OnToggleBag;
             @ToggleBag.performed -= instance.OnToggleBag;
             @ToggleBag.canceled -= instance.OnToggleBag;
-            @TakeFromBag.started -= instance.OnTakeFromBag;
-            @TakeFromBag.performed -= instance.OnTakeFromBag;
-            @TakeFromBag.canceled -= instance.OnTakeFromBag;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         /// <summary>
@@ -1175,11 +1175,11 @@ public partial class @DesktopInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnToggleBag(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Take From Bag" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnTakeFromBag(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }

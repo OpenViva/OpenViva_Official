@@ -30,7 +30,7 @@ public class Inventory : MonoBehaviour
         _keybinds.Viva.RightGrab.performed += PlaceInBagWithLeftHand;
         _keybinds.Viva.ScrollUp.performed += ScrollUp;
         _keybinds.Viva.ScrollDown.performed += ScrollDown;
-        _keybinds.Viva.TakeFromBag.performed += TakeSelectedItem;
+        _keybinds.Viva.Interact.performed += TakeSelectedItem;
 
         _itemIndexes = new ItemIndexes();
     }
@@ -173,7 +173,7 @@ public class Inventory : MonoBehaviour
         _keybinds.Viva.RightGrab.performed -= PlaceInBagWithLeftHand;
         _keybinds.Viva.ScrollUp.performed -= ScrollUp;
         _keybinds.Viva.ScrollDown.performed -= ScrollDown;
-        _keybinds.Viva.TakeFromBag.performed -= TakeSelectedItem;
+        _keybinds.Viva.Interact.performed -= TakeSelectedItem;
         _keybinds.Viva.Disable();
     }
 }
