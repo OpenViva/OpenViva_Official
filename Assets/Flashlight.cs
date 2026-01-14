@@ -6,7 +6,7 @@ public class Flashlight : MonoBehaviour
     private PlayerKB_GrabObject _grabScript;
     private int _isGrabbed = 0;
     private DesktopInput _keybinds;
-    private bool _isOn = false;
+    [SerializeField] private bool _isOn;
     [SerializeField] private GameObject _diode;
     [SerializeField] private GameObject _vfx;
 
@@ -29,7 +29,10 @@ public class Flashlight : MonoBehaviour
         if (_isGrabbed == 0) return;
 
         _diode.SetActive(!_isOn);
-        _vfx.SetActive(!_isOn);
+        if (_vfx != null)
+        {
+            _vfx.SetActive(!_isOn);
+        }
         _isOn = !_isOn;
     }
 
