@@ -1051,7 +1051,7 @@ public class LeanTween : MonoBehaviour {
     * });<br />
     * seq.add( LeanTween.move(cube1, Vector3.one * 10f, 1f) ); // do a tween<br />
     * seq.add( () => { // fire event after tween<br />
-    * &#160;Debug.Log("We are done now");<br />
+    * &#160;Debug.Log("We are done _now");<br />
     * });;<br />
     */
     public static LTSeq sequence(bool initSequence = true)
