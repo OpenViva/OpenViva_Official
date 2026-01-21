@@ -24,6 +24,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
     private bool _isActive = true; // The item cannot be grabbed if this is false
     private bool _isOpen = false; // If this object is not a bag, this variable is always true
 
+    private Outline _outline;
+
     private void Start()
     {
         // Find the player's hand objects in the scene
@@ -45,6 +47,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
         }
         _inputActionReferences[0].action.performed += grabLeft;
         _inputActionReferences[1].action.performed += grabRight;
+
+        _outline = GetComponent<Outline>();
     }
 
     private void grabLeft(InputAction.CallbackContext context)
@@ -103,6 +107,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         if (collider == _playerLeftCollider || collider == _playerRightCollider)
         {
             _playerInRange = true;
+             _outline.enabled = true;
         }
     }
 
@@ -112,6 +117,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         if (collider == _playerLeftCollider || collider == _playerRightCollider)
         {
            _playerInRange = false;
+            _outline.enabled = false;
         }
     }
 
