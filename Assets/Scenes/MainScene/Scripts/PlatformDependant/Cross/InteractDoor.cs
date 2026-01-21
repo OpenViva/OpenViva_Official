@@ -30,6 +30,8 @@ public class InteractDoor : MonoBehaviour
 
     [SerializeField] Animator doorAnimator; // Animator component for the door
 
+    private Outline _outline;
+
     void Start()
     {
         // Set the colliders of the player's hands based on the platform
@@ -49,6 +51,8 @@ public class InteractDoor : MonoBehaviour
             inputActionReferences[i].action.Enable();
             inputActionReferences[i].action.performed += interactDoor;
         }
+
+        _outline = GetComponent<Outline>();
     }
 
     // Open or close the door when the player interacts if they are in range
@@ -85,12 +89,14 @@ public class InteractDoor : MonoBehaviour
         if (collider == playerLeftColliderKB || collider == playerRightColliderKB)
         {
             playerInRange = true;
+            _outline.enabled = true;
         }
         #endif
         #if UNITY_ANDROID || UNITY_EDITOR
         if (collider == playerLeftColliderVR || collider == playerRightColliderVR)
         {
             playerInRange = true;
+            _outline.enabled = true;
         }
         #endif
     }
@@ -102,12 +108,14 @@ public class InteractDoor : MonoBehaviour
         if (collider == playerLeftColliderKB || collider == playerRightColliderKB)
         {
             playerInRange = false;
+            _outline.enabled = false;
         }
         #endif
         #if UNITY_ANDROID || UNITY_EDITOR
         if (collider == playerLeftColliderVR || collider == playerRightColliderVR)
         {
             playerInRange = false;
+            _outline.enabled = false;
         }
         #endif
     }
