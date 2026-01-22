@@ -18,6 +18,9 @@ public class Inventory : MonoBehaviour
     private int _selectedItem = 1;
     [SerializeField] PlayerKB_BasicActions _basicActions;
 
+    [SerializeField] private PlayerKB_HUD _hud;
+    private bool _start = true;
+
     private void Start()
     {
         _bagScript = GetComponent<PlayerKB_GrabObject>();
@@ -49,6 +52,19 @@ public class Inventory : MonoBehaviour
             {
                 _itemInOtherHand = _playerManager.GetItemLeft();
             }
+
+            if (_start)
+            {
+                _hud.CreateHint("[Q]: Open Bag");
+                _hud.ClearHint("[scrollwheel]: Select Items");
+                _hud.ClearHint("[E]: Take Item");
+                _start = false;
+            }
+        }
+
+        if (_grabbedIn == 0)
+        {
+            _start = true;
         }
     }
 
@@ -59,10 +75,38 @@ public class Inventory : MonoBehaviour
             if (_isOpen)
             {
                 _animator.Play("Close");
+                _hud.ClearHint("[Q]: Close Bag");
+                _hud.CreateHint("[Q]: Open Bag");
+                _hud.ClearHint("[scrollwheel]: Select Items");
+                _hud.ClearHint("[E]: Take Item");
+                if (_grabbedIn == 1)
+                {
+                    _hud.CreateHint("[LMB]: Drop");
+                }
+                else if (_grabbedIn == 2)
+                {
+                    _hud.CreateHint("[RMB]: Drop");
+                }
+                _hud.ClearHint("[LMB]: Place Item");
+                _hud.ClearHint("[RMB]: Place Item");
             }
             else
             {
                 _animator.Play("Open");
+                _hud.ClearHint("[LMB]: Drop");
+                _hud.ClearHint("[RMB]: Drop");
+                _hud.ClearHint("[Q]: Open Bag");
+                _hud.CreateHint("[Q]: Close Bag");
+                _hud.CreateHint("[scrollwheel]: Select Items");
+                _hud.CreateHint("[E]: Take Item");
+                if (_grabbedIn == 1)
+                {
+                    _hud.CreateHint("[LMB]: Place Item");
+                }
+                else if (_grabbedIn == 2)
+                {
+                    _hud.CreateHint("[RMB]: Place Item");
+                }
             }
             _isOpen = ! _isOpen;
             _basicActions.SetBagOpen(_isOpen);

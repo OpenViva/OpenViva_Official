@@ -10,6 +10,9 @@ public class Flashlight : MonoBehaviour
     [SerializeField] private GameObject _diode;
     [SerializeField] private GameObject _vfx;
 
+    [SerializeField] private PlayerKB_HUD _hud;
+    private bool _doOnce = true;
+
     private void Start()
     {
         _grabScript = GetComponent<PlayerKB_GrabObject>();
@@ -22,6 +25,20 @@ public class Flashlight : MonoBehaviour
     private void Update()
     {
         _isGrabbed = _grabScript.GetIsGrabbed();
+
+        if (_isGrabbed != 0)
+        {
+            if (_doOnce)
+            {
+                _hud.CreateHint("[E]: Toggle Flashlight");
+                _doOnce = false;
+            }
+        }
+        else
+        {
+            _hud.ClearHint("[E]: Toggle Flashlight");
+            _doOnce = true;
+        }
     }
 
     private void ToggleFlashlight(InputAction.CallbackContext context)

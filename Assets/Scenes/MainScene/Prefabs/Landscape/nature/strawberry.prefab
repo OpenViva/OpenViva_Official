@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3106703258984290987}
   - component: {fileID: -5821674387629284396}
   - component: {fileID: 3388583080100748145}
+  - component: {fileID: -5962697945283022449}
   m_Layer: 0
   m_Name: strawberry
   m_TagString: Item
@@ -314,3 +315,21 @@ MonoBehaviour:
   - {fileID: -6978633687812840381, guid: e11ac0d8fbe15c14f99019496ae95a6c, type: 3}
   - {fileID: 4076074286235900454, guid: e11ac0d8fbe15c14f99019496ae95a6c, type: 3}
   _objectIndex: 3
+--- !u!114 &-5962697945283022449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3558671506934368141}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

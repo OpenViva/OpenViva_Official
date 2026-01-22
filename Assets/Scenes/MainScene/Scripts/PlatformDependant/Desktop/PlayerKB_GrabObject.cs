@@ -26,6 +26,9 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
     private Outline _outline;
 
+    private PlayerKB_HUD _hud;
+    private bool _hintIsShowing = false;
+
     private void Start()
     {
         // Find the player's hand objects in the scene
@@ -48,6 +51,10 @@ public class PlayerKB_GrabObject : MonoBehaviour
         _inputActionReferences[0].action.performed += grabLeft;
         _inputActionReferences[1].action.performed += grabRight;
 
+        
+        GameObject hud = GameObject.Find("HUD");
+        _hud = hud.GetComponent<PlayerKB_HUD>();
+
         _outline = GetComponent<Outline>();
     }
 
@@ -64,6 +71,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObject.transform.localPosition = _holdPositions.GetObjectPositionLeft(_objectIndex);
                 _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
                 _isGrabbedInLeft = true;
+                _hud.ClearHint("[LMB] or [RMB]: Grab");
+                _hud.CreateHint("[LMB]: Drop");
             }
             // If the object is already grabbed in the left hand, release it
             else if (_isGrabbedInLeft)
@@ -72,6 +81,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObjectRB.isKinematic = false;
                 _grabbableObjectRB.useGravity = true;
                 _isGrabbedInLeft = false;
+                _hud.ClearHint("[LMB]: Drop");
             }
         }
     }
@@ -89,6 +99,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObject.transform.localPosition = _holdPositions.GetObjectPositionRight(_objectIndex);
                 _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
                 _isGrabbedInRight = true;
+                _hud.ClearHint("[LMB] or [RMB]: Grab");
+                _hud.CreateHint("[RMB]: Drop");
             }
             // If the object is already grabbed in the right hand, release it
             else if (_isGrabbedInRight)
@@ -97,6 +109,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObjectRB.isKinematic = false;
                 _grabbableObjectRB.useGravity = true;
                 _isGrabbedInRight = false;
+                _hud.ClearHint("[RMB]: Drop");
             }
         }
     }
@@ -107,7 +120,12 @@ public class PlayerKB_GrabObject : MonoBehaviour
         if (collider == _playerLeftCollider || collider == _playerRightCollider)
         {
             _playerInRange = true;
-             _outline.enabled = true;
+            _outline.enabled = true;
+            if (!_hintIsShowing && !_isGrabbedInLeft && !_isGrabbedInRight)
+            {
+                _hud.CreateHint("[LMB] or [RMB]: Grab");
+                _hintIsShowing = true;
+            }
         }
     }
 
@@ -117,7 +135,9 @@ public class PlayerKB_GrabObject : MonoBehaviour
         if (collider == _playerLeftCollider || collider == _playerRightCollider)
         {
            _playerInRange = false;
-            _outline.enabled = false;
+           _outline.enabled = false;
+           _hud.ClearHint("[LMB] or [RMB]: Grab");
+           _hintIsShowing = false;
         }
     }
 

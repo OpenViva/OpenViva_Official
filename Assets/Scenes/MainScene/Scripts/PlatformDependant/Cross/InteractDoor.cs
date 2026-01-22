@@ -32,6 +32,8 @@ public class InteractDoor : MonoBehaviour
 
     private Outline _outline;
 
+    [SerializeField] private PlayerKB_HUD _hud;
+
     void Start()
     {
         // Set the colliders of the player's hands based on the platform
@@ -90,6 +92,7 @@ public class InteractDoor : MonoBehaviour
         {
             playerInRange = true;
             _outline.enabled = true;
+            _hud.CreateHint("[LMB] or [RMB]: Interact");
         }
         #endif
         #if UNITY_ANDROID || UNITY_EDITOR
@@ -97,6 +100,7 @@ public class InteractDoor : MonoBehaviour
         {
             playerInRange = true;
             _outline.enabled = true;
+            _hud.CreateHint("[LMB] or [RMB]: Interact");
         }
         #endif
     }
@@ -109,6 +113,7 @@ public class InteractDoor : MonoBehaviour
         {
             playerInRange = false;
             _outline.enabled = false;
+            _hud.ClearHint("[LMB] or [RMB]: Interact");
         }
         #endif
         #if UNITY_ANDROID || UNITY_EDITOR
@@ -116,6 +121,7 @@ public class InteractDoor : MonoBehaviour
         {
             playerInRange = false;
             _outline.enabled = false;
+            _hud.CreateHint("[LMB] or [RMB]: Interact");
         }
         #endif
     }
