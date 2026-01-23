@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ObjectHoldPositions : MonoBehaviour
 {
-    private Vector3[] allObjectPositionsLeft = new Vector3[16]
+    private Vector3[] allObjectPositionsLeft = new Vector3[17]
     {
         new Vector3(0.0456f, 0.0211f, -0.0027f), // BAG
         new Vector3(0.0133f, 0.0137f, -0.007f), // RUBBER_DUCKY
@@ -19,10 +19,11 @@ public class ObjectHoldPositions : MonoBehaviour
         new Vector3(0.0253f, 0.0135f, -0.0092f), // MILK_CANISTER
         new Vector3(0.008180236f, 0.02287848f, -0.0223377f), // MIXING_BOWL
         new Vector3(-0.0057f, 0.0359f, -0.0119f), // MIXING_SPOON
-        new Vector3(0.01464081f, 0.02148611f, -0.01569432f) // MORTAR
+        new Vector3(0.01464081f, 0.02148611f, -0.01569432f), // MORTAR
+        new Vector3(-0.0052f, 0.01671f, -0.01126f) // PESTLE
     };
 
-    private Vector3[] allObjectPositionsRight = new Vector3[16]
+    private Vector3[] allObjectPositionsRight = new Vector3[17]
     {
         new Vector3(-0.04559939f, 0.02110242f, -0.003600158f), // BAG
         new Vector3(-0.004600528f, 0.00939743f, -0.007199669f), // RUBBER_DUCKY
@@ -39,10 +40,11 @@ public class ObjectHoldPositions : MonoBehaviour
         new Vector3(-0.0253f, 0.0154f, -0.0103f), // MILK_CANISTER
         new Vector3(-0.008180243f, 0.02286628f, -0.02166189f), // MIXING_BOWL
         new Vector3(0.003947446f, 0.03384247f, -0.01147585f), // MIXING_SPOON
-        new Vector3(-0.01255f, 0.02265f, -0.01679f) // MORTAR
+        new Vector3(-0.01255f, 0.02265f, -0.01679f), // MORTAR
+        new Vector3(0.0052f, 0.0167f, -0.0111f) // PESTLE
     };
 
-    private Quaternion[] allObjectRotationsLeft = new Quaternion[16]
+    private Quaternion[] allObjectRotationsLeft = new Quaternion[17]
     {
         Quaternion.Euler(0f, 90f, 0f), // BAG
         Quaternion.Euler(-15.865f, 22.223f, 34.353f), // RUBBER_DUCKY
@@ -59,10 +61,11 @@ public class ObjectHoldPositions : MonoBehaviour
         Quaternion.Euler(90f, 0f, 90f), // MILK_CANISTER
         Quaternion.Euler(0f, 0f, 90f), // MIXING_BOWL
         Quaternion.Euler(-12.754f, -5.818f, 18.995f), // MIXING_SPOON
-        Quaternion.Euler(107.547f, -61.47198f, 28.91901f) // MORTAR
+        Quaternion.Euler(107.547f, -61.47198f, 28.91901f), // MORTAR
+        Quaternion.Euler(0f, 0f, 90f) // PESTLE
     };
 
-    private Quaternion[] allObjectRotationsRight = new Quaternion[16]
+    private Quaternion[] allObjectRotationsRight = new Quaternion[17]
     {
         Quaternion.Euler(0f, -90f, 0f), // BAG
         Quaternion.Euler(0f, 159.498f, 9.144f), // RUBBER_DUCKY
@@ -79,7 +82,8 @@ public class ObjectHoldPositions : MonoBehaviour
         Quaternion.Euler(90f, -180f, 90f), // MILK_CANISTER
         Quaternion.Euler(0f, 180f, 90f), // MIXING_BOWL
         Quaternion.Euler(-18.041f, -372.479f, -14.093f), // MIXING_SPOON
-        Quaternion.Euler(107.547f, 118.528f, 28.91901f) // MORTAR
+        Quaternion.Euler(107.547f, 118.528f, 28.91901f), // MORTAR
+        Quaternion.Euler(0f, 180f, 90f) // PESTLE
     };
 
     public Vector3 GetObjectPositionLeft(int objectIndex)
