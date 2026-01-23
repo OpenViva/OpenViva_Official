@@ -33,6 +33,7 @@ public class InteractDoor : MonoBehaviour
     private Outline _outline;
 
     [SerializeField] private PlayerKB_HUD _hud;
+    private bool _doOnce = true;
 
     void Start()
     {
@@ -92,7 +93,11 @@ public class InteractDoor : MonoBehaviour
         {
             playerInRange = true;
             _outline.enabled = true;
-            _hud.CreateHint("[LMB] or [RMB]: Interact");
+            if (_doOnce)
+            {
+                _hud.CreateHint("[LMB] or [RMB]: Interact");
+                _doOnce = false;
+            }
         }
         #endif
         #if UNITY_ANDROID || UNITY_EDITOR
@@ -100,7 +105,11 @@ public class InteractDoor : MonoBehaviour
         {
             playerInRange = true;
             _outline.enabled = true;
-            _hud.CreateHint("[LMB] or [RMB]: Interact");
+            if (_doOnce)
+            {
+                _hud.CreateHint("[LMB] or [RMB]: Interact");
+                _doOnce = false;
+            }
         }
         #endif
     }
@@ -114,6 +123,7 @@ public class InteractDoor : MonoBehaviour
             playerInRange = false;
             _outline.enabled = false;
             _hud.ClearHint("[LMB] or [RMB]: Interact");
+            _doOnce = true;
         }
         #endif
         #if UNITY_ANDROID || UNITY_EDITOR
@@ -122,6 +132,7 @@ public class InteractDoor : MonoBehaviour
             playerInRange = false;
             _outline.enabled = false;
             _hud.CreateHint("[LMB] or [RMB]: Interact");
+            _doOnce = true;
         }
         #endif
     }

@@ -55,6 +55,14 @@ public class Inventory : MonoBehaviour
 
             if (_start)
             {
+                if (_grabbedIn == 1)
+                {
+                    _hud.CreateHint("[LMB]: Drop");
+                }
+                else if (_grabbedIn == 2)
+                {
+                    _hud.CreateHint("[RMB]: Drop");
+                }
                 _hud.CreateHint("[Q]: Open Bag");
                 _hud.ClearHint("[scrollwheel]: Select Items");
                 _hud.ClearHint("[E]: Take Item");
