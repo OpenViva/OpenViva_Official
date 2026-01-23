@@ -77,6 +77,7 @@ public class Inventory : MonoBehaviour
                 _animator.Play("Close");
                 _hud.ClearHint("[Q]: Close Bag");
                 _hud.CreateHint("[Q]: Open Bag");
+                _hud.CreateHint("[Q]: Open Bag");
                 _hud.ClearHint("[scrollwheel]: Select Items");
                 _hud.ClearHint("[E]: Take Item");
                 if (_grabbedIn == 1)
