@@ -1,8 +1,9 @@
+using NUnit.Framework.Constraints;
 using UnityEngine;
 
 public class ObjectHoldPositions : MonoBehaviour
 {
-    private Vector3[] allObjectPositionsLeft = new Vector3[19]
+    private Vector3[] allObjectPositionsLeft = new Vector3[20]
     {
         new Vector3(0.0456f, 0.0211f, -0.0027f), // BAG
         new Vector3(0.0133f, 0.0137f, -0.007f), // RUBBER_DUCKY
@@ -22,10 +23,11 @@ public class ObjectHoldPositions : MonoBehaviour
         new Vector3(0.01464081f, 0.02148611f, -0.01569432f), // MORTAR
         new Vector3(-0.0052f, 0.01671f, -0.01126f), // PESTLE
         new Vector3(0.0065f, 0.0135f, -0.0221f), // POT
-        new Vector3(-0.0003f, 0.0182f, -0.0052f) // SOAP
+        new Vector3(-0.0003f, 0.0182f, -0.0052f), // SOAP
+        new Vector3(0f, 0.0147f, -0.0041f) // TOWEL
     };
 
-    private Vector3[] allObjectPositionsRight = new Vector3[19]
+    private Vector3[] allObjectPositionsRight = new Vector3[20]
     {
         new Vector3(-0.04559939f, 0.02110242f, -0.003600158f), // BAG
         new Vector3(-0.004600528f, 0.00939743f, -0.007199669f), // RUBBER_DUCKY
@@ -45,10 +47,11 @@ public class ObjectHoldPositions : MonoBehaviour
         new Vector3(-0.01255f, 0.02265f, -0.01679f), // MORTAR
         new Vector3(0.0052f, 0.0167f, -0.0111f), // PESTLE
         new Vector3(-0.006500248f, 0.0134955f, -0.02190186f), // POT
-        new Vector3(0.001989744f, 0.01963428f, -0.006832869f) // SOAP
+        new Vector3(0.001989744f, 0.01963428f, -0.006832869f), // SOAP
+        new Vector3(0.0026f, 0.0197f, -0.0011f) // TOWEL
     };
 
-    private Quaternion[] allObjectRotationsLeft = new Quaternion[19]
+    private Quaternion[] allObjectRotationsLeft = new Quaternion[20]
     {
         Quaternion.Euler(0f, 90f, 0f), // BAG
         Quaternion.Euler(-15.865f, 22.223f, 34.353f), // RUBBER_DUCKY
@@ -68,10 +71,11 @@ public class ObjectHoldPositions : MonoBehaviour
         Quaternion.Euler(107.547f, -61.47198f, 28.91901f), // MORTAR
         Quaternion.Euler(0f, 0f, 90f), // PESTLE
         Quaternion.Euler(0f, 0f, 90f), // POT
-        Quaternion.Euler(13.573f, -73.303f, 0f) // SOAP
+        Quaternion.Euler(13.573f, -73.303f, 0f), // SOAP
+        Quaternion.Euler(0f, 0f, 90f) // TOWEL
     };
 
-    private Quaternion[] allObjectRotationsRight = new Quaternion[19]
+    private Quaternion[] allObjectRotationsRight = new Quaternion[20]
     {
         Quaternion.Euler(0f, -90f, 0f), // BAG
         Quaternion.Euler(0f, 159.498f, 9.144f), // RUBBER_DUCKY
@@ -91,7 +95,8 @@ public class ObjectHoldPositions : MonoBehaviour
         Quaternion.Euler(107.547f, 118.528f, 28.91901f), // MORTAR
         Quaternion.Euler(0f, 180f, 90f), // PESTLE
         Quaternion.Euler(0f, 180f, 90f), // POT
-        Quaternion.Euler(7.471f, 68.086f, -8.472f) // SOAP
+        Quaternion.Euler(7.471f, 68.086f, -8.472f), // SOAP
+        Quaternion.Euler(0f, 180f, 90f) // TOWEL
     };
 
     public Vector3 GetObjectPositionLeft(int objectIndex)
