@@ -55,7 +55,7 @@ public class Flashlight : MonoBehaviour
 
     private void OnDestroy()
     {
-        _keybinds.Viva.Interact.performed -= ToggleFlashlight;
         _keybinds.Disable();
+        _keybinds.Viva.Interact.performed -= ToggleFlashlight;
     }
 }

@@ -5,7 +5,7 @@ public class ObjectHoldPositions : MonoBehaviour
 {
     private Vector3[] allObjectPositionsLeft = new Vector3[20]
     {
-        new Vector3(0.0456f, 0.0211f, -0.0027f), // BAG
+        new Vector3(0.0907f, -0.2307f, 0.1391f), // BAG
         new Vector3(0.0133f, 0.0137f, -0.007f), // RUBBER_DUCKY
         new Vector3(0.0025f,0.0158f, -0.0064f), // PEACH
         new Vector3(0.00077f, 0.03047f, -0.0053f), // STRAWBERRY
@@ -53,7 +53,7 @@ public class ObjectHoldPositions : MonoBehaviour
 
     private Quaternion[] allObjectRotationsLeft = new Quaternion[20]
     {
-        Quaternion.Euler(0f, 90f, 0f), // BAG
+        Quaternion.Euler(90f, 90f, -90f), // BAG
         Quaternion.Euler(-15.865f, 22.223f, 34.353f), // RUBBER_DUCKY
         Quaternion.Euler(-5.64f, 4.661f, 90.595f), // PEACH
         Quaternion.Euler(0f, 0f, 90f), // STRAWBERRY
