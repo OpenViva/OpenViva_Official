@@ -26,4 +26,9 @@ public class AnimationHandler : MonoBehaviour
     {
         PlayAnimation("holdBag", hand);
     }
+
+    public void HoldRubberDucky(string hand)
+    {
+        PlayAnimation("holdRubberDucky", hand);
+    }
 }
