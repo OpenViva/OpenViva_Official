@@ -14,7 +14,7 @@ public class ObjectHoldPositions : MonoBehaviour
         new Vector3(0.01392059f, 0.01097836f, 0.01483068f), // WHEAT
         new Vector3(0.0041f, 0.0192f, -0.0057f), // FLASHLIGHT
         new Vector3(0.0003204332f, 0.0162733f, -0.006679615f), // EGG
-        new Vector3(0.01903992f, 0.02049595f, -0.02319194f), // FLOUR_JAR
+        new Vector3(0.01900025f, 0.0204766f, -0.002700543f), // FLOUR_JAR
         new Vector3(1.983345e-05f, 0.02659328f, -0.004195444f), // KNIFE
         new Vector3(-0.00038f, 0.01314f, -0.00221f), // LANTERN
         new Vector3(0.0253f, 0.0135f, -0.0092f), // MILK_CANISTER
@@ -62,7 +62,7 @@ public class ObjectHoldPositions : MonoBehaviour
         Quaternion.Euler(16.234f, 33.554f, 100.504f), // WHEAT
         Quaternion.Euler(-180f, 90f, 180f), // FLASHLIGHT
         Quaternion.Euler(-107.063f, 91.058f, -1.106018f), // EGG
-        Quaternion.Euler(-15.914f, -180f, -90f), // FLOUR_JAR
+        Quaternion.Euler(0f, -180f, -90f), // FLOUR_JAR
         Quaternion.Euler(-90f, 0, 90f), // KNIFE
         Quaternion.Euler(0f, -90f, 90f), // LANTERN
         Quaternion.Euler(90f, 0f, 90f), // MILK_CANISTER

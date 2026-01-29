@@ -83,7 +83,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: 51.98, y: -13.3, z: 0.174}
+        value: {x: 51.98, y: -13.3, z: -12.27}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -115,7 +115,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: 37.34, y: 0.353, z: -26.52}
+        value: {x: 37.34, y: 0.353, z: -11.16}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -660,7 +660,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.174
+        value: -12.27
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -786,7 +786,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -26.52
+        value: -11.16
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -1079,8 +1079,8 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: hand_r/middle1_r/middle2_r
+    attribute: m_LocalEulerAngles.z
+    path: hand_r/pinky1_r/pinky2_r
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1092,7 +1092,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: hand_r/middle1_r/middle2_r
+    path: hand_r/pinky1_r/pinky2_r
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1103,8 +1103,8 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
-    path: hand_r/middle1_r/middle2_r
+    attribute: m_LocalEulerAngles.x
+    path: hand_r/pinky1_r/pinky2_r
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1151,8 +1151,8 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: hand_r/ring1_r/ring2_r
+    attribute: m_LocalEulerAngles.z
+    path: hand_r/middle1_r/middle2_r
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1164,7 +1164,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: hand_r/ring1_r/ring2_r
+    path: hand_r/middle1_r/middle2_r
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1175,8 +1175,8 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
-    path: hand_r/ring1_r/ring2_r
+    attribute: m_LocalEulerAngles.x
+    path: hand_r/middle1_r/middle2_r
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1224,7 +1224,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: hand_r/pinky1_r/pinky2_r
+    path: hand_r/ring1_r/ring2_r
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1236,7 +1236,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: hand_r/pinky1_r/pinky2_r
+    path: hand_r/ring1_r/ring2_r
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1248,7 +1248,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: hand_r/pinky1_r/pinky2_r
+    path: hand_r/ring1_r/ring2_r
     classID: 4
     script: {fileID: 0}
     flags: 0

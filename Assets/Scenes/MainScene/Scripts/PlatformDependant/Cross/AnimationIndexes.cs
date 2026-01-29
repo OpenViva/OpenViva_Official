@@ -3,7 +3,12 @@ using UnityEngine;
 public class AnimationIndexes : MonoBehaviour
 {
 
-    private AnimationHandler _animationHandler = new AnimationHandler();
+    private AnimationHandler _animationHandler;
+
+    private void Start()
+    {
+        _animationHandler = GetComponent<AnimationHandler>();
+    }
 
     public void PlayAnimationLeft(int index)
     {
