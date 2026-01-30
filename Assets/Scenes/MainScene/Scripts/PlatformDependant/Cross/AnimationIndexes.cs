@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AnimationIndexes : MonoBehaviour
 {
-
+    
     private AnimationHandler _animationHandler;
 
     private void Start()
