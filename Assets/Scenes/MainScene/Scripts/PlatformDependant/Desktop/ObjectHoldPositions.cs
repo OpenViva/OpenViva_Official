@@ -21,9 +21,9 @@ public class ObjectHoldPositions : MonoBehaviour
         new Vector3(0.008180236f, 0.02287848f, -0.0223377f), // MIXING_BOWL
         new Vector3(-0.00536f, 0.01277f, -0.00911f), // MIXING_SPOON
         new Vector3(0.01464081f, 0.02148611f, -0.01569432f), // MORTAR
-        new Vector3(-0.0052f, 0.01671f, -0.01126f), // PESTLE
-        new Vector3(0.0065f, 0.0135f, -0.0221f), // POT
-        new Vector3(-0.0003f, 0.0182f, -0.0052f), // SOAP
+        new Vector3(-0.003500368f, 0.0166771f, -0.01124747f), // PESTLE
+        new Vector3(0.0017f, 0.0135f, 0.0006f), // POT
+        new Vector3(0.001260375f, 0.01704546f, -0.003782249f), // SOAP
         new Vector3(0f, 0.0147f, -0.0041f) // TOWEL
     };
 
@@ -45,9 +45,9 @@ public class ObjectHoldPositions : MonoBehaviour
         new Vector3(-0.008180243f, 0.02286628f, -0.02166189f), // MIXING_BOWL
         new Vector3(0.004679678f, 0.01651493f, -0.0108921f), // MIXING_SPOON
         new Vector3(-0.01255f, 0.02265f, -0.01679f), // MORTAR
-        new Vector3(0.0052f, 0.0167f, -0.0111f), // PESTLE
-        new Vector3(-0.006500248f, 0.0134955f, -0.02190186f), // POT
-        new Vector3(0.001989744f, 0.01963428f, -0.006832869f), // SOAP
+        new Vector3(0.003739929f, 0.01669415f, -0.01110298f), // PESTLE
+        new Vector3(-0.0065f, 0.0135f, 0.0012f), // POT
+        new Vector3(-0.002220156f, 0.0140006f, -0.002716051f), // SOAP
         new Vector3(0.0026f, 0.0197f, -0.0011f) // TOWEL
     };
 
@@ -71,7 +71,7 @@ public class ObjectHoldPositions : MonoBehaviour
         Quaternion.Euler(107.547f, -61.47198f, 28.91901f), // MORTAR
         Quaternion.Euler(0f, 0f, 90f), // PESTLE
         Quaternion.Euler(0f, 0f, 90f), // POT
-        Quaternion.Euler(13.573f, -73.303f, 0f), // SOAP
+        Quaternion.Euler(12.477f, -49.722f, -83.662f), // SOAP
         Quaternion.Euler(0f, 0f, 90f) // TOWEL
     };
 
@@ -95,7 +95,7 @@ public class ObjectHoldPositions : MonoBehaviour
         Quaternion.Euler(107.547f, 118.528f, 28.91901f), // MORTAR
         Quaternion.Euler(0f, 180f, 90f), // PESTLE
         Quaternion.Euler(0f, 180f, 90f), // POT
-        Quaternion.Euler(7.471f, 68.086f, -8.472f), // SOAP
+        Quaternion.Euler(5.797f, 47.381f, 83.604f), // SOAP
         Quaternion.Euler(0f, 180f, 90f) // TOWEL
     };
 
