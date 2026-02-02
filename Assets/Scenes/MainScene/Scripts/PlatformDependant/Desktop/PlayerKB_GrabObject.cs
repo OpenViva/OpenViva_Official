@@ -29,7 +29,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
     private PlayerKB_HUD _hud;
     private bool _hintIsShowing = false;
 
-    private AnimationIndexes _animationIndexes = new AnimationIndexes();
+    [SerializeField] private AnimationIndexes _animationIndexes;
 
     private void Start()
     {
@@ -88,6 +88,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _isGrabbedInLeft = false;
 
                 _hud.ClearHint("[LMB]: Drop");
+
+                _animationIndexes.PlayAnimationLeft(-1);
             }
         }
     }
@@ -108,6 +110,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
                 _hud.ClearHint("[LMB] or [RMB]: Grab");
                 _hud.CreateHint("[RMB]: Drop");
+
+                _animationIndexes.PlayAnimationRight(_objectIndex);
             }
             // If the object is already grabbed in the right hand, release it
             else if (_isGrabbedInRight)
@@ -118,6 +122,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _isGrabbedInRight = false;
 
                 _hud.ClearHint("[RMB]: Drop");
+
+                _animationIndexes.PlayAnimationRight(-1);
             }
         }
     }
