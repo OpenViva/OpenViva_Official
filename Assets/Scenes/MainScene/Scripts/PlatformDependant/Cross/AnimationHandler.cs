@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class AnimationHandler : MonoBehaviour
 {
+    // Plays the correct hand animation based on the item being held and which hand is being used
+
     [SerializeField] private Animator _leftWrist;
     [SerializeField] private Animator _rightWrist;
 

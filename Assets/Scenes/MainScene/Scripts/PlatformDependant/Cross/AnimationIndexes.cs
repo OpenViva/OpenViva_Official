@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class AnimationIndexes : MonoBehaviour
 {
-    
+
+    // Tells the animation handler which animation to play based on the index provided and handedness
+
     private AnimationHandler _animationHandler;
 
     private void Start()

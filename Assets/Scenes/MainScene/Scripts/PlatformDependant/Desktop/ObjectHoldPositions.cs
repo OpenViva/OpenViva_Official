@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class ObjectHoldPositions : MonoBehaviour
 {
+    // the position and rotation to set different items to when they are held in either hand
+
     private Vector3[] allObjectPositionsLeft = new Vector3[20]
     {
         new Vector3(0.0424f, 0.0134f, -0.0307f), // BAG

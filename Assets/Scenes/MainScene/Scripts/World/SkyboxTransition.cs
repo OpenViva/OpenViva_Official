@@ -3,20 +3,23 @@ using UnityEngine;
 
 public class SkyboxTransition : MonoBehaviour
 {
+    // Skybox materials for different times of day
     [SerializeField] private Material _dawnToMorning;
     [SerializeField] private Material _morningToDay;
     [SerializeField] private Material _dayToAfternoon;
     [SerializeField] private Material _afternoonToDusk;
     [SerializeField] private Material _duskToNight;
     [SerializeField] private Material _nightToDawn;
-    private DayNightCycle _time;
 
-    private int _minutes;
-    private CycleSpeeds.Speed _speed;
-    private float _transitionSpeed;
+    private DayNightCycle _time; // Script to track how many minutes have passed in the day and the cycle speed
+
+    private int _minutes; // How many minutes have passed in the day
+    private CycleSpeeds.Speed _speed; // The set speed of the day-night cycle
+    private float _transitionSpeed; // How fast the skybox transitions
 
     private void Start()
     {
+        // Get reference to DayNightCycle script and retrieve current minutes and speed
         _time = GetComponent<DayNightCycle>();
         _minutes = _time.GetMinutes();
         _speed = _time.GetSpeed();
@@ -82,8 +85,10 @@ public class SkyboxTransition : MonoBehaviour
         }
     }
 
+    // Coroutines to transition skyboxes
     private IEnumerator NightToDawn()
     {
+        // Set blend to 0 and gradually increase it over transition speed
         _nightToDawn.SetFloat("_Blend", 0);
         for (float i = 0; i < _transitionSpeed; i += Time.deltaTime)
         {
@@ -91,7 +96,7 @@ public class SkyboxTransition : MonoBehaviour
             yield return null;
         }
         RenderSettings.skybox = _dawnToMorning;
-        _nightToDawn.SetFloat("Blend", 0);
+        _nightToDawn.SetFloat("_Blend", 0);
     }
 
     private IEnumerator DawnToMorning()
@@ -103,7 +108,7 @@ public class SkyboxTransition : MonoBehaviour
             yield return null;
         }
         RenderSettings.skybox = _morningToDay;
-        _dawnToMorning.SetFloat("Blend", 0);
+        _dawnToMorning.SetFloat("_Blend", 0);
     }
 
     private IEnumerator MorningToDay()
@@ -115,7 +120,7 @@ public class SkyboxTransition : MonoBehaviour
             yield return null;
         }
         RenderSettings.skybox = _dayToAfternoon;
-        _morningToDay.SetFloat("Blend", 0);
+        _morningToDay.SetFloat("_Blend", 0);
     }
 
     private IEnumerator DayToAfternoon()
@@ -127,7 +132,7 @@ public class SkyboxTransition : MonoBehaviour
             yield return null;
         }
         RenderSettings.skybox = _afternoonToDusk;
-        _dayToAfternoon.SetFloat("Blend", 0);
+        _dayToAfternoon.SetFloat("_Blend", 0);
     }
 
     private IEnumerator AfternoonToDusk()
@@ -139,7 +144,7 @@ public class SkyboxTransition : MonoBehaviour
             yield return null;
         }
         RenderSettings.skybox = _duskToNight;
-        _afternoonToDusk.SetFloat("Blend", 0);
+        _afternoonToDusk.SetFloat("_Blend", 0);
     }
 
     private IEnumerator DuskToNight()
@@ -151,6 +156,6 @@ public class SkyboxTransition : MonoBehaviour
             yield return null;
         }
         RenderSettings.skybox = _nightToDawn;
-        _duskToNight.SetFloat("Blend", 0);
+        _duskToNight.SetFloat("_Blend", 0);
     }
 }

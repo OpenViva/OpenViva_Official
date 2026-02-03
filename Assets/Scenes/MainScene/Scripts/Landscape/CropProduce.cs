@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CropProduce : MonoBehaviour
 {
-    // FIELDS
+    // Crop item class.
+
     private CropTypes.CropType cropType; // The type of crop
     private int position; // The position of the crop
     private bool isPicked = false; // Whether the crop still in the same place that is was in when it was initialized
@@ -16,7 +17,7 @@ public class CropProduce : MonoBehaviour
         this.position = position;
     }
 
-    // GETTERS AND SETTERS
+    // SETTERS AND GETTERS
     public void setIsPicked()
     {
         isPicked = true;
@@ -27,7 +28,6 @@ public class CropProduce : MonoBehaviour
         return gameObject;
     }
 
-    // PROPERTIES
     // When the crop is put in a bowl, destroy the object
     public void inBowl()
     {

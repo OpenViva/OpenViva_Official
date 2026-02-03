@@ -43,6 +43,7 @@ public class PlayerKB_HUD : MonoBehaviour
         }
     }
 
+    // Control Hints
     public void CreateHint(string text)
     {
         if (_nextFreeIndex < 6)

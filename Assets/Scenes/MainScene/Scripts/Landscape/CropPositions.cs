@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CropPositions : MonoBehaviour
 {
-    // Remembers the position for the crop being initialized
+    // Remembers the position for crops so that they spawn in the right spot when they grow
     private int currentCantaloupePosition = 0;
     private int currentWheatPosition = 0;
     private int currentBlueberryPosition = 0;

@@ -169,6 +169,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         return 0;
     }
 
+    // When the item is placed in the inventory, set it as inactive and disable physics. Do the inverse when taken out of the inventory
     public void SetIsActive(bool set, int handedness)
     {
         if (set == false)
@@ -207,6 +208,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         }
     }
 
+    // If this object is a bag, set whether it is open or closed to enable/disable grabbing
     public void SetIsOpen(bool isOpen)
     {
         _isOpen = isOpen;

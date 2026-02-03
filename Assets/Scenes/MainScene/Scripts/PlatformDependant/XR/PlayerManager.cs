@@ -19,7 +19,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject _rightHandKB; // PlayerKB's right hand
     [SerializeField] private GameObject _leftHandVR; // PlayerVR's left hand
     [SerializeField] private GameObject _rightHandVR; // PlayerVR's right hand
-    ItemIndexes _itemIndexes; // A script to fetch item indexes
+    CropIndexes _itemIndexes; // A script to fetch item indexes
 
     void Start()
     {
@@ -31,7 +31,7 @@ public class PlayerManager : MonoBehaviour
 
         Globals.isDesktopMode = true;
 
-        _itemIndexes = new ItemIndexes();
+        _itemIndexes = new CropIndexes();
     }
 
     private void FixedUpdate()
@@ -74,20 +74,24 @@ public class PlayerManager : MonoBehaviour
             Debug.Log("Input type changed to KBM");
         }
     }
-
+    
+    // Check which items are being held in the player's hands, if any
     private GameObject CheckItemInHands(Transform parent)
     {
         List<GameObject> children = new List<GameObject>();
         int numElements = 0;
 
+        // Get all child objects of the hand
         foreach (Transform child in parent)
         {
             children.Add(child.gameObject);
             numElements++;
         }
 
+        // Get the last child object, which will be the held item
         GameObject item = children[numElements - 1];
 
+        // Return the item if it has the "Item" tag
         if (item.CompareTag("Item"))
         {
             return item;
@@ -98,6 +102,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    // Specifically get the index of the item held in each hand
     public int GetItemLeft()
     {
         GameObject item = CheckItemInHands(_leftHandKB.transform);
@@ -118,6 +123,7 @@ public class PlayerManager : MonoBehaviour
         return -1;
     }
 
+    // Specifically get the GameObject of the item held in each hand
     public GameObject GetObjectLeft()
     {
         return CheckItemInHands(_leftHandKB.transform);
