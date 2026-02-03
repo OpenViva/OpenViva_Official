@@ -29,6 +29,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
     private PlayerKB_HUD _hud;
     private bool _hintIsShowing = false;
 
+    [SerializeField] private AnimationIndexes _animationIndexes;
+
     private void Start()
     {
         // Find the player's hand objects in the scene
@@ -71,8 +73,11 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObject.transform.localPosition = _holdPositions.GetObjectPositionLeft(_objectIndex);
                 _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
                 _isGrabbedInLeft = true;
+
                 _hud.ClearHint("[LMB] or [RMB]: Grab");
                 _hud.CreateHint("[LMB]: Drop");
+
+                _animationIndexes.PlayAnimationLeft(_objectIndex);
             }
             // If the object is already grabbed in the left hand, release it
             else if (_isGrabbedInLeft)
@@ -81,7 +86,10 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObjectRB.isKinematic = false;
                 _grabbableObjectRB.useGravity = true;
                 _isGrabbedInLeft = false;
+
                 _hud.ClearHint("[LMB]: Drop");
+
+                _animationIndexes.PlayAnimationLeft(-1);
             }
         }
     }
@@ -99,8 +107,11 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObject.transform.localPosition = _holdPositions.GetObjectPositionRight(_objectIndex);
                 _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
                 _isGrabbedInRight = true;
+
                 _hud.ClearHint("[LMB] or [RMB]: Grab");
                 _hud.CreateHint("[RMB]: Drop");
+
+                _animationIndexes.PlayAnimationRight(_objectIndex);
             }
             // If the object is already grabbed in the right hand, release it
             else if (_isGrabbedInRight)
@@ -109,7 +120,10 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObjectRB.isKinematic = false;
                 _grabbableObjectRB.useGravity = true;
                 _isGrabbedInRight = false;
+
                 _hud.ClearHint("[RMB]: Drop");
+
+                _animationIndexes.PlayAnimationRight(-1);
             }
         }
     }
