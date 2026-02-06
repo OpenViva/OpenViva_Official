@@ -1,16 +1,28 @@
+using System.Linq;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
-public class PlayerVR_GrabObject : MonoBehaviour
+public class PlayerVR_GrabObject : XRGrabInteractable
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Transform _leftAttach;
+    [SerializeField] private Transform _rightAttach;
 
-    // Update is called once per frame
-    void Update()
+    protected override void OnSelectEntering(SelectEnterEventArgs args)
     {
-        
+        var interactor = args.interactorObject.transform;
+        string name = interactor.name;
+
+        if (name.Contains("Left"))
+        {
+            attachTransform = _leftAttach;
+        }
+        else if (name.Contains("Right"))
+        {
+            attachTransform = _rightAttach;
+        }
+
+        base.OnSelectEntering(args);
     }
 }

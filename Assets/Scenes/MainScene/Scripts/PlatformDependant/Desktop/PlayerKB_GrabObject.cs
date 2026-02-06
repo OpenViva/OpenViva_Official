@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerKB_GrabObject : MonoBehaviour
 {
-    [SerializeField] private InputActionReference[] _inputActionReferences = new InputActionReference[2]; // 0 - LBM, 1 - RMB
+    [SerializeField] private InputActionReference[] _inputActionReferences; // 0 - LBM, 1 - RMB
     private GameObject _playerLeftHand; // The player's left hand object
     private GameObject _playerRightHand; // The player's right hand object
     private Collider _playerLeftCollider; // The collider of the player's left hand
@@ -19,7 +19,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
     private bool _isGrabbedInLeft = false; // Check whether the object is grabbed in the left hand
     private bool _isGrabbedInRight = false; // Check whether the object is grabbed in the right hand
 
-    private ObjectHoldPositions _holdPositions = new ObjectHoldPositions(); // Calls the script that holds the positions and rotations of all grabbable objects
+    private ObjectHoldPositions _holdPositions; // Calls the script that holds the positions and rotations of all grabbable objects
     [SerializeField] private int _objectIndex; // The index of the object in the ObjectHoldPositions script
     private bool _isActive = true; // The item cannot be grabbed if this is false
     private bool _isOpen = false; // If this object is not a bag, this variable is always true
@@ -33,6 +33,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
     private void Start()
     {
+        _holdPositions = new ObjectHoldPositions();
+
         // Find the player's hand objects in the scene
         _playerLeftHand = GameObject.Find("hand_l");
         _playerRightHand = GameObject.Find("hand_r");
