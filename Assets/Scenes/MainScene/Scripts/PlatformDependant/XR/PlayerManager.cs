@@ -24,7 +24,7 @@ public class PlayerManager : MonoBehaviour
     void Start()
     {
         Globals.isDesktopMode = true;
-        ChangeInputType();
+        // ChangeInputType(); // TODO: Needs fixing, doesn't change to desktop by default.
 
         // Set up change input type action
         _changeInputType.action.Enable();
