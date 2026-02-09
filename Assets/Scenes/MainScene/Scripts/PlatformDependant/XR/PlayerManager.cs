@@ -23,13 +23,14 @@ public class PlayerManager : MonoBehaviour
 
     void Start()
     {
+        Globals.isDesktopMode = true;
+        ChangeInputType();
+
         // Set up change input type action
         _changeInputType.action.Enable();
-        _changeInputType.action.performed += ChangeInputType;
+        _changeInputType.action.performed += context => ChangeInputType();
         // Lock the cursor to the center of the screen
         Cursor.lockState = CursorLockMode.Locked;
-
-        Globals.isDesktopMode = true;
 
         _itemIndexes = new CropIndexes();
     }
@@ -51,10 +52,10 @@ public class PlayerManager : MonoBehaviour
     {
         // Clean up change input type action
         _changeInputType.action.Disable();
-        _changeInputType.action.performed -= ChangeInputType;
+        _changeInputType.action.performed -= context => ChangeInputType();
     }
 
-    private void ChangeInputType(InputAction.CallbackContext context)
+    private void ChangeInputType()
     {
         // Toggle between Keyboard/Mouse and VR input types
         if (_inputType == Player_InputTypes.InputType.KBM)
