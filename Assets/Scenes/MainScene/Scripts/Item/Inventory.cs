@@ -65,15 +65,15 @@ public class Inventory : MonoBehaviour
             {
                 if (_grabbedIn == 1)
                 {
-                    _hud.CreateHint("[LMB]: Drop");
+                    _hud.CreateHint(Hint.HintType.LeftReleaseHint);
                 }
                 else if (_grabbedIn == 2)
                 {
-                    _hud.CreateHint("[RMB]: Drop");
+                    _hud.CreateHint(Hint.HintType.RightReleaseHint);
                 }
-                _hud.CreateHint("[Q]: Open Bag");
-                _hud.ClearHint("[scrollwheel]: Select Items");
-                _hud.ClearHint("[E]: Take Item");
+                _hud.CreateHint(Hint.HintType.OpenBagHint);
+                _hud.ClearHint(Hint.HintType.SelectItemsHint);
+                _hud.ClearHint(Hint.HintType.TakeItemHint);
                 _start = false;
             }
         }
@@ -93,38 +93,37 @@ public class Inventory : MonoBehaviour
             if (_isOpen)
             {
                 _animator.Play("Close");
-                _hud.ClearHint("[Q]: Close Bag");
-                _hud.CreateHint("[Q]: Open Bag");
-                _hud.CreateHint("[Q]: Open Bag");
-                _hud.ClearHint("[scrollwheel]: Select Items");
-                _hud.ClearHint("[E]: Take Item");
+                _hud.ClearHint(Hint.HintType.CloseBagHint);
+                _hud.CreateHint(Hint.HintType.OpenBagHint);
+                _hud.ClearHint(Hint.HintType.SelectItemsHint);
+                _hud.ClearHint(Hint.HintType.TakeItemHint);
                 if (_grabbedIn == 1)
                 {
-                    _hud.CreateHint("[LMB]: Drop");
+                    _hud.CreateHint(Hint.HintType.LeftReleaseHint);
                 }
                 else if (_grabbedIn == 2)
                 {
-                    _hud.CreateHint("[RMB]: Drop");
+                    _hud.CreateHint(Hint.HintType.RightReleaseHint);
                 }
-                _hud.ClearHint("[LMB]: Place Item");
-                _hud.ClearHint("[RMB]: Place Item");
+                _hud.ClearHint(Hint.HintType.LeftPlaceItemHint);
+                _hud.ClearHint(Hint.HintType.RightPlaceItemHint);
             }
             else
             {
                 _animator.Play("Open");
-                _hud.ClearHint("[LMB]: Drop");
-                _hud.ClearHint("[RMB]: Drop");
-                _hud.ClearHint("[Q]: Open Bag");
-                _hud.CreateHint("[Q]: Close Bag");
-                _hud.CreateHint("[scrollwheel]: Select Items");
-                _hud.CreateHint("[E]: Take Item");
+                _hud.ClearHint(Hint.HintType.LeftReleaseHint);
+                _hud.ClearHint(Hint.HintType.RightReleaseHint);
+                _hud.ClearHint(Hint.HintType.OpenBagHint);
+                _hud.CreateHint(Hint.HintType.CloseBagHint);
+                _hud.CreateHint(Hint.HintType.SelectItemsHint);
+                _hud.CreateHint(Hint.HintType.TakeItemHint);
                 if (_grabbedIn == 1)
                 {
-                    _hud.CreateHint("[LMB]: Place Item");
+                    _hud.CreateHint(Hint.HintType.LeftPlaceItemHint);
                 }
                 else if (_grabbedIn == 2)
                 {
-                    _hud.CreateHint("[RMB]: Place Item");
+                    _hud.CreateHint(Hint.HintType.RightPlaceItemHint);
                 }
             }
             _isOpen = ! _isOpen;

@@ -30,13 +30,13 @@ public class Flashlight : MonoBehaviour
         {
             if (_doOnce)
             {
-                _hud.CreateHint("[E]: Toggle Flashlight");
+                _hud.CreateHint(Hint.HintType.FlashlightHint);
                 _doOnce = false;
             }
         }
         else
         {
-            _hud.ClearHint("[E]: Toggle Flashlight");
+            _hud.ClearHint(Hint.HintType.FlashlightHint);
             _doOnce = true;
         }
     }

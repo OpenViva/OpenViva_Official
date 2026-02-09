@@ -76,8 +76,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
                 _isGrabbedInLeft = true;
 
-                _hud.ClearHint("[LMB] or [RMB]: Grab");
-                _hud.CreateHint("[LMB]: Drop");
+                _hud.ClearHint(Hint.HintType.GrabHint);
+                _hud.CreateHint(Hint.HintType.LeftReleaseHint);
 
                 _animationIndexes.PlayAnimationLeft(_objectIndex);
             }
@@ -89,7 +89,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObjectRB.useGravity = true;
                 _isGrabbedInLeft = false;
 
-                _hud.ClearHint("[LMB]: Drop");
+                _hud.ClearHint(Hint.HintType.LeftReleaseHint);
 
                 _animationIndexes.PlayAnimationLeft(-1);
             }
@@ -110,8 +110,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
                 _isGrabbedInRight = true;
 
-                _hud.ClearHint("[LMB] or [RMB]: Grab");
-                _hud.CreateHint("[RMB]: Drop");
+                _hud.ClearHint(Hint.HintType.GrabHint);
+                _hud.CreateHint(Hint.HintType.RightReleaseHint);
 
                 _animationIndexes.PlayAnimationRight(_objectIndex);
             }
@@ -123,7 +123,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObjectRB.useGravity = true;
                 _isGrabbedInRight = false;
 
-                _hud.ClearHint("[RMB]: Drop");
+                _hud.ClearHint(Hint.HintType.RightReleaseHint);
 
                 _animationIndexes.PlayAnimationRight(-1);
             }
@@ -139,7 +139,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             _outline.enabled = true;
             if (!_hintIsShowing && !_isGrabbedInLeft && !_isGrabbedInRight)
             {
-                _hud.CreateHint("[LMB] or [RMB]: Grab");
+                _hud.CreateHint(Hint.HintType.GrabHint);
                 _hintIsShowing = true;
             }
         }
@@ -152,7 +152,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         {
            _playerInRange = false;
            _outline.enabled = false;
-           _hud.ClearHint("[LMB] or [RMB]: Grab");
+           _hud.ClearHint(Hint.HintType.GrabHint);
            _hintIsShowing = false;
         }
     }
