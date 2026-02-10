@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3136345651905983666}
   m_Layer: 0
-  m_Name: AttachRight
+  m_Name: RightAttach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1278917027073672511}
   m_Layer: 0
-  m_Name: AttachLeft
+  m_Name: LeftAttach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,7 +95,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6168932639107689632}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.493779, y: -0.5068196, z: 0.5061268, w: 0.49310416}
+  m_LocalRotation: {x: 0.49308145, y: -0.5061004, z: 0.506843, w: 0.49380493}
   m_LocalPosition: {x: -9.267, y: 3.537, z: 0.407}
   m_LocalScale: {x: 0.0075251046, y: 0.007525108, z: 0.007525112}
   m_ConstrainProportionsScale: 0
@@ -103,7 +103,7 @@ Transform:
   - {fileID: 1278917027073672511}
   - {fileID: 3136345651905983666}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 89.916, y: 0, z: 91.493}
 --- !u!137 &2369841692918268006
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
