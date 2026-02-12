@@ -10,45 +10,32 @@ public class PlayerKB_BasicActions : MonoBehaviour
 
     // --- References ---
     [Header("References")]
-    [Tooltip("The object that holds the player movement (_playerKB/_playerVR)")]
-    [SerializeField] private GameObject _player;
     [SerializeField] private PlayerKB_Movement _playerMovement;
     [SerializeField] private CharacterController _characterController;
+
     [Tooltip("The object that holds the player hands/view model")]
     [SerializeField] private GameObject _playerPrefab;
     [SerializeField] private GameObject _map;
 
     // --- Fields ---
+    [SerializeField] private Player _player;
+    private PlayerControls _controls;
+
     private bool _isCrouching = false;
     private int _currentHandPos = 10;
     private bool _mapOpen = false;
-    private DesktopInput _playerInput;
     private bool _bagOpen = false;
 
     private void Awake()
     {
-        _playerInput = new DesktopInput();
+        _player = GetComponentInParent<Player>();
 
-        // Move binding
-        _playerInput.Viva.Move.performed += ctx => _playerMovement.moveInput = ctx.ReadValue<Vector2>();
-        _playerInput.Viva.Move.canceled += ctx => _playerMovement.moveInput = Vector2.zero;
+        _controls = _player.Controls;
 
-        // Look binding
-        _playerInput.Viva.Look.performed += ctx => _playerMovement.lookInput = ctx.ReadValue<Vector2>();
-        _playerInput.Viva.Look.canceled += ctx => _playerMovement.lookInput = Vector2.zero;
-
-        // Run binding
-        _playerInput.Viva.Run.performed += ctx => _playerMovement.HandleRun(true);
-        _playerInput.Viva.Run.canceled += ctx => _playerMovement.HandleRun(false);
-
-        // Jump binding
-        _playerInput.Viva.Jump.performed += ctx => _playerMovement.HandleJump();
-
-        // Other bindings
-        _playerInput.Viva.Crouch.performed += OnCrouch;
-        _playerInput.Viva.ScrollUp.performed += OnExtendHands;
-        _playerInput.Viva.ScrollDown.performed += OnRetractHands;
-        _playerInput.Viva.OpenMap.performed += OnChangeMapVisibility;
+        _controls.Viva.Crouch.performed += OnCrouch;
+        _controls.Viva.ScrollUp.performed += OnExtendHands;
+        _controls.Viva.ScrollDown.performed += OnRetractHands;
+        _controls.Viva.OpenMap.performed += OnChangeMapVisibility;
     }
     void Start()
     {
@@ -64,9 +51,6 @@ public class PlayerKB_BasicActions : MonoBehaviour
         }
         else Debug.LogWarning($"Player Movement of {this} cannot be found!");
     }
-
-    private void OnEnable() => _playerInput.Viva.Enable();
-    private void OnDisable() => _playerInput.Viva.Disable();
 
     public void SetBagOpen(bool set)
     {

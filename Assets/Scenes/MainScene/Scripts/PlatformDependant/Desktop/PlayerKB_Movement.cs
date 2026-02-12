@@ -64,6 +64,9 @@ public class PlayerKB_Movement : MonoBehaviour
     [SerializeField] private float _timeSinceGrounded = 0f;
 
     // --- Fields ---
+    private Player _player;
+    private PlayerControls _controls;
+
     private float _xRotation;
     private float _yRotation;
     private Vector3 _controllerVelocity;
@@ -72,6 +75,8 @@ public class PlayerKB_Movement : MonoBehaviour
 
     private void Start()
     {
+        _player = GetComponentInParent<Player>();
+
         // Locks cursor and makes it invisible
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -81,6 +86,8 @@ public class PlayerKB_Movement : MonoBehaviour
             _characterController = foundController;
         }
         else Debug.LogWarning($"Character Controller of {this} cannot be assigned!");
+
+        AssignInputEvents();
     }
 
     void Update()
@@ -183,7 +190,7 @@ public class PlayerKB_Movement : MonoBehaviour
             jumpBufferTimer = jumpBufferTime;
         }
     }
-  
+
     private void UpdateCoyoteTime()
     {
         if (isGrounded)
@@ -229,7 +236,7 @@ public class PlayerKB_Movement : MonoBehaviour
 
     public void DisableRunning(bool crouching)
     {
-        if(crouching)
+        if (crouching)
         {
             _runMultiplier = 1f;
         }
@@ -302,6 +309,26 @@ public class PlayerKB_Movement : MonoBehaviour
         {
             Gizmos.DrawLine(feetPosition, feetPosition + direction * edgeRaycastLength);
         }
+    }
+
+    private void AssignInputEvents()
+    {
+        _controls = _player.Controls;
+
+        // Move binding
+        _controls.Viva.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        _controls.Viva.Move.canceled += ctx => moveInput = Vector2.zero;
+
+        // Look binding
+        _controls.Viva.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
+        _controls.Viva.Look.canceled += ctx => lookInput = Vector2.zero;
+
+        // Run binding
+        _controls.Viva.Run.performed += ctx => HandleRun(true);
+        _controls.Viva.Run.canceled += ctx => HandleRun(false);
+
+        // Jump binding
+        _controls.Viva.Jump.performed += ctx => HandleJump();
     }
 }
 
