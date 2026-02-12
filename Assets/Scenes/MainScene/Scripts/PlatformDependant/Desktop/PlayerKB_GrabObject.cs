@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerKB_GrabObject : MonoBehaviour
 {
-    [SerializeField] private InputActionReference[] _inputActionReferences; // 0 - LBM, 1 - RMB
     private GameObject _playerLeftHand; // The player's left hand object
     private GameObject _playerRightHand; // The player's right hand object
     private Collider _playerLeftCollider; // The collider of the player's left hand
@@ -31,8 +30,14 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
     [SerializeField] private AnimationIndexes _animationIndexes;
 
+    // --- Fields ---
+    private Player _player;
+    private PlayerControls _controls;
+
     private void Start()
     {
+        _player = FindFirstObjectByType<Player>();
+
         _holdPositions = new ObjectHoldPositions();
 
         // Find the player's hand objects in the scene
@@ -47,22 +52,15 @@ public class PlayerKB_GrabObject : MonoBehaviour
         _playerLeftCollider = _playerLeftHand.GetComponent<Collider>();
         _playerRightCollider = _playerRightHand.GetComponent<Collider>();
 
-        // Enable input actions and bind the grab functions
-        for (int i = 0; i < _inputActionReferences.Length; i++)
-        {
-            _inputActionReferences[i].action.Enable();
-        }
-        _inputActionReferences[0].action.performed += grabLeft;
-        _inputActionReferences[1].action.performed += grabRight;
-
-        
         GameObject hud = GameObject.Find("HUD");
         _hud = hud.GetComponent<PlayerKB_HUD>();
 
         _outline = GetComponent<Outline>();
+
+        AssignInputs();
     }
 
-    private void grabLeft(InputAction.CallbackContext context)
+    private void GrabLeft()
     {
         // If the player is in range and the object is not already grabbed, grab it with the left hand
         if (_isActive && !_isOpen)
@@ -96,7 +94,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         }
     }
 
-    private void grabRight(InputAction.CallbackContext context)
+    private void GrabRight()
     {
         // If the player is in range and the object is not already grabbed, grab it with the right hand
         if (_isActive && !_isOpen)
@@ -216,15 +214,12 @@ public class PlayerKB_GrabObject : MonoBehaviour
         _isOpen = isOpen;
     }
 
-    void OnDestroy()
+    private void AssignInputs()
     {
-        // Disable input actions and unbind the grab functions
-        for (int i = 0; i < _inputActionReferences.Length; i++)
-        {
-            _inputActionReferences[i].action.Disable();
-        }
-        _inputActionReferences[0].action.performed -= grabLeft;
-        _inputActionReferences[1].action.performed -= grabRight;
+        _controls = _player.Controls;
+
+        _controls.Viva.LeftGrab.performed += context => GrabLeft();
+        _controls.Viva.RightGrab.performed += context => GrabRight();
     }
 }
 #endif

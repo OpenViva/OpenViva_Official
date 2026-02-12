@@ -11,7 +11,6 @@ public class Inventory : MonoBehaviour
     [SerializeField] private PlayerManager _playerManager; // This script is used to check what item the player is holding
     private int _itemInOtherHand = -1; // The index of the item in the hand that isn't holding the bag
     private Animator _animator; // Animator used to open or close the bag
-    private DesktopInput _keybinds; // Input system for desktop
     private bool _isOpen; // Check if the bag is open
     [SerializeField] private List<string> _inventory = new List<string>(); // The names of every item in the bag
     private int _numElements = 0; // The number of items in the bag
@@ -23,20 +22,25 @@ public class Inventory : MonoBehaviour
     [SerializeField] private PlayerKB_HUD _hud; // HUD script to show hints
     private bool _start = true; // Certain hints must only be shown once when the bag is grabbed
 
+    // --- Fields ---
+    private Player _player;
+    private PlayerControls _controls;
+
     // Initialize variables and set up input actions
     private void Start()
     {
         _bagScript = GetComponent<PlayerKB_GrabObject>();
         _animator = GetComponent<Animator>();
 
-        _keybinds = new DesktopInput();
-        _keybinds.Viva.Enable();
-        _keybinds.Viva.ToggleBag.performed += ToggleBag;
-        _keybinds.Viva.LeftGrab.performed += PlaceInBagWithRightHand;
-        _keybinds.Viva.RightGrab.performed += PlaceInBagWithLeftHand;
-        _keybinds.Viva.ScrollUp.performed += ScrollUp;
-        _keybinds.Viva.ScrollDown.performed += ScrollDown;
-        _keybinds.Viva.Interact.performed += TakeSelectedItem;
+        _player = FindFirstObjectByType<Player>();
+        _controls = _player.Controls;
+
+        _controls.Viva.ToggleBag.performed += ToggleBag;
+        _controls.Viva.LeftGrab.performed += PlaceInBagWithRightHand;
+        _controls.Viva.RightGrab.performed += PlaceInBagWithLeftHand;
+        _controls.Viva.ScrollUp.performed += ScrollUp;
+        _controls.Viva.ScrollDown.performed += ScrollDown;
+        _controls.Viva.Interact.performed += TakeSelectedItem;
 
         _itemIndexes = new CropIndexes();
     }
@@ -235,17 +239,5 @@ public class Inventory : MonoBehaviour
                 _selectedItem = _numElements - 1;
             }
         }
-    }
-
-    // Unsubscribe from input actions
-    private void OnDestroy()
-    {
-        _keybinds.Viva.ToggleBag.performed -= ToggleBag;
-        _keybinds.Viva.LeftGrab.performed -= PlaceInBagWithRightHand;
-        _keybinds.Viva.RightGrab.performed -= PlaceInBagWithLeftHand;
-        _keybinds.Viva.ScrollUp.performed -= ScrollUp;
-        _keybinds.Viva.ScrollDown.performed -= ScrollDown;
-        _keybinds.Viva.Interact.performed -= TakeSelectedItem;
-        _keybinds.Viva.Disable();
     }
 }

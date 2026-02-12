@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -30,15 +29,20 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private float _openClipLength = 0.6f;
     [SerializeField] private float _closeClipLength = 1.2f;
 
-    // --- Private Fields ---
+    // --- Fields ---
     [SerializeField] private List<GameObject> leftPages = new();
     [SerializeField] private List<GameObject> rightPages = new();
+
+    private Player _player;
+    private PlayerControls _controls;
 
     private Vector3 targetPosition;
     private Quaternion targetRotation;
 
     private void Start()
     {
+        _player = GetComponentInParent<Player>();
+
         if (TryGetComponent(out Animator foundAnimator))
         {
             bookAnimator = foundAnimator;
@@ -51,16 +55,16 @@ public class PauseMenu : MonoBehaviour
 
         leftPages = GetDirectChildren(LeftPage);
         rightPages = GetDirectChildren(RightPage);
+
+        AssignInputs();
     }
 
     #region Input Methods
-    public void OnPause(InputAction.CallbackContext context)
+    private void AssignInputs()
     {
-        // Check phase: Started (pressed), Performed (held if needed), Canceled (released)
-        if (context.performed)
-        {
-            TogglePauseMenu();
-        }
+        _controls = _player.Controls;
+
+        _controls.Viva.Pause.performed += ctx => TogglePauseMenu();
     }
 
     public void TogglePauseMenu()
