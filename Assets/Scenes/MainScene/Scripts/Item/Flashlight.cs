@@ -5,7 +5,6 @@ public class Flashlight : MonoBehaviour
 {
     private PlayerKB_GrabObject _grabScript;
     private int _isGrabbed = 0;
-    private DesktopInput _keybinds;
     [SerializeField] private bool _isOn;
     [SerializeField] private GameObject _diode;
     [SerializeField] private GameObject _vfx;
@@ -13,13 +12,18 @@ public class Flashlight : MonoBehaviour
     [SerializeField] private PlayerKB_HUD _hud;
     private bool _doOnce = true;
 
+    // --- Fields ---
+    private Player _player;
+    private PlayerControls _controls;
+
     private void Start()
     {
         _grabScript = GetComponent<PlayerKB_GrabObject>();
 
-        _keybinds = new DesktopInput();
-        _keybinds.Viva.Enable();
-        _keybinds.Viva.Interact.performed += ToggleFlashlight;
+        _player = FindFirstObjectByType<Player>();
+        _controls = _player.Controls;
+
+        _controls.Viva.Interact.performed += ToggleFlashlight;
     }
 
     private void Update()
@@ -51,11 +55,5 @@ public class Flashlight : MonoBehaviour
             _vfx.SetActive(!_isOn);
         }
         _isOn = !_isOn;
-    }
-
-    private void OnDestroy()
-    {
-        _keybinds.Disable();
-        _keybinds.Viva.Interact.performed -= ToggleFlashlight;
     }
 }
