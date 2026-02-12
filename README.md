@@ -37,11 +37,11 @@ We currently have translations for:
 # Prerequisites for Development
 
 Required:
-- Unity 6000.0.58f2
+- Unity 6000.3.6f1
 
 Recommended:
-- Any C# IDE (Programming)
-- GitHub Desktop (For better Git management)
+- Visual Studio (2022 or 2026) or any other C# IDE (Programming)
+- Visual Studio Git or GitHub Desktop (For better Git management)
 - Blender (3D modelling)
 - Krita (2D modelling)
 
