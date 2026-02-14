@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 
 // This class manages the day-night cycle in the game.
@@ -16,6 +17,8 @@ public class DayNightCycle : MonoBehaviour
     private float temp; // Tracks how many frames have passed since the last second.
 
     private int minutes; // Total minutes passed in the current day.
+    private float minutesAccumulated;
+
     private int _minutes { get { return minutes; } set { minutes = value; OnMinutesChange(value);  } } // Call the method every minute
     [SerializeField] private int hours; // Total hours passed in the current day.
     private int _hours { get { return hours; } set { hours = value; OnHourChange(value); } } // Call the method every hour
@@ -65,18 +68,24 @@ public class DayNightCycle : MonoBehaviour
     {
         // Increment minutes every second based on the cycle speed
         // NOTE: Since this is method is only called every frame, accuracy worsens over time, especially at lower cycle speeds.
-        temp += Time.deltaTime;
-        if (temp >= 1f)
+
+        float minutesPerSecond = 1440f / (360f / increment);
+
+        float delta = minutesPerSecond * Time.deltaTime;
+        minutesAccumulated += delta;
+
+        if (minutesAccumulated >= 1f)
         {
-            _minutes += (int)(increment * 4);
-            temp = 0f;
+            int wholeMinutes = (int)minutesAccumulated;
+            _minutes += wholeMinutes;
+            minutesAccumulated -= wholeMinutes;
         }
+
+        revolutionPoint.transform.Rotate(increment * Time.deltaTime, 0f, 0f);
     }
 
     private void OnMinutesChange(int value)
     {
-        revolutionPoint.transform.Rotate(increment / 1.20f, 0, 0); // Rotate the sun based on the increment
-
         _hours = minutes / 60; // Update hours based on total minutes
 
         changeSunIntensity(value); // Update sun intensity based on time of day
