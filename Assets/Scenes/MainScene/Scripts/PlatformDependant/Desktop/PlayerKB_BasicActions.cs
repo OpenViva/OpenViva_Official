@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 // Allows the player to perform basic actions (KB&M)
 
@@ -26,17 +27,6 @@ public class PlayerKB_BasicActions : MonoBehaviour
     private bool _mapOpen = false;
     private bool _bagOpen = false;
 
-    private void Awake()
-    {
-        _player = GetComponentInParent<Player>();
-
-        _controls = _player.Controls;
-
-        _controls.Viva.Crouch.performed += OnCrouch;
-        _controls.Viva.ScrollUp.performed += OnExtendHands;
-        _controls.Viva.ScrollDown.performed += OnRetractHands;
-        _controls.Viva.OpenMap.performed += OnChangeMapVisibility;
-    }
     void Start()
     {
         if (TryGetComponent(out CharacterController foundController))
@@ -50,6 +40,8 @@ public class PlayerKB_BasicActions : MonoBehaviour
             _playerMovement = foundMovement;
         }
         else Debug.LogWarning($"Player Movement of {this} cannot be found!");
+
+        AssignInputEvents();
     }
 
     public void SetBagOpen(bool set)
@@ -104,6 +96,17 @@ public class PlayerKB_BasicActions : MonoBehaviour
         _mapOpen = !_mapOpen;
         _map.SetActive(_mapOpen);
     }
-}
 
+    private void AssignInputEvents()
+    {
+        _player = GetComponentInParent<Player>();
+
+        _controls = _player.Controls;
+
+        _controls.Viva.Crouch.performed += OnCrouch;
+        _controls.Viva.ScrollUp.performed += OnExtendHands;
+        _controls.Viva.ScrollDown.performed += OnRetractHands;
+        _controls.Viva.OpenMap.performed += OnChangeMapVisibility;
+    }
+}
 #endif
