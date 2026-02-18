@@ -34,13 +34,13 @@ public class Flashlight : MonoBehaviour
         {
             if (_doOnce)
             {
-                _hud.CreateHint(Hint.HintType.FlashlightHint);
+                _hud.CreateHint(HintConstants.FlashlightHint);
                 _doOnce = false;
             }
         }
         else
         {
-            _hud.ClearHint(Hint.HintType.FlashlightHint);
+            _hud.ClearHint(HintConstants.FlashlightHint);
             _doOnce = true;
         }
     }

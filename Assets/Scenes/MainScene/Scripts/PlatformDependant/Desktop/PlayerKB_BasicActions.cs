@@ -28,6 +28,8 @@ public class PlayerKB_BasicActions : MonoBehaviour
 
     void Start()
     {
+        _player = GetComponentInParent<Player>();
+
         if (TryGetComponent(out CharacterController foundController))
         {
             _characterController = foundController;

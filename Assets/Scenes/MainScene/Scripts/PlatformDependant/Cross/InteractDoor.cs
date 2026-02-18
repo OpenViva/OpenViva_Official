@@ -95,7 +95,7 @@ public class InteractDoor : MonoBehaviour
             _outline.enabled = true;
             if (_doOnce)
             {
-                _hud.CreateHint(Hint.HintType.InteractHint);
+                _hud.CreateHint(HintConstants.InteractHint);
                 _doOnce = false;
             }
         }
@@ -107,7 +107,7 @@ public class InteractDoor : MonoBehaviour
             _outline.enabled = true;
             if (_doOnce)
             {
-                _hud.CreateHint(Hint.HintType.InteractHint);
+                _hud.CreateHint(HintConstants.InteractHint);
                 _doOnce = false;
             }
         }
@@ -122,7 +122,7 @@ public class InteractDoor : MonoBehaviour
         {
             playerInRange = false;
             _outline.enabled = false;
-            _hud.ClearHint(Hint.HintType.InteractHint);
+            _hud.ClearHint(HintConstants.InteractHint);
             _doOnce = true;
         }
         #endif
@@ -131,7 +131,7 @@ public class InteractDoor : MonoBehaviour
         {
             playerInRange = false;
             _outline.enabled = false;
-            _hud.CreateHint(Hint.HintType.InteractHint);
+            _hud.CreateHint(HintConstants.InteractHint);
             _doOnce = true;
         }
         #endif

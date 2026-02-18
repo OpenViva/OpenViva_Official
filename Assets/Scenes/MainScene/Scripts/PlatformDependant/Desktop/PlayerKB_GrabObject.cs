@@ -73,8 +73,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
                 _isGrabbedInLeft = true;
 
-                _hud.ClearHint(Hint.HintType.GrabHint);
-                _hud.CreateHint(Hint.HintType.LeftReleaseHint);
+                _hud.ClearHint(HintConstants.GrabHint);
+                _hud.CreateHint(HintConstants.LeftReleaseHint);
 
                 _animationIndexes.PlayAnimationLeft(_objectIndex);
             }
@@ -86,7 +86,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObjectRB.useGravity = true;
                 _isGrabbedInLeft = false;
 
-                _hud.ClearHint(Hint.HintType.LeftReleaseHint);
+                _hud.ClearHint(HintConstants.LeftReleaseHint);
 
                 _animationIndexes.PlayAnimationLeft(-1);
             }
@@ -107,8 +107,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
                 _isGrabbedInRight = true;
 
-                _hud.ClearHint(Hint.HintType.GrabHint);
-                _hud.CreateHint(Hint.HintType.RightReleaseHint);
+                _hud.ClearHint(HintConstants.GrabHint);
+                _hud.CreateHint(HintConstants.RightReleaseHint);
 
                 _animationIndexes.PlayAnimationRight(_objectIndex);
             }
@@ -120,7 +120,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObjectRB.useGravity = true;
                 _isGrabbedInRight = false;
 
-                _hud.ClearHint(Hint.HintType.RightReleaseHint);
+                _hud.ClearHint(HintConstants.RightReleaseHint);
 
                 _animationIndexes.PlayAnimationRight(-1);
             }
@@ -136,7 +136,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             _outline.enabled = true;
             if (!_hintIsShowing && !_isGrabbedInLeft && !_isGrabbedInRight)
             {
-                _hud.CreateHint(Hint.HintType.GrabHint);
+                _hud.CreateHint(HintConstants.GrabHint);
                 _hintIsShowing = true;
             }
         }
@@ -149,7 +149,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         {
            _playerInRange = false;
            _outline.enabled = false;
-           _hud.ClearHint(Hint.HintType.GrabHint);
+           _hud.ClearHint(HintConstants.GrabHint);
            _hintIsShowing = false;
         }
     }

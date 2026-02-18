@@ -62,15 +62,15 @@ public class Inventory : MonoBehaviour
             {
                 if (_grabbedIn == 1)
                 {
-                    _hud.CreateHint(Hint.HintType.LeftReleaseHint);
+                    _hud.CreateHint(HintConstants.LeftReleaseHint);
                 }
                 else if (_grabbedIn == 2)
                 {
-                    _hud.CreateHint(Hint.HintType.RightReleaseHint);
+                    _hud.CreateHint(HintConstants.RightReleaseHint);
                 }
-                _hud.CreateHint(Hint.HintType.OpenBagHint);
-                _hud.ClearHint(Hint.HintType.SelectItemsHint);
-                _hud.ClearHint(Hint.HintType.TakeItemHint);
+                _hud.CreateHint(HintConstants.OpenBagHint);
+                _hud.ClearHint(HintConstants.SelectItemsHint);
+                _hud.ClearHint(HintConstants.TakeItemHint);
                 _start = false;
             }
         }
@@ -90,37 +90,37 @@ public class Inventory : MonoBehaviour
             if (_isOpen)
             {
                 _animator.Play("Close");
-                _hud.ClearHint(Hint.HintType.CloseBagHint);
-                _hud.CreateHint(Hint.HintType.OpenBagHint);
-                _hud.ClearHint(Hint.HintType.SelectItemsHint);
-                _hud.ClearHint(Hint.HintType.TakeItemHint);
+                _hud.ClearHint(HintConstants.CloseBagHint);
+                _hud.CreateHint(HintConstants.OpenBagHint);
+                _hud.ClearHint(HintConstants.SelectItemsHint);
+                _hud.ClearHint(HintConstants.TakeItemHint);
                 if (_grabbedIn == 1)
                 {
-                    _hud.CreateHint(Hint.HintType.LeftReleaseHint);
+                    _hud.CreateHint(HintConstants.LeftReleaseHint);
                 }
                 else if (_grabbedIn == 2)
                 {
-                    _hud.CreateHint(Hint.HintType.RightReleaseHint);
+                    _hud.CreateHint(HintConstants.RightReleaseHint);
                 }
-                _hud.ClearHint(Hint.HintType.LeftPlaceItemHint);
-                _hud.ClearHint(Hint.HintType.RightPlaceItemHint);
+                _hud.ClearHint(HintConstants.LeftPlaceItemHint);
+                _hud.ClearHint(HintConstants.RightPlaceItemHint);
             }
             else
             {
                 _animator.Play("Open");
-                _hud.ClearHint(Hint.HintType.LeftReleaseHint);
-                _hud.ClearHint(Hint.HintType.RightReleaseHint);
-                _hud.ClearHint(Hint.HintType.OpenBagHint);
-                _hud.CreateHint(Hint.HintType.CloseBagHint);
-                _hud.CreateHint(Hint.HintType.SelectItemsHint);
-                _hud.CreateHint(Hint.HintType.TakeItemHint);
+                _hud.ClearHint(HintConstants.LeftReleaseHint);
+                _hud.ClearHint(HintConstants.RightReleaseHint);
+                _hud.ClearHint(HintConstants.OpenBagHint);
+                _hud.CreateHint(HintConstants.CloseBagHint);
+                _hud.CreateHint(HintConstants.SelectItemsHint);
+                _hud.CreateHint(HintConstants.TakeItemHint);
                 if (_grabbedIn == 1)
                 {
-                    _hud.CreateHint(Hint.HintType.LeftPlaceItemHint);
+                    _hud.CreateHint(HintConstants.LeftPlaceItemHint);
                 }
                 else if (_grabbedIn == 2)
                 {
-                    _hud.CreateHint(Hint.HintType.RightPlaceItemHint);
+                    _hud.CreateHint(HintConstants.RightPlaceItemHint);
                 }
             }
             _isOpen = ! _isOpen;
