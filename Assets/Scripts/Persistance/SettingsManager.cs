@@ -2,6 +2,7 @@
 using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class SettingsManager : MonoBehaviour
 {
@@ -32,11 +33,9 @@ public class SettingsManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null)
-        {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else Destroy(gameObject);
+        else
+            Destroy(gameObject);
 
         savePath = Path.Combine(Application.persistentDataPath, "gamesettings.json");
 
