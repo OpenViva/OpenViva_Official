@@ -65,7 +65,6 @@ public class PlayerKB_Movement : MonoBehaviour
 
     // --- Fields ---
     private Player _player;
-    private PlayerControls _controls;
 
     private float _xRotation;
     private float _yRotation;
@@ -313,22 +312,20 @@ public class PlayerKB_Movement : MonoBehaviour
 
     private void AssignInputEvents()
     {
-        _controls = _player.Controls;
-
         // Move binding
-        _controls.Viva.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-        _controls.Viva.Move.canceled += ctx => moveInput = Vector2.zero;
+        _player.Controls.Viva.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        _player.Controls.Viva.Move.canceled += ctx => moveInput = Vector2.zero;
 
         // Look binding
-        _controls.Viva.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
-        _controls.Viva.Look.canceled += ctx => lookInput = Vector2.zero;
+        _player.Controls.Viva.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
+        _player.Controls.Viva.Look.canceled += ctx => lookInput = Vector2.zero;
 
         // Run binding
-        _controls.Viva.Run.performed += ctx => HandleRun(true);
-        _controls.Viva.Run.canceled += ctx => HandleRun(false);
+        _player.Controls.Viva.Run.performed += ctx => HandleRun(true);
+        _player.Controls.Viva.Run.canceled += ctx => HandleRun(false);
 
         // Jump binding
-        _controls.Viva.Jump.performed += ctx => HandleJump();
+        _player.Controls.Viva.Jump.performed += ctx => HandleJump();
     }
 }
 

@@ -24,7 +24,6 @@ public class Inventory : MonoBehaviour
 
     // --- Fields ---
     private Player _player;
-    private PlayerControls _controls;
 
     // Initialize variables and set up input actions
     private void Start()
@@ -33,16 +32,10 @@ public class Inventory : MonoBehaviour
         _animator = GetComponent<Animator>();
 
         _player = FindFirstObjectByType<Player>();
-        _controls = _player.Controls;
-
-        _controls.Viva.ToggleBag.performed += ToggleBag;
-        _controls.Viva.LeftGrab.performed += PlaceInBagWithRightHand;
-        _controls.Viva.RightGrab.performed += PlaceInBagWithLeftHand;
-        _controls.Viva.ScrollUp.performed += ScrollUp;
-        _controls.Viva.ScrollDown.performed += ScrollDown;
-        _controls.Viva.Interact.performed += TakeSelectedItem;
 
         _itemIndexes = new CropIndexes();
+
+        AssignInputs();
     }
 
     private void Update()
@@ -239,5 +232,15 @@ public class Inventory : MonoBehaviour
                 _selectedItem = _numElements - 1;
             }
         }
+    }
+
+    private void AssignInputs()
+    {
+        _player.Controls.Viva.ToggleBag.performed += ToggleBag;
+        _player.Controls.Viva.LeftGrab.performed += PlaceInBagWithRightHand;
+        _player.Controls.Viva.RightGrab.performed += PlaceInBagWithLeftHand;
+        _player.Controls.Viva.ScrollUp.performed += ScrollUp;
+        _player.Controls.Viva.ScrollDown.performed += ScrollDown;
+        _player.Controls.Viva.Interact.performed += TakeSelectedItem;
     }
 }

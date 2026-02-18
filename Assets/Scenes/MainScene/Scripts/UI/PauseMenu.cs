@@ -34,7 +34,6 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private List<GameObject> rightPages = new();
 
     private Player _player;
-    private PlayerControls _controls;
 
     private Vector3 targetPosition;
     private Quaternion targetRotation;
@@ -62,9 +61,7 @@ public class PauseMenu : MonoBehaviour
     #region Input Methods
     private void AssignInputs()
     {
-        _controls = _player.Controls;
-
-        _controls.Viva.Pause.performed += ctx => TogglePauseMenu();
+        _player.Controls.Viva.Pause.performed += ctx => TogglePauseMenu();
     }
 
     public void TogglePauseMenu()

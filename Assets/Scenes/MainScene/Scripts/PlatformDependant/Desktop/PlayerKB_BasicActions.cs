@@ -20,7 +20,6 @@ public class PlayerKB_BasicActions : MonoBehaviour
 
     // --- Fields ---
     [SerializeField] private Player _player;
-    private PlayerControls _controls;
 
     private bool _isCrouching = false;
     private int _currentHandPos = 10;
@@ -99,14 +98,10 @@ public class PlayerKB_BasicActions : MonoBehaviour
 
     private void AssignInputEvents()
     {
-        _player = GetComponentInParent<Player>();
-
-        _controls = _player.Controls;
-
-        _controls.Viva.Crouch.performed += OnCrouch;
-        _controls.Viva.ScrollUp.performed += OnExtendHands;
-        _controls.Viva.ScrollDown.performed += OnRetractHands;
-        _controls.Viva.OpenMap.performed += OnChangeMapVisibility;
+        _player.Controls.Viva.Crouch.performed += OnCrouch;
+        _player.Controls.Viva.ScrollUp.performed += OnExtendHands;
+        _player.Controls.Viva.ScrollDown.performed += OnRetractHands;
+        _player.Controls.Viva.OpenMap.performed += OnChangeMapVisibility;
     }
 }
 #endif

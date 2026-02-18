@@ -32,7 +32,6 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
     // --- Fields ---
     private Player _player;
-    private PlayerControls _controls;
 
     private void Start()
     {
@@ -216,10 +215,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
     private void AssignInputs()
     {
-        _controls = _player.Controls;
-
-        _controls.Viva.LeftGrab.performed += context => GrabLeft();
-        _controls.Viva.RightGrab.performed += context => GrabRight();
+        _player.Controls.Viva.LeftGrab.performed += context => GrabLeft();
+        _player.Controls.Viva.RightGrab.performed += context => GrabRight();
     }
 }
 #endif
