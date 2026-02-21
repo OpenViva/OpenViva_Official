@@ -3,29 +3,19 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Allows the player to perform basic actions (KB&M)
-
+/// <summary>
+/// Handles basic desktop actions: movement, look, crouch, map.
+/// Scroll (hand extend/retract) is handled by PlayerKB_GrabController → DesktopHandDriver.
+/// </summary>
 public class PlayerKB_BasicActions : MonoBehaviour
 {
-
-    // --- References ---
     [Header("References")]
-    [Tooltip("The object that holds the player movement (_playerKB/_playerVR)")]
-    [SerializeField] private GameObject _player;
     [SerializeField] private PlayerKB_Movement _playerMovement;
-    [SerializeField] private CharacterController _characterController;
-    [Tooltip("The object that holds the player hands/view model")]
-    [SerializeField] private GameObject _playerPrefab;
     [SerializeField] private GameObject _map;
 
-    // --- Fields ---
-    private bool _isCrouching = false;
-    private int _currentHandPos = 10;
-    private bool _mapOpen = false;
-    private DesktopInput _playerInput;
-    private bool _bagOpen = false;
+    DesktopInput _playerInput;
 
-    private void Awake()
+    void Awake()
     {
         _playerInput = new DesktopInput();
 
@@ -41,84 +31,40 @@ public class PlayerKB_BasicActions : MonoBehaviour
         _playerInput.Viva.Run.performed += ctx => _playerMovement.HandleRun(true);
         _playerInput.Viva.Run.canceled += ctx => _playerMovement.HandleRun(false);
 
-        // Jump binding
-        _playerInput.Viva.Jump.performed += ctx => _playerMovement.HandleJump();
-
-        // Other bindings
+        // Crouch + Map
         _playerInput.Viva.Crouch.performed += OnCrouch;
-        _playerInput.Viva.ScrollUp.performed += OnExtendHands;
-        _playerInput.Viva.ScrollDown.performed += OnRetractHands;
         _playerInput.Viva.OpenMap.performed += OnChangeMapVisibility;
     }
+
     void Start()
     {
-        if (TryGetComponent(out CharacterController foundController))
-        {
-            _characterController = foundController;
-        }
-        else Debug.LogWarning($"Character Controller of {this} cannot be found!");
-
-        if (TryGetComponent(out PlayerKB_Movement foundMovement))
-        {
-            _playerMovement = foundMovement;
-        }
-        else Debug.LogWarning($"Player Movement of {this} cannot be found!");
+        if (_playerMovement == null)
+            TryGetComponent(out _playerMovement);
     }
 
-    private void OnEnable() => _playerInput.Viva.Enable();
-    private void OnDisable() => _playerInput.Viva.Disable();
+    void OnEnable() => _playerInput.Viva.Enable();
+    void OnDisable() => _playerInput.Viva.Disable();
 
-    public void SetBagOpen(bool set)
+    void OnCrouch(InputAction.CallbackContext context)
     {
-        _bagOpen = set;
+        if (_playerMovement != null)
+            _playerMovement.HandleCrouch();
     }
 
-    private void OnCrouch(InputAction.CallbackContext context)
+    void OnChangeMapVisibility(InputAction.CallbackContext context)
     {
-        // Toggle crouch when [C] is pressed
-        if (!_isCrouching)
-        {
-            _playerMovement.SetMovementSpeed(1f);
-            _playerMovement.DisableRunning(true);
-            _characterController.height /= 6;
-            _isCrouching = true;
-        }
-        else
-        {
-            _playerMovement.SetMovementSpeed(3.5f);
-            _playerMovement.DisableRunning(false);
-            _characterController.Move(Vector3.up * 0.1f);
-            _characterController.height *= 6;
-            _isCrouching = false;
-        }
+        if (_map == null) return;
+        _map.SetActive(!_map.activeSelf);
     }
 
-    private void OnExtendHands(InputAction.CallbackContext context)
+    void OnDestroy()
     {
-        // Extend the hands forward when when the mouse wheel is scrolled up
-        if (_currentHandPos <= 50 && !_bagOpen)
+        if (_playerInput != null)
         {
-            _playerPrefab.transform.Translate(Vector3.right * 0.01f);
-            _currentHandPos++;
+            _playerInput.Viva.Crouch.performed -= OnCrouch;
+            _playerInput.Viva.OpenMap.performed -= OnChangeMapVisibility;
+            _playerInput.Dispose();
         }
-        
-    }
-
-    private void OnRetractHands(InputAction.CallbackContext context)
-    {
-        // Retract the hands backward when the mouse wheel is scrolled down
-        if (_currentHandPos >= 0 && !_bagOpen)
-        {
-            _playerPrefab.transform.Translate(Vector3.left * 0.01f);
-            _currentHandPos--;
-        }
-    }
-
-    private void OnChangeMapVisibility(InputAction.CallbackContext context)
-    {
-        // Toggle minimap visibility when [M] is pressed
-        _mapOpen = !_mapOpen;
-        _map.SetActive(_mapOpen);
     }
 }
 

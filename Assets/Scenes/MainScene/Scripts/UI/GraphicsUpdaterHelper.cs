@@ -14,19 +14,24 @@ public class GraphicsUpdaterHelper : MonoBehaviour
 
     private void OnEnable()
     {
-        minusButton.onClick.AddListener(OnMinus);
-        plusButton.onClick.AddListener(OnPlus);
+        if (minusButton != null)
+            minusButton.onClick.AddListener(OnMinus);
+        if (plusButton != null)
+            plusButton.onClick.AddListener(OnPlus);
         UpdateDisplay();
     }
 
     private void OnDisable()
     {
-        minusButton.onClick.RemoveListener(OnMinus);
-        plusButton.onClick.RemoveListener(OnPlus);
+        if (minusButton != null)
+            minusButton.onClick.RemoveListener(OnMinus);
+        if (plusButton != null)
+            plusButton.onClick.RemoveListener(OnPlus);
     }
 
     void OnMinus()
     {
+        if (SettingsManager.Instance == null) return;
         switch (setting)
         {
             case SettingType.FpsLimit: SettingsManager.Instance.DecreaseFpsLimit(); break;
@@ -39,6 +44,7 @@ public class GraphicsUpdaterHelper : MonoBehaviour
 
     void OnPlus()
     {
+        if (SettingsManager.Instance == null) return;
         switch (setting)
         {
             case SettingType.FpsLimit: SettingsManager.Instance.IncreaseFpsLimit(); break;
@@ -51,6 +57,8 @@ public class GraphicsUpdaterHelper : MonoBehaviour
 
     void UpdateDisplay()
     {
+        if (SettingsManager.Instance == null || valueText == null)
+            return;
         var s = SettingsManager.Instance.Current;
         switch (setting)
         {

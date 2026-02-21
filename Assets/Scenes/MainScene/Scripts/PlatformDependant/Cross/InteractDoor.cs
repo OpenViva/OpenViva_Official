@@ -2,22 +2,26 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// This class allows the player to open and close the door
-
-public class InteractDoor : MonoBehaviour
+/// <summary>
+/// Door interaction — supports both trigger-collider overlap (legacy) and IInteractable (new system).
+/// The player can interact with the door via:
+/// - Desktop: E key (via PlayerKB_GrabController → IInteractable) or LMB/RMB when in trigger range
+/// - VR: grip button when in trigger range
+/// </summary>
+public class InteractDoor : MonoBehaviour, IInteractable
 {
 
     [SerializeField] private InputActionReference[] inputActionReferences = new InputActionReference[4]; // 0: LMB, 1: RMB, 2: Left Grip, 3: Right Grip
 
     // Fetch the player's hand objects and their colliders based on the platform
-#if UNITY_STANDALONE_WIN
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
     [SerializeField] private GameObject playerLeftHandKB;
     [SerializeField] private GameObject playerRightHandKB;
     private Collider playerLeftColliderKB;
     private Collider playerRightColliderKB;
 #endif
 
-#if UNITY_ANDROID || UNITY_EDITOR
+#if UNITY_ANDROID
     [SerializeField] private GameObject playerLeftHandVR;
     [SerializeField] private GameObject playerRightHandVR;
     private Collider playerLeftColliderVR;
@@ -38,14 +42,18 @@ public class InteractDoor : MonoBehaviour
     void Start()
     {
         // Set the colliders of the player's hands based on the platform
-#if UNITY_STANDALONE_WIN
-        playerLeftColliderKB = playerLeftHandKB.GetComponent<Collider>();
-        playerRightColliderKB = playerRightHandKB.GetComponent<Collider>();
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
+        if (playerLeftHandKB != null)
+            playerLeftColliderKB = playerLeftHandKB.GetComponent<Collider>();
+        if (playerRightHandKB != null)
+            playerRightColliderKB = playerRightHandKB.GetComponent<Collider>();
 #endif
 
-#if UNITY_ANDROID || UNITY_EDITOR
-        playerLeftColliderVR = playerLeftHandVR.GetComponent<Collider>();
-        playerRightColliderVR = playerRightHandVR.GetComponent<Collider>();
+#if UNITY_ANDROID
+        if (playerLeftHandVR != null)
+            playerLeftColliderVR = playerLeftHandVR.GetComponent<Collider>();
+        if (playerRightHandVR != null)
+            playerRightColliderVR = playerRightHandVR.GetComponent<Collider>();
 #endif
 
         // Enable input actions and subscribe to performed events
@@ -63,19 +71,38 @@ public class InteractDoor : MonoBehaviour
     {
         if (playerInRange && !isMoving)
         {
-            isMoving = true;
-            if (!isOpen)
-            {
-                doorAnimator.Play("Opening");
-                StartCoroutine(setIsMoving());
-                isOpen = true;
-            }
-            else
-            {
-                doorAnimator.Play("Closing");
-                StartCoroutine(setIsMoving());
-                isOpen = false;
-            }
+            ToggleDoor();
+        }
+    }
+
+    /// <summary>
+    /// IInteractable implementation — called by PlayerKB_GrabController (E key) or VR grab controller.
+    /// Does NOT require trigger overlap — works via camera raycast.
+    /// </summary>
+    public void Interact(GameObject interactor)
+    {
+        if (!isMoving)
+        {
+            ToggleDoor();
+        }
+    }
+
+    public bool CanInteract => !isMoving;
+
+    void ToggleDoor()
+    {
+        isMoving = true;
+        if (!isOpen)
+        {
+            doorAnimator.Play("Opening");
+            StartCoroutine(setIsMoving());
+            isOpen = true;
+        }
+        else
+        {
+            doorAnimator.Play("Closing");
+            StartCoroutine(setIsMoving());
+            isOpen = false;
         }
     }
 
@@ -88,53 +115,50 @@ public class InteractDoor : MonoBehaviour
     // Detect when the player's hand colliders enter the door handle's trigger collider
     private void OnTriggerEnter(Collider collider)
     {
-        #if UNITY_STANDALONE_WIN
+        bool isPlayerHand = false;
+
+        #if UNITY_STANDALONE_WIN || UNITY_EDITOR
         if (collider == playerLeftColliderKB || collider == playerRightColliderKB)
-        {
-            playerInRange = true;
-            _outline.enabled = true;
-            if (_doOnce)
-            {
-                _hud.CreateHint("[LMB] or [RMB]: Interact");
-                _doOnce = false;
-            }
-        }
+            isPlayerHand = true;
         #endif
-        #if UNITY_ANDROID || UNITY_EDITOR
+        #if UNITY_ANDROID
         if (collider == playerLeftColliderVR || collider == playerRightColliderVR)
+            isPlayerHand = true;
+        #endif
+
+        if (isPlayerHand)
         {
             playerInRange = true;
-            _outline.enabled = true;
-            if (_doOnce)
+            if (_outline != null) _outline.enabled = true;
+            if (_doOnce && _hud != null)
             {
-                _hud.CreateHint("[LMB] or [RMB]: Interact");
+                _hud.CreateHint("[E]: Interact");
                 _doOnce = false;
             }
         }
-        #endif
     }
 
     // Detect when the player's hand colliders exit the door handle's trigger collider
     private void OnTriggerExit(Collider collider)
     {
-        #if UNITY_STANDALONE_WIN
+        bool isPlayerHand = false;
+
+        #if UNITY_STANDALONE_WIN || UNITY_EDITOR
         if (collider == playerLeftColliderKB || collider == playerRightColliderKB)
-        {
-            playerInRange = false;
-            _outline.enabled = false;
-            _hud.ClearHint("[LMB] or [RMB]: Interact");
-            _doOnce = true;
-        }
+            isPlayerHand = true;
         #endif
-        #if UNITY_ANDROID || UNITY_EDITOR
+        #if UNITY_ANDROID
         if (collider == playerLeftColliderVR || collider == playerRightColliderVR)
+            isPlayerHand = true;
+        #endif
+
+        if (isPlayerHand)
         {
             playerInRange = false;
-            _outline.enabled = false;
-            _hud.CreateHint("[LMB] or [RMB]: Interact");
+            if (_outline != null) _outline.enabled = false;
+            if (_hud != null) _hud.ClearHint("[E]: Interact");
             _doOnce = true;
         }
-        #endif
     }
 
     void OnDestroy()

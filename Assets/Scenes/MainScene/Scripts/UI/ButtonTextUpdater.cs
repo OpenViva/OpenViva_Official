@@ -28,26 +28,32 @@ public class ButtonTextUpdater : MonoBehaviour
 
     private void OnEnable()
     {
-        button.onClick.AddListener(OnClick);
-        SettingsManager.Instance.OnSettingsChanged.AddListener(UpdateDisplay);
+        if (button != null)
+            button.onClick.AddListener(OnClick);
+        if (SettingsManager.Instance != null)
+            SettingsManager.Instance.OnSettingsChanged.AddListener(UpdateDisplay);
         UpdateDisplay();
     }
 
     private void OnDisable()
     {
-        button.onClick.RemoveListener(OnClick);
-        SettingsManager.Instance.OnSettingsChanged.RemoveListener(UpdateDisplay);
+        if (button != null)
+            button.onClick.RemoveListener(OnClick);
+        if (SettingsManager.Instance != null)
+            SettingsManager.Instance.OnSettingsChanged.RemoveListener(UpdateDisplay);
     }
 
     void OnClick()
     {
-        SettingsManager.Instance.ChangeSetting(setting, mode);
+        if (SettingsManager.Instance != null)
+            SettingsManager.Instance.ChangeSetting(setting, mode);
     }
 
     void UpdateDisplay()
     {
+        if (SettingsManager.Instance == null || displayText == null)
+            return;
         string text = SettingsManager.Instance.GetDisplayText(setting, cycleTexts);
-        if (displayText != null)
-            displayText.text = text + suffix;
+        displayText.text = text + suffix;
     }
 }

@@ -3,151 +3,120 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Allows the player to perform basic actions (KB&M)
-
+/// <summary>
+/// VR gesture support — maps grip/trigger button events to HandAnimator gestures.
+/// This supplements PlayerVR_GrabController (which handles analog grip/trigger for finger curling).
+/// Provides gestures like point (grip only), fist (trigger only), etc.
+/// Also handles VR-specific gesture buttons (e.g., thumbstick click for wave/come).
+/// </summary>
 public class PlayerVR_BasicActions : MonoBehaviour
 {
+    [Header("Hand Animators")]
+    [SerializeField] private HandAnimator leftHandAnimator;
+    [SerializeField] private HandAnimator rightHandAnimator;
 
-    // FIELDS
-    [SerializeField] private InputActionReference[] inputActionReferences = new InputActionReference[4]; // 0: Left Grip, 1: Right Grip, 2: Left Trigger, 3: Right Trigger
-    [SerializeField] private Animator animatorL; // Left hand animator
-    [SerializeField] private Animator animatorR; // Right hand animator
-    private bool LeftTriggerDown = false; // Is left trigger pressed
-    private bool LeftGripDown = false; // Is left grip pressed
-    private bool RightTriggerDown = false; // Is right trigger pressed
-    private bool RightGripDown = false; // Is right grip pressed
+    [Header("VR Gesture Input Actions")]
+    [Tooltip("Optional button inputs for gestures (e.g., A/B/X/Y buttons)")]
+    [SerializeField] private InputActionReference leftPrimaryButtonAction;
+    [SerializeField] private InputActionReference rightPrimaryButtonAction;
+    [SerializeField] private InputActionReference leftSecondaryButtonAction;
+    [SerializeField] private InputActionReference rightSecondaryButtonAction;
 
-    // PROPERTIES
-    void Start()
+    void OnEnable()
     {
-        // Enable input actions and bind events
-        for (int i = 0; i < inputActionReferences.Length; i++)
-        {
-            inputActionReferences[i].action.Enable();
-        }
-        inputActionReferences[0].action.performed += LeftPoint;
-        inputActionReferences[0].action.canceled += LeftPointEnd;
-        inputActionReferences[1].action.performed += LeftGrab;
-        inputActionReferences[1].action.canceled += LeftGrabEnd;
-        inputActionReferences[2].action.performed += RightPoint;
-        inputActionReferences[2].action.canceled += RightPointEnd;
-        inputActionReferences[3].action.performed += RightGrab;
-        inputActionReferences[3].action.canceled += RightGrabEnd;
+        EnableAction(leftPrimaryButtonAction);
+        EnableAction(rightPrimaryButtonAction);
+        EnableAction(leftSecondaryButtonAction);
+        EnableAction(rightSecondaryButtonAction);
+
+        BindAction(leftPrimaryButtonAction, OnLeftPrimary, OnLeftPrimaryRelease);
+        BindAction(rightPrimaryButtonAction, OnRightPrimary, OnRightPrimaryRelease);
+        BindAction(leftSecondaryButtonAction, OnLeftSecondary, null);
+        BindAction(rightSecondaryButtonAction, OnRightSecondary, null);
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
-        // Disable input actions and unbind events
-        for (int i = 0; i < inputActionReferences.Length; i++)
-        {
-            inputActionReferences[i].action.Disable();
-        }
-        inputActionReferences[0].action.performed -= LeftPoint;
-        inputActionReferences[0].action.canceled -= LeftPointEnd;
-        inputActionReferences[1].action.performed -= LeftGrab;
-        inputActionReferences[1].action.canceled -= LeftGrabEnd;
+        UnbindAction(leftPrimaryButtonAction, OnLeftPrimary, OnLeftPrimaryRelease);
+        UnbindAction(rightPrimaryButtonAction, OnRightPrimary, OnRightPrimaryRelease);
+        UnbindAction(leftSecondaryButtonAction, OnLeftSecondary, null);
+        UnbindAction(rightSecondaryButtonAction, OnRightSecondary, null);
 
+        DisableAction(leftPrimaryButtonAction);
+        DisableAction(rightPrimaryButtonAction);
+        DisableAction(leftSecondaryButtonAction);
+        DisableAction(rightSecondaryButtonAction);
     }
 
-    
-    private void LeftPoint(InputAction.CallbackContext context)
+    // Primary button (A/X) = Point gesture (hold)
+    void OnLeftPrimary(InputAction.CallbackContext ctx)
     {
-        // Set left grip down and play point animation if trigger is not down
-        LeftGripDown = true;
-        if (!LeftTriggerDown)
-        {
-            animatorL.Play("Player_LeftPoint");
-        }
+        if (leftHandAnimator != null && !leftHandAnimator.IsHolding)
+            leftHandAnimator.PlayGesture(HandAnimator.Gesture.Point);
     }
 
-    private void LeftGrab(InputAction.CallbackContext context)
+    void OnLeftPrimaryRelease(InputAction.CallbackContext ctx)
     {
-        // Set left trigger down and play grab animation or point-to-grab animation if grip is down
-        LeftTriggerDown = true;
-        if (LeftGripDown)
-        {
-            animatorL.Play("Player_LeftPointToGrab");
-        } else
-        {
-            animatorL.Play("Player_LeftGrab");
-        }
+        if (leftHandAnimator != null && leftHandAnimator.CurrentGesture == HandAnimator.Gesture.Point)
+            leftHandAnimator.ClearGesture();
     }
 
-    private void LeftPointEnd(InputAction.CallbackContext context)
+    void OnRightPrimary(InputAction.CallbackContext ctx)
     {
-        // Set left grip up and play point-end animation or point-to-grab animation if trigger is down
-        LeftGripDown = false;
-        if (LeftTriggerDown)
-        {
-            animatorL.Play("Player_LeftPointToGrab");
-        } else
-        {
-            animatorL.Play("Player_LeftPointEnd");
-        }
-
+        if (rightHandAnimator != null && !rightHandAnimator.IsHolding)
+            rightHandAnimator.PlayGesture(HandAnimator.Gesture.Point);
     }
 
-    private void LeftGrabEnd(InputAction.CallbackContext context)
+    void OnRightPrimaryRelease(InputAction.CallbackContext ctx)
     {
-        // Set left trigger up and play grab-end animation or grab-to-point animation if grip is down
-        LeftTriggerDown = false;
-        if (LeftGripDown)
-        {
-            animatorL.Play("Player_LeftGrabToPoint");
-        } else
-        {
-            animatorL.Play("Player_LeftGrabEnd");
-        }
+        if (rightHandAnimator != null && rightHandAnimator.CurrentGesture == HandAnimator.Gesture.Point)
+            rightHandAnimator.ClearGesture();
     }
 
-    private void RightPoint(InputAction.CallbackContext context)
+    // Secondary button (B/Y) = Wave gesture (timed)
+    void OnLeftSecondary(InputAction.CallbackContext ctx)
     {
-        // Set right grip down and play point animation if trigger is not down
-        RightGripDown = true;
-        if (!RightTriggerDown)
-        {
-            animatorR.Play("Player_RightPoint");
-        }
+        if (leftHandAnimator != null && !leftHandAnimator.IsHolding)
+            leftHandAnimator.PlayGesture(HandAnimator.Gesture.Wave, 1.5f);
     }
 
-    private void RightGrab(InputAction.CallbackContext context)
+    void OnRightSecondary(InputAction.CallbackContext ctx)
     {
-        // Set right trigger down and play grab animation or point-to-grab animation if grip is down
-        RightTriggerDown = true;
-        if (RightGripDown)
-        {
-            animatorR.Play("Player_RightPointToGrab");
-        } else
-        {
-            animatorR.Play("Player_RightGrab");
-        }
+        if (rightHandAnimator != null && !rightHandAnimator.IsHolding)
+            rightHandAnimator.PlayGesture(HandAnimator.Gesture.Wave, 1.5f);
     }
 
-    private void RightPointEnd(InputAction.CallbackContext context)
+    #region Utility
+
+    void EnableAction(InputActionReference actionRef)
     {
-        // Set right grip up and play point-end animation or point-to-grab animation if trigger is down
-        RightGripDown = false;
-        if (RightTriggerDown)
-        {
-            animatorR.Play("Player_RightPointToGrab");
-        } else
-        {
-            animatorR.Play("Player_RightPointEnd");
-        }
+        if (actionRef != null && actionRef.action != null) actionRef.action.Enable();
     }
 
-    private void RightGrabEnd(InputAction.CallbackContext context)
+    void DisableAction(InputActionReference actionRef)
     {
-        // Set right trigger up and play grab-end animation or grab-to-point animation if grip is down
-        RightTriggerDown = false;
-        if (RightGripDown)
-        {
-            animatorR.Play("Player_RightGrabToPoint");
-        } else
-        {
-            animatorR.Play("Player_RightGrabEnd");
-        }
+        if (actionRef != null && actionRef.action != null) actionRef.action.Disable();
     }
+
+    void BindAction(InputActionReference actionRef,
+                     System.Action<InputAction.CallbackContext> performed,
+                     System.Action<InputAction.CallbackContext> canceled)
+    {
+        if (actionRef == null || actionRef.action == null) return;
+        if (performed != null) actionRef.action.performed += performed;
+        if (canceled != null) actionRef.action.canceled += canceled;
+    }
+
+    void UnbindAction(InputActionReference actionRef,
+                      System.Action<InputAction.CallbackContext> performed,
+                      System.Action<InputAction.CallbackContext> canceled)
+    {
+        if (actionRef == null || actionRef.action == null) return;
+        if (performed != null) actionRef.action.performed -= performed;
+        if (canceled != null) actionRef.action.canceled -= canceled;
+    }
+
+    #endregion
 }
 
 #endif

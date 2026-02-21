@@ -1,61 +1,32 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class Flashlight : MonoBehaviour
+/// <summary>
+/// Flashlight item — toggles light on/off when interacted with (E key) while held.
+/// Uses the new GrabbableItem + IInteractable system.
+/// </summary>
+public class Flashlight : MonoBehaviour, IInteractable
 {
-    private PlayerKB_GrabObject _grabScript;
-    private int _isGrabbed = 0;
-    private DesktopInput _keybinds;
     [SerializeField] private bool _isOn;
     [SerializeField] private GameObject _diode;
     [SerializeField] private GameObject _vfx;
 
-    [SerializeField] private PlayerKB_HUD _hud;
-    private bool _doOnce = true;
+    GrabbableItem _grabbable;
 
-    private void Start()
+    void Start()
     {
-        _grabScript = GetComponent<PlayerKB_GrabObject>();
-
-        _keybinds = new DesktopInput();
-        _keybinds.Viva.Enable();
-        _keybinds.Viva.Interact.performed += ToggleFlashlight;
+        _grabbable = GetComponent<GrabbableItem>();
     }
 
-    private void Update()
+    public bool CanInteract => _grabbable != null && _grabbable.IsHeld;
+
+    public void Interact(GameObject interactor)
     {
-        _isGrabbed = _grabScript.GetIsGrabbed();
+        if (!CanInteract) return;
 
-        if (_isGrabbed != 0)
-        {
-            if (_doOnce)
-            {
-                _hud.CreateHint("[E]: Toggle Flashlight");
-                _doOnce = false;
-            }
-        }
-        else
-        {
-            _hud.ClearHint("[E]: Toggle Flashlight");
-            _doOnce = true;
-        }
-    }
-
-    private void ToggleFlashlight(InputAction.CallbackContext context)
-    {
-        if (_isGrabbed == 0) return;
-
-        _diode.SetActive(!_isOn);
-        if (_vfx != null)
-        {
-            _vfx.SetActive(!_isOn);
-        }
         _isOn = !_isOn;
-    }
-
-    private void OnDestroy()
-    {
-        _keybinds.Disable();
-        _keybinds.Viva.Interact.performed -= ToggleFlashlight;
+        if (_diode != null)
+            _diode.SetActive(_isOn);
+        if (_vfx != null)
+            _vfx.SetActive(_isOn);
     }
 }

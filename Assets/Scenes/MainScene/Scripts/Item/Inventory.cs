@@ -2,231 +2,243 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Bag inventory system. Attach to the Bag GrabbableItem.
+/// When the bag is held and Q is pressed, it opens/closes.
+/// While open: the item in the other hand can be stored, scroll selects stored items, E takes one out.
+/// Works with the new HandGrabSystem/GrabbableItem system.
+/// </summary>
 public class Inventory : MonoBehaviour
 {
-    private PlayerKB_GrabObject _bagScript; // Script to check which hand the bag is held in
-    private int _grabbedIn = 0; // 0 - Neither, 1 - Left, 2 - Right
-    [SerializeField] private PlayerManager _playerManager; // The player manager script for checking what item the player is holding
-    private int _itemInOtherHand = -1;
-    private Animator _animator; // Animator used to open or close the bag
-    private DesktopInput _keybinds;
-    private bool _isOpen; // Check if the bag is open
-    [SerializeField] private List<string> _inventory = new List<string>();
-    private int _numElements = 0;
-    [SerializeField] private List<GameObject> _objects = new List<GameObject>();
-    private ItemIndexes _itemIndexes;
-    private int _selectedItem = 1;
-    [SerializeField] PlayerKB_BasicActions _basicActions;
-
+    [Header("References")]
+    [Tooltip("Left hand HandGrabSystem")]
+    [SerializeField] private HandGrabSystem _leftHandGrab;
+    [Tooltip("Right hand HandGrabSystem")]
+    [SerializeField] private HandGrabSystem _rightHandGrab;
     [SerializeField] private PlayerKB_HUD _hud;
-    private bool _start = true;
 
-    private void Start()
+    [Header("Settings")]
+    [SerializeField] private int _maxItems = 10;
+
+    // Bag state
+    GrabbableItem _bagItem;
+    Animator _animator;
+    bool _isOpen;
+    DesktopInput _keybinds;
+
+    // Stored items
+    [SerializeField] List<string> _inventoryNames = new List<string>();
+    List<GameObject> _storedObjects = new List<GameObject>();
+    int _selectedIndex; // 0-based
+
+    // HUD tracking
+    bool _wasHeld;
+
+    void Start()
     {
-        _bagScript = GetComponent<PlayerKB_GrabObject>();
+        _bagItem = GetComponent<GrabbableItem>();
         _animator = GetComponent<Animator>();
 
         _keybinds = new DesktopInput();
         _keybinds.Viva.Enable();
-        _keybinds.Viva.ToggleBag.performed += ToggleBag;
-        _keybinds.Viva.LeftGrab.performed += PlaceInBagWithRightHand;
-        _keybinds.Viva.RightGrab.performed += PlaceInBagWithLeftHand;
-        _keybinds.Viva.ScrollUp.performed += ScrollUp;
-        _keybinds.Viva.ScrollDown.performed += ScrollDown;
-        _keybinds.Viva.Interact.performed += TakeSelectedItem;
-
-        _itemIndexes = new ItemIndexes();
+        _keybinds.Viva.ToggleBag.performed += OnToggleBag;
+        _keybinds.Viva.LeftGrab.performed += OnLeftClick;
+        _keybinds.Viva.RightGrab.performed += OnRightClick;
+        _keybinds.Viva.ScrollUp.performed += OnScrollUp;
+        _keybinds.Viva.ScrollDown.performed += OnScrollDown;
+        _keybinds.Viva.Interact.performed += OnTakeItem;
     }
 
-    private void Update()
+    void Update()
     {
-        _grabbedIn = _bagScript.GetIsGrabbed();
-        _bagScript.SetIsOpen(_isOpen);
-        if (_grabbedIn != 0)
-        {
-            if (_grabbedIn == 1)
-            {
-                _itemInOtherHand = _playerManager.GetItemRight();
-            }
-            else if ( _grabbedIn == 2)
-            {
-                _itemInOtherHand = _playerManager.GetItemLeft();
-            }
+        bool isHeld = _bagItem != null && _bagItem.IsHeld;
 
-            if (_start)
-            {
-                if (_grabbedIn == 1)
-                {
-                    _hud.CreateHint("[LMB]: Drop");
-                }
-                else if (_grabbedIn == 2)
-                {
-                    _hud.CreateHint("[RMB]: Drop");
-                }
+        // Show/clear hints when bag is first picked up or dropped
+        if (isHeld && !_wasHeld)
+        {
+            if (_hud != null)
                 _hud.CreateHint("[Q]: Open Bag");
-                _hud.ClearHint("[scrollwheel]: Select Items");
-                _hud.ClearHint("[E]: Take Item");
-                _start = false;
-            }
         }
-
-        if (_grabbedIn == 0)
+        else if (!isHeld && _wasHeld)
         {
-            _start = true;
-        }
-    }
-
-    private void ToggleBag(InputAction.CallbackContext context)
-    {
-        if (_grabbedIn > 0)
-        {
-            if (_isOpen)
+            CloseBag();
+            if (_hud != null)
             {
-                _animator.Play("Close");
-                _hud.ClearHint("[Q]: Close Bag");
-                _hud.CreateHint("[Q]: Open Bag");
-                _hud.CreateHint("[Q]: Open Bag");
-                _hud.ClearHint("[scrollwheel]: Select Items");
-                _hud.ClearHint("[E]: Take Item");
-                if (_grabbedIn == 1)
-                {
-                    _hud.CreateHint("[LMB]: Drop");
-                }
-                else if (_grabbedIn == 2)
-                {
-                    _hud.CreateHint("[RMB]: Drop");
-                }
-                _hud.ClearHint("[LMB]: Place Item");
-                _hud.ClearHint("[RMB]: Place Item");
-            }
-            else
-            {
-                _animator.Play("Open");
-                _hud.ClearHint("[LMB]: Drop");
-                _hud.ClearHint("[RMB]: Drop");
                 _hud.ClearHint("[Q]: Open Bag");
-                _hud.CreateHint("[Q]: Close Bag");
-                _hud.CreateHint("[scrollwheel]: Select Items");
-                _hud.CreateHint("[E]: Take Item");
-                if (_grabbedIn == 1)
-                {
-                    _hud.CreateHint("[LMB]: Place Item");
-                }
-                else if (_grabbedIn == 2)
-                {
-                    _hud.CreateHint("[RMB]: Place Item");
-                }
+                _hud.ClearHint("[Q]: Close Bag");
+                _hud.ClearHint("[scrollwheel]: Select Items");
+                _hud.ClearHint("[E]: Take Item");
             }
-            _isOpen = ! _isOpen;
-            _basicActions.SetBagOpen(_isOpen);
+        }
+
+        _wasHeld = isHeld;
+    }
+
+    /// <summary>
+    /// Which hand is the bag NOT in? Returns the other hand's HandGrabSystem, or null.
+    /// </summary>
+    HandGrabSystem GetOtherHand()
+    {
+        if (_bagItem == null || !_bagItem.IsHeld) return null;
+
+        if (_bagItem.heldByHand == _leftHandGrab)
+            return _rightHandGrab;
+        if (_bagItem.heldByHand == _rightHandGrab)
+            return _leftHandGrab;
+
+        return null;
+    }
+
+    bool IsBagHeld => _bagItem != null && _bagItem.IsHeld;
+
+    void OnToggleBag(InputAction.CallbackContext ctx)
+    {
+        if (!IsBagHeld) return;
+
+        if (_isOpen)
+            CloseBag();
+        else
+            OpenBag();
+    }
+
+    void OpenBag()
+    {
+        if (_isOpen) return;
+        _isOpen = true;
+
+        if (_animator != null)
+            _animator.Play("Open");
+
+        if (_hud != null)
+        {
+            _hud.ClearHint("[Q]: Open Bag");
+            _hud.CreateHint("[Q]: Close Bag");
+            _hud.CreateHint("[scrollwheel]: Select Items");
+            _hud.CreateHint("[E]: Take Item");
         }
     }
 
-    private void PlaceInBagWithRightHand(InputAction.CallbackContext context)
+    void CloseBag()
     {
-        if (_isOpen && _grabbedIn == 1 && _numElements < 10)
+        if (!_isOpen) return;
+        _isOpen = false;
+
+        if (_animator != null)
+            _animator.Play("Close");
+
+        if (_hud != null)
         {
-            string itemName = _itemIndexes.GetItemName(_itemInOtherHand);
-            if (itemName != "Error")
-            {
-                _inventory.Add(itemName);
-                GameObject item = _playerManager.GetObjectRight();
-                if (item != null)
-                {
-                    _objects.Add(item);
-                    PlayerKB_GrabObject itemScript = item.GetComponent<PlayerKB_GrabObject>();
-                    itemScript.SetIsActive(false, 0);
-                    _numElements++;
-                }
-                
-            }  
+            _hud.ClearHint("[Q]: Close Bag");
+            _hud.ClearHint("[scrollwheel]: Select Items");
+            _hud.ClearHint("[E]: Take Item");
+            if (IsBagHeld)
+                _hud.CreateHint("[Q]: Open Bag");
         }
     }
 
-    private void PlaceInBagWithLeftHand(InputAction.CallbackContext context)
+    /// <summary>
+    /// Try to store the item from the other hand into the bag.
+    /// </summary>
+    void TryStoreItem()
     {
-        if (_isOpen && _grabbedIn == 2 && _numElements < 10)
+        if (!_isOpen || _storedObjects.Count >= _maxItems) return;
+
+        var otherHand = GetOtherHand();
+        if (otherHand == null || !otherHand.IsHolding) return;
+
+        var item = otherHand.HeldItem;
+        if (item == null || item == _bagItem) return; // Don't store the bag in itself
+
+        // Release item from hand without throw
+        otherHand.ReleaseItem(false);
+
+        // Store it
+        _inventoryNames.Add(item.gameObject.name);
+        _storedObjects.Add(item.gameObject);
+        item.gameObject.SetActive(false);
+
+        if (_storedObjects.Count == 1)
+            _selectedIndex = 0;
+
+        Debug.Log($"Stored: {item.gameObject.name} ({_storedObjects.Count}/{_maxItems})");
+    }
+
+    void OnLeftClick(InputAction.CallbackContext ctx)
+    {
+        // If bag is open and held in left hand, try to store the right hand's item
+        if (_isOpen && IsBagHeld && _bagItem.heldByHand == _leftHandGrab)
+            TryStoreItem();
+    }
+
+    void OnRightClick(InputAction.CallbackContext ctx)
+    {
+        // If bag is open and held in right hand, try to store the left hand's item
+        if (_isOpen && IsBagHeld && _bagItem.heldByHand == _rightHandGrab)
+            TryStoreItem();
+    }
+
+    void OnScrollUp(InputAction.CallbackContext ctx)
+    {
+        if (!_isOpen || _storedObjects.Count == 0) return;
+
+        if (_selectedIndex < _storedObjects.Count - 1)
         {
-            string itemName = _itemIndexes.GetItemName(_itemInOtherHand);
-            if (itemName != "Error")
-            {
-                _inventory.Add(itemName);
-                GameObject item = _playerManager.GetObjectLeft();
-                if (item != null)
-                {
-                    _objects.Add(item);
-                    PlayerKB_GrabObject itemScript = item.GetComponent<PlayerKB_GrabObject>();
-                    itemScript.SetIsActive(false, 0);
-                    _numElements++;
-                }
-            }
+            _selectedIndex++;
+            Debug.Log($"Selected: {_inventoryNames[_selectedIndex]}");
         }
     }
 
-    private void ScrollUp(InputAction.CallbackContext context)
+    void OnScrollDown(InputAction.CallbackContext ctx)
     {
-        if (!_isOpen || _numElements == 0) return;
+        if (!_isOpen || _storedObjects.Count == 0) return;
 
-        if (_selectedItem < _numElements)
+        if (_selectedIndex > 0)
         {
-            _selectedItem++;
-            Debug.Log("Selected Item: " + _inventory[_selectedItem - 1]);
+            _selectedIndex--;
+            Debug.Log($"Selected: {_inventoryNames[_selectedIndex]}");
         }
     }
 
-    private void ScrollDown(InputAction.CallbackContext context)
+    void OnTakeItem(InputAction.CallbackContext ctx)
     {
-        if (!(_isOpen && _numElements > 0)) return;
+        if (!_isOpen || _storedObjects.Count == 0) return;
 
-        if (_selectedItem > 1)
-        {
-            _selectedItem--;
-            Debug.Log("Selected Item: " + _inventory[_selectedItem - 1]);
-        }
-    }   
+        var otherHand = GetOtherHand();
+        if (otherHand == null || otherHand.IsHolding) return; // Other hand must be free
 
-    private void TakeSelectedItem(InputAction.CallbackContext context)
-    {
-        if (_isOpen && _numElements > 0)
-        {
-            GameObject item = _objects[_selectedItem - 1];
-            _objects.Remove(item);
-            _inventory.RemoveAt(_selectedItem - 1);
-            PlayerKB_GrabObject itemScript = item.GetComponent<PlayerKB_GrabObject>();
-            if (_grabbedIn == 1)
-            {
-                itemScript.SetIsActive(true, 2);
-            }
-            else if (_grabbedIn == 2)
-            {
-                itemScript.SetIsActive(true, 1);
-            }
-            _numElements--;
+        // Retrieve the stored item
+        int idx = Mathf.Clamp(_selectedIndex, 0, _storedObjects.Count - 1);
+        GameObject itemObj = _storedObjects[idx];
+        _storedObjects.RemoveAt(idx);
+        _inventoryNames.RemoveAt(idx);
 
-            if (_numElements == 0)
-            {
-                _selectedItem = 1;
-            }
-            else if (_selectedItem >= _numElements)
-            {
-                _selectedItem = _numElements - 1;
-            }
+        // Re-activate and place in hand
+        itemObj.SetActive(true);
+        var grabbable = itemObj.GetComponent<GrabbableItem>();
+        if (grabbable != null)
+            otherHand.GrabItem(grabbable);
 
-            if (_numElements != 0)
-            {
-                Debug.Log("Selected Item: " + _inventory[_selectedItem]);
-            }
-        }
+        // Adjust selection
+        if (_storedObjects.Count == 0)
+            _selectedIndex = 0;
+        else if (_selectedIndex >= _storedObjects.Count)
+            _selectedIndex = _storedObjects.Count - 1;
+
+        Debug.Log($"Took: {itemObj.name} ({_storedObjects.Count} remaining)");
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
-        _keybinds.Viva.ToggleBag.performed -= ToggleBag;
-        _keybinds.Viva.LeftGrab.performed -= PlaceInBagWithRightHand;
-        _keybinds.Viva.RightGrab.performed -= PlaceInBagWithLeftHand;
-        _keybinds.Viva.ScrollUp.performed -= ScrollUp;
-        _keybinds.Viva.ScrollDown.performed -= ScrollDown;
-        _keybinds.Viva.Interact.performed -= TakeSelectedItem;
-        _keybinds.Viva.Disable();
+        if (_keybinds != null)
+        {
+            _keybinds.Viva.ToggleBag.performed -= OnToggleBag;
+            _keybinds.Viva.LeftGrab.performed -= OnLeftClick;
+            _keybinds.Viva.RightGrab.performed -= OnRightClick;
+            _keybinds.Viva.ScrollUp.performed -= OnScrollUp;
+            _keybinds.Viva.ScrollDown.performed -= OnScrollDown;
+            _keybinds.Viva.Interact.performed -= OnTakeItem;
+            _keybinds.Viva.Disable();
+            _keybinds.Dispose();
+        }
     }
 }

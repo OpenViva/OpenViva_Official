@@ -2,307 +2,317 @@
 
 using UnityEngine;
 
+/// <summary>
+/// Rigidbody-based player movement — faithfully replicates old OpenViva's
+/// KeyboardController.OnFixedUpdateControl + Player.Keyboard physics.
+///
+/// Also bootstraps the entire interaction system at runtime (physics hands,
+/// grab controller, hand driver, gestures) so everything "just works" without
+/// any manual prefab wiring.
+/// </summary>
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(CapsuleCollider))]
 public class PlayerKB_Movement : MonoBehaviour
 {
-    // This class is responsible for the movement of the player using keyboard.
-    // Code by Edenity on Unity Asset Store
-
-    // --- Movement ---
     [Header("Movement")]
-    [SerializeField, Range(1f, 20f)] private float _movementSpeed;
-    [Tooltip("How much faster do you want to go when running?")]
-    [SerializeField, Range(1f, 20f)] private float _runMultiplier;
-    [Tooltip("How steep of an angle is detected as ground")]
-    [SerializeField] private float edgeAngleTolerance = 45f;
-    [Tooltip("Radius for ground detection")]
-    [SerializeField] private float groundCheckRadius = 0.3f;
-    [Tooltip("Distance to check for ground from player center")]
-    [SerializeField] private float groundCheckDistance = 0f;
-    [SerializeField] private float feetOffset = 0f;
-    [Tooltip("Length of the edge detection raycasts")]
-    [SerializeField] private float edgeRaycastLength = 0.53f;
-    [Tooltip("Force applied to push the player off the edge")]
-    [SerializeField] private float edgePushForce = 2f;
+    [Tooltip("Base walk speed (old OpenViva: 0.2)")]
+    public float walkSpeed = 0.2f;
+    [Tooltip("Sprint multiplier when Alt/Shift held (old: 3x)")]
+    public float sprintMultiplier = 3f;
+    [Tooltip("Velocity damping per FixedUpdate (old: 0.85)")]
+    public float moveDamping = 0.85f;
 
-    // --- Look ---
     [Header("Look")]
-    [Range(0.1f, 10f)]
-    [Tooltip("speed of the camera movement")]
-    [SerializeField] private float _mouseSensitivity = 2;
+    [Tooltip("Mouse sensitivity (old: 70, applied * dt * 0.01)")]
+    public float mouseSensitivity = 70f;
+    [Tooltip("Mouse rotation smooth decay (old: 0.6)")]
+    public float mouseDecay = 0.6f;
+    [Tooltip("Max pitch angle from horizontal (old: 75)")]
+    public float maxPitchAngle = 75f;
 
-    [Tooltip("Mouse Smoothing (Optional)")]
-    [Range(0f, 0.5f)]
-    public float lookSmoothing = 0f;
-    private Vector2 _currentLookVelocity;
+    [Header("Player Height")]
+    [Tooltip("Standing head height (old: 1.4)")]
+    public float standingHeight = 1.4f;
+    [Tooltip("Crouching head height (old: 0.5)")]
+    public float crouchHeight = 0.5f;
+    [Tooltip("Crouch transition speed (old: 5)")]
+    public float crouchSpeed = 5f;
 
-    // --- Jump & Gravity ---
-    [Header("Jump & Gravity")]
-    [SerializeField, Range(1f, 20f)] private float _jumpHeight;
-    [SerializeField] private float _gravity = -9.81f;
-
-    [Header("Jump Buffer")]
-    [Tooltip("How long (seconds) the jump input is buffered for")]
-    [SerializeField, Range(0f, 0.3f)] private float jumpBufferTime = 0.15f;
-    [Tooltip("Coyote time: How long after leaving ground you can still jump")]
-    [SerializeField, Range(0f, 0.3f)] private float coyoteTime = 0.1f;
-
-    // --- References ---
     [Header("References")]
-    [SerializeField] private CharacterController _characterController;
     [SerializeField] private Transform _camera;
 
-    // --- Debug ---
-    [Header("Debug")]
-    public Vector2 moveInput;
-    public Vector2 lookInput;
-    [SerializeField] private bool isGrounded = false;
+    // --- Public input state (set by BasicActions) ---
+    [HideInInspector] public Vector2 moveInput;
+    [HideInInspector] public Vector2 lookInput;
 
-    [SerializeField] private bool jumpBuffered = false;
-    [SerializeField] private float jumpBufferTimer = 0f;
-    [SerializeField] private bool coyoteActive = false;
-    [SerializeField] private float coyoteTimer = 0f;
-    [SerializeField] private float _timeSinceGrounded = 0f;
+    // --- Runtime ---
+    Rigidbody rb;
+    CapsuleCollider capsule;
+    Vector3 moveVel;
+    Vector2 mouseVelocitySum;
+    float currentHeight;
+    float targetHeight;
+    bool _isRunning;
+    bool _isCrouching;
 
-    // --- Fields ---
-    private float _xRotation;
-    private float _yRotation;
-    private Vector3 _controllerVelocity;
-    private bool _isRunning = false;
-    private bool _jumpQueued = false;
-
-    private void Start()
+    void Start()
     {
-        // Locks cursor and makes it invisible
+        rb = GetComponent<Rigidbody>();
+        capsule = GetComponent<CapsuleCollider>();
+
+        // Remove CharacterController if still present (conflicts with Rigidbody)
+        var cc = GetComponent<CharacterController>();
+        if (cc != null)
+        {
+            Debug.LogWarning("[PlayerKB] Removing conflicting CharacterController");
+            Destroy(cc);
+        }
+
+        // Auto-find camera if not assigned in inspector
+        if (_camera == null)
+        {
+            var cam = GetComponentInChildren<Camera>();
+            if (cam != null) _camera = cam.transform;
+        }
+        if (_camera == null)
+            _camera = Camera.main?.transform;
+
+        // Match old OpenViva player Rigidbody setup
+        rb.mass = 100f;
+        rb.linearDamping = 1f;
+        rb.angularDamping = 50f;
+        rb.useGravity = true;
+        rb.isKinematic = false;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+
+        currentHeight = standingHeight;
+        targetHeight = standingHeight;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        if (TryGetComponent(out CharacterController foundController))
+        // FOV = 65 (old OpenViva)
+        if (_camera != null)
         {
-            _characterController = foundController;
-        }
-        else Debug.LogWarning($"Character Controller of {this} cannot be assigned!");
-    }
-
-    void Update()
-    {
-        isGrounded = GroundCheck();
-
-        UpdateJumpBuffer();
-        UpdateCoyoteTime();
-
-        if (isGrounded && _jumpQueued)
-        {
-            ExecuteJump();
-            _jumpQueued = false;
+            var cam = _camera.GetComponent<Camera>();
+            if (cam != null) cam.fieldOfView = 65f;
         }
 
-        HandleGravity();
-        HandleLook();
-        HandleMovement();
+        // Setup capsule to match
+        capsule.radius = 0.09f;
+        capsule.height = standingHeight + 0.3f;
+        capsule.center = Vector3.up * (capsule.height * 0.5f);
+        capsule.direction = 1;
+
+        // --- Bootstrap the entire interaction system ---
+        BootstrapInteractionSystem();
     }
 
-    private void LateUpdate()
+    void FixedUpdate()
     {
-        // Rotates the controller on the Y-axis so that it is on the same rotation as the camera
-        transform.localRotation = Quaternion.Euler(0f, _yRotation, 0f);
-
-        // Rotates camera on the Y and X-axis
-        _camera.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
-    }
-
-    void HandleMovement()
-    {
+        if (_camera == null) return;
         if (Globals.isMenuOpen) return;
 
-        if (!isGrounded)
+        // --- 1. Apply mouse rotation from PREVIOUS frame's accumulated velocity ---
+        float angleSlow = 1f - Mathf.Abs(_camera.forward.y) * 0.5f;
+        _camera.rotation *= Quaternion.Euler(mouseVelocitySum.x, mouseVelocitySum.y * angleSlow, 0f);
+        mouseVelocitySum *= mouseDecay;
+
+        // --- 2. Movement (old OpenViva style) ---
+        Vector3 accel = new Vector3(moveInput.x, 0f, moveInput.y);
+        if (accel != Vector3.zero)
         {
-            DetectAndPushFromEdge();
+            Vector3 headForward = _camera.TransformDirection(accel);
+            headForward.y = 0f;
+            float speed = _isRunning ? walkSpeed * sprintMultiplier : walkSpeed;
+            moveVel += headForward.normalized * speed;
         }
 
-        Vector3 move = (transform.right * moveInput.x + transform.forward * moveInput.y) * GetCurrentSpeed();
-        Vector3 totalMove = (move + _controllerVelocity) * Time.deltaTime;
+        moveVel *= moveDamping;
+        moveVel.y = rb.linearVelocity.y;
+        rb.linearVelocity = moveVel;
 
-        _characterController.Move(totalMove);
-    }
+        // --- 3. Capsule + head height ---
+        currentHeight += (targetHeight - currentHeight) * Time.fixedDeltaTime * crouchSpeed;
+        _camera.localPosition = Vector3.up * currentHeight;
+        UpdateCapsule();
 
-    void HandleLook()
-    {
-        if (lookInput == Vector2.zero || Globals.isMenuOpen) return;
-
-        Vector2 input = lookInput;
-
-        if (lookSmoothing > 0f)
+        // --- 4. Add new mouse input for NEXT frame ---
+        if (lookInput != Vector2.zero)
         {
-            input = Vector2.SmoothDamp(Vector2.zero, lookInput, ref _currentLookVelocity,
-                                       lookSmoothing, Mathf.Infinity, Time.unscaledDeltaTime);
+            mouseVelocitySum += new Vector2(-lookInput.y, lookInput.x) * mouseSensitivity * Time.fixedDeltaTime * 0.01f;
         }
 
-        _yRotation += input.x * _mouseSensitivity;
-        _xRotation -= input.y * _mouseSensitivity;
-
-        // Rotate camera up/down with clamp
-        _xRotation = Mathf.Clamp(_xRotation, -90, 90);
+        // --- 5. Fix camera roll + clamp pitch ---
+        _camera.rotation = Quaternion.LookRotation(_camera.forward, Vector3.up);
+        _camera.rotation = Quaternion.RotateTowards(
+            Quaternion.LookRotation(new Vector3(_camera.forward.x, 0f, _camera.forward.z)),
+            _camera.rotation,
+            maxPitchAngle
+        );
     }
 
-    #region Jump Logic
-    public void HandleJump()
+    void UpdateCapsule()
     {
-        // Can jump if grounded OR within coyote time
-        if (isGrounded || coyoteActive)
-        {
-            ExecuteJump();
-        }
-        else
-        {
-            _jumpQueued = true; // Otherwise buffer the jump input
-        }
+        capsule.height = currentHeight + 0.3f;
+        capsule.center = Vector3.up * (capsule.height * 0.5f);
     }
 
-    private void ExecuteJump()
+    #region Public API
+
+    public void HandleRun(bool running) => _isRunning = running;
+
+    public void HandleJump() { }
+
+    public void HandleCrouch()
     {
-        _controllerVelocity.y = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
+        _isCrouching = !_isCrouching;
+        targetHeight = _isCrouching ? crouchHeight : standingHeight;
     }
 
-    private void UpdateJumpBuffer()
-    {
-        if (_jumpQueued)
-        {
-            jumpBufferTimer -= Time.deltaTime;
-            jumpBuffered = jumpBufferTimer > 0f;
-
-            // Buffer expired
-            if (jumpBufferTimer <= 0f)
-            {
-                _jumpQueued = false;
-                jumpBuffered = false;
-            }
-        }
-        else
-        {
-            jumpBuffered = false;
-            jumpBufferTimer = jumpBufferTime;
-        }
-    }
-  
-    private void UpdateCoyoteTime()
-    {
-        if (isGrounded)
-        {
-            coyoteTimer = coyoteTime;
-            coyoteActive = true;
-        }
-        else
-        {
-            coyoteTimer -= Time.deltaTime;
-            coyoteActive = coyoteTimer > 0f;
-        }
-
-        _timeSinceGrounded = isGrounded ? 0f : _timeSinceGrounded + Time.deltaTime;
-    }
-    #endregion
-
-    public void HandleRun(bool running)
-    {
-        _isRunning = running;
-    }
-
-    void HandleGravity()
-    {
-        // Fix for instantly snapping to the ground off edges
-        if (_characterController.isGrounded && _controllerVelocity.y < 0)
-        {
-            _controllerVelocity.y = 0;
-        }
-
-        _controllerVelocity.y += _gravity * Time.deltaTime;
-    }
-
-    float GetCurrentSpeed()
-    {
-        return _isRunning ? _movementSpeed * _runMultiplier : _movementSpeed;
-    }
-
-    public void SetMovementSpeed(float newSpeed)
-    {
-        _movementSpeed = newSpeed;
-    }
+    public void SetMovementSpeed(float newSpeed) => walkSpeed = newSpeed;
 
     public void DisableRunning(bool crouching)
     {
-        if(crouching)
-        {
-            _runMultiplier = 1f;
-        }
-        else
-        {
-            _runMultiplier = 2.5f;
-        }
+        if (crouching) _isRunning = false;
     }
 
-    #region Helper Methods
-    void DetectAndPushFromEdge()
-    {
-        // Cast rays in 4 directions (forward, backward, left, right) to detect edges at the player's feet
-        Vector3[] directions = { transform.forward, -transform.forward, transform.right, -transform.right };
-
-        // Get the player's feet position
-        Vector3 feetPosition = transform.position + Vector3.up * (feetOffset + 0.1f);
-
-        foreach (var direction in directions)
-        {
-            RaycastHit hit;
-
-            // Cast the ray from the player's feet in the specified direction
-            if (Physics.Raycast(feetPosition, direction, out hit, edgeRaycastLength))
-            {
-                // If the surface is too steep (an edge), push the player away from it
-                if (Vector3.Angle(hit.normal, Vector3.up) > 45f) // Steep surfaces are considered edges
-                {
-                    Vector3 pushDirection = hit.normal.normalized; // Opposite of the platform's surface normal
-                    _characterController.Move(edgePushForce * Time.deltaTime * pushDirection);
-                    return; // Only apply one push per frame
-                }
-            }
-        }
-    }
-
-    bool GroundCheck()
-    {
-        Vector3 sphereOrigin = transform.position + Vector3.up * (groundCheckRadius + 0.1f);
-
-        // Perform a SphereCast slightly below the player to detect the ground
-        if (Physics.SphereCast(sphereOrigin, groundCheckRadius, Vector3.down, out RaycastHit hit, groundCheckDistance))
-        {
-            if (hit.collider.gameObject == gameObject) return false;
-
-            // Ensure the surface normal is facing upward enough to be considered "ground"
-            if (Vector3.Angle(hit.normal, Vector3.up) < edgeAngleTolerance)
-            {
-                return true;
-            }
-        }
-
-        return false; // Not grounded
-    }
     #endregion
 
-    void OnDrawGizmosSelected()
+    #region Interaction System Bootstrap
+
+    /// <summary>
+    /// Auto-creates and wires all interaction components at runtime.
+    /// Creates separate invisible physics hand GameObjects (like old OpenViva's
+    /// handRigidBodyPrefab) so they don't conflict with the Animator bone hierarchy.
+    /// </summary>
+    void BootstrapInteractionSystem()
     {
-        Vector3 origin = transform.position + Vector3.up * (groundCheckRadius + 0.05f);
-        Gizmos.color = GroundCheck() ? Color.green : Color.red;
-        Gizmos.DrawWireSphere(origin + Vector3.down * groundCheckDistance, groundCheckRadius);
-
-        Gizmos.color = Color.blue;
-        // Get the player's feet position
-        Vector3 feetPosition = transform.position + Vector3.up * (feetOffset + 0.1f);
-
-        // Draw edge detection rays from the player's feet
-        Vector3[] directions = { transform.forward, -transform.forward, transform.right, -transform.right };
-        foreach (var direction in directions)
+        if (_camera == null)
         {
-            Gizmos.DrawLine(feetPosition, feetPosition + direction * edgeRaycastLength);
+            Debug.LogError("[PlayerKB] No camera — cannot bootstrap interaction system");
+            return;
         }
+
+        // Find bone transforms in the hierarchy
+        Transform wristL = FindChild(transform, "wrist_l");
+        Transform wristR = FindChild(transform, "wrist_r");
+
+        if (wristL == null || wristR == null)
+        {
+            Debug.LogError("[PlayerKB] Cannot find wrist_l/wrist_r — interaction system not created");
+            return;
+        }
+
+        // Enable wrist_r Animator (disabled by default in prefab)
+        var wristRAnimator = wristR.GetComponent<Animator>();
+        if (wristRAnimator != null && !wristRAnimator.enabled)
+            wristRAnimator.enabled = true;
+
+        // --- Create physics hands (separate from bone hierarchy, like old game) ---
+        var leftGrab = CreatePhysicsHand("PhysicsHand_L", true, wristL);
+        var rightGrab = CreatePhysicsHand("PhysicsHand_R", false, wristR);
+
+        // Ignore collision between physics hands and player capsule
+        if (leftGrab.handCollider != null)
+            Physics.IgnoreCollision(capsule, leftGrab.handCollider);
+        if (rightGrab.handCollider != null)
+            Physics.IgnoreCollision(capsule, rightGrab.handCollider);
+
+        // --- HandAnimator on wrists ---
+        var leftAnim = EnsureComponent<HandAnimator>(wristL.gameObject);
+        leftAnim.isLeftHand = true;
+        leftAnim.handAnimator = wristL.GetComponent<Animator>();
+
+        var rightAnim = EnsureComponent<HandAnimator>(wristR.gameObject);
+        rightAnim.isLeftHand = false;
+        rightAnim.handAnimator = wristRAnimator;
+
+        // --- DesktopHandDriver ---
+        var handDriver = EnsureComponent<DesktopHandDriver>(gameObject);
+        handDriver.cameraTransform = _camera;
+        handDriver.leftHandGrab = leftGrab;
+        handDriver.rightHandGrab = rightGrab;
+        handDriver.leftWristBone = wristL;
+        handDriver.rightWristBone = wristR;
+
+        // --- PlayerKB_GrabController ---
+        var grabController = EnsureComponent<PlayerKB_GrabController>(gameObject);
+        grabController.leftHand = leftGrab;
+        grabController.rightHand = rightGrab;
+        grabController.handDriver = handDriver;
+        grabController.leftHandAnimator = leftAnim;
+        grabController.rightHandAnimator = rightAnim;
+        grabController.playerCamera = _camera.GetComponent<Camera>();
+
+        // --- DesktopGestures ---
+        var gestures = EnsureComponent<DesktopGestures>(gameObject);
+        gestures.leftHandAnimator = leftAnim;
+        gestures.rightHandAnimator = rightAnim;
+        gestures.leftHandGrab = leftGrab;
+        gestures.rightHandGrab = rightGrab;
+
+        Debug.Log("[PlayerKB] Interaction system bootstrapped: physics hands + grab + gestures ready");
     }
+
+    /// <summary>
+    /// Creates an invisible physics hand GameObject (like old OpenViva's handRigidBodyPrefab).
+    /// NOT parented to the bone hierarchy — independent physics object that chases bone position.
+    /// HandGrabSystem.Awake() auto-configures the Rigidbody (mass=5, no gravity, etc.)
+    /// </summary>
+    HandGrabSystem CreatePhysicsHand(string name, bool isLeft, Transform wristBone)
+    {
+        // Don't create duplicates
+        var existing = GameObject.Find(name);
+        if (existing != null)
+        {
+            var existingGrab = existing.GetComponent<HandGrabSystem>();
+            if (existingGrab != null) return existingGrab;
+        }
+
+        var go = new GameObject(name);
+        // NOT parented to player — independent physics object (child Rigidbodies are bad practice)
+        go.transform.position = wristBone.position;
+        go.transform.rotation = wristBone.rotation;
+
+        // SphereCollider for physical interactions (old: radius 0.05)
+        var col = go.AddComponent<SphereCollider>();
+        col.radius = 0.05f;
+
+        // HandGrabSystem auto-adds Rigidbody via RequireComponent
+        // Its Awake() configures: mass=5, gravity=false, maxAngularVelocity=64, etc.
+        var grab = go.AddComponent<HandGrabSystem>();
+        grab.isLeftHand = isLeft;
+        grab.gripPoint = go.transform;
+        grab.handCollider = col;
+
+        return grab;
+    }
+
+    #endregion
+
+    #region Helpers
+
+    static T EnsureComponent<T>(GameObject go) where T : Component
+    {
+        var c = go.GetComponent<T>();
+        return c != null ? c : go.AddComponent<T>();
+    }
+
+    static Transform FindChild(Transform parent, string name)
+    {
+        if (parent.name == name) return parent;
+        foreach (Transform child in parent)
+        {
+            var found = FindChild(child, name);
+            if (found != null) return found;
+        }
+        return null;
+    }
+
+    #endregion
 }
 
 #endif

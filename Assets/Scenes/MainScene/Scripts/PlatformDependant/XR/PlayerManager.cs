@@ -1,68 +1,64 @@
-#if UNITY_ANDROID || UNITY_EDITOR
+#if UNITY_ANDROID || UNITY_EDITOR || UNITY_STANDALONE_WIN
 
-using NUnit.Framework;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Class that manages the player
-
+/// <summary>
+/// Manages switching between Desktop (KBM) and VR player rigs.
+/// Works with the new HandGrabSystem — queries held items from HandGrabSystem instead of old PlayerKB_GrabObject.
+/// </summary>
 public class PlayerManager : MonoBehaviour
 {
+    [SerializeField] private Player_InputTypes.InputType _inputType;
+    [SerializeField] private InputActionReference _changeInputType;
+    [SerializeField] private GameObject _playerKB;
+    [SerializeField] private GameObject _playerVR;
 
-    [SerializeField] private Player_InputTypes.InputType _inputType; // Current input type
-    [SerializeField] private InputActionReference _changeInputType; // Keybind to change input type ([1] key)
-    [SerializeField] private GameObject _playerKB; // Player GameObject for Keyboard/Mouse
-    [SerializeField] private GameObject _playerVR; // Player GameObject for VR
-
-    [SerializeField] private GameObject _leftHandKB; // PlayerKB's left hand
-    [SerializeField] private GameObject _rightHandKB; // PlayerKB's right hand
-    [SerializeField] private GameObject _leftHandVR; // PlayerVR's left hand
-    [SerializeField] private GameObject _rightHandVR; // PlayerVR's right hand
-    ItemIndexes _itemIndexes; // A script to fetch item indexes
+    [Header("Hand References (New System)")]
+    [Tooltip("Left hand HandGrabSystem on the KBM player")]
+    [SerializeField] private HandGrabSystem _leftHandGrab;
+    [Tooltip("Right hand HandGrabSystem on the KBM player")]
+    [SerializeField] private HandGrabSystem _rightHandGrab;
 
     void Start()
     {
-        // Set up change input type action
-        _changeInputType.action.Enable();
-        _changeInputType.action.performed += ChangeInputType;
-        // Lock the cursor to the center of the screen
+        if (_changeInputType != null)
+        {
+            _changeInputType.action.Enable();
+            _changeInputType.action.performed += ChangeInputType;
+        }
+
         Cursor.lockState = CursorLockMode.Locked;
-
         Globals.isDesktopMode = true;
-
-        _itemIndexes = new ItemIndexes();
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        // Sync positions between the KBM and VR player objects
+        if (_playerKB == null || _playerVR == null) return;
+
         if (_inputType == Player_InputTypes.InputType.KBM)
-        {
             _playerVR.transform.position = _playerKB.transform.position;
-        }
         else
-        {
             _playerKB.transform.position = _playerVR.transform.position;
-        }
     }
 
     void OnDestroy()
     {
-        // Clean up change input type action
-        _changeInputType.action.Disable();
-        _changeInputType.action.performed -= ChangeInputType;
+        if (_changeInputType != null)
+        {
+            _changeInputType.action.Disable();
+            _changeInputType.action.performed -= ChangeInputType;
+        }
     }
 
-    private void ChangeInputType(InputAction.CallbackContext context)
+    void ChangeInputType(InputAction.CallbackContext context)
     {
-        // Toggle between Keyboard/Mouse and VR input types
         if (_inputType == Player_InputTypes.InputType.KBM)
         {
             _inputType = Player_InputTypes.InputType.VR;
             _playerKB.SetActive(false);
             _playerVR.SetActive(true);
-            Globals.isDesktopMode = true;
+            Globals.isDesktopMode = false;
             Debug.Log("Input type changed to VR");
         }
         else
@@ -70,62 +66,51 @@ public class PlayerManager : MonoBehaviour
             _inputType = Player_InputTypes.InputType.KBM;
             _playerVR.SetActive(false);
             _playerKB.SetActive(true);
-            Globals.isDesktopMode = false;
+            Globals.isDesktopMode = true;
             Debug.Log("Input type changed to KBM");
         }
     }
 
-    private GameObject CheckItemInHands(Transform parent)
-    {
-        List<GameObject> children = new List<GameObject>();
-        int numElements = 0;
-
-        foreach (Transform child in parent)
-        {
-            children.Add(child.gameObject);
-            numElements++;
-        }
-
-        GameObject item = children[numElements - 1];
-
-        if (item.CompareTag("Item"))
-        {
-            return item;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
+    /// <summary>
+    /// Get the item held in the left hand (new system).
+    /// Returns -1 if nothing held, or the HoldPose index.
+    /// </summary>
     public int GetItemLeft()
     {
-        GameObject item = CheckItemInHands(_leftHandKB.transform);
-        if (item != null)
-        {
-            return _itemIndexes.GetItemIndex(item.name);
-        }
+        if (_leftHandGrab != null && _leftHandGrab.IsHolding)
+            return (int)_leftHandGrab.HeldItem.holdPose;
         return -1;
     }
 
+    /// <summary>
+    /// Get the item held in the right hand (new system).
+    /// Returns -1 if nothing held, or the HoldPose index.
+    /// </summary>
     public int GetItemRight()
     {
-        GameObject item = CheckItemInHands(_rightHandKB.transform);
-        if (item != null)
-        {
-            return _itemIndexes.GetItemIndex(item.name);
-        }
+        if (_rightHandGrab != null && _rightHandGrab.IsHolding)
+            return (int)_rightHandGrab.HeldItem.holdPose;
         return -1;
     }
 
+    /// <summary>
+    /// Get the actual GameObject held in the left hand.
+    /// </summary>
     public GameObject GetObjectLeft()
     {
-        return CheckItemInHands(_leftHandKB.transform);
+        if (_leftHandGrab != null && _leftHandGrab.IsHolding)
+            return _leftHandGrab.HeldItem.gameObject;
+        return null;
     }
 
+    /// <summary>
+    /// Get the actual GameObject held in the right hand.
+    /// </summary>
     public GameObject GetObjectRight()
     {
-        return CheckItemInHands(_rightHandKB.transform);
+        if (_rightHandGrab != null && _rightHandGrab.IsHolding)
+            return _rightHandGrab.HeldItem.gameObject;
+        return null;
     }
 }
 
