@@ -45,7 +45,7 @@ namespace SteamAudio
         {
             mContext = API.iplContextRetain(context.Get());
         }
-
+        
         ~Context()
         {
             Release();
