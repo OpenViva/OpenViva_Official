@@ -1,13 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Flashlight : MonoBehaviour
+public class Lantern : MonoBehaviour
 {
     private PlayerKB_GrabObject _grabScript;
     private int _isGrabbed = 0;
     [SerializeField] private bool _isOn;
     [SerializeField] private GameObject _diode;
-    [SerializeField] private GameObject _vfx;
 
     [SerializeField] private HintManager _hud;
     private bool _doOnce = true;
@@ -23,7 +22,7 @@ public class Flashlight : MonoBehaviour
         _player = FindFirstObjectByType<Player>();
         _controls = _player.Controls;
 
-        _controls.Viva.Interact.performed += ToggleFlashlight;
+        _controls.Viva.Interact.performed += Toggle;
     }
 
     private void Update()
@@ -34,26 +33,22 @@ public class Flashlight : MonoBehaviour
         {
             if (_doOnce)
             {
-                _hud.CreateHint(HintConstants.FlashlightHint);
+                _hud.CreateHint(HintConstants.LanternHint);
                 _doOnce = false;
             }
         }
         else
         {
-            _hud.ClearHint(HintConstants.FlashlightHint);
+            _hud.ClearHint(HintConstants.LanternHint);
             _doOnce = true;
         }
     }
 
-    private void ToggleFlashlight(InputAction.CallbackContext context)
+    private void Toggle(InputAction.CallbackContext context)
     {
         if (_isGrabbed == 0) return;
 
         _diode.SetActive(!_isOn);
-        if (_vfx != null)
-        {
-            _vfx.SetActive(!_isOn);
-        }
         _isOn = !_isOn;
     }
 }

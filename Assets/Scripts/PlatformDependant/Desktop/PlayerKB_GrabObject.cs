@@ -25,7 +25,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
     private Outline _outline;
 
-    private PlayerKB_HUD _hud;
+    private HintManager _hud;
     private bool _hintIsShowing = false;
 
     [SerializeField] private AnimationIndexes _animationIndexes;
@@ -52,7 +52,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         _playerRightCollider = _playerRightHand.GetComponent<Collider>();
 
         GameObject hud = GameObject.Find("HUD");
-        _hud = hud.GetComponent<PlayerKB_HUD>();
+        _hud = hud.GetComponent<HintManager>();
 
         _outline = GetComponent<Outline>();
 

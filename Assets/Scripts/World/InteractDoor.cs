@@ -32,7 +32,7 @@ public class InteractDoor : MonoBehaviour
 
     private Outline _outline;
 
-    [SerializeField] private PlayerKB_HUD _hud;
+    [SerializeField] private HintManager _hud;
     private bool _doOnce = true;
 
     void Start()

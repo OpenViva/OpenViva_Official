@@ -331,9 +331,9 @@ GameObject:
   - component: {fileID: 7579784770701166886}
   - component: {fileID: 6188953550679089520}
   - component: {fileID: 5778550343069892082}
-  - component: {fileID: 751258691758630096}
   - component: {fileID: 5471146695580664263}
   - component: {fileID: 5827263743420038292}
+  - component: {fileID: 1757304696351040645}
   m_Layer: 0
   m_Name: FlashLight
   m_TagString: Untagged
@@ -504,22 +504,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _objectIndex: 7
   _animationIndexes: {fileID: 0}
---- !u!114 &751258691758630096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5995071476856499394}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83f653def9ee52b4bae6cadc093e0cd0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isOn: 0
-  _diode: {fileID: 2024397710667513697}
-  _vfx: {fileID: 4059804172916575499}
-  _hud: {fileID: 0}
 --- !u!114 &5471146695580664263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -670,3 +654,20 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 7590352572170525281}
   _rightAttach: {fileID: 6230434376857242355}
+  _floatingHint: {fileID: 0}
+--- !u!114 &1757304696351040645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5995071476856499394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f73750df45adba42afc9f97bf1a4630, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Flashlight
+  _isOn: 0
+  _diode: {fileID: 2024397710667513697}
+  _hud: {fileID: 0}
+  _vfx: {fileID: 4059804172916575499}
