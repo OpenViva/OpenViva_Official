@@ -19,7 +19,7 @@ public class Inventory : MonoBehaviour
     private int _selectedItem = 1; // The item that the player has selected to take out of the bag
     [SerializeField] PlayerKB_BasicActions _basicActions; // Prevent the player from extending/retracting hands when the bag is open
 
-    [SerializeField] private PlayerKB_HUD _hud; // HUD script to show hints
+    [SerializeField] private HintManager _hud; // HUD script to show hints
     private bool _start = true; // Certain hints must only be shown once when the bag is grabbed
 
     // --- Fields ---
@@ -52,7 +52,7 @@ public class Inventory : MonoBehaviour
             {
                 _itemInOtherHand = _playerManager.GetItemRight();
             }
-            else if ( _grabbedIn == 2)
+            else if (_grabbedIn == 2)
             {
                 _itemInOtherHand = _playerManager.GetItemLeft();
             }
@@ -60,19 +60,15 @@ public class Inventory : MonoBehaviour
             // Show hints when the bag is grabbed
             if (_start)
             {
-                if (_grabbedIn == 1)
-                {
-                    _hud.CreateHint(HintConstants.LeftReleaseHint);
-                }
-                else if (_grabbedIn == 2)
-                {
-                    _hud.CreateHint(HintConstants.RightReleaseHint);
-                }
                 _hud.CreateHint(HintConstants.OpenBagHint);
                 _hud.ClearHint(HintConstants.SelectItemsHint);
                 _hud.ClearHint(HintConstants.TakeItemHint);
                 _start = false;
             }
+        }
+        else
+        {
+            _hud.ClearHint(HintConstants.OpenBagHint); 
         }
 
         // Reset start variable when bag is dropped
