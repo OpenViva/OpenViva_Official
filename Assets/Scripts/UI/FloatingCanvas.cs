@@ -28,6 +28,11 @@ public class FloatingCanvas : MonoBehaviour
         transform.position = location.position;
     }
 
+    public void WarpToObject (Vector3 location)
+    {
+        transform.position = location;
+    }
+
     public void WarpToOrigin()
     {
         transform.position = Vector3.zero;
