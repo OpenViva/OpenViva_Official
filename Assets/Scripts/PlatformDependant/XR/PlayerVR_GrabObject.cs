@@ -7,7 +7,7 @@ public class PlayerVR_GrabObject : XRGrabInteractable
     [SerializeField] private Transform _leftAttach;
     [SerializeField] private Transform _rightAttach;
 
-    private bool _isGrabbed = false;
+    public int _isGrabbed = 0;
 
     [SerializeField] private HintManager _floatingHint;
 
@@ -19,29 +19,35 @@ public class PlayerVR_GrabObject : XRGrabInteractable
         if (name.Contains("Left"))
         {
             attachTransform = _leftAttach;
+            _isGrabbed = 1;
         }
         else if (name.Contains("Right"))
         {
             attachTransform = _rightAttach;
+            _isGrabbed = 2;
         }
 
         FloatingCanvas.Instance.WarpToOrigin();
 
         base.OnSelectEntering(args);
-        _isGrabbed = true;
     }
 
     protected override void OnSelectExiting(SelectExitEventArgs args)
     {
         base.OnSelectExiting(args);
-        _isGrabbed = false;
         _floatingHint.ClearHint(HintConstants.LeftGrabHintVR);
         _floatingHint.ClearHint(HintConstants.RightGrabHintVR);
     }
 
+    protected override void Drop()
+    {
+        base.Drop();
+        _isGrabbed = 0;
+    }
+
     private void OnTriggerEnter(Collider collider)
     {
-        if (!collider.CompareTag("Player") || _isGrabbed) { return; }
+        if (!collider.CompareTag("Player") || _isGrabbed != 0) { return; }
 
         if (collider.gameObject.name.Contains("Left"))
         {
@@ -62,5 +68,10 @@ public class PlayerVR_GrabObject : XRGrabInteractable
         FloatingCanvas.Instance.WarpToOrigin();
         _floatingHint.ClearHint(HintConstants.LeftGrabHintVR);
         _floatingHint.ClearHint(HintConstants.RightGrabHintVR);
+    }
+
+    public int GetIsGrabbed()
+    {
+        return _isGrabbed;
     }
 }

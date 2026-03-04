@@ -57,7 +57,7 @@ public class PlayerManager : MonoBehaviour
 
     private void ChangeInputType()
     {
-        // Toggle between Keyboard/Mouse and VR input types
+        // ToggleLantern between Keyboard/Mouse and VR input types
         if (_inputType == Player_InputTypes.InputType.KBM)
         {
             _inputType = Player_InputTypes.InputType.VR;

@@ -5,8 +5,8 @@ public class InteractDoorKB : MonoBehaviour
 {
     protected Player _player;
 
-    [SerializeField] private Collider _playerLeftHand;
-    [SerializeField] private Collider _playerRightHand;
+    [SerializeField] protected Collider _playerLeftHand;
+    [SerializeField] protected Collider _playerRightHand;
 
     private bool _playerInRange = false;
     private bool _isOpen = false;
