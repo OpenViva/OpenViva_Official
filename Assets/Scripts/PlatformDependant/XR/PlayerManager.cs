@@ -9,8 +9,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerManager : MonoBehaviour
 {
-
-    [SerializeField] private Player_InputTypes.InputType _inputType; // Current input type
     [SerializeField] private InputActionReference _changeInputType; // Keybind to change input type ([1] key)
     [SerializeField] private GameObject _playerKB; // Player GameObject for Keyboard/Mouse
     [SerializeField] private GameObject _playerVR; // Player GameObject for VR
@@ -23,8 +21,8 @@ public class PlayerManager : MonoBehaviour
 
     void Start()
     {
-        Globals.isDesktopMode = true;
-        // ChangeInputType(); // TODO: Needs fixing, doesn't change to desktop by default.
+        Globals.isDesktopMode = false;
+        ChangeInputType(); // TODO: Needs fixing, doesn't change to desktop by default.
 
         // Set up change input type action
         _changeInputType.action.Enable();
@@ -38,7 +36,7 @@ public class PlayerManager : MonoBehaviour
     private void FixedUpdate()
     {
         // Sync positions between the KBM and VR player objects
-        if (_inputType == Player_InputTypes.InputType.KBM)
+        if (Globals.isDesktopMode)
         {
             _playerVR.transform.position = _playerKB.transform.position;
         }
@@ -58,20 +56,18 @@ public class PlayerManager : MonoBehaviour
     private void ChangeInputType()
     {
         // ToggleLantern between Keyboard/Mouse and VR input types
-        if (_inputType == Player_InputTypes.InputType.KBM)
+        if (Globals.isDesktopMode)
         {
-            _inputType = Player_InputTypes.InputType.VR;
+            Globals.isDesktopMode = false;
             _playerKB.SetActive(false);
             _playerVR.SetActive(true);
-            Globals.isDesktopMode = true;
             Debug.Log("Input type changed to VR");
         }
         else
         {
-            _inputType = Player_InputTypes.InputType.KBM;
+            Globals.isDesktopMode = true;
             _playerVR.SetActive(false);
             _playerKB.SetActive(true);
-            Globals.isDesktopMode = false;
             Debug.Log("Input type changed to KBM");
         }
     }
