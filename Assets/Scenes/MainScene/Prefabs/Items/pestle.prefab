@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8747832003314682837}
   - component: {fileID: 8082465512251002667}
   - component: {fileID: 5362798973585933563}
-  - component: {fileID: 7717160330337451633}
+  - component: {fileID: 4978763611649001603}
   - component: {fileID: 5570981068016238606}
   - component: {fileID: 8385294578488010865}
   - component: {fileID: 2493562950431659687}
@@ -120,8 +120,8 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 678701460581921409, guid: 72fecd5051f74e742ba64fa995b35348, type: 3}
---- !u!64 &7717160330337451633
-MeshCollider:
+--- !u!65 &4978763611649001603
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -138,10 +138,9 @@ MeshCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 678701460581921409, guid: 72fecd5051f74e742ba64fa995b35348, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.09, y: 0.16, z: 0.09}
+  m_Center: {x: 0.000030517578, y: 0.000004298985, z: 0.000015255064}
 --- !u!54 &5570981068016238606
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -333,6 +332,8 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 769926484547923182}
   _rightAttach: {fileID: 4500500453853148653}
+  _isGrabbed: 0
+  _floatingHint: {fileID: 0}
 --- !u!1 &8363060275259887546
 GameObject:
   m_ObjectHideFlags: 0

@@ -207,11 +207,11 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.006181455, y: 0.03520212, z: 0.29242125}
+  m_Size: {x: 0.05, y: 0.08, z: 0.34}
   m_Center: {x: 0.000007630705, y: -0.0068581454, z: 0.078240216}
 --- !u!114 &3826504356094256275
 MonoBehaviour:
@@ -363,6 +363,8 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 2558601872199964214}
   _rightAttach: {fileID: 637154553501996794}
+  _isGrabbed: 0
+  _floatingHint: {fileID: 0}
 --- !u!1 &8836274353137830343
 GameObject:
   m_ObjectHideFlags: 0

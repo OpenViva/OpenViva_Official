@@ -201,7 +201,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.20510393, y: 0.25952408, z: 0.20510393}
+  m_Size: {x: 0.25, y: 0.3, z: 0.25}
   m_Center: {x: 0, y: 0.12976204, z: 0}
 --- !u!114 &-1074259253711788312
 MonoBehaviour:
@@ -367,6 +367,8 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 18956059395300221}
   _rightAttach: {fileID: 9019847865633362419}
+  _isGrabbed: 0
+  _floatingHint: {fileID: 0}
 --- !u!1 &5216601366951456386
 GameObject:
   m_ObjectHideFlags: 0

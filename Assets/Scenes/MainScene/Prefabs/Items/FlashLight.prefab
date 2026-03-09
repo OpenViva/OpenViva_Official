@@ -328,12 +328,13 @@ GameObject:
   - component: {fileID: 5597157859876458912}
   - component: {fileID: 2635689692535914465}
   - component: {fileID: 3495297382484490258}
-  - component: {fileID: 7579784770701166886}
+  - component: {fileID: 9169228435058993333}
   - component: {fileID: 6188953550679089520}
   - component: {fileID: 5778550343069892082}
   - component: {fileID: 5471146695580664263}
   - component: {fileID: 5827263743420038292}
   - component: {fileID: 1757304696351040645}
+  - component: {fileID: 1421685174827246018}
   m_Layer: 0
   m_Name: FlashLight
   m_TagString: Untagged
@@ -441,8 +442,8 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6492427120234770954, guid: 47ac86b7739b0e043b270c7adec935d6, type: 3}
---- !u!64 &7579784770701166886
-MeshCollider:
+--- !u!65 &9169228435058993333
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -459,10 +460,9 @@ MeshCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -6492427120234770954, guid: 47ac86b7739b0e043b270c7adec935d6, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.08, y: 0.17, z: 0.08}
+  m_Center: {x: -0.000003813766, y: 0.009922393, z: -0.000015258789}
 --- !u!54 &6188953550679089520
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -654,6 +654,7 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 7590352572170525281}
   _rightAttach: {fileID: 6230434376857242355}
+  _isGrabbed: 0
   _floatingHint: {fileID: 0}
 --- !u!114 &1757304696351040645
 MonoBehaviour:
@@ -669,5 +670,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Flashlight
   _isOn: 0
   _diode: {fileID: 2024397710667513697}
-  _hud: {fileID: 0}
   _vfx: {fileID: 4059804172916575499}
+  _hud: {fileID: 0}
+--- !u!114 &1421685174827246018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5995071476856499394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a53946c3b85a56c438c8e8bd4f9523b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlashlightVR
+  _XRIButtonDownY: {fileID: -5744627170979735842, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  _XRIButtonDownB: {fileID: -1074524636125062897, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  _controlHintsL: {fileID: 0}
+  _controlHintsR: {fileID: 0}
