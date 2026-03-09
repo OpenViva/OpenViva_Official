@@ -195,7 +195,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectIndex: 5
-  _animationIndexes: {fileID: 0}
 --- !u!114 &5549419742236526852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,6 +345,8 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 224371685614065183}
   _rightAttach: {fileID: 4229114255542104613}
+  _floatingHint: {fileID: 0}
+  _objectIndex: 5
 --- !u!1 &5173966645491743785
 GameObject:
   m_ObjectHideFlags: 0
