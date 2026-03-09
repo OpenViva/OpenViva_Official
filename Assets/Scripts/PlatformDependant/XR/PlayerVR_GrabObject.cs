@@ -11,6 +11,9 @@ public class PlayerVR_GrabObject : XRGrabInteractable
 
     [SerializeField] private HintManager _floatingHint;
 
+    [SerializeField] private int _objectIndex;
+    [SerializeField] private AnimationIndexes _animationIndexes;
+
     protected override void OnSelectEntering(SelectEnterEventArgs args)
     {
         var interactor = args.interactorObject.transform;
