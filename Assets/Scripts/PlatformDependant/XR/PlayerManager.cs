@@ -1,6 +1,3 @@
-#if UNITY_ANDROID || UNITY_EDITOR
-
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -131,5 +128,3 @@ public class PlayerManager : MonoBehaviour
         return CheckItemInHands(_rightHandKB.transform);
     }
 }
-
-#endif

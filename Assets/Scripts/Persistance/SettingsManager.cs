@@ -2,7 +2,6 @@
 using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class SettingsManager : MonoBehaviour
 {

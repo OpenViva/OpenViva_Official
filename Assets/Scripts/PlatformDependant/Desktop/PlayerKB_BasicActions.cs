@@ -2,7 +2,6 @@
 
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 // Allows the player to perform basic actions (KB&M)
 
