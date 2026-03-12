@@ -1,5 +1,6 @@
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
 
+using IngameDebugConsole;
 using UnityEngine;
 
 public class PlayerKB_Movement : MonoBehaviour
@@ -9,7 +10,8 @@ public class PlayerKB_Movement : MonoBehaviour
 
     // --- Movement ---
     [Header("Movement")]
-    [SerializeField, Range(1f, 20f)] private float _movementSpeed;
+    [field: SerializeField ,Range(1f, 20f)] 
+    public float MovementSpeed { get; private set; } = 2;
     [Tooltip("How much faster do you want to go when running?")]
     [SerializeField, Range(1f, 20f)] private float _runMultiplier;
     [Tooltip("How steep of an angle is detected as ground")]
@@ -37,7 +39,8 @@ public class PlayerKB_Movement : MonoBehaviour
 
     // --- Jump & Gravity ---
     [Header("Jump & Gravity")]
-    [SerializeField, Range(1f, 20f)] private float _jumpHeight;
+    [field: SerializeField, Range(1f, 20f)]
+    public float JumpHeight { get; private set; } = 1;
     [SerializeField] private float _gravity = -9.81f;
 
     [Header("Jump Buffer")]
@@ -75,6 +78,9 @@ public class PlayerKB_Movement : MonoBehaviour
     private void Start()
     {
         _player = GetComponentInParent<Player>();
+
+        DebugLogConsole.AddCommandInstance("PlayerSpeed", "Change the player speed, a value between 1 and 20", nameof(ChangePlayerSpeed), this);
+        DebugLogConsole.AddCommandInstance("PlayerJump", "Change the player jump height, a value between 1 and 20", nameof(ChangePlayerJumpHeight), this);
 
         // Locks cursor and makes it invisible
         Cursor.lockState = CursorLockMode.Locked;
@@ -166,7 +172,7 @@ public class PlayerKB_Movement : MonoBehaviour
 
     private void ExecuteJump()
     {
-        _controllerVelocity.y = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
+        _controllerVelocity.y = Mathf.Sqrt(JumpHeight * -2f * _gravity);
     }
 
     private void UpdateJumpBuffer()
@@ -225,12 +231,12 @@ public class PlayerKB_Movement : MonoBehaviour
 
     float GetCurrentSpeed()
     {
-        return _isRunning ? _movementSpeed * _runMultiplier : _movementSpeed;
+        return _isRunning ? MovementSpeed * _runMultiplier : MovementSpeed;
     }
 
     public void SetMovementSpeed(float newSpeed)
     {
-        _movementSpeed = newSpeed;
+        MovementSpeed = newSpeed;
     }
 
     public void DisableRunning(bool crouching)
@@ -326,6 +332,20 @@ public class PlayerKB_Movement : MonoBehaviour
 
         // Jump binding
         _player.Controls.Viva.Jump.performed += ctx => HandleJump();
+    }
+
+    public void ChangePlayerSpeed(float newSpeed)
+    {
+        MovementSpeed = Mathf.Clamp(newSpeed, 1f, 20f);
+
+        Debug.Log("Changed player speed to: " + newSpeed);
+    }
+
+    public void ChangePlayerJumpHeight(float newJumpHeight)
+    {
+        JumpHeight = Mathf.Clamp(newJumpHeight, 1f, 20f);
+
+        Debug.Log("Changed player jump height to: " + newJumpHeight);
     }
 }
 
