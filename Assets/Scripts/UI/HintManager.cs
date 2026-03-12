@@ -52,6 +52,6 @@ public class HintManager : MonoBehaviour
         }
 
         // If no match found, do nothing
-        Debug.Log($"No matching UI element found for HintType: {hintType}. No changes made.");
+        //Debug.Log($"No matching UI element found for HintType: {hintType}. No changes made.");
     }
 }
