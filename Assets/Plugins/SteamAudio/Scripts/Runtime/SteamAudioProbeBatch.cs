@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
@@ -163,7 +164,7 @@ namespace SteamAudio
             probeGenerationParams.type = placementStrategy;
             probeGenerationParams.spacing = horizontalSpacing;
             probeGenerationParams.height = heightAboveFloor;
-            probeGenerationParams.transform = Common.TransposeMatrix(Common.ConvertTransform(gameObject.transform)); // Probe generation requires a transposed matrix.
+            probeGenerationParams.transform = Common.ConvertTransform(gameObject.transform);
 
             probeArray.GenerateProbes(scene, probeGenerationParams);
 
@@ -216,15 +217,16 @@ namespace SteamAudio
 
         public int GetSizeForLayer(BakedDataIdentifier identifier)
         {
-            var layerInfo = new BakedDataLayerInfo { };
-            if (FindLayer(identifier, ref layerInfo))
+            for (int i = 0; i < mBakedDataLayerInfo.Count; ++i)
             {
-                return layerInfo.dataSize;
+                if (mBakedDataLayerInfo[i].identifier.Equals(identifier))
+                {
+                    return mBakedDataLayerInfo[i].dataSize;
+                }
+
             }
-            else
-            {
-                return 0;
-            }
+
+            return 0;
         }
 
         public BakedDataLayerInfo GetInfoForLayer(int index)
@@ -247,50 +249,34 @@ namespace SteamAudio
             mBakedDataLayerInfo.Add(layerInfo);
         }
 
-        public void UpdateLayer(BakedDataIdentifier identifier, int dataSize)
-        {
-            var layerInfo = new BakedDataLayerInfo { };
-            if (FindLayer(identifier, ref layerInfo))
-            {
-                layerInfo.dataSize = dataSize;
-            }
-        }
-
         public void RemoveLayer(BakedDataIdentifier identifier)
         {
-            var layerInfo = new BakedDataLayerInfo { };
-            if (FindLayer(identifier, ref layerInfo))
+            for (int i = 0; i < mBakedDataLayerInfo.Count; ++i)
             {
-                mBakedDataLayerInfo.Remove(layerInfo);
-                UpdateGameObjectStatistics(layerInfo);
+                if (mBakedDataLayerInfo[i].identifier.Equals(identifier))
+                {
+                    var layerInfo = mBakedDataLayerInfo[i];
+                    mBakedDataLayerInfo.RemoveAt(i);
+                    UpdateGameObjectStatistics(layerInfo);
+                    return;
+                }
             }
         }
 
         public void AddOrUpdateLayer(GameObject gameObject, BakedDataIdentifier identifier, int dataSize)
         {
-            var layerInfo = new BakedDataLayerInfo { };
-            if (FindLayer(identifier, ref layerInfo))
+            for (int i = 0; i < mBakedDataLayerInfo.Count; ++i)
             {
-                UpdateLayer(identifier, dataSize);
-            }
-            else
-            {
-                AddLayer(gameObject, identifier, dataSize);
-            }
-        }
-
-        bool FindLayer(BakedDataIdentifier identifier, ref BakedDataLayerInfo result)
-        {
-            foreach (var layerInfo in mBakedDataLayerInfo)
-            {
-                if (layerInfo.identifier.Equals(identifier))
+                if (mBakedDataLayerInfo[i].identifier.Equals(identifier))
                 {
-                    result = layerInfo;
-                    return true;
+                    var layerInfo = mBakedDataLayerInfo[i];
+                    layerInfo.dataSize = dataSize;
+                    mBakedDataLayerInfo[i] = layerInfo;
+                    return;
                 }
             }
 
-            return false;
+            AddLayer(gameObject, identifier, dataSize);
         }
 
         void UpdateGameObjectStatistics(BakedDataLayerInfo layerInfo)
@@ -338,6 +324,36 @@ namespace SteamAudio
             tasks[0].probeBatchAssets[0] = GetAsset();
 
             Baker.BeginBake(tasks);
+        }
+
+        public static void BeginBake(SteamAudioProbeBatch[] probeBatches)
+        {
+#if UNITY_EDITOR
+            AssetDatabase.StartAssetEditing();
+#endif
+
+            var tasks = new BakedDataTask[probeBatches.Length];
+
+            for (var i = 0; i < probeBatches.Length; i++)
+            {
+                tasks[i].gameObject = probeBatches[i].gameObject;
+                tasks[i].component = probeBatches[i];
+                tasks[i].name = probeBatches[i].gameObject.name;
+                tasks[i].identifier = probeBatches[i].GetBakedDataIdentifier();
+                tasks[i].probeBatches = new SteamAudioProbeBatch[1];
+                tasks[i].probeBatchNames = new string[1];
+                tasks[i].probeBatchAssets = new SerializedData[1];
+
+                tasks[i].probeBatches[0] = probeBatches[i];
+                tasks[i].probeBatchNames[0] = probeBatches[i].gameObject.name;
+                tasks[i].probeBatchAssets[0] = probeBatches[i].GetAsset();
+            }
+
+#if UNITY_EDITOR
+            AssetDatabase.StopAssetEditing();
+#endif
+
+            Baker.BeginBake(tasks, true);
         }
 #endif
     }

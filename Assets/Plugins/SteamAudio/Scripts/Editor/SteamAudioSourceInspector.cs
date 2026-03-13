@@ -20,6 +20,7 @@ using UnityEditor;
 namespace SteamAudio
 {
     [CustomEditor(typeof(SteamAudioSource))]
+    [CanEditMultipleObjects]
     public class SteamAudioSourceInspector : Editor
     {
         SerializedProperty mDirectBinaural;
@@ -63,6 +64,7 @@ namespace SteamAudio
         SerializedProperty mFindAlternatePaths;
         SerializedProperty mApplyHRTFToPathing;
         SerializedProperty mPathingMixLevel;
+        SerializedProperty mNormalizePathingEQ;
 
         Texture2D mDirectivityPreview = null;
         float[] mDirectivitySamples = null;
@@ -111,6 +113,7 @@ namespace SteamAudio
             mFindAlternatePaths = serializedObject.FindProperty("findAlternatePaths");
             mApplyHRTFToPathing = serializedObject.FindProperty("applyHRTFToPathing");
             mPathingMixLevel = serializedObject.FindProperty("pathingMixLevel");
+            mNormalizePathingEQ = serializedObject.FindProperty("normalizePathingEQ");
         }
 
         public override void OnInspectorGUI()
@@ -133,10 +136,7 @@ namespace SteamAudio
             if (audioEngineIsUnity)
             {
                 EditorGUILayout.PropertyField(mDistanceAttenuation);
-                if (mDistanceAttenuation.boolValue)
-                {
-                    EditorGUILayout.PropertyField(mDistanceAttenuationInput);
-                }
+                EditorGUILayout.PropertyField(mDistanceAttenuationInput);
             }
 
             if (audioEngineIsUnity)
@@ -217,11 +217,13 @@ namespace SteamAudio
                                 EditorGUILayout.PropertyField(mTransmissionMid);
                             }
                         }
-                        else if ((TransmissionInput) mTransmissionInput.enumValueIndex == TransmissionInput.SimulationDefined)
-                        {
-                            EditorGUILayout.PropertyField(mTransmissionRays);
-                        }
                     }
+                }
+
+                if (!audioEngineIsUnity ||
+                    (TransmissionInput) mTransmissionInput.enumValueIndex == TransmissionInput.SimulationDefined)
+                {
+                    EditorGUILayout.PropertyField(mTransmissionRays);
                 }
             }
 
@@ -265,6 +267,7 @@ namespace SteamAudio
                 {
                     EditorGUILayout.PropertyField(mApplyHRTFToPathing);
                     EditorGUILayout.PropertyField(mPathingMixLevel);
+                    EditorGUILayout.PropertyField(mNormalizePathingEQ);
                 }
             }
 

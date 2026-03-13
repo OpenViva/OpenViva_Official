@@ -25,8 +25,8 @@ namespace SteamAudio
     public static class Constants
     {
         public const uint kVersionMajor = 4;
-        public const uint kVersionMinor = 6;
-        public const uint kVersionPatch = 0;
+        public const uint kVersionMinor = 8;
+        public const uint kVersionPatch = 1;
         public const uint kVersion = (kVersionMajor << 16) | (kVersionMinor << 8) | kVersionPatch;
     }
 
@@ -159,6 +159,12 @@ namespace SteamAudio
         Callback
     }
 
+    public enum DeviationModelType
+    {
+        Default,
+        Callback
+    }
+
     public enum OcclusionType
     {
         Raycast,
@@ -230,6 +236,9 @@ namespace SteamAudio
 
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
     public delegate float AirAbsorptionCallback(float distance, int band, IntPtr userData);
+
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate float DeviationCallback(float angle, int band, IntPtr userData);
 
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
     public delegate float DirectivityCallback(Vector3 direction, IntPtr userData);
@@ -527,6 +536,14 @@ namespace SteamAudio
     }
 
     [StructLayout(LayoutKind.Sequential)]
+    public struct DeviationModel
+    {
+        public DeviationModelType type;
+        public DeviationCallback callback;
+        public IntPtr userData;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
     public struct SimulationSettings
     {
         public SimulationFlags flags;
@@ -581,6 +598,7 @@ namespace SteamAudio
         public Bool enableValidation;
         public Bool findAlternatePaths;
         public int numTransmissionRays;
+        public IntPtr deviationModel;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -658,6 +676,48 @@ namespace SteamAudio
         public float xfactor;
         public float yfactor;
         public Matrix4x4 transform;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct EnergyFieldSettings
+    {
+        public float duration;
+        public int order;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ImpulseResponseSettings
+    {
+        public float duration;
+        public int order;
+        public int samplingRate;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ReconstructorSettings
+    {
+        public float maxDuration;
+        public int maxOrder;
+        public int samplingRate;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ReconstructorInputs
+    {
+        public IntPtr energyField;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ReconstructorSharedInputs
+    {
+        public float duration;
+        public int order;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ReconstructorOutputs
+    {
+        public IntPtr impulseResponse;
     }
 
     // FUNCTIONS
@@ -1153,6 +1213,20 @@ namespace SteamAudio
 #endif
         public static extern UIntPtr iplProbeBatchGetDataSize(IntPtr probeBatch, ref BakedDataIdentifier identifier);
 
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplProbeBatchGetEnergyField(IntPtr probeBatch, ref BakedDataIdentifier identifier, int probeIndex, IntPtr energyField);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplProbeBatchGetReverb(IntPtr probeBatch, ref BakedDataIdentifier identifier, int probeIndex, float[] reverbTimes);
+
         // Baking
 
 #if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
@@ -1310,6 +1384,250 @@ namespace SteamAudio
         [DllImport("phonon")]
 #endif
         public static extern void iplSourceGetOutputs(IntPtr source, SimulationFlags flags,  ref SimulationOutputs outputs);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern float iplDistanceAttenuationCalculate(IntPtr context, Vector3 source, Vector3 listener, ref DistanceAttenuationModel model);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplAirAbsorptionCalculate(IntPtr context, Vector3 source, Vector3 listener, ref AirAbsorptionModel mode, float[] minDistances);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern float iplDirectivityCalculate(IntPtr context, CoordinateSpace3 source, Vector3 listener, ref Directivity model);
+
+        // Energy Field API
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern Error iplEnergyFieldCreate(IntPtr context, ref EnergyFieldSettings settings, out IntPtr energyField);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern IntPtr iplEnergyFieldRetain(IntPtr energyField);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplEnergyFieldRelease(ref IntPtr energyField);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern int iplEnergyFieldGetNumChannels(IntPtr energyField);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern int iplEnergyFieldGetNumBins(IntPtr energyField);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern IntPtr iplEnergyFieldGetData(IntPtr energyField);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern IntPtr iplEnergyFieldGetChannel(IntPtr energyField, int channelIndex);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern IntPtr iplEnergyFieldGetBand(IntPtr energyField, int channelIndex, int bandIndex);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplEnergyFieldReset(IntPtr energyField);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplEnergyFieldCopy(IntPtr srcEnergyField, IntPtr dstEnergyField);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplEnergyFieldSwap(IntPtr energyFieldA, IntPtr energyFieldB);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplEnergyFieldAdd(IntPtr energyField1, IntPtr energyField2, IntPtr outEnergyField);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplEnergyFieldScale(IntPtr inEnergyField, float scalar, IntPtr outEnergyField);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplEnergyFieldScaleAccum(IntPtr inEnergyField, float scalar, IntPtr outEnergyField);
+
+        // Impulse Response API
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern Error iplImpulseResponseCreate(IntPtr context, ref ImpulseResponseSettings settings, out IntPtr impulseResponse);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern IntPtr iplImpulseResponseRetain(IntPtr impulseResponse);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplImpulseResponseRelease(ref IntPtr impulseResponse);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern int iplImpulseResponseGetNumChannels(IntPtr impulseResponse);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern int iplImpulseResponseGetNumSamples(IntPtr impulseResponse);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern IntPtr iplImpulseResponseGetData(IntPtr impulseResponse);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern IntPtr iplImpulseResponseGetChannel(IntPtr impulseResponse, int channelIndex);
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplImpulseResponseReset(IntPtr impulseResponse);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplImpulseResponseCopy(IntPtr srcImpulseReponse, IntPtr dstImpulseResponse);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplImpulseResponseSwap(IntPtr impulseResponse1, IntPtr impulseResponse2);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplImpulseResponseAdd(IntPtr inImpulseResponse1, IntPtr inImpulseResponse2, IntPtr outImpulseResponse);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplImpulseResponseScale(IntPtr inImpulseResponse, float scalar, IntPtr outImpulseResponse);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplImpulseResponseScaleAccum(IntPtr inImpulseRespnse, float scalar, IntPtr outImpulseResponse);
+
+        // Reconstructor API
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+
+#endif
+        public static extern Error iplReconstructorCreate(IntPtr context, ref ReconstructorSettings settings, out IntPtr reconstructor);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern IntPtr iplReconstructorRetain(IntPtr reconstructor);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplReconstructorRelease(ref IntPtr reconstructor);
+
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
+        [DllImport("__Internal")]
+#else
+        [DllImport("phonon")]
+#endif
+        public static extern void iplReconstructorReconstruct(IntPtr reconstructor, int numInputs, ref ReconstructorInputs inputs, ref ReconstructorSharedInputs sharedInputs, ref ReconstructorOutputs outputs);
 
         // UNITY PLUGIN
 

@@ -40,7 +40,11 @@ namespace SteamAudio
         public override void Destroy()
         {
             var index = 28;
-            mAudioSource.SetSpatializerFloat(index, -1);
+
+            if (mAudioSource != null)
+            {
+                mAudioSource.SetSpatializerFloat(index, -1);
+            }
 
             if (mSteamAudioSource)
             {
@@ -87,6 +91,7 @@ namespace SteamAudio
             mAudioSource.SetSpatializerFloat(index++, (source.directBinaural) ? 1.0f : 0.0f);
             mAudioSource.SetSpatializerFloat(index++, mHandle);
             mAudioSource.SetSpatializerFloat(index++, (source.perspectiveCorrection) ? 1.0f : 0.0f);
+            mAudioSource.SetSpatializerFloat(index++, (source.normalizePathingEQ) ? 1.0f : 0.0f);
         }
     }
 }
