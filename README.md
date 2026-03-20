@@ -42,8 +42,8 @@ Required:
 Recommended:
 - Visual Studio (2022 or 2026) or any other C# IDE (Programming)
 - Visual Studio Git or GitHub Desktop (For better Git management)
-- Blender (3D modelling)
-- Krita (2D modelling)
+- Blender (3D modeling)
+- Krita (2D art)
 
 ## Copyrights
 
