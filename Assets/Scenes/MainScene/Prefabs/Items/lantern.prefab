@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 3484522463268407178}
   m_Layer: 0
   m_Name: lantern
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -184,7 +184,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectIndex: 11
-  _animationIndexes: {fileID: 0}
 --- !u!114 &8336669414931106178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,7 +229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 0
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
+  outlineWidth: 5
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -366,8 +365,7 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 8454865540744001950}
   _rightAttach: {fileID: 53554777198459401}
-  _isGrabbed: 0
-  _floatingHint: {fileID: 0}
+  _objectIndex: 11
 --- !u!1 &3240990135687043257
 GameObject:
   m_ObjectHideFlags: 0

@@ -181,7 +181,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectIndex: 8
-  _animationIndexes: {fileID: 0}
 --- !u!114 &-3353020000556257192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,7 +274,7 @@ MonoBehaviour:
   m_StartingInteractionStrengthFilters: []
   m_AutoFindParentInteractableInHierarchy: 0
   m_ParentInteractableObject: {fileID: 0}
-  m_AttachTransform: {fileID: 5767518586607644088}
+  m_AttachTransform: {fileID: 0}
   m_SecondaryAttachTransform: {fileID: 0}
   m_UseDynamicAttach: 0
   m_MatchAttachPosition: 1
@@ -332,8 +331,7 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 5767518586607644088}
   _rightAttach: {fileID: 112484145487886815}
-  _isGrabbed: 0
-  _floatingHint: {fileID: 0}
+  _objectIndex: 8
 --- !u!1 &2001653335655689939
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,7 +357,7 @@ Transform:
   m_GameObject: {fileID: 2001653335655689939}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0574, y: 0, z: 0.0217}
+  m_LocalPosition: {x: 0.0468, y: -0.0118, z: 0.0458}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -390,7 +388,7 @@ Transform:
   m_GameObject: {fileID: 4147134906893675573}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0563, y: -0.0099, z: 0.0129}
+  m_LocalPosition: {x: -0.0444, y: -0.016, z: 0.0368}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

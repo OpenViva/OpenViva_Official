@@ -58,6 +58,7 @@ public class PlayerVR_GrabObject : XRGrabInteractable
         base.Drop();
         _isGrabbed = 0;
         _animationIndexes.PlayAnimationLeft(-1);
+        _animationIndexes.PlayAnimationRight(-1);
     }
 
     private void OnTriggerEnter(Collider collider)
