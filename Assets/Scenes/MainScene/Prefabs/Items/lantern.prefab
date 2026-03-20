@@ -12,15 +12,16 @@ GameObject:
   - component: {fileID: 5978868208611522674}
   - component: {fileID: 2702414468527111273}
   - component: {fileID: 4263494932037500146}
-  - component: {fileID: 6492833167287363429}
+  - component: {fileID: 4318863614757605173}
   - component: {fileID: 2259260177357175519}
   - component: {fileID: 3033485035025551692}
   - component: {fileID: 8336669414931106178}
+  - component: {fileID: 1841003122571541695}
   - component: {fileID: 7969031229399907460}
   - component: {fileID: 3484522463268407178}
   m_Layer: 0
   m_Name: lantern
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122,8 +123,8 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 2484360190035778968, guid: 37c8885c9234a3f46b1695ece532a692, type: 3}
---- !u!64 &6492833167287363429
-MeshCollider:
+--- !u!65 &4318863614757605173
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -137,13 +138,12 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2484360190035778968, guid: 37c8885c9234a3f46b1695ece532a692, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.09, y: 0.03, z: 0.11}
+  m_Center: {x: 7.4838735e-10, y: -7.077536e-10, z: -0.030429274}
 --- !u!54 &2259260177357175519
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -184,7 +184,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectIndex: 11
-  _animationIndexes: {fileID: 0}
 --- !u!114 &8336669414931106178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,8 +198,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isOn: 1
   _diode: {fileID: 5421578247437466812}
-  _vfx: {fileID: 0}
   _hud: {fileID: 0}
+--- !u!114 &1841003122571541695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3120964140139729626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1c2b8b554815bf499847b63c481da6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LanternVR
+  _XRIButtonDownY: {fileID: -5744627170979735842, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  _XRIButtonDownB: {fileID: -1074524636125062897, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  _controlHintsL: {fileID: 0}
+  _controlHintsR: {fileID: 0}
 --- !u!114 &7969031229399907460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,7 +229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 0
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
+  outlineWidth: 5
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -351,6 +365,7 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 8454865540744001950}
   _rightAttach: {fileID: 53554777198459401}
+  _objectIndex: 11
 --- !u!1 &3240990135687043257
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,14 +12,14 @@ GameObject:
   - component: {fileID: 6222151597471154324}
   - component: {fileID: 2447687070587583665}
   - component: {fileID: 134198570135471404}
-  - component: {fileID: 7516579278291336520}
+  - component: {fileID: 2115820270406180683}
   - component: {fileID: 1693868463845965981}
   - component: {fileID: 6482007641217066576}
   - component: {fileID: 3310814714198673513}
   - component: {fileID: 3503733885123411587}
   m_Layer: 0
   m_Name: milkCanisterHanger
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122,8 +122,8 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 7918703394238900142, guid: 50ca4aed603c7174b91504716f91a515, type: 3}
---- !u!64 &7516579278291336520
-MeshCollider:
+--- !u!65 &2115820270406180683
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -140,10 +140,9 @@ MeshCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 7918703394238900142, guid: 50ca4aed603c7174b91504716f91a515, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.18, y: 0.18, z: 0.06}
+  m_Center: {x: 0.0000076293945, y: 0.06415771, z: -0.0007690393}
 --- !u!54 &1693868463845965981
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -184,7 +183,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectIndex: 12
-  _animationIndexes: {fileID: 0}
 --- !u!114 &3310814714198673513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,7 +197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 0
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
+  outlineWidth: 5
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -335,6 +333,7 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 3117188158079793744}
   _rightAttach: {fileID: 5858598208828520580}
+  _objectIndex: 12
 --- !u!1 &5513286229281989028
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,7 +359,7 @@ Transform:
   m_GameObject: {fileID: 5513286229281989028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 0.155, z: 0.0365}
+  m_LocalPosition: {x: 0, y: 0.155, z: 0.0436}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -391,7 +390,7 @@ Transform:
   m_GameObject: {fileID: 6346979292354189616}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 0.157, z: 0.0327}
+  m_LocalPosition: {x: -0, y: 0.157, z: 0.0484}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

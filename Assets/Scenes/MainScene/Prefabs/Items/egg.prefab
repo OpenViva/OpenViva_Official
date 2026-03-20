@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9009296052668615843}
   - component: {fileID: 7300927288957584404}
   - component: {fileID: -7690766447443331439}
-  - component: {fileID: 5354506538339218089}
+  - component: {fileID: 4321583557630160285}
   - component: {fileID: 5529560124385639755}
   - component: {fileID: -5146144381422465321}
   - component: {fileID: -3353020000556257192}
@@ -120,8 +120,8 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -4591002169977161409, guid: 0f6632be61938b14cb971c7d4e73c4dd, type: 3}
---- !u!64 &5354506538339218089
-MeshCollider:
+--- !u!65 &4321583557630160285
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -138,10 +138,9 @@ MeshCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -4591002169977161409, guid: 0f6632be61938b14cb971c7d4e73c4dd, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.1, y: 0.1, z: 0.12}
+  m_Center: {x: 0, y: -0.000000009313225, z: 0.008488127}
 --- !u!54 &5529560124385639755
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -182,7 +181,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectIndex: 8
-  _animationIndexes: {fileID: 0}
 --- !u!114 &-3353020000556257192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,7 +274,7 @@ MonoBehaviour:
   m_StartingInteractionStrengthFilters: []
   m_AutoFindParentInteractableInHierarchy: 0
   m_ParentInteractableObject: {fileID: 0}
-  m_AttachTransform: {fileID: 5767518586607644088}
+  m_AttachTransform: {fileID: 0}
   m_SecondaryAttachTransform: {fileID: 0}
   m_UseDynamicAttach: 0
   m_MatchAttachPosition: 1
@@ -333,6 +331,7 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 5767518586607644088}
   _rightAttach: {fileID: 112484145487886815}
+  _objectIndex: 8
 --- !u!1 &2001653335655689939
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,7 +357,7 @@ Transform:
   m_GameObject: {fileID: 2001653335655689939}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0574, y: 0, z: 0.0217}
+  m_LocalPosition: {x: 0.0468, y: -0.0118, z: 0.0458}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -389,7 +388,7 @@ Transform:
   m_GameObject: {fileID: 4147134906893675573}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0563, y: -0.0099, z: 0.0129}
+  m_LocalPosition: {x: -0.0444, y: -0.016, z: 0.0368}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -4,18 +4,18 @@ public class AnimationHandler : MonoBehaviour
 {
     // Plays the correct hand animation based on the item being held and which hand is being used
 
-    [SerializeField] private Animator _leftWrist;
-    [SerializeField] private Animator _rightWrist;
+    [SerializeField] private Animator _leftAnimator;
+    [SerializeField] private Animator _rightAnimator;
 
     private void PlayAnimation(string clipname, string hand)
     {
         if (hand == "Left")
         {
-            _leftWrist.Play(clipname);
+            _leftAnimator.Play(clipname);
         }
         else if (hand == "Right")
         {
-            _rightWrist.Play(clipname);
+            _rightAnimator.Play(clipname);
         }
     }
 

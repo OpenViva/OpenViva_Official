@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1832808326180080856}
   serializedVersion: 2
   m_LocalRotation: {x: 0.78881836, y: -0.026278622, z: -0.61313295, w: 0.033807874}
-  m_LocalPosition: {x: -6.1, y: -0.3, z: -36.9}
+  m_LocalPosition: {x: -6.19, y: -0.01, z: -36.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56,7 +56,7 @@ Transform:
   m_GameObject: {fileID: 2636104551323025435}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7697991, y: 0.027294517, z: 0.6368484, w: 0.032992624}
-  m_LocalPosition: {x: 3.6, y: -0.33, z: -36.16}
+  m_LocalPosition: {x: 7.14, y: -1.72, z: -36.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -232,8 +232,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.5
-  m_Height: 15.630716
+  m_Radius: 5
+  m_Height: 25
   m_Direction: 1
   m_Center: {x: 0.23271781, y: -0.6678935, z: -32.512493}
 --- !u!114 &8942536386245893074
@@ -248,11 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aa53ab25af41114397a2b5c34447bd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputActionReferences:
-  - {fileID: -6978633687812840381, guid: e11ac0d8fbe15c14f99019496ae95a6c, type: 3}
-  - {fileID: 4076074286235900454, guid: e11ac0d8fbe15c14f99019496ae95a6c, type: 3}
   _objectIndex: 0
-  _animationIndexes: {fileID: 0}
 --- !u!95 &4908610853308689979
 Animator:
   serializedVersion: 7
@@ -442,3 +438,4 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 1278917027073672511}
   _rightAttach: {fileID: 3136345651905983666}
+  _objectIndex: 0

@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 8288138267956316351}
   - component: {fileID: 7299570732922640304}
   - component: {fileID: 8962938589163696235}
-  - component: {fileID: 3547470211195844700}
+  - component: {fileID: 2014106664097973412}
   - component: {fileID: 8582243809757764262}
   - component: {fileID: 5805642613667713572}
   - component: {fileID: 7136996490044637699}
@@ -178,8 +178,8 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1722340757523705069, guid: d778dba85e6a0f94f83da324c54f57ed, type: 3}
---- !u!64 &3547470211195844700
-MeshCollider:
+--- !u!65 &2014106664097973412
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -196,10 +196,9 @@ MeshCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -1722340757523705069, guid: d778dba85e6a0f94f83da324c54f57ed, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.1, y: 0.32, z: 0.06}
+  m_Center: {x: 0.000035170473, y: -0.013553246, z: 0.00108667}
 --- !u!114 &8582243809757764262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,7 +212,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectIndex: 14
-  _animationIndexes: {fileID: 0}
 --- !u!114 &5805642613667713572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,6 +362,7 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 8693928828116320248}
   _rightAttach: {fileID: 5069186169361380282}
+  _objectIndex: 14
 --- !u!1 &7534723189766554037
 GameObject:
   m_ObjectHideFlags: 0

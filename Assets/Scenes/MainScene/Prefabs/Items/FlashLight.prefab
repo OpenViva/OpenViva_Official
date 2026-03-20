@@ -24,13 +24,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 727347665531233397}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00010617076, y: -0.051113628, z: -0.99869066, w: -0.0020722297}
-  m_LocalPosition: {x: 0.0227, y: -0.0001, z: 0.0208}
+  m_LocalRotation: {x: 0.00014092214, y: 0.06799316, z: -0.9976837, w: -0.0020701522}
+  m_LocalPosition: {x: 0.022701105, y: 0.00089844485, z: 0.031002656}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5411451528717738734}
-  m_LocalEulerAnglesHint: {x: -5.86, y: 0.024, z: -180.239}
+  m_LocalEulerAnglesHint: {x: 7.797, y: -0.033, z: -180.24}
 --- !u!1 &2024397710667513697
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,13 +309,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4221821703215429139}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.000000104308114, y: 0.0000001490116, z: -0.99999887, w: -0.0015348194}
-  m_LocalPosition: {x: -0.0225, y: 0.0001, z: 0.0199}
+  m_LocalRotation: {x: 0.000101996564, y: 0.06642986, z: -0.99779, w: -0.0015322429}
+  m_LocalPosition: {x: -0.022500647, y: 0.00010060288, z: 0.029399242}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5411451528717738734}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180.176}
+  m_LocalEulerAnglesHint: {x: 7.618, y: -0.024, z: -180.178}
 --- !u!1 &5995071476856499394
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,15 +328,16 @@ GameObject:
   - component: {fileID: 5597157859876458912}
   - component: {fileID: 2635689692535914465}
   - component: {fileID: 3495297382484490258}
-  - component: {fileID: 7579784770701166886}
+  - component: {fileID: 9169228435058993333}
   - component: {fileID: 6188953550679089520}
   - component: {fileID: 5778550343069892082}
   - component: {fileID: 5471146695580664263}
   - component: {fileID: 5827263743420038292}
   - component: {fileID: 1757304696351040645}
+  - component: {fileID: 1421685174827246018}
   m_Layer: 0
   m_Name: FlashLight
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -441,8 +442,8 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6492427120234770954, guid: 47ac86b7739b0e043b270c7adec935d6, type: 3}
---- !u!64 &7579784770701166886
-MeshCollider:
+--- !u!65 &9169228435058993333
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -459,10 +460,9 @@ MeshCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -6492427120234770954, guid: 47ac86b7739b0e043b270c7adec935d6, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.08, y: 0.17, z: 0.08}
+  m_Center: {x: -0.000003813766, y: 0.009922393, z: -0.000015258789}
 --- !u!54 &6188953550679089520
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -503,7 +503,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectIndex: 7
-  _animationIndexes: {fileID: 0}
 --- !u!114 &5471146695580664263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,7 +517,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 0
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
+  outlineWidth: 5
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -654,7 +653,7 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 7590352572170525281}
   _rightAttach: {fileID: 6230434376857242355}
-  _floatingHint: {fileID: 0}
+  _objectIndex: 7
 --- !u!114 &1757304696351040645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -669,5 +668,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Flashlight
   _isOn: 0
   _diode: {fileID: 2024397710667513697}
-  _hud: {fileID: 0}
   _vfx: {fileID: 4059804172916575499}
+  _hud: {fileID: 0}
+--- !u!114 &1421685174827246018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5995071476856499394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a53946c3b85a56c438c8e8bd4f9523b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlashlightVR
+  _XRIButtonDownY: {fileID: -5744627170979735842, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  _XRIButtonDownB: {fileID: -1074524636125062897, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  _controlHintsL: {fileID: 0}
+  _controlHintsR: {fileID: 0}

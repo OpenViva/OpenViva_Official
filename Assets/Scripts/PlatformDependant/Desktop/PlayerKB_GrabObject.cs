@@ -28,7 +28,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
     private HintManager _hud;
     private bool _hintIsShowing = false;
 
-    [SerializeField] private AnimationIndexes _animationIndexes;
+    private AnimationIndexes _animationIndexes;
 
     // --- Fields ---
     private Player _player;
@@ -55,6 +55,9 @@ public class PlayerKB_GrabObject : MonoBehaviour
         _hud = hud.GetComponent<HintManager>();
 
         _outline = GetComponent<Outline>();
+
+        GameObject animationGameObject = GameObject.Find("AnimationKB");
+        _animationIndexes = animationGameObject.GetComponent<AnimationIndexes>();
 
         AssignInputs();
     }
