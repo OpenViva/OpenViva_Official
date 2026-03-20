@@ -57,7 +57,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         _outline = GetComponent<Outline>();
 
         GameObject animationGameObject = GameObject.Find("AnimationKB");
-        _animationIndexes = animationGameObject.GetComponent<AnimationIndexes>();
+        _animationIndexes = PlayerManager.Instance._animationKB.GetComponent<AnimationIndexes>();
 
         AssignInputs();
     }
@@ -177,6 +177,9 @@ public class PlayerKB_GrabObject : MonoBehaviour
         if (set == false)
         {
             _grabbableObject.transform.SetParent(null);
+
+            if (handedness == 1) { _animationIndexes.PlayAnimationLeft(-1); }
+            else { _animationIndexes.PlayAnimationRight(-1); }
         }
         else
         {

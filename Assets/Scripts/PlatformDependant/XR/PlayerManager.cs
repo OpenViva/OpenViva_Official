@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerManager : MonoBehaviour
 {
+    public static PlayerManager Instance { get; private set; }
+
     [SerializeField] private InputActionReference _changeInputType; // Keybind to change input type ([1] key)
     [SerializeField] private GameObject _playerKB; // Player GameObject for Keyboard/Mouse
     [SerializeField] private GameObject _playerVR; // Player GameObject for VR
@@ -15,6 +17,21 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject _leftHandVR; // PlayerVR's left hand
     [SerializeField] private GameObject _rightHandVR; // PlayerVR's right hand
     CropIndexes _itemIndexes; // A script to fetch item indexes
+
+    [SerializeField] public GameObject _animationKB;
+    [SerializeField] public GameObject _animationVR;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     void Start()
     {
