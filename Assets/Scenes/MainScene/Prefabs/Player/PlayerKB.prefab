@@ -1648,7 +1648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c769089e419ff1446ba92a98d1a897aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerKB_BasicActions
-  _movementSpeed: 2
+  <MovementSpeed>k__BackingField: 2
   _runMultiplier: 4
   edgeAngleTolerance: 45
   groundCheckRadius: 0.12
@@ -1658,7 +1658,7 @@ MonoBehaviour:
   edgePushForce: 1
   _mouseSensitivity: 1
   lookSmoothing: 0.05
-  _jumpHeight: 1
+  <JumpHeight>k__BackingField: 1
   _gravity: -9.81
   jumpBufferTime: 0.15
   coyoteTime: 0.1
