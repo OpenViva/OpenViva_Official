@@ -35,7 +35,7 @@ public class FlashlightVR : MonoBehaviour
 
     private void Update()
     {
-        _isGrabbed = _grabScript.GetIsGrabbed();
+        _isGrabbed = _grabScript.IsGrabbed;
 
         if (_isGrabbed != 0)
         {

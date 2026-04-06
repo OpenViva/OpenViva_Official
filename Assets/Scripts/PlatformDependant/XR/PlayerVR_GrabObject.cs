@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
@@ -8,6 +9,17 @@ public class PlayerVR_GrabObject : XRGrabInteractable
     [SerializeField] private Transform _rightAttach;
 
     private int _isGrabbed = 0;
+    public event Action<int> OnGrabbedStateChanged;
+    public int IsGrabbed
+    {
+        get => _isGrabbed;
+        set
+        {
+            if (_isGrabbed == value) return;
+            _isGrabbed = value;
+            OnGrabbedStateChanged?.Invoke(_isGrabbed);
+        }
+    }
 
     private HintManager _hintManager;
 
@@ -30,13 +42,13 @@ public class PlayerVR_GrabObject : XRGrabInteractable
         if (name.Contains("Left"))
         {
             attachTransform = _leftAttach;
-            _isGrabbed = 1;
+            IsGrabbed = 1;
             _animationIndexes.PlayAnimationLeft(_objectIndex);
         }
         else if (name.Contains("Right"))
         {
             attachTransform = _rightAttach;
-            _isGrabbed = 2;
+            IsGrabbed = 2;
             _animationIndexes.PlayAnimationRight(_objectIndex);
         }
 
@@ -55,14 +67,14 @@ public class PlayerVR_GrabObject : XRGrabInteractable
     protected override void Drop()
     {
         base.Drop();
-        _isGrabbed = 0;
+        IsGrabbed = 0;
         _animationIndexes.PlayAnimationLeft(-1);
         _animationIndexes.PlayAnimationRight(-1);
     }
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (!collider.CompareTag("Player") || _isGrabbed != 0) { return; }
+        if (!collider.CompareTag("Player") || IsGrabbed != 0) { return; }
 
         if (collider.gameObject.name.Contains("Left"))
         {
@@ -83,10 +95,5 @@ public class PlayerVR_GrabObject : XRGrabInteractable
         FloatingCanvas.Instance.WarpToOrigin();
         _hintManager.ClearHint(HintConstants.LeftGrabHintVR);
         _hintManager.ClearHint(HintConstants.RightGrabHintVR);
-    }
-
-    public int GetIsGrabbed()
-    {
-        return _isGrabbed;
     }
 }

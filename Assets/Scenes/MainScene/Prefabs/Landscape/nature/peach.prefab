@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 3514350068468768112}
   - component: {fileID: 4937672614964896459}
   - component: {fileID: -2330175895846265174}
+  - component: {fileID: 3539112942790635207}
   m_Layer: 0
   m_Name: peach
   m_TagString: Item
@@ -345,7 +346,21 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 8342276417317773532}
   _rightAttach: {fileID: 8104081238456859360}
+  isGrabbed: 0
   _objectIndex: 2
+--- !u!114 &3539112942790635207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3355987145470707866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782d286fb1970fc45ad9942807b7350a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PooledObject
+  originalPrefab: {fileID: 3355987145470707866}
 --- !u!1 &3787284984665819940
 GameObject:
   m_ObjectHideFlags: 0

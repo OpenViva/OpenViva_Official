@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 3198446669376902454}
   - component: {fileID: 8831462862877188808}
   - component: {fileID: 2646502026376989101}
+  - component: {fileID: 3699616114415604273}
   m_Layer: 0
   m_Name: soap
   m_TagString: Item
@@ -362,7 +363,21 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 578466295108710406}
   _rightAttach: {fileID: 5492895670358039427}
+  isGrabbed: 0
   _objectIndex: 18
+--- !u!114 &3699616114415604273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3717378832342788213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782d286fb1970fc45ad9942807b7350a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PooledObject
+  originalPrefab: {fileID: 3717378832342788213}
 --- !u!1 &9071251787751407420
 GameObject:
   m_ObjectHideFlags: 0

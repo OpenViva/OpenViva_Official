@@ -16,7 +16,6 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject _rightHandKB; // PlayerKB's right hand
     [SerializeField] private GameObject _leftHandVR; // PlayerVR's left hand
     [SerializeField] private GameObject _rightHandVR; // PlayerVR's right hand
-    CropIndexes _itemIndexes; // A script to fetch item indexes
 
     [SerializeField] public GameObject _animationKB;
     [SerializeField] public GameObject _animationVR;
@@ -43,8 +42,6 @@ public class PlayerManager : MonoBehaviour
         _changeInputType.action.performed += context => ChangeInputType();
         // Lock the cursor to the center of the screen
         Cursor.lockState = CursorLockMode.Locked;
-
-        _itemIndexes = new CropIndexes();
     }
 
     private void FixedUpdate()
@@ -119,7 +116,7 @@ public class PlayerManager : MonoBehaviour
         GameObject item = CheckItemInHands(_leftHandKB.transform);
         if (item != null)
         {
-            return _itemIndexes.GetItemIndex(item.name);
+            return CropIndexes.Instance.GetItemIndex(item.name);
         }
         return -1;
     }
@@ -129,7 +126,7 @@ public class PlayerManager : MonoBehaviour
         GameObject item = CheckItemInHands(_rightHandKB.transform);
         if (item != null)
         {
-            return _itemIndexes.GetItemIndex(item.name);
+            return CropIndexes.Instance.GetItemIndex(item.name);
         }
         return -1;
     }

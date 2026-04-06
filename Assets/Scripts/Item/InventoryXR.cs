@@ -6,21 +6,20 @@ public class InventoryXR : MonoBehaviour
 
     // Manages the inventory system linked to the bag.
 {
-    private PlayerKB_GrabObject _bagScript; // This script is used to check which hand the bag is grabbed in
-    private int _grabbedIn = 0; // 0 - Neither, 1 - Left, 2 - Right
-    [SerializeField] private PlayerManager _playerManager; // This script is used to check what item the player is holding
-    private int _itemInOtherHand = -1; // The index of the item in the hand that isn't holding the bag
-    private Animator _animator; // Animator used to open or close the bag
-    private bool _isOpen; // Check if the bag is open
-    [SerializeField] private List<string> _inventory = new List<string>(); // The names of every item in the bag
-    private int _numElements = 0; // The number of items in the bag
-    [SerializeField] private List<GameObject> _objects = new List<GameObject>(); // The game objects of every item in the bag
-    private CropIndexes _itemIndexes; // Script that keeps track of the index for each item
-    private int _selectedItem = 1; // The item that the player has selected to take out of the bag
-    [SerializeField] PlayerKB_BasicActions _basicActions; // Prevent the player from extending/retracting hands when the bag is open
+    private PlayerKB_GrabObject _bagScript;                                         // This script is used to check which hand the bag is grabbed in
+    private int _grabbedIn = 0;                                                     // 0 - Neither, 1 - Left, 2 - Right
+    [SerializeField] private PlayerManager _playerManager;                          // This script is used to check what item the player is holding
+    private int _itemInOtherHand = -1;                                              // The index of the item in the hand that isn't holding the bag
+    private Animator _animator;                                                     // Animator used to open or close the bag
+    private bool _isOpen;                                                           // Check if the bag is open
+    [SerializeField] private List<string> _inventory = new List<string>();          // The names of every item in the bag
+    private int _numElements = 0;                                                   // The number of items in the bag
+    [SerializeField] private List<GameObject> _objects = new List<GameObject>();    // The game objects of every item in the bag
+    private int _selectedItem = 1;                                                  // The item that the player has selected to take out of the bag
+    [SerializeField] PlayerKB_BasicActions _basicActions;                           // Prevent the player from extending/retracting hands when the bag is open
 
-    [SerializeField] private HintManager _hud; // HUD script to show hints
-    private bool _start = true; // Certain hints must only be shown once when the bag is grabbed
+    [SerializeField] private HintManager _hud;                                      // HUD script to show hints
+    private bool _start = true;                                                     // Certain hints must only be shown once when the bag is grabbed
 
     // --- Fields ---
     private Player _player;
@@ -32,8 +31,6 @@ public class InventoryXR : MonoBehaviour
         _animator = GetComponent<Animator>();
 
         _player = FindFirstObjectByType<Player>();
-
-        _itemIndexes = new CropIndexes();
 
         AssignInputs();
     }
@@ -131,7 +128,7 @@ public class InventoryXR : MonoBehaviour
         if (_isOpen && _grabbedIn == 1 && _numElements < 10)
         {
             // Get the name of the item in the other hand
-            string itemName = _itemIndexes.GetItemName(_itemInOtherHand);
+            string itemName = CropIndexes.Instance.GetItemName(_itemInOtherHand);
             if (itemName != "Error")
             {
                 // Add the item to the inventory
@@ -157,7 +154,7 @@ public class InventoryXR : MonoBehaviour
     {
         if (_isOpen && _grabbedIn == 2 && _numElements < 10)
         {
-            string itemName = _itemIndexes.GetItemName(_itemInOtherHand);
+            string itemName = CropIndexes.Instance.GetItemName(_itemInOtherHand);
             if (itemName != "Error")
             {
                 _inventory.Add(itemName);

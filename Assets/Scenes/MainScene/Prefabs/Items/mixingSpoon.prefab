@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 8582243809757764262}
   - component: {fileID: 5805642613667713572}
   - component: {fileID: 7136996490044637699}
+  - component: {fileID: 6846550492544880457}
   m_Layer: 0
   m_Name: mixingSpoon
   m_TagString: Item
@@ -362,7 +363,21 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 8693928828116320248}
   _rightAttach: {fileID: 5069186169361380282}
+  isGrabbed: 0
   _objectIndex: 14
+--- !u!114 &6846550492544880457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3332256533347672567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782d286fb1970fc45ad9942807b7350a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PooledObject
+  originalPrefab: {fileID: 3332256533347672567}
 --- !u!1 &7534723189766554037
 GameObject:
   m_ObjectHideFlags: 0

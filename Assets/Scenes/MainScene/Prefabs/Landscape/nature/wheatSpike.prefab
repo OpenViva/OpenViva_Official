@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: -3312533591206249372}
   - component: {fileID: 4353326860353666372}
   - component: {fileID: 7162248826876031551}
+  - component: {fileID: 2158038944821047147}
   m_Layer: 0
   m_Name: wheatSpike
   m_TagString: Item
@@ -345,7 +346,21 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 8854392269598439992}
   _rightAttach: {fileID: 3375356570721711090}
+  isGrabbed: 0
   _objectIndex: 6
+--- !u!114 &2158038944821047147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23298497509788178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782d286fb1970fc45ad9942807b7350a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PooledObject
+  originalPrefab: {fileID: 23298497509788178}
 --- !u!1 &2250705242457230276
 GameObject:
   m_ObjectHideFlags: 0

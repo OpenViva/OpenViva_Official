@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8385294578488010865}
   - component: {fileID: 2493562950431659687}
   - component: {fileID: 7715102348808319067}
+  - component: {fileID: 3292879011076880763}
   m_Layer: 0
   m_Name: pestle
   m_TagString: Item
@@ -331,7 +332,21 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 769926484547923182}
   _rightAttach: {fileID: 4500500453853148653}
+  isGrabbed: 0
   _objectIndex: 16
+--- !u!114 &3292879011076880763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3277983012787334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782d286fb1970fc45ad9942807b7350a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PooledObject
+  originalPrefab: {fileID: 3277983012787334}
 --- !u!1 &8363060275259887546
 GameObject:
   m_ObjectHideFlags: 0

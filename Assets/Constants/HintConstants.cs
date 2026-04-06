@@ -21,4 +21,8 @@ public class HintConstants : MonoBehaviour
     public static readonly string RightFlashlightHintVR = "Toggle Flashlight: [B]";
     public static readonly string LeftLanternHintVR = "Toggle Lantern: [Y]";
     public static readonly string RightLanternHintVR = "Toggle Lantern: [B]";
+    public static readonly string LeftOpenBagHintVR = "Open Bag: [Y]";
+    public static readonly string RightOpenBagHintVR = "Open Bag: [B]";
+    public static readonly string LeftCloseBagHintVR = "Close Bag: [Y]";
+    public static readonly string RightCloseBagHintVR = "Close Bag: [B]";
 }

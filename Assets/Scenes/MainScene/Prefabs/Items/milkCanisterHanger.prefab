@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6482007641217066576}
   - component: {fileID: 3310814714198673513}
   - component: {fileID: 3503733885123411587}
+  - component: {fileID: 653750103660161028}
   m_Layer: 0
   m_Name: milkCanisterHanger
   m_TagString: Item
@@ -333,7 +334,21 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 3117188158079793744}
   _rightAttach: {fileID: 5858598208828520580}
+  isGrabbed: 0
   _objectIndex: 12
+--- !u!114 &653750103660161028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5201993556898987226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782d286fb1970fc45ad9942807b7350a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PooledObject
+  originalPrefab: {fileID: 5201993556898987226}
 --- !u!1 &5513286229281989028
 GameObject:
   m_ObjectHideFlags: 0

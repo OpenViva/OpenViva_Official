@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 5689086620622601233}
   - component: {fileID: -2280860166535248129}
   - component: {fileID: 3839383900701676040}
+  - component: {fileID: 6459452907088125167}
   m_Layer: 0
   m_Name: cantaloupe
   m_TagString: Item
@@ -374,7 +375,21 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 2488597981380335382}
   _rightAttach: {fileID: 5806127903409284965}
+  isGrabbed: 0
   _objectIndex: 4
+--- !u!114 &6459452907088125167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4022507327587062065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782d286fb1970fc45ad9942807b7350a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PooledObject
+  originalPrefab: {fileID: 4022507327587062065}
 --- !u!1 &5003627362575896295
 GameObject:
   m_ObjectHideFlags: 0
