@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 3328921118309770834}
   - component: {fileID: 544418982582027651}
   - component: {fileID: 839054981336679966}
-  - component: {fileID: 4311029070344152061}
   m_Layer: 0
   m_Name: mixingBowl
   m_TagString: Item
@@ -332,21 +331,7 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 3446035058320649220}
   _rightAttach: {fileID: 2437843812439142581}
-  isGrabbed: 0
   _objectIndex: 13
---- !u!114 &4311029070344152061
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1381515640498995264}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 782d286fb1970fc45ad9942807b7350a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PooledObject
-  originalPrefab: {fileID: 1381515640498995264}
 --- !u!1 &1963484623418662023
 GameObject:
   m_ObjectHideFlags: 0

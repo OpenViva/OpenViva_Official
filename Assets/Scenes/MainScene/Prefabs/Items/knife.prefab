@@ -48,7 +48,6 @@ GameObject:
   - component: {fileID: 4019498087213220307}
   - component: {fileID: 3826504356094256275}
   - component: {fileID: 792421895063984374}
-  - component: {fileID: 1231948620757273140}
   m_Layer: 0
   m_Name: knife
   m_TagString: Item
@@ -363,21 +362,7 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 2558601872199964214}
   _rightAttach: {fileID: 637154553501996794}
-  isGrabbed: 0
   _objectIndex: 10
---- !u!114 &1231948620757273140
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6876940547837867965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 782d286fb1970fc45ad9942807b7350a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PooledObject
-  originalPrefab: {fileID: 6876940547837867965}
 --- !u!1 &8836274353137830343
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,7 +19,6 @@ GameObject:
   - component: {fileID: 1841003122571541695}
   - component: {fileID: 7969031229399907460}
   - component: {fileID: 3484522463268407178}
-  - component: {fileID: 5567385131192339652}
   m_Layer: 0
   m_Name: lantern
   m_TagString: Item
@@ -366,21 +365,7 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 8454865540744001950}
   _rightAttach: {fileID: 53554777198459401}
-  isGrabbed: 0
   _objectIndex: 11
---- !u!114 &5567385131192339652
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3120964140139729626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 782d286fb1970fc45ad9942807b7350a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PooledObject
-  originalPrefab: {fileID: 3120964140139729626}
 --- !u!1 &3240990135687043257
 GameObject:
   m_ObjectHideFlags: 0
