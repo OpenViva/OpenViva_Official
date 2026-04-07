@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,11 @@ public class InventoryVR : MonoBehaviour
     private Animator _animator;
     private bool _isOpen = false;
     private PlayerVR_GrabObject _bagScript;
+
+    private void Awake()
+    {
+        _bagScript = GetComponentInParent<PlayerVR_GrabObject>();
+    }
 
     private void Start()
     {
@@ -36,7 +42,17 @@ public class InventoryVR : MonoBehaviour
 
     private void ToggleBag(InputAction.CallbackContext context)
     {
-        
+        if (_isOpen)
+        {
+            _animator.Play("Close");
+            _isOpen = false;
+        }
+        else
+        {
+            _animator.Play("Open");
+            _isOpen = true;
+        }
+        ShowHints(_bagScript.IsGrabbed);
     }
 
     private void ShowHints(int handedness)
@@ -50,40 +66,42 @@ public class InventoryVR : MonoBehaviour
         {
             case 1:
                 if (!_isOpen)
-                {
-                    _controlHintsL.CreateHint(HintConstants.LeftOpenBagHintVR);
-                }
+                { _controlHintsL.CreateHint(HintConstants.LeftOpenBagHintVR); }
                 else
-                {
-                    _controlHintsL.CreateHint(HintConstants.LeftCloseBagHintVR);
-                }
+                { _controlHintsL.CreateHint(HintConstants.LeftCloseBagHintVR); }
                 break;
             case 2:
                 if (!_isOpen)
-                {
-                    _controlHintsR.CreateHint(HintConstants.RightOpenBagHintVR);
-                }
+                { _controlHintsR.CreateHint(HintConstants.RightOpenBagHintVR); }
                 else
-                {
-                    _controlHintsR.CreateHint(HintConstants.RightCloseBagHintVR);
-                }
+                { _controlHintsR.CreateHint(HintConstants.RightCloseBagHintVR); }
                 break;
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider collider)
     {
-        GameObject @object = other.gameObject;
-        if (@object.GetComponent<PlayerVR_GrabObject>().IsGrabbed == 0)
+        GameObject other = collider.gameObject;
+
+        /*
+         * 'out var script':
+         * Instantiate a new variable called 'script' of type <Component> using the found component.
+         * This variable can now be used within the code block.
+         * 'script' is null if component not found.
+         */
+        if (other.TryGetComponent<PlayerVR_GrabObject>(out var script))
         {
-            PlaceInBag(@object);
+            if (script.IsGrabbed == 0)
+            {
+                PlaceInBag(other);
+            }
         }
 
-        if (@object.name == "Controller_BaseLeft")
+        if (other.name == "Controller_BaseLeft")
         {
             PrepareToRemove(0);
         }
-        if (@object.name == "Controller_BaseRight")
+        if (other.name == "Controller_BaseRight")
         {
             PrepareToRemove(1);
         }
