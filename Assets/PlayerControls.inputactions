@@ -115,18 +115,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Toggle Bag",
+                    "name": "InteractRight",
                     "type": "Button",
-                    "id": "2af2b0a8-b7dc-4705-b7a1-803e1271e2fb",
+                    "id": "a650c215-e420-4366-aa16-723ccae693aa",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Interact",
+                    "name": "InteractLeft",
                     "type": "Button",
-                    "id": "a650c215-e420-4366-aa16-723ccae693aa",
+                    "id": "5ed36331-0ae9-4480-9e78-327b3b85af61",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -532,23 +532,23 @@
                 },
                 {
                     "name": "",
-                    "id": "e16f5030-5918-4076-9c59-9f228ee9eb89",
-                    "path": "<Keyboard>/#(Q)",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Toggle Bag",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "8c6cf395-fbfc-42b7-85ad-20b52ca2333e",
                     "path": "<Keyboard>/#(E)",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Interact",
+                    "action": "InteractRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0fe8f79b-aa80-433d-969f-3c58428caea1",
+                    "path": "<Keyboard>/#(Q)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InteractLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

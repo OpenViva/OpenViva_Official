@@ -66,7 +66,7 @@ public class PlayerManager : MonoBehaviour
 
     private void ChangeInputType()
     {
-        // ToggleLantern between Keyboard/Mouse and VR input types
+        // ToggleLanternLeft between Keyboard/Mouse and VR input types
         if (Globals.isDesktopMode)
         {
             Globals.isDesktopMode = false;

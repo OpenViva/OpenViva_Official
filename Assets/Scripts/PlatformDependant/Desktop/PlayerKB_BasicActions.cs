@@ -51,7 +51,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
 
     private void OnCrouch(InputAction.CallbackContext context)
     {
-        // ToggleLantern crouch when [C] is pressed
+        // ToggleLanternLeft crouch when [C] is pressed
         if (!_isCrouching)
         {
             _playerMovement.SetMovementSpeed(1f);
@@ -92,7 +92,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
 
     private void OnChangeMapVisibility(InputAction.CallbackContext context)
     {
-        // ToggleLantern minimap visibility when [M] is pressed
+        // ToggleLanternLeft minimap visibility when [M] is pressed
         _mapOpen = !_mapOpen;
         _map.SetActive(_mapOpen);
     }

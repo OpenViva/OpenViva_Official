@@ -201,18 +201,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Toggle Bag"",
+                    ""name"": ""InteractRight"",
                     ""type"": ""Button"",
-                    ""id"": ""2af2b0a8-b7dc-4705-b7a1-803e1271e2fb"",
+                    ""id"": ""a650c215-e420-4366-aa16-723ccae693aa"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Interact"",
+                    ""name"": ""InteractLeft"",
                     ""type"": ""Button"",
-                    ""id"": ""a650c215-e420-4366-aa16-723ccae693aa"",
+                    ""id"": ""5ed36331-0ae9-4480-9e78-327b3b85af61"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -618,23 +618,23 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""e16f5030-5918-4076-9c59-9f228ee9eb89"",
-                    ""path"": ""<Keyboard>/#(Q)"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Toggle Bag"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""8c6cf395-fbfc-42b7-85ad-20b52ca2333e"",
                     ""path"": ""<Keyboard>/#(E)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Interact"",
+                    ""action"": ""InteractRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0fe8f79b-aa80-433d-969f-3c58428caea1"",
+                    ""path"": ""<Keyboard>/#(Q)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InteractLeft"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -707,8 +707,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Viva_ScrollDown = m_Viva.FindAction("Scroll Down", throwIfNotFound: true);
         m_Viva_Run = m_Viva.FindAction("Run", throwIfNotFound: true);
         m_Viva_Pause = m_Viva.FindAction("Pause", throwIfNotFound: true);
-        m_Viva_ToggleBag = m_Viva.FindAction("Toggle Bag", throwIfNotFound: true);
-        m_Viva_Interact = m_Viva.FindAction("Interact", throwIfNotFound: true);
+        m_Viva_InteractRight = m_Viva.FindAction("InteractRight", throwIfNotFound: true);
+        m_Viva_InteractLeft = m_Viva.FindAction("InteractLeft", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -801,8 +801,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Viva_ScrollDown;
     private readonly InputAction m_Viva_Run;
     private readonly InputAction m_Viva_Pause;
-    private readonly InputAction m_Viva_ToggleBag;
-    private readonly InputAction m_Viva_Interact;
+    private readonly InputAction m_Viva_InteractRight;
+    private readonly InputAction m_Viva_InteractLeft;
     /// <summary>
     /// Provides access to input actions defined in input action map "Viva".
     /// </summary>
@@ -863,13 +863,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Pause => m_Wrapper.m_Viva_Pause;
         /// <summary>
-        /// Provides access to the underlying input action "Viva/ToggleBag".
+        /// Provides access to the underlying input action "Viva/InteractRight".
         /// </summary>
-        public InputAction @ToggleBag => m_Wrapper.m_Viva_ToggleBag;
+        public InputAction @InteractRight => m_Wrapper.m_Viva_InteractRight;
         /// <summary>
-        /// Provides access to the underlying input action "Viva/Interact".
+        /// Provides access to the underlying input action "Viva/InteractLeft".
         /// </summary>
-        public InputAction @Interact => m_Wrapper.m_Viva_Interact;
+        public InputAction @InteractLeft => m_Wrapper.m_Viva_InteractLeft;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -932,12 +932,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
-            @ToggleBag.started += instance.OnToggleBag;
-            @ToggleBag.performed += instance.OnToggleBag;
-            @ToggleBag.canceled += instance.OnToggleBag;
-            @Interact.started += instance.OnInteract;
-            @Interact.performed += instance.OnInteract;
-            @Interact.canceled += instance.OnInteract;
+            @InteractRight.started += instance.OnInteractRight;
+            @InteractRight.performed += instance.OnInteractRight;
+            @InteractRight.canceled += instance.OnInteractRight;
+            @InteractLeft.started += instance.OnInteractLeft;
+            @InteractLeft.performed += instance.OnInteractLeft;
+            @InteractLeft.canceled += instance.OnInteractLeft;
         }
 
         /// <summary>
@@ -985,12 +985,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
-            @ToggleBag.started -= instance.OnToggleBag;
-            @ToggleBag.performed -= instance.OnToggleBag;
-            @ToggleBag.canceled -= instance.OnToggleBag;
-            @Interact.started -= instance.OnInteract;
-            @Interact.performed -= instance.OnInteract;
-            @Interact.canceled -= instance.OnInteract;
+            @InteractRight.started -= instance.OnInteractRight;
+            @InteractRight.performed -= instance.OnInteractRight;
+            @InteractRight.canceled -= instance.OnInteractRight;
+            @InteractLeft.started -= instance.OnInteractLeft;
+            @InteractLeft.performed -= instance.OnInteractLeft;
+            @InteractLeft.canceled -= instance.OnInteractLeft;
         }
 
         /// <summary>
@@ -1168,18 +1168,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPause(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Toggle Bag" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "InteractRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnToggleBag(InputAction.CallbackContext context);
+        void OnInteractRight(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "InteractLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnInteract(InputAction.CallbackContext context);
+        void OnInteractLeft(InputAction.CallbackContext context);
     }
 }

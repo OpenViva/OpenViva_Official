@@ -23,34 +23,53 @@ public class FlashlightKB : MonoBehaviour
         _player = FindFirstObjectByType<Player>();
         _controls = _player.Controls;
 
-        _controls.Viva.Interact.performed += ToggleFlashlight;
+        _controls.Viva.InteractLeft.performed += ToggleFlashlightLeft;
+        _controls.Viva.InteractRight.performed += ToggleFlashlightRight;
     }
 
     private void Update()
     {
         _isGrabbed = _grabScript.GetIsGrabbed();
 
-        if (_isGrabbed != 0)
+        if (_doOnce)
         {
-            if (_doOnce)
+            if (_isGrabbed == 1 && _doOnce)
             {
-                _hud.CreateHint(HintConstants.FlashlightHint);
+                _hud.CreateHint(HintConstants.LeftFlashlightHint);
                 _doOnce = false;
             }
+            else if (_isGrabbed == 2 && _doOnce)
+            {
+                _hud.CreateHint(HintConstants.RightFlashlightHint);
+                _doOnce = false;
+            }
+            else
+            {
+                _hud.ClearHint(HintConstants.LeftFlashlightHint);
+                _hud.ClearHint(HintConstants.RightFlashlightHint);
+                _doOnce = true;
+            }
         }
-        else
+            
+    }
+
+    public void ToggleFlashlightLeft(InputAction.CallbackContext context)
+    {
+        if (_isGrabbed == 1)
         {
-            _hud.ClearHint(HintConstants.FlashlightHint);
-            _doOnce = true;
+            _diode.SetActive(!_isOn);
+            _vfx.SetActive(!_isOn);
+            _isOn = !_isOn;
         }
     }
 
-    public void ToggleFlashlight(InputAction.CallbackContext context)
+    public void ToggleFlashlightRight(InputAction.CallbackContext context)
     {
-        if (_isGrabbed == 0) return;
-
-        _diode.SetActive(!_isOn);
-        _vfx.SetActive(!_isOn);
-        _isOn = !_isOn;
+        if (_isGrabbed == 2)
+        {
+            _diode.SetActive(!_isOn);
+            _vfx.SetActive(!_isOn);
+            _isOn = !_isOn;
+        }
     }
 }

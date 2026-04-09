@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,11 +11,11 @@ public class InventoryVR : MonoBehaviour
 
     private Animator _animator;
     private bool _isOpen = false;
-    private PlayerVR_GrabObject _bagScript;
+    private PlayerVR_GrabObject _grabScript;
 
     private void Awake()
     {
-        _bagScript = GetComponentInParent<PlayerVR_GrabObject>();
+        _grabScript = GetComponentInParent<PlayerVR_GrabObject>();
     }
 
     private void Start()
@@ -30,14 +29,14 @@ public class InventoryVR : MonoBehaviour
     {
         _XRIButtonDownB.action.Enable();
         _XRIButtonDownY.action.Enable();
-        _bagScript.OnGrabbedStateChanged += ShowHints;
+        _grabScript.OnGrabbedStateChanged += ShowHints;
     }
 
     private void OnDisable()
     {
         _XRIButtonDownB.action.Disable();
         _XRIButtonDownY.action.Disable();
-        _bagScript.OnGrabbedStateChanged -= ShowHints;
+        _grabScript.OnGrabbedStateChanged -= ShowHints;
     }
 
     private void ToggleBag(InputAction.CallbackContext context)
@@ -52,7 +51,7 @@ public class InventoryVR : MonoBehaviour
             _animator.Play("Open");
             _isOpen = true;
         }
-        ShowHints(_bagScript.IsGrabbed);
+        ShowHints(_grabScript.IsGrabbed);
     }
 
     private void ShowHints(int handedness)
@@ -62,7 +61,7 @@ public class InventoryVR : MonoBehaviour
         _controlHintsL.ClearHint(HintConstants.LeftCloseBagHintVR);
         _controlHintsR.ClearHint(HintConstants.RightCloseBagHintVR);
 
-        switch(handedness)
+        switch (handedness)
         {
             case 1:
                 if (!_isOpen)
