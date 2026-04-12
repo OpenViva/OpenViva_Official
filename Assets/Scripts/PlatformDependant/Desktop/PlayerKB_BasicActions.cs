@@ -23,7 +23,6 @@ public class PlayerKB_BasicActions : MonoBehaviour
     private bool _isCrouching = false;
     private int _currentHandPos = 10;
     private bool _mapOpen = false;
-    private bool _bagOpen = false;
 
     void Start()
     {
@@ -42,11 +41,6 @@ public class PlayerKB_BasicActions : MonoBehaviour
         else Debug.LogWarning($"Player Movement of {this} cannot be found!");
 
         AssignInputEvents();
-    }
-
-    public void SetBagOpen(bool set)
-    {
-        _bagOpen = set;
     }
 
     private void OnCrouch(InputAction.CallbackContext context)
@@ -72,7 +66,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
     private void OnExtendHands(InputAction.CallbackContext context)
     {
         // Extend the hands forward when when the mouse wheel is scrolled up
-        if (_currentHandPos <= 50 && !_bagOpen)
+        if (_currentHandPos <= 50 && !InventoryKB.Instance.IsOpen)
         {
             _playerPrefab.transform.Translate(Vector3.right * 0.01f);
             _currentHandPos++;
@@ -83,7 +77,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
     private void OnRetractHands(InputAction.CallbackContext context)
     {
         // Retract the hands backward when the mouse wheel is scrolled down
-        if (_currentHandPos >= 0 && !_bagOpen)
+        if (_currentHandPos >= 0 && !InventoryKB.Instance.IsOpen)
         {
             _playerPrefab.transform.Translate(Vector3.left * 0.01f);
             _currentHandPos--;

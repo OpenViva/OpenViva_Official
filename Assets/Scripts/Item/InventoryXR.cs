@@ -10,12 +10,12 @@
 //    [SerializeField] private PlayerManager _playerManager;                          // This script is used to check what item the player is holding
 //    private int _itemInOtherHand = -1;                                              // The index of the item in the hand that isn't holding the bag
 //    private Animator _animator;                                                     // Animator used to open or close the bag
-//    private bool _isOpen;                                                           // Check if the bag is open
+//    private bool IsOpen;                                                           // Check if the bag is open
 //    [SerializeField] private List<string> _inventory = new List<string>();          // The names of every item in the bag
 //    private int _numElements = 0;                                                   // The number of items in the bag
 //    [SerializeField] private List<GameObject> _objects = new List<GameObject>();    // The game objects of every item in the bag
 //    private int _selectedItem = 1;                                                  // The item that the player has selected to take out of the bag
-//    [SerializeField] PlayerKB_BasicActions _basicActions;                           // Prevent the player from extending/retracting hands when the bag is open
+    [SerializeField] PlayerKB_BasicActions _basicActions;                           // Prevent the player from extending/retracting hands when the bag is open
 
 //    [SerializeField] private HintManager _hud;                                      // HUD script to show hints
 //    private bool _start = true;                                                     // Certain hints must only be shown once when the bag is grabbed
@@ -50,7 +50,7 @@
 //        // Check which hand the bag is grabbed in
 //        _grabbedIn = _bagScript.GetIsGrabbed();
 //        // Tell the grab object script whether the bag is open or closed
-//        _bagScript.SetIsOpen(_isOpen);
+//        _bagScript.SetIsOpen(IsOpen);
 
 //        // Get the item in the other hand
 //        if (_grabbedIn != 0)
@@ -90,7 +90,7 @@
 //    {
 //        if (_grabbedIn > 0)
 //        {
-//            if (_isOpen)
+//            if (IsOpen)
 //            {
 //                _animator.Play("Close");
 //                _hud.ClearHint(HintConstants.CloseBagHint);
@@ -126,8 +126,8 @@
 //                    _hud.CreateHint(HintConstants.RightPlaceItemHint);
 //                }
 //            }
-//            _isOpen = ! _isOpen;
-//            _basicActions.SetBagOpen(_isOpen);
+//            IsOpen = !IsOpen;
+//            _basicActions.SetBagOpen(IsOpen);
 //        }
 //    }
 
@@ -135,7 +135,7 @@
 //    private void PlaceInBagWithRightHand(InputAction.CallbackContext context)
 //    {
 //        // If the bag is open, the bag is in the left hand, and there is space in the bag
-//        if (_isOpen && _grabbedIn == 1 && _numElements < 10)
+//        if (IsOpen && _grabbedIn == 1 && _numElements < 10)
 //        {
 //            // Get the name of the item in the other hand
 //            string itemName = CropIndexes.Instance.GetItemName(_itemInOtherHand);
@@ -162,7 +162,7 @@
 //    // Ditto.
 //    private void PlaceInBagWithLeftHand(InputAction.CallbackContext context)
 //    {
-//        if (_isOpen && _grabbedIn == 2 && _numElements < 10)
+//        if (IsOpen && _grabbedIn == 2 && _numElements < 10)
 //        {
 //            string itemName = CropIndexes.Instance.GetItemName(_itemInOtherHand);
 //            if (itemName != "Error")
@@ -183,7 +183,7 @@
 //    // Select item in the bag
 //    private void ScrollUp(InputAction.CallbackContext context)
 //    {
-//        if (!_isOpen || _numElements == 0) return;
+//        if (!IsOpen || _numElements == 0) return;
 
 //        if (_selectedItem < _numElements)
 //        {
@@ -194,7 +194,7 @@
 
 //    private void ScrollDown(InputAction.CallbackContext context)
 //    {
-//        if (!(_isOpen && _numElements > 0)) return;
+//        if (!(IsOpen && _numElements > 0)) return;
 
 //        if (_selectedItem > 1)
 //        {
@@ -216,7 +216,7 @@
 
 //    private void Take(int handedness)
 //    {
-//        if (_isOpen && _numElements > 0)
+//        if (IsOpen && _numElements > 0)
 //        {
 //            GameObject item = _objects[_selectedItem - 1];
 //            _objects.Remove(item);
