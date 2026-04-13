@@ -68,4 +68,18 @@ public class LanternKB : MonoBehaviour
             _isOn = !_isOn;
         }
     }
+
+    private void OnDisable()
+    {
+        if (_isGrabbed == 1)
+        {
+            _hud.ClearHint(HintConstants.LeftLanternHint);
+            _hud.ClearHint(HintConstants.LeftReleaseHint);
+        }
+        else
+        {
+            _hud.ClearHint(HintConstants.RightLanternHint);
+            _hud.ClearHint(HintConstants.RightReleaseHint);
+        }
+    }
 }

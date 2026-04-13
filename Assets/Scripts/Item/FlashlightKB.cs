@@ -43,14 +43,16 @@ public class FlashlightKB : MonoBehaviour
                 _hud.CreateHint(HintConstants.RightFlashlightHint);
                 _doOnce = false;
             }
-            else
+        }
+        else
+        {
+            if (_isGrabbed == 0)
             {
                 _hud.ClearHint(HintConstants.LeftFlashlightHint);
                 _hud.ClearHint(HintConstants.RightFlashlightHint);
                 _doOnce = true;
             }
         }
-            
     }
 
     public void ToggleFlashlightLeft(InputAction.CallbackContext context)
@@ -70,6 +72,20 @@ public class FlashlightKB : MonoBehaviour
             _diode.SetActive(!_isOn);
             _vfx.SetActive(!_isOn);
             _isOn = !_isOn;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (_isGrabbed == 1)
+        {
+            _hud.ClearHint(HintConstants.LeftFlashlightHint);
+            _hud.ClearHint(HintConstants.LeftReleaseHint);
+        }
+        else
+        {
+            _hud.ClearHint(HintConstants.RightFlashlightHint);
+            _hud.ClearHint(HintConstants.RightReleaseHint);
         }
     }
 }

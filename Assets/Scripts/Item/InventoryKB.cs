@@ -1,5 +1,3 @@
-using NUnit.Framework;
-using Steamworks.Ugc;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,25 +5,24 @@ using UnityEngine.InputSystem;
 
 public class InventoryKB : MonoBehaviour
 {
-    public static InventoryKB Instance;
-
     private Player _player;
     [SerializeField] private HintManager _hud;
     private PlayerKB_GrabObject _grabScript;
     private Animator _animator;
+    private ItemIndexes _itemIndexes;
 
     private int _grabbedIn;
-    public bool IsOpen;
+    private bool _isOpen;
 
     private List<ItemInList> _inventory = new List<ItemInList>();
-    private int _numElements;
     [SerializeField] private int _maxInventorySize = 10;
+    private int _selectedItem = 0;
 
     [Serializable]
     private class ItemInList
     {
         private string name;
-        private GameObject prefab;
+        public GameObject prefab;
 
         public ItemInList(string name, GameObject prefab)
         {
@@ -34,24 +31,15 @@ public class InventoryKB : MonoBehaviour
         }
     }
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
-        _grabScript = GetComponent<PlayerKB_GrabObject>();
-    }
-
     private void Start()
     {
         _player = FindFirstObjectByType<Player>();
         _animator = GetComponent<Animator>();
+        _grabScript = GetComponent<PlayerKB_GrabObject>();
+        _itemIndexes = new ItemIndexes();
+
+        _player.Controls.Viva.ScrollDown.performed += ScrollDown;
+        _player.Controls.Viva.ScrollUp.performed += ScrollUp;
     }
 
     private void Update()
@@ -73,6 +61,8 @@ public class InventoryKB : MonoBehaviour
             _player.Controls.Viva.InteractLeft.performed += ToggleBag;
             _player.Controls.Viva.RightGrab.performed -= PlaceInBag;
             _player.Controls.Viva.LeftGrab.performed += PlaceInBag;
+            _player.Controls.Viva.InteractLeft.performed -= TakeFromBag;
+            _player.Controls.Viva.InteractRight.performed += TakeFromBag;
         }
 
         if (handedness == 2)
@@ -81,20 +71,26 @@ public class InventoryKB : MonoBehaviour
             _player.Controls.Viva.InteractRight.performed += ToggleBag;
             _player.Controls.Viva.LeftGrab.performed -= PlaceInBag;
             _player.Controls.Viva.RightGrab.performed += PlaceInBag;
+            _player.Controls.Viva.InteractRight.performed -= TakeFromBag;
+            _player.Controls.Viva.InteractLeft.performed += TakeFromBag;
         }
     }
 
     private void ToggleBag(InputAction.CallbackContext context)
     {
-        if (IsOpen)
+        if (_isOpen)
         {
             _animator.Play("Close");
-            IsOpen = false;
+            _isOpen = false;
+            _grabScript.SetIsOpen(false);
+            PlayerKB_BasicActions.Instance.IsBagOpen = false;
         }
         else
         {
             _animator.Play("Open");
-            IsOpen = true;
+            _isOpen = true;
+            _grabScript.SetIsOpen(true);
+            PlayerKB_BasicActions.Instance.IsBagOpen = true;
         }
         ShowHints(_grabbedIn);
     }
@@ -107,29 +103,33 @@ public class InventoryKB : MonoBehaviour
         _hud.ClearHint(HintConstants.RightCloseBagHint);
         _hud.ClearHint(HintConstants.LeftPlaceItemHint);
         _hud.ClearHint(HintConstants.RightPlaceItemHint);
+        _hud.ClearHint(HintConstants.LeftTakeItemHint);
+        _hud.ClearHint(HintConstants.RightTakeItemHint);
 
         switch (handedness)
         {
             case 1:
-                if (!IsOpen)
-                { 
-                    _hud.CreateHint(HintConstants.LeftOpenBagHint); 
-                    _hud.CreateHint(HintConstants.LeftPlaceItemHint);
+                if (!_isOpen)
+                {
+                    _hud.CreateHint(HintConstants.LeftOpenBagHint);
                 }
                 else
-                { 
-                    _hud.CreateHint(HintConstants.LeftCloseBagHint); 
+                {
+                    _hud.CreateHint(HintConstants.LeftCloseBagHint);
+                    _hud.CreateHint(HintConstants.LeftPlaceItemHint);
+                    _hud.CreateHint(HintConstants.LeftTakeItemHint);
                 }
                 break;
             case 2:
-                if (!IsOpen)
-                { 
-                    _hud.CreateHint(HintConstants.RightOpenBagHint); 
-                    _hud.CreateHint(HintConstants.RightPlaceItemHint);
+                if (!_isOpen)
+                {
+                    _hud.CreateHint(HintConstants.RightOpenBagHint);
                 }
                 else
-                { 
-                    _hud.CreateHint(HintConstants.RightCloseBagHint); 
+                {
+                    _hud.CreateHint(HintConstants.RightCloseBagHint);
+                    _hud.CreateHint(HintConstants.RightPlaceItemHint);
+                    _hud.CreateHint(HintConstants.RightTakeItemHint);
                 }
                 break;
         }
@@ -151,9 +151,47 @@ public class InventoryKB : MonoBehaviour
         }
         if (itemIndex == -1 || itemObject == null) { return; }
 
-        string itemName = CropIndexes.Instance.GetItemName(itemIndex);
+        string itemName = _itemIndexes.GetItemName(itemIndex);
         _inventory.Add(new ItemInList(itemName, itemObject));
         itemObject.GetComponent<PlayerKB_GrabObject>().SetIsActive(false, 3 - _grabbedIn);
-        _numElements++;
+    }
+
+    private void ScrollDown(InputAction.CallbackContext context)
+    {
+        if (_isOpen && _selectedItem > 0)
+        {
+            _selectedItem--;
+        }
+    }
+
+    private void ScrollUp(InputAction.CallbackContext context)
+    {
+        if (_isOpen && _selectedItem < _inventory.Count)
+        {
+            _selectedItem++;
+        }
+    }
+
+    private void TakeFromBag(InputAction.CallbackContext context)
+    {
+        if (_isOpen && _inventory.Count > 0)
+        {
+            GameObject itemObject = _inventory[_selectedItem].prefab;
+            _inventory.RemoveAt(_selectedItem);
+            itemObject.GetComponent<PlayerKB_GrabObject>().SetIsActive(true, 3 - _grabbedIn);
+            CorrectSelectedItemIndex();
+        }
+    }
+
+    private void CorrectSelectedItemIndex()
+    {
+        if (_inventory.Count == 0)
+        {
+            _selectedItem = 1;
+        }
+        else if (_selectedItem >= _inventory.Count)
+        {
+            _selectedItem = _inventory.Count - 1;
+        }
     }
 }

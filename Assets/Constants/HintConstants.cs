@@ -10,8 +10,8 @@ public class HintConstants : MonoBehaviour
     public static readonly string LeftCloseBagHint = "Close Bag: [Q]";
     public static readonly string RightCloseBagHint = "Close Bag: [E]";
     public static readonly string SelectItemsHint = "Select Items: [scrollwheel]";
-    public static readonly string LeftTakeItemHint = "Take Item: [Q]";
-    public static readonly string RightTakeItemHint = "Take Item: [E]";
+    public static readonly string LeftTakeItemHint = "Take Item: [E]";
+    public static readonly string RightTakeItemHint = "Take Item: [Q]";
     public static readonly string LeftPlaceItemHint = "Place Item: [LMB]";
     public static readonly string RightPlaceItemHint = "Place Item: [RMB]";
     public static readonly string InteractHint = "Interact: [LMB] or [RMB]";

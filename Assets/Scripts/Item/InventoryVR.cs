@@ -98,11 +98,11 @@ public class InventoryVR : MonoBehaviour
 
         if (other.name == "Controller_BaseLeft")
         {
-            // PrepareToRemove(0);
+            PrepareToRemove(0);
         }
         if (other.name == "Controller_BaseRight")
         {
-            // PrepareToRemove(1);
+            PrepareToRemove(1);
         }
     }
 

@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerKB_BasicActions : MonoBehaviour
 {
+    public static PlayerKB_BasicActions Instance;
 
     // --- References ---
     [Header("References")]
@@ -23,6 +24,19 @@ public class PlayerKB_BasicActions : MonoBehaviour
     private bool _isCrouching = false;
     private int _currentHandPos = 10;
     private bool _mapOpen = false;
+    public bool IsBagOpen = false;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -66,7 +80,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
     private void OnExtendHands(InputAction.CallbackContext context)
     {
         // Extend the hands forward when when the mouse wheel is scrolled up
-        if (_currentHandPos <= 50 && !InventoryKB.Instance.IsOpen)
+        if (_currentHandPos <= 50 && !IsBagOpen)
         {
             _playerPrefab.transform.Translate(Vector3.right * 0.01f);
             _currentHandPos++;
@@ -77,7 +91,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
     private void OnRetractHands(InputAction.CallbackContext context)
     {
         // Retract the hands backward when the mouse wheel is scrolled down
-        if (_currentHandPos >= 0 && !InventoryKB.Instance.IsOpen)
+        if (_currentHandPos >= 0 && !IsBagOpen)
         {
             _playerPrefab.transform.Translate(Vector3.left * 0.01f);
             _currentHandPos--;
