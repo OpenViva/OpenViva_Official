@@ -14,7 +14,7 @@ public class InventoryKB : MonoBehaviour
     private int _grabbedIn;
     private bool _isOpen;
 
-    private List<ItemInList> _inventory = new List<ItemInList>();
+    private List<ItemInList> _inventory = new();
     [SerializeField] private int _maxInventorySize = 10;
     private int _selectedItem = 0;
 
@@ -22,12 +22,12 @@ public class InventoryKB : MonoBehaviour
     private class ItemInList
     {
         private string name;
-        public GameObject prefab;
+        public GameObject item;
 
-        public ItemInList(string name, GameObject prefab)
+        public ItemInList(string name, GameObject item)
         {
             this.name = name;
-            this.prefab = prefab;
+            this.item = item;
         }
     }
 
@@ -166,7 +166,7 @@ public class InventoryKB : MonoBehaviour
 
     private void ScrollUp(InputAction.CallbackContext context)
     {
-        if (_isOpen && _selectedItem < _inventory.Count)
+        if (_isOpen && _selectedItem < _inventory.Count - 1)
         {
             _selectedItem++;
         }
@@ -176,18 +176,18 @@ public class InventoryKB : MonoBehaviour
     {
         if (_isOpen && _inventory.Count > 0)
         {
-            GameObject itemObject = _inventory[_selectedItem].prefab;
+            GameObject itemObject = _inventory[_selectedItem].item;
             _inventory.RemoveAt(_selectedItem);
             itemObject.GetComponent<PlayerKB_GrabObject>().SetIsActive(true, 3 - _grabbedIn);
-            CorrectSelectedItemIndex();
+            ClampSelectedIndex();
         }
     }
 
-    private void CorrectSelectedItemIndex()
+    private void ClampSelectedIndex()
     {
         if (_inventory.Count == 0)
         {
-            _selectedItem = 1;
+            _selectedItem = 0;
         }
         else if (_selectedItem >= _inventory.Count)
         {

@@ -117,7 +117,15 @@ public class PlayerManager : MonoBehaviour
     // Specifically get the index of the item held in each hand
     public int GetItemLeft()
     {
-        GameObject item = CheckItemInHands(_leftHandKB.transform);
+        GameObject item;
+        if (Globals.isDesktopMode)
+        {
+            item = CheckItemInHands(_leftHandKB.transform);
+        }
+        else
+        {
+            item = CheckItemInHands(_leftHandVR.transform);
+        }
         if (item != null)
         {
             return _itemIndexes.GetItemIndex(item.name);
@@ -127,7 +135,15 @@ public class PlayerManager : MonoBehaviour
 
     public int GetItemRight()
     {
-        GameObject item = CheckItemInHands(_rightHandKB.transform);
+        GameObject item;
+        if (Globals.isDesktopMode)
+        {
+            item = CheckItemInHands(_rightHandKB.transform);
+        }
+        else
+        {
+            item = CheckItemInHands(_rightHandVR.transform);
+        }
         if (item != null)
         {
             return _itemIndexes.GetItemIndex(item.name);
@@ -138,11 +154,25 @@ public class PlayerManager : MonoBehaviour
     // Specifically get the GameObject of the item held in each hand
     public GameObject GetObjectLeft()
     {
-        return CheckItemInHands(_leftHandKB.transform);
+        if (Globals.isDesktopMode)
+        {
+            return CheckItemInHands(_leftHandKB.transform);
+        }
+        else
+        {
+            return CheckItemInHands(_leftHandVR.transform);
+        }
     }
 
     public GameObject GetObjectRight()
     {
-        return CheckItemInHands(_rightHandKB.transform);
+        if (Globals.isDesktopMode)
+        {
+            return CheckItemInHands(_rightHandKB.transform);
+        }
+        else
+        {
+            return CheckItemInHands(_rightHandVR.transform);
+        }
     }
 }

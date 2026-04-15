@@ -23,7 +23,7 @@ public class PlayerVR_GrabObject : XRGrabInteractable
 
     private HintManager _hintManager;
 
-    [SerializeField] private int _objectIndex;
+    public int ObjectIndex;
     private AnimationIndexes _animationIndexes;
 
     private void Start()
@@ -43,15 +43,16 @@ public class PlayerVR_GrabObject : XRGrabInteractable
         {
             attachTransform = _leftAttach;
             IsGrabbed = 1;
-            _animationIndexes.PlayAnimationLeft(_objectIndex);
+            _animationIndexes.PlayAnimationLeft(ObjectIndex);
         }
         else if (name.Contains("Right"))
         {
             attachTransform = _rightAttach;
             IsGrabbed = 2;
-            _animationIndexes.PlayAnimationRight(_objectIndex);
+            _animationIndexes.PlayAnimationRight(ObjectIndex);
         }
 
+        transform.SetParent(interactor);
         FloatingCanvas.Instance.WarpToOrigin();
 
         base.OnSelectEntering(args);
@@ -70,6 +71,7 @@ public class PlayerVR_GrabObject : XRGrabInteractable
         IsGrabbed = 0;
         _animationIndexes.PlayAnimationLeft(-1);
         _animationIndexes.PlayAnimationRight(-1);
+        transform.SetParent(null);
     }
 
     private void OnTriggerEnter(Collider collider)

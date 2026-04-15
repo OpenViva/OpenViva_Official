@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,6 +7,7 @@ public class InventoryVR : MonoBehaviour
 {
     [SerializeField] private InputActionReference _XRIButtonDownY;
     [SerializeField] private InputActionReference _XRIButtonDownB;
+    [SerializeField] private InputActionReference _rightThumbstick;
 
     [SerializeField] private HintManager _controlHintsL;
     [SerializeField] private HintManager _controlHintsR;
@@ -12,7 +15,26 @@ public class InventoryVR : MonoBehaviour
     private Animator _animator;
     private bool _isOpen = false;
     private PlayerVR_GrabObject _grabScript;
+    private ItemIndexes _itemIndexes;
 
+    private List<ItemInList> _inventory = new();
+    private int _selectedItem = 0;
+    [SerializeField] private int _maxInventorySize = 10;
+
+    private bool _itemTaken;
+
+    [Serializable]
+    private class ItemInList
+    {
+        private string name;
+        public GameObject item;
+
+        public ItemInList(string name, GameObject item)
+        {
+            this.name = name;
+            this.item = item;
+        }
+    }
     private void Awake()
     {
         _grabScript = GetComponentInParent<PlayerVR_GrabObject>();
@@ -21,22 +43,40 @@ public class InventoryVR : MonoBehaviour
     private void Start()
     {
         _animator = GetComponentInParent<Animator>();
-        _XRIButtonDownY.action.performed += ToggleBag;
-        _XRIButtonDownB.action.performed += ToggleBag;
+        _itemIndexes = new ItemIndexes();
+        _rightThumbstick.action.performed += Scroll;
     }
 
     private void OnEnable()
     {
         _XRIButtonDownB.action.Enable();
         _XRIButtonDownY.action.Enable();
+        _rightThumbstick.action.Enable();
         _grabScript.OnGrabbedStateChanged += ShowHints;
+        _grabScript.OnGrabbedStateChanged += SwitchInputs;
     }
 
     private void OnDisable()
     {
         _XRIButtonDownB.action.Disable();
         _XRIButtonDownY.action.Disable();
+        _rightThumbstick.action.Disable();
         _grabScript.OnGrabbedStateChanged -= ShowHints;
+        _grabScript.OnGrabbedStateChanged -= SwitchInputs;
+    }
+
+    private void SwitchInputs(int handedness)
+    {
+        if (handedness == 1)
+        {
+            _XRIButtonDownB.action.performed -= ToggleBag;
+            _XRIButtonDownY.action.performed += ToggleBag;
+        }
+        else if (handedness == 2)
+        {
+            _XRIButtonDownY.action.performed -= ToggleBag;
+            _XRIButtonDownB.action.performed += ToggleBag;
+        }
     }
 
     private void ToggleBag(InputAction.CallbackContext context)
@@ -80,6 +120,8 @@ public class InventoryVR : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
+        if (!_isOpen) { return; }
+
         GameObject other = collider.gameObject;
 
         /*
@@ -90,30 +132,90 @@ public class InventoryVR : MonoBehaviour
          */
         if (other.TryGetComponent<PlayerVR_GrabObject>(out var script))
         {
-            if (script.IsGrabbed == 0)
+            if (script.IsGrabbed == 0 && !other.GetComponent<Rigidbody>().isKinematic)
             {
                 PlaceInBag(other);
             }
         }
 
-        if (other.name == "Controller_BaseLeft")
+        if ((other.name == "Controller_BaseLeft" || other.name == "Controller_BaseRight") 
+            && PlayerManager.Instance.GetObjectLeft() == null && PlayerManager.Instance.GetObjectRight() == null)
         {
-            PrepareToRemove(0);
-        }
-        if (other.name == "Controller_BaseRight")
-        {
-            PrepareToRemove(1);
+            PrepareToRemove();
         }
     }
 
     private void PlaceInBag(GameObject item)
     {
-
+        if (_inventory.Count >= _maxInventorySize) { return; }
+        string name = _itemIndexes.GetItemName(item.GetComponent<PlayerVR_GrabObject>().ObjectIndex);
+        _inventory.Add(new ItemInList(name, item));
+        item.GetComponent<Rigidbody>().isKinematic = true;
+        item.SetActive(false);
     }
 
-    private void PrepareToRemove(int handedness)
+    private void Scroll(InputAction.CallbackContext context)
     {
-
+        Vector2 input = context.ReadValue<Vector2>();
+        if (input.y > 0.8f && _selectedItem < _inventory.Count - 1)
+        {
+            _selectedItem++;
+        }
+        else if (input.y < -0.8f && _selectedItem > 0)
+        {
+            _selectedItem--;
+        }
     }
 
+    private void PrepareToRemove()
+    {
+        GameObject item = _inventory[_selectedItem].item;
+        item.transform.SetParent(transform);
+        item.transform.position = transform.position;
+        item.SetActive(true);
+        _itemTaken = false;
+    }
+
+    private void OnTriggerExit(Collider collider)
+    {
+        if (!_isOpen) { return; }
+
+        GameObject other = collider.gameObject;
+        if (other.CompareTag("Item") && !_itemTaken)
+        {
+            other.GetComponent<Rigidbody>().isKinematic = false;
+            other.transform.SetParent(null);
+            _itemTaken = true;
+            RemoveItem(other);
+        }
+
+        if ((other.name == "Controller_BaseLeft" || other.name == "Controller_BaseRight") && !_itemTaken)
+        {
+            CancelRemove(other);
+        }
+    }
+
+    private void RemoveItem(GameObject item)
+    {
+        for (int i = 0; i < _inventory.Count; i++)
+        {
+            if (_inventory[i].item == item)
+            {
+                _inventory.RemoveAt(i);
+                break;
+            }
+        }
+    }
+
+    private void CancelRemove(GameObject item)
+    {
+        for (int i = 0; i < _inventory.Count; i++)
+        {
+            if (_inventory[i].item == item)
+            {
+                item.SetActive(false);
+                break;
+            }
+        }
+    }
 }

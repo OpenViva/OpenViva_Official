@@ -74,12 +74,13 @@ GameObject:
   - component: {fileID: 2369841692918268006}
   - component: {fileID: 5303031242294838351}
   - component: {fileID: 5756361660847227652}
+  - component: {fileID: 5495394423795810281}
   - component: {fileID: 1286921549269554204}
   - component: {fileID: 8942536386245893074}
   - component: {fileID: 4908610853308689979}
-  - component: {fileID: 4758236876011916066}
   - component: {fileID: 5542705368823135290}
   - component: {fileID: 2048057131676361320}
+  - component: {fileID: 2412557541529759087}
   m_Layer: 0
   m_Name: bag
   m_TagString: Item
@@ -102,6 +103,7 @@ Transform:
   m_Children:
   - {fileID: 1278917027073672511}
   - {fileID: 3136345651905983666}
+  - {fileID: 6033128317843852400}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 89.916, y: 0, z: 91.493}
 --- !u!137 &2369841692918268006
@@ -213,6 +215,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.441728, y: 42.62926, z: 37.90519}
   m_Center: {x: -0.07347127, y: 0.06133401, z: 1.8502649}
+--- !u!65 &5495394423795810281
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6168932639107689632}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 16.043297, y: 34.631596, z: 3.9560533}
+  m_Center: {x: 0.85226136, y: 0.29401654, z: -6.816827}
 --- !u!136 &1286921549269554204
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -271,23 +294,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4758236876011916066
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6168932639107689632}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55bec35914633e849844346111fa4f50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerManager: {fileID: 0}
-  _inventory: []
-  _objects: []
-  _basicActions: {fileID: 0}
-  _hud: {fileID: 0}
 --- !u!114 &5542705368823135290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,4 +444,90 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 1278917027073672511}
   _rightAttach: {fileID: 3136345651905983666}
-  _objectIndex: 0
+  ObjectIndex: 0
+--- !u!114 &2412557541529759087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6168932639107689632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 374833f057f616e429a412a3e2a49195, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryKB
+  _hud: {fileID: 0}
+  _maxInventorySize: 10
+--- !u!1 &7998843605558546015
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6033128317843852400}
+  - component: {fileID: 2180758913365111564}
+  - component: {fileID: 8039074178635582353}
+  m_Layer: 0
+  m_Name: InventoryCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6033128317843852400
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7998843605558546015}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3011516079178860346}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2180758913365111564
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7998843605558546015}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 16.043297, y: 34.631596, z: 3.9560533}
+  m_Center: {x: 0.85226136, y: 0.29401654, z: -6.816827}
+--- !u!114 &8039074178635582353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7998843605558546015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5850fe45a2ff9849807abe3cbade14f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryVR
+  _XRIButtonDownY: {fileID: -5744627170979735842, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  _XRIButtonDownB: {fileID: -878015284853184980, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  _rightThumbstick: {fileID: -8666952849799569744, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  _controlHintsL: {fileID: 0}
+  _controlHintsR: {fileID: 0}
+  _maxInventorySize: 10
