@@ -52,7 +52,6 @@ public class PlayerVR_GrabObject : XRGrabInteractable
             _animationIndexes.PlayAnimationRight(ObjectIndex);
         }
 
-        transform.SetParent(interactor);
         FloatingCanvas.Instance.WarpToOrigin();
 
         base.OnSelectEntering(args);
@@ -72,6 +71,7 @@ public class PlayerVR_GrabObject : XRGrabInteractable
         _animationIndexes.PlayAnimationLeft(-1);
         _animationIndexes.PlayAnimationRight(-1);
         transform.SetParent(null);
+        GetComponent<Rigidbody>().isKinematic = false;
     }
 
     private void OnTriggerEnter(Collider collider)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -21,7 +22,8 @@ public class InventoryVR : MonoBehaviour
     private int _selectedItem = 0;
     [SerializeField] private int _maxInventorySize = 10;
 
-    private bool _itemTaken;
+    private GameObject _itemBeingRemoved;
+    private bool _canScroll;
 
     [Serializable]
     private class ItemInList
@@ -132,16 +134,17 @@ public class InventoryVR : MonoBehaviour
          */
         if (other.TryGetComponent<PlayerVR_GrabObject>(out var script))
         {
-            if (script.IsGrabbed == 0 && !other.GetComponent<Rigidbody>().isKinematic)
+            if (script.IsGrabbed == 0 && !other.GetComponent<Rigidbody>().isKinematic && other != _itemBeingRemoved)
             {
                 PlaceInBag(other);
             }
         }
 
-        if ((other.name == "Controller_BaseLeft" || other.name == "Controller_BaseRight") 
-            && PlayerManager.Instance.GetObjectLeft() == null && PlayerManager.Instance.GetObjectRight() == null)
+        if ((other.name == "Controller_BaseLeft" || other.name == "Controller_BaseRight")
+            && ((_grabScript.IsGrabbed == 1 && PlayerManager.Instance.GetObjectRight() == null)
+            || (_grabScript.IsGrabbed == 2 && PlayerManager.Instance.GetObjectLeft() == null)))
         {
-            PrepareToRemove();
+                PrepareToRemove();
         }
     }
 
@@ -156,6 +159,8 @@ public class InventoryVR : MonoBehaviour
 
     private void Scroll(InputAction.CallbackContext context)
     {
+        if (!_canScroll) { return; }
+
         Vector2 input = context.ReadValue<Vector2>();
         if (input.y > 0.8f && _selectedItem < _inventory.Count - 1)
         {
@@ -165,15 +170,17 @@ public class InventoryVR : MonoBehaviour
         {
             _selectedItem--;
         }
+
+        StartCoroutine(ScrollCooldown());
     }
 
     private void PrepareToRemove()
     {
-        GameObject item = _inventory[_selectedItem].item;
-        item.transform.SetParent(transform);
-        item.transform.position = transform.position;
-        item.SetActive(true);
-        _itemTaken = false;
+        if (_inventory.Count == 0) { return; }
+        _itemBeingRemoved = _inventory[_selectedItem].item;
+        _itemBeingRemoved.transform.SetParent(transform);
+        _itemBeingRemoved.transform.position = transform.position;
+        _itemBeingRemoved.SetActive(true);
     }
 
     private void OnTriggerExit(Collider collider)
@@ -181,17 +188,15 @@ public class InventoryVR : MonoBehaviour
         if (!_isOpen) { return; }
 
         GameObject other = collider.gameObject;
-        if (other.CompareTag("Item") && !_itemTaken)
+        if (other == _itemBeingRemoved)
         {
-            other.GetComponent<Rigidbody>().isKinematic = false;
-            other.transform.SetParent(null);
-            _itemTaken = true;
-            RemoveItem(other);
+            _itemBeingRemoved.transform.SetParent(null);
+            RemoveItem(_itemBeingRemoved);
         }
 
-        if ((other.name == "Controller_BaseLeft" || other.name == "Controller_BaseRight") && !_itemTaken)
+        if (other.name == "Controller_BaseLeft" || other.name == "Controller_BaseRight")
         {
-            CancelRemove(other);
+            CancelRemove();
         }
     }
 
@@ -202,20 +207,46 @@ public class InventoryVR : MonoBehaviour
             if (_inventory[i].item == item)
             {
                 _inventory.RemoveAt(i);
+                _itemBeingRemoved = null;
+                break;
+            }
+        }
+        ClampSelectedIndex();
+    }
+
+    private void CancelRemove()
+    {
+        if (_itemBeingRemoved == null) { return; }
+        if (_itemBeingRemoved.GetComponent<PlayerVR_GrabObject>().IsGrabbed != 0) { return; }
+
+        for (int i = 0; i < _inventory.Count; i++)
+        {
+            if (_inventory[i].item == _itemBeingRemoved)
+            {
+                _itemBeingRemoved.SetActive(false);
+                _itemBeingRemoved.transform.SetParent(null);
+                _itemBeingRemoved = null;
                 break;
             }
         }
     }
 
-    private void CancelRemove(GameObject item)
+    private void ClampSelectedIndex()
     {
-        for (int i = 0; i < _inventory.Count; i++)
+        if (_inventory.Count == 0)
         {
-            if (_inventory[i].item == item)
-            {
-                item.SetActive(false);
-                break;
-            }
+            _selectedItem = 0;
         }
+        else if (_selectedItem >= _inventory.Count)
+        {
+            _selectedItem = _inventory.Count - 1;
+        }
+    }
+
+    private IEnumerator ScrollCooldown()
+    {
+        _canScroll = false;
+        yield return new WaitForSeconds(0.25f);
+        _canScroll = true;
     }
 }
