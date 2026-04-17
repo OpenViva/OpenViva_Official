@@ -5,7 +5,7 @@ using UnityEngine.AI;
 public class NavAgentController : MonoBehaviour
 {
     [Tooltip("The distance to move in each direction")]
-    [SerializeField] private Vector3 offsetCoords; // TODO: Change this to move to mouse look position
+    public Vector3 offsetCoords; // TODO: Change this to move to mouse look position
 
     private Vector3 _startingCoords;
     private NavMeshAgent _agent;

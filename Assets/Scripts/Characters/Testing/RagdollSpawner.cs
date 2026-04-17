@@ -62,7 +62,7 @@ public class RagdollSpawner : MonoBehaviour
         {
             navAgentController = instance.AddComponent<NavAgentController>();
         }
-        navAgentController.coords = moveCoords;
+        navAgentController.offsetCoords = moveCoords;
 
         // 6. Enable and set initial state
         ragdoll.enabled = true;
