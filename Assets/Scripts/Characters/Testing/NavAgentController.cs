@@ -7,6 +7,7 @@ public class NavAgentController : MonoBehaviour
     [Header("Settings")]
     [Tooltip("The distance to move in each direction")]
     public Vector3 offsetCoords; // TODO: Change this to move to mouse look position
+    public float turnSpeed = 5;
 
     [Header("Raycast Settings")]
     public float maxRayDistance = 1000f;
@@ -45,6 +46,8 @@ public class NavAgentController : MonoBehaviour
         {
             float velocityX = _agent.velocity.magnitude > 0.1f ? 1f : 0f;
             _animator.SetFloat("VelocityX", velocityX);
+
+            FaceTarget(GetNextPathpoint());
         }
     }
 
@@ -101,6 +104,37 @@ public class NavAgentController : MonoBehaviour
         {
             Debug.Log("Raycast did not hit anything on the selected layers!");
         }
+    }
+
+    protected Vector3 GetNextPathpoint()
+    {
+        NavMeshPath path = _agent.path;
+
+        if (path.corners.Length < 2)
+        {
+            return _agent.destination;
+        }
+
+        for (int i = 0; i < path.corners.Length; i++)
+        {
+            if (Vector3.Distance(_agent.transform.position, path.corners[i]) < 1)
+            {
+                return path.corners[i + 1];
+            }
+        }
+
+        return _agent.destination;
+    }
+
+    public void FaceTarget(Vector3 target)
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(target - transform.position);
+
+        Vector3 currentEulerAngles = transform.rotation.eulerAngles;
+
+        float yRotation = Mathf.LerpAngle(currentEulerAngles.y, targetRotation.eulerAngles.y, turnSpeed * Time.deltaTime);
+
+        transform.rotation = Quaternion.Euler(currentEulerAngles.x, yRotation, currentEulerAngles.z);
     }
 
     private Camera GetActiveMainCamera()
