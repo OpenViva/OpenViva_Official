@@ -131,6 +131,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "UniversalInteract",
+                    "type": "Button",
+                    "id": "25c151ac-f890-4e6e-9ec7-f6f0ff0353fc",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -549,6 +558,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "InteractLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e7389c75-1996-44ec-85ee-e48cf61b3606",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "UniversalInteract",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
