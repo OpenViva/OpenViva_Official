@@ -16,12 +16,19 @@ public class RagdollSpawner : MonoBehaviour
     [Header("Nav Controller Settings")]
     public Vector3 moveCoords = new(0, 0, -3); // TODO: Do NOT initialize coords but get them from the spawner object (ex: mirror)
 
+    private Vector3 _startingCoords;
+
+    private void Start()
+    {
+        _startingCoords = transform.position;
+    }
+
     [Button("Spawn & Setup Ragdoll", EButtonEnableMode.Playmode)]
     public void SpawnAndSetupRagdoll()
     {
         if (characterPrefab == null) return;
 
-        GameObject instance = Instantiate(characterPrefab);
+        GameObject instance = Instantiate(characterPrefab, _startingCoords, transform.rotation.normalized);
         instance.name = "RagdollCharacter_" + Time.frameCount;
 
         // 1. Add the component
@@ -63,6 +70,7 @@ public class RagdollSpawner : MonoBehaviour
             navAgentController = instance.AddComponent<NavAgentController>();
         }
         navAgentController.offsetCoords = moveCoords;
+        navAgentController.startingCoords = _startingCoords;
 
         // 6. Enable and set initial state
         ragdoll.enabled = true;
