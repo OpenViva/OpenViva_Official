@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
+[RequireComponent(typeof(Player))]
 
 // Class that manages the player
 
@@ -19,7 +22,11 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] public GameObject _animationKB;
     [SerializeField] public GameObject _animationVR;
 
+    // Static Events
+    public static event Action OnMoveCharaToCamera;
+
     private ItemIndexes _itemIndexes;
+    private Player _player;
 
     private void Awake()
     {
@@ -46,6 +53,10 @@ public class PlayerManager : MonoBehaviour
 
         _itemIndexes = new ItemIndexes();
         _itemList = new List<PlayerVR_GrabObject>(FindObjectsByType<PlayerVR_GrabObject>(FindObjectsSortMode.None));
+
+        _player = GetComponent<Player>();
+
+        InitializeInputEvents();
     }
 
     private void FixedUpdate()
@@ -187,5 +198,15 @@ public class PlayerManager : MonoBehaviour
             }
         }
         return null;
+    }
+
+    void RaiseMoveCharaToCamera()
+    {
+        OnMoveCharaToCamera?.Invoke();
+    }
+
+    void InitializeInputEvents()
+    {
+        _player.Controls.Viva.UniversalInteract.performed += context => RaiseMoveCharaToCamera();
     }
 }
