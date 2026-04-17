@@ -6,34 +6,37 @@ public class NavAgentController : MonoBehaviour
 {
     public Vector3 coords; // TODO: Change this to move to mouse look position
 
-    private NavMeshAgent agent;
-    private Animator animator;
+    private Vector3 _startingCoords;
+    private NavMeshAgent _agent;
+    private Animator _animator;
 
     void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
+        _agent = GetComponent<NavMeshAgent>();
+        _animator = GetComponent<Animator>();
+
+        _startingCoords = transform.position;
     }
 
     void Update()
     {
         // Update the "VelocityX" animator parameter while moving
-        if (animator != null && agent != null)
+        if (_animator != null && _agent != null)
         {
-            float velocityX = agent.velocity.magnitude > 0.1f ? 1f : 0f;
-            animator.SetFloat("VelocityX", velocityX);
+            float velocityX = _agent.velocity.magnitude > 0.1f ? 1f : 0f;
+            _animator.SetFloat("VelocityX", velocityX);
         }
     }
 
-    [Button("Move Agent To Center", EButtonEnableMode.Playmode)]
-    public void MoveToCenter()
+    [Button("Move To Start Position", EButtonEnableMode.Playmode)]
+    public void MoveToStart()
     {
-        agent.SetDestination(Vector3.zero);
+        _agent.SetDestination(_startingCoords);
     }
 
-    [Button("Move Agent To Coords", EButtonEnableMode.Playmode)]
+    [Button("Move To Distance", EButtonEnableMode.Playmode)]
     public void MoveToCoords()
     {
-        agent.SetDestination(coords);
+        _agent.SetDestination(_startingCoords + coords);
     }
 }
