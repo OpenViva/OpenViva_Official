@@ -50,7 +50,7 @@ public class RagdollSpawner : MonoBehaviour
         agent.radius = agentRadius;
         agent.height = agentHeight;
         agent.baseOffset = 0f;
-        agent.angularSpeed = 360f;
+        agent.angularSpeed = 3600f;
         agent.acceleration = 8f;
         agent.stoppingDistance = 0.5f;
 
