@@ -27,15 +27,13 @@ public class FlashlightVR : MonoBehaviour
         _diode = _flashlightKB._diode;
         _vfx = _flashlightKB._vfx;
 
-        _XRIButtonDownY.action.performed += ToggleFlashlight;
-        _XRIButtonDownB.action.performed += ToggleFlashlight;
         _XRIButtonDownY.action.Enable();
         _XRIButtonDownB.action.Enable();
     }
 
     private void Update()
     {
-        _isGrabbed = _grabScript.GetIsGrabbed();
+        _isGrabbed = _grabScript.IsGrabbed;
 
         if (_isGrabbed != 0)
         {
@@ -44,10 +42,14 @@ public class FlashlightVR : MonoBehaviour
             if (_isGrabbed == 1)
             {
                 _controlHintsL.CreateHint(HintConstants.LeftFlashlightHintVR);
+                _XRIButtonDownB.action.performed -= ToggleFlashlight;
+                _XRIButtonDownY.action.performed += ToggleFlashlight;
             }
             else if (_isGrabbed == 2)
             {
                 _controlHintsR.CreateHint(HintConstants.RightFlashlightHintVR);
+                _XRIButtonDownY.action.performed -= ToggleFlashlight;
+                _XRIButtonDownB.action.performed += ToggleFlashlight;
             }
 
             _doOnce = false;
@@ -59,6 +61,8 @@ public class FlashlightVR : MonoBehaviour
             _doOnce = true;
         }
     }
+
+
 
     private void ToggleFlashlight(InputAction.CallbackContext context)
     {

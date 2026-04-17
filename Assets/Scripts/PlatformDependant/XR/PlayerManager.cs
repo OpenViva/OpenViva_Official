@@ -14,12 +14,12 @@ public class PlayerManager : MonoBehaviour
 
     [SerializeField] private GameObject _leftHandKB; // PlayerKB's left hand
     [SerializeField] private GameObject _rightHandKB; // PlayerKB's right hand
-    [SerializeField] private GameObject _leftHandVR; // PlayerVR's left hand
-    [SerializeField] private GameObject _rightHandVR; // PlayerVR's right hand
-    CropIndexes _itemIndexes; // A script to fetch item indexes
+    private List<PlayerVR_GrabObject> _itemList;
 
     [SerializeField] public GameObject _animationKB;
     [SerializeField] public GameObject _animationVR;
+
+    private ItemIndexes _itemIndexes;
 
     private void Awake()
     {
@@ -44,7 +44,8 @@ public class PlayerManager : MonoBehaviour
         // Lock the cursor to the center of the screen
         Cursor.lockState = CursorLockMode.Locked;
 
-        _itemIndexes = new CropIndexes();
+        _itemIndexes = new ItemIndexes();
+        _itemList = new List<PlayerVR_GrabObject>(FindObjectsByType<PlayerVR_GrabObject>(FindObjectsSortMode.None));
     }
 
     private void FixedUpdate()
@@ -69,7 +70,7 @@ public class PlayerManager : MonoBehaviour
 
     private void ChangeInputType()
     {
-        // ToggleLantern between Keyboard/Mouse and VR input types
+        // ToggleLanternLeft between Keyboard/Mouse and VR input types
         if (Globals.isDesktopMode)
         {
             Globals.isDesktopMode = false;
@@ -87,7 +88,7 @@ public class PlayerManager : MonoBehaviour
     }
     
     // Check which items are being held in the player's hands, if any
-    private GameObject CheckItemInHands(Transform parent)
+    private GameObject CheckItemInHandsKB(Transform parent)
     {
         List<GameObject> children = new List<GameObject>();
         int numElements = 0;
@@ -116,7 +117,16 @@ public class PlayerManager : MonoBehaviour
     // Specifically get the index of the item held in each hand
     public int GetItemLeft()
     {
-        GameObject item = CheckItemInHands(_leftHandKB.transform);
+        GameObject item;
+        if (Globals.isDesktopMode)
+        {
+            item = CheckItemInHandsKB(_leftHandKB.transform);
+        }
+        else
+        {
+            item = CheckItemInHandsVR(1);
+        }
+
         if (item != null)
         {
             return _itemIndexes.GetItemIndex(item.name);
@@ -126,7 +136,15 @@ public class PlayerManager : MonoBehaviour
 
     public int GetItemRight()
     {
-        GameObject item = CheckItemInHands(_rightHandKB.transform);
+        GameObject item;
+        if (Globals.isDesktopMode)
+        {
+            item = CheckItemInHandsKB(_rightHandKB.transform);
+        }
+        else
+        {
+            item = CheckItemInHandsVR(2);
+        }
         if (item != null)
         {
             return _itemIndexes.GetItemIndex(item.name);
@@ -137,11 +155,37 @@ public class PlayerManager : MonoBehaviour
     // Specifically get the GameObject of the item held in each hand
     public GameObject GetObjectLeft()
     {
-        return CheckItemInHands(_leftHandKB.transform);
+        if (Globals.isDesktopMode)
+        {
+            return CheckItemInHandsKB(_leftHandKB.transform);
+        }
+        else
+        {
+            return CheckItemInHandsVR(1);
+        }
     }
 
     public GameObject GetObjectRight()
     {
-        return CheckItemInHands(_rightHandKB.transform);
+        if (Globals.isDesktopMode)
+        {
+            return CheckItemInHandsKB(_rightHandKB.transform);
+        }
+        else
+        {
+            return CheckItemInHandsVR(2);
+        }
+    }
+
+    private GameObject CheckItemInHandsVR(int handedness)
+    {
+        for (int i = 0; i < _itemList.Count; i++)
+        {
+            if (_itemList[i].IsGrabbed == handedness)
+            {
+                return _itemList[i].gameObject;
+            }
+        }
+        return null;
     }
 }

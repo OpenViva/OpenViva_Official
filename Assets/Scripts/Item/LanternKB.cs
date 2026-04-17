@@ -22,33 +22,64 @@ public class LanternKB : MonoBehaviour
         _player = FindFirstObjectByType<Player>();
         _controls = _player.Controls;
 
-        _controls.Viva.Interact.performed += ToggleLantern;
+        _controls.Viva.InteractLeft.performed += ToggleLanternLeft;
+        _controls.Viva.InteractRight.performed += ToggleLanternRight;
     }
 
     private void Update()
     {
         _isGrabbed = _grabScript.GetIsGrabbed();
 
-        if (_isGrabbed != 0)
+        if (_doOnce)
         {
-            if (_doOnce)
+            if (_isGrabbed == 1)
             {
-                _hud.CreateHint(HintConstants.LanternHint);
+                _hud.CreateHint(HintConstants.LeftLanternHint);
                 _doOnce = false;
             }
-        }
-        else
-        {
-            _hud.ClearHint(HintConstants.LanternHint);
-            _doOnce = true;
+            else if (_isGrabbed == 2)
+            {
+                _hud.CreateHint(HintConstants.RightLanternHint);
+                _doOnce = false;
+            }
+            else
+            {
+                _hud.ClearHint(HintConstants.LeftLanternHint);
+                _hud.ClearHint(HintConstants.RightLanternHint);
+                _doOnce = true;
+            }
         }
     }
 
-    private void ToggleLantern(InputAction.CallbackContext context)
+    private void ToggleLanternLeft(InputAction.CallbackContext context)
     {
-        if (_isGrabbed == 0) return;
+        if (_isGrabbed == 1)
+        {
+            _diode.SetActive(!_isOn);
+            _isOn = !_isOn;
+        }
+    }
 
-        _diode.SetActive(!_isOn);
-        _isOn = !_isOn;
+    private void ToggleLanternRight(InputAction.CallbackContext context)
+    {
+        if (_isGrabbed == 2)
+        {
+            _diode.SetActive(!_isOn);
+            _isOn = !_isOn;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (_isGrabbed == 1)
+        {
+            _hud.ClearHint(HintConstants.LeftLanternHint);
+            _hud.ClearHint(HintConstants.LeftReleaseHint);
+        }
+        else
+        {
+            _hud.ClearHint(HintConstants.RightLanternHint);
+            _hud.ClearHint(HintConstants.RightReleaseHint);
+        }
     }
 }

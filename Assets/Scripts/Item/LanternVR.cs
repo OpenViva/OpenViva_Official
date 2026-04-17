@@ -16,7 +16,6 @@ public class LanternVR : MonoBehaviour
 
     private bool _isOn;
     private GameObject _diode;
-    private GameObject _vfx;
 
     private void Start()
     {
@@ -26,15 +25,13 @@ public class LanternVR : MonoBehaviour
         _isOn = _lanternKB._isOn;
         _diode = _lanternKB._diode;
 
-        _XRIButtonDownY.action.performed += ToggleFlashlight;
-        _XRIButtonDownB.action.performed += ToggleFlashlight;
         _XRIButtonDownY.action.Enable();
         _XRIButtonDownB.action.Enable();
     }
 
     private void Update()
     {
-        _isGrabbed = _grabScript.GetIsGrabbed();
+        _isGrabbed = _grabScript.IsGrabbed;
 
         if (_isGrabbed != 0)
         {
@@ -43,10 +40,14 @@ public class LanternVR : MonoBehaviour
             if (_isGrabbed == 1)
             {
                 _controlHintsL.CreateHint(HintConstants.LeftLanternHintVR);
+                _XRIButtonDownB.action.performed -= ToggleLantern;
+                _XRIButtonDownY.action.performed += ToggleLantern;
             }
             else if (_isGrabbed == 2)
             {
                 _controlHintsR.CreateHint(HintConstants.RightLanternHintVR);
+                _XRIButtonDownY.action.performed -= ToggleLantern;
+                _XRIButtonDownB.action.performed += ToggleLantern;  
             }
 
             _doOnce = false;
@@ -59,7 +60,7 @@ public class LanternVR : MonoBehaviour
         }
     }
 
-    private void ToggleFlashlight(InputAction.CallbackContext context)
+    private void ToggleLantern(InputAction.CallbackContext context)
     {
         if (_isGrabbed == 0) return;
 

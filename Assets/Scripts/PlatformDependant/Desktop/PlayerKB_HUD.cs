@@ -1,8 +1,3 @@
-#if UNITY_EDITOR || UNITY_STANDALONE_WIN
-
-using System;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 // Handles the player's HUD for KB&M
@@ -23,5 +18,3 @@ public class PlayerKB_HUD : MonoBehaviour
         gps.GetComponent<RectTransform>().localPosition = new Vector3(posX/(873.1f/102.8f) + 12.90f, posZ/(584.7f/65.2f) - 7.78f, 0); // Used maths for this. Based on map scale.
     }
 }
-
-#endif

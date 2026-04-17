@@ -79,6 +79,7 @@ public class AnimationIndexes : MonoBehaviour
             case 19:
                 _animationHandler.HoldTowel("Left");
                 break;
+
         }
     }
 

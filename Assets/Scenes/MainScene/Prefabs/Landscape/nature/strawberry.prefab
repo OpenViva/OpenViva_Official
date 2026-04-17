@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 3388583080100748145}
   - component: {fileID: -5962697945283022449}
   - component: {fileID: 4440201973053054375}
+  - component: {fileID: -9145387428929306360}
   m_Layer: 0
   m_Name: strawberry
   m_TagString: Item
@@ -376,7 +377,20 @@ MonoBehaviour:
   m_MaxAngularVelocityDelta: 20
   _leftAttach: {fileID: 4297588011051062248}
   _rightAttach: {fileID: 1901712005215768073}
-  _objectIndex: 3
+  ObjectIndex: 2
+--- !u!114 &-9145387428929306360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3558671506934368141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782d286fb1970fc45ad9942807b7350a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PooledObject
+  originalPrefab: {fileID: 3558671506934368141}
 --- !u!1 &3818863674837130647
 GameObject:
   m_ObjectHideFlags: 0

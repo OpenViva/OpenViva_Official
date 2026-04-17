@@ -23,34 +23,69 @@ public class FlashlightKB : MonoBehaviour
         _player = FindFirstObjectByType<Player>();
         _controls = _player.Controls;
 
-        _controls.Viva.Interact.performed += ToggleFlashlight;
+        _controls.Viva.InteractLeft.performed += ToggleFlashlightLeft;
+        _controls.Viva.InteractRight.performed += ToggleFlashlightRight;
     }
 
     private void Update()
     {
         _isGrabbed = _grabScript.GetIsGrabbed();
 
-        if (_isGrabbed != 0)
+        if (_doOnce)
         {
-            if (_doOnce)
+            if (_isGrabbed == 1 && _doOnce)
             {
-                _hud.CreateHint(HintConstants.FlashlightHint);
+                _hud.CreateHint(HintConstants.LeftFlashlightHint);
+                _doOnce = false;
+            }
+            else if (_isGrabbed == 2 && _doOnce)
+            {
+                _hud.CreateHint(HintConstants.RightFlashlightHint);
                 _doOnce = false;
             }
         }
         else
         {
-            _hud.ClearHint(HintConstants.FlashlightHint);
-            _doOnce = true;
+            if (_isGrabbed == 0)
+            {
+                _hud.ClearHint(HintConstants.LeftFlashlightHint);
+                _hud.ClearHint(HintConstants.RightFlashlightHint);
+                _doOnce = true;
+            }
         }
     }
 
-    public void ToggleFlashlight(InputAction.CallbackContext context)
+    public void ToggleFlashlightLeft(InputAction.CallbackContext context)
     {
-        if (_isGrabbed == 0) return;
+        if (_isGrabbed == 1)
+        {
+            _diode.SetActive(!_isOn);
+            _vfx.SetActive(!_isOn);
+            _isOn = !_isOn;
+        }
+    }
 
-        _diode.SetActive(!_isOn);
-        _vfx.SetActive(!_isOn);
-        _isOn = !_isOn;
+    public void ToggleFlashlightRight(InputAction.CallbackContext context)
+    {
+        if (_isGrabbed == 2)
+        {
+            _diode.SetActive(!_isOn);
+            _vfx.SetActive(!_isOn);
+            _isOn = !_isOn;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (_isGrabbed == 1)
+        {
+            _hud.ClearHint(HintConstants.LeftFlashlightHint);
+            _hud.ClearHint(HintConstants.LeftReleaseHint);
+        }
+        else
+        {
+            _hud.ClearHint(HintConstants.RightFlashlightHint);
+            _hud.ClearHint(HintConstants.RightReleaseHint);
+        }
     }
 }

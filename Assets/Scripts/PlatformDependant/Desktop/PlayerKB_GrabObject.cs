@@ -21,7 +21,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
     private ObjectHoldPositions _holdPositions; // Calls the script that holds the positions and rotations of all grabbable objects
     [SerializeField] private int _objectIndex; // The index of the object in the ObjectHoldPositions script
     private bool _isActive = true; // The item cannot be grabbed if this is false
-    private bool _isOpen = false; // If this object is not a bag, this variable is always true
+    private bool _isOpen = false; // If this object is not a bag, this variable is always false
 
     private Outline _outline;
 

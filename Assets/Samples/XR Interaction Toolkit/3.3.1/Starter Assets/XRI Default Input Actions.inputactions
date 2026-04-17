@@ -985,15 +985,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "ButtonDown: B",
-                    "type": "Button",
-                    "id": "4bc12509-f4e1-44a4-8974-bed8890de7f1",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1313,17 +1304,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "ButtonDown: Y",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ec536aa1-92c8-47a0-ab24-fc9812271a45",
-                    "path": "<XRController>{RightHand}/secondaryButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ButtonDown: B",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -2109,6 +2089,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "ButtonDown: B",
+                    "type": "Button",
+                    "id": "a36f63bf-bba1-4574-b0bf-4be94bc8b2f7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -2417,6 +2406,17 @@
                     "processors": "ScaleVector2(x=0),StickDeadzone",
                     "groups": "",
                     "action": "Translate Manipulation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d4235e08-0919-480d-a429-90c83a3e3e03",
+                    "path": "<XRController>{RightHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ButtonDown: B",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
