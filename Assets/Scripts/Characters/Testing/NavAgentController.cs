@@ -4,7 +4,8 @@ using UnityEngine.AI;
 
 public class NavAgentController : MonoBehaviour
 {
-    public Vector3 coords; // TODO: Change this to move to mouse look position
+    [Tooltip("The distance to move in each direction")]
+    [SerializeField] private Vector3 offsetCoords; // TODO: Change this to move to mouse look position
 
     private Vector3 _startingCoords;
     private NavMeshAgent _agent;
@@ -37,6 +38,6 @@ public class NavAgentController : MonoBehaviour
     [Button("Move To Distance", EButtonEnableMode.Playmode)]
     public void MoveToCoords()
     {
-        _agent.SetDestination(_startingCoords + coords);
+        _agent.SetDestination(_startingCoords + offsetCoords);
     }
 }
