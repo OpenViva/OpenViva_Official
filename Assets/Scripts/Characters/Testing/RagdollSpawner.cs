@@ -23,13 +23,20 @@ public class RagdollSpawner : MonoBehaviour
         _startingCoords = transform.position;
     }
 
+    GameObject SpawnCharacter()
+    {
+        GameObject instance = Instantiate(characterPrefab, _startingCoords, transform.rotation.normalized);
+        instance.name = "RagdollCharacter_" + Time.frameCount;
+
+        return instance;
+    }
+
     [Button("Spawn & Setup Ragdoll", EButtonEnableMode.Playmode)]
     public void SpawnAndSetupRagdoll()
     {
         if (characterPrefab == null) return;
 
-        GameObject instance = Instantiate(characterPrefab, _startingCoords, transform.rotation.normalized);
-        instance.name = "RagdollCharacter_" + Time.frameCount;
+        GameObject instance = SpawnCharacter();
 
         // 1. Add the component
         RagdollAnimator2 ragdoll = instance.AddComponent<RagdollAnimator2>();
