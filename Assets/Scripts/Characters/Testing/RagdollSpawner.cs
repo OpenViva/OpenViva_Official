@@ -10,7 +10,7 @@ public class RagdollSpawner : MonoBehaviour
     public GameObject characterPrefab;
 
     [Header("Cloth Settings")]
-    public List<GameObject> rootBoneObjects;
+    public List<GameObject> rootBoneObjects; // Unused for now
 
     [Header("NavMeshAgent Settings")]
     public float agentSpeed = 1.5f;
@@ -94,7 +94,7 @@ public class RagdollSpawner : MonoBehaviour
         ragdoll.User_SwitchFallState(RagdollHandler.EAnimatingMode.Standing);
 
         // 7. Set up cloth physics
-        _physicsAttacher.CreateBoneCloths(instance, rootBoneObjects, "Hair_BoneCloth");
+        _physicsAttacher.CreateBoneCloths(instance, "Hair_BoneCloth");
 
         Debug.Log($"Ragdoll fully auto-setup on {instance.name}");
     }
