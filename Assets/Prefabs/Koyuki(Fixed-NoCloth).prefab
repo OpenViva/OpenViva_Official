@@ -3644,6 +3644,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1819765974993944406}
   - component: {fileID: 5491419363473573604}
+  - component: {fileID: 590524312304238243}
   m_Layer: 0
   m_Name: Koyuki(Fixed-NoCloth)
   m_TagString: Untagged
@@ -3698,6 +3699,33 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &590524312304238243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3605110169217932567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb49e48ff9507134983fdf38a9c5f032, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RootBonesHolder
+  rootBoneObjects:
+  - {fileID: 1359478411035200673}
+  - {fileID: 2025546992115401952}
+  - {fileID: 7633679481455054964}
+  - {fileID: 1648196951179823224}
+  - {fileID: 7344459186841135949}
+  - {fileID: 9135101867844175050}
+  - {fileID: 3287852593115752951}
+  - {fileID: 1619034622533863061}
+  - {fileID: 376790069484280805}
+  - {fileID: 2905704013106503454}
+  - {fileID: 3167743883330444060}
+  - {fileID: 2855781177452955235}
+  - {fileID: 7230787508044799102}
+  - {fileID: 3595344781305818060}
 --- !u!1 &3610215608667497433
 GameObject:
   m_ObjectHideFlags: 0
