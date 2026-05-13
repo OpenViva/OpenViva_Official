@@ -4,21 +4,13 @@ using UnityEngine;
 
 public class PhysicsAttacher : MonoBehaviour
 {
-    [SerializeField]
-    List<GameObject> rootBoneObjects;
-
-    void Start()
-    {
-
-    }
-
     /// <summary>
     /// Creates a BoneCloth at runtime from a list of root bone objects and sets default parameters.
     /// </summary>
     /// <param name="character">Character that the GameObject will be parented to</param>
     /// <param name="rootBoneObjects">List of GameObjects that will act as root bones for this BoneCloth</param>
     /// <param name="clothName">Name for the created MagicaCloth GameObject</param>
-    public void CreateBoneCloths(GameObject character, string clothName = "New_BoneCloth")
+    public void CreateBoneCloths(GameObject character, List<GameObject> rootBoneObjects, string clothName = "New_BoneCloth")
     {
         if (character == null || rootBoneObjects == null || rootBoneObjects.Count == 0)
         {
