@@ -1,5 +1,6 @@
 using FIMSpace.FProceduralAnimation;
 using NaughtyAttributes;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,6 +8,9 @@ public class RagdollSpawner : MonoBehaviour
 {
     [Header("Prefab to Spawn")]
     public GameObject characterPrefab;
+
+    [Header("Cloth Settings")]
+    public List<GameObject> rootBoneObjects;
 
     [Header("NavMeshAgent Settings")]
     public float agentSpeed = 1.5f;
@@ -16,11 +20,16 @@ public class RagdollSpawner : MonoBehaviour
     [Header("Nav Controller Settings")]
     public Vector3 moveCoords = new(0, 0, -3); // TODO: Do NOT initialize coords but get them from the spawner object (ex: mirror)
 
+    [Header("Debug")]
+    [SerializeField] private PhysicsAttacher _physicsAttacher;
+
     private Vector3 _startingCoords;
 
     private void Start()
     {
         _startingCoords = transform.position;
+
+        _physicsAttacher = GetComponent<PhysicsAttacher>();
     }
 
     GameObject SpawnCharacter()
@@ -83,6 +92,9 @@ public class RagdollSpawner : MonoBehaviour
         ragdoll.enabled = true;
         ragdoll.Settings.Initialize(ragdoll, instance); // Prevents some runtime exceptions
         ragdoll.User_SwitchFallState(RagdollHandler.EAnimatingMode.Standing);
+
+        // 7. Set up cloth physics
+        _physicsAttacher.CreateBoneCloths(instance, rootBoneObjects, "Hair_BoneCloth");
 
         Debug.Log($"Ragdoll fully auto-setup on {instance.name}");
     }
