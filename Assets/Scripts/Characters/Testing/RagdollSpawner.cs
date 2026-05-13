@@ -9,9 +9,6 @@ public class RagdollSpawner : MonoBehaviour
     [Header("Prefab to Spawn")]
     public GameObject characterPrefab;
 
-    [Header("Cloth Settings")]
-    public List<GameObject> rootBoneObjects; // Unused for now
-
     [Header("NavMeshAgent Settings")]
     public float agentSpeed = 1.5f;
     public float agentRadius = 0.3f;
@@ -24,6 +21,7 @@ public class RagdollSpawner : MonoBehaviour
     [SerializeField] private PhysicsAttacher _physicsAttacher;
 
     private Vector3 _startingCoords;
+    List<GameObject> rootBoneObjects;
 
     private void Start()
     {
@@ -46,6 +44,9 @@ public class RagdollSpawner : MonoBehaviour
         if (characterPrefab == null) return;
 
         GameObject instance = SpawnCharacter();
+
+        // Find root bones for cloth physics if script is present
+        rootBoneObjects = instance.GetComponent<RootBonesHolder>().rootBoneObjects;
 
         // 1. Add the component
         RagdollAnimator2 ragdoll = instance.AddComponent<RagdollAnimator2>();
@@ -94,7 +95,14 @@ public class RagdollSpawner : MonoBehaviour
         ragdoll.User_SwitchFallState(RagdollHandler.EAnimatingMode.Standing);
 
         // 7. Set up cloth physics
-        _physicsAttacher.CreateBoneCloths(instance, "Hair_BoneCloth");
+        if (rootBoneObjects.Count != 0)
+        {
+            _physicsAttacher.CreateBoneCloths(instance, rootBoneObjects, "Hair_BoneCloth");
+        }
+        else
+        {
+            Debug.LogError("Root bones List for cloth physics is empty or missing on character!");
+        }
 
         Debug.Log($"Ragdoll fully auto-setup on {instance.name}");
     }
