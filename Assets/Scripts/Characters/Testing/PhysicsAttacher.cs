@@ -26,7 +26,7 @@ public class PhysicsAttacher : MonoBehaviour
     /// <param name="character">Character that the GameObject will be parented to</param>
     /// <param name="rootBoneObjects">List of GameObjects that will act as root bones for this BoneCloth</param>
     /// <param name="clothName">Name for the created MagicaCloth GameObject</param>
-    public void CreateBoneCloths(GameObject character, List<GameObject> rootBoneObjects, string clothName = "New_BoneCloth")
+    public void CreateBoneCloth(GameObject character, List<GameObject> rootBoneObjects, string clothName = "New_BoneCloth")
     {
         if (character == null || rootBoneObjects == null || rootBoneObjects.Count == 0)
         {

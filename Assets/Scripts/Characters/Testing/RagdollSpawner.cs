@@ -97,7 +97,7 @@ public class RagdollSpawner : MonoBehaviour
         // 7. Set up cloth physics
         if (rootBoneObjects.Count != 0)
         {
-            _physicsAttacher.CreateBoneCloths(instance, rootBoneObjects, "Hair_BoneCloth");
+            _physicsAttacher.CreateBoneCloth(instance, rootBoneObjects, "Hair_BoneCloth");
         }
         else
         {
