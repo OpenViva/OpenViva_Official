@@ -72,4 +72,27 @@ public class PhysicsAttacher : MonoBehaviour
         // Build and start simulation
         cloth.BuildAndRun();
     }
+
+    public void ChangeDefaultBoneData(float gravity = 3, 
+        float damping = 0.05f, 
+        float distanceCompression = 0.5f, 
+        float stiffnessValue = 0.15f, 
+        bool useStiffnessCurve = true, 
+        float stiffnessCurveStart = 1, 
+        float stiffnessCurveEnd = 0.15f, 
+        float velocityAttenuation = 0.6f, 
+        bool useLimit = true, 
+        float speedLimit = 3)
+    {
+        this.gravity = gravity;
+        this.damping = damping;
+        this.distanceCompression = distanceCompression;
+        this.stiffnessValue = stiffnessValue;
+        this.useStiffnessCurve = useStiffnessCurve;
+        this.stiffnessCurveStart = stiffnessCurveStart;
+        this.stiffnessCurveEnd = stiffnessCurveEnd;
+        this.velocityAttenuation = velocityAttenuation;
+        this.useLimit = useLimit;
+        this.speedLimit = speedLimit;
+    }
 }
