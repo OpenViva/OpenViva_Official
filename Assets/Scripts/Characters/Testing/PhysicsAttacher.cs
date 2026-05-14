@@ -4,6 +4,22 @@ using UnityEngine;
 
 public class PhysicsAttacher : MonoBehaviour
 {
+    [Header("Default Bone Data")]
+    [SerializeField] private float gravity = 3;
+    [SerializeField] private float damping = 0.05f;
+    [SerializeField] private float distanceCompression = 0.5f;
+
+    [Header("Angle Restoration Constraint Data")]
+    [SerializeField] private float stiffnessValue = 0.15f;
+    [SerializeField] private bool useStiffnessCurve = true;
+    [SerializeField] private float stiffnessCurveStart = 1;
+    [SerializeField] private float stiffnessCurveEnd = 0.15f;
+    [SerializeField] private float velocityAttenuation = 0.6f;
+
+    [Header("Inertia Constraint Particle SpeedLimit")]
+    [SerializeField] private bool useLimit = true;
+    [SerializeField] private float speedLimit = 3;
+
     /// <summary>
     /// Creates a BoneCloth at runtime from a list of root bone objects and sets default parameters.
     /// </summary>
@@ -43,12 +59,12 @@ public class PhysicsAttacher : MonoBehaviour
         }
 
         // Setup parameters
-        sdata.gravity = 3.0f;
-        sdata.damping.SetValue(0.05f);
-        sdata.angleRestorationConstraint.stiffness.SetValue(0.15f, 1.0f, 0.15f, true);
-        sdata.angleRestorationConstraint.velocityAttenuation = 0.6f;
-        sdata.tetherConstraint.distanceCompression = 0.5f;
-        sdata.inertiaConstraint.particleSpeedLimit.SetValue(true, 3.0f);
+        sdata.gravity = gravity;
+        sdata.damping.SetValue(damping);
+        sdata.angleRestorationConstraint.stiffness.SetValue(stiffnessValue, stiffnessCurveStart, stiffnessCurveEnd, useStiffnessCurve);
+        sdata.angleRestorationConstraint.velocityAttenuation = velocityAttenuation;
+        sdata.tetherConstraint.distanceCompression = distanceCompression;
+        sdata.inertiaConstraint.particleSpeedLimit.SetValue(useLimit, speedLimit);
         sdata.colliderCollisionConstraint.mode = ColliderCollisionConstraint.Mode.None;
 
         cloth.name = clothName;
