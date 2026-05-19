@@ -34,7 +34,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
     // --- Fields ---
     private Player _player;
 
-    private void Start()
+    protected virtual void Start()
     {
         _player = FindFirstObjectByType<Player>();
 
@@ -45,7 +45,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         _playerRightHand = GameObject.Find("hand_r");
 
         // Set the grabbable object and its Rigidbody
-        _grabbableObject = this.gameObject;
+        _grabbableObject = gameObject;
         _grabbableObjectRB = _grabbableObject.GetComponent<Rigidbody>();
 
         // Set the colliders of the player's hands
@@ -63,7 +63,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         AssignInputs();
     }
 
-    private void GrabLeft()
+    protected virtual void GrabLeft()
     {
         // If the player is in range and the object is not already grabbed, grab it with the left hand
         if (_isActive && !_isOpen)
@@ -98,7 +98,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         }
     }
 
-    private void GrabRight()
+    protected virtual void GrabRight()
     {
         // If the player is in range and the object is not already grabbed, grab it with the right hand
         if (_isActive && !_isOpen)
@@ -133,7 +133,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider collider)
+    protected virtual void OnTriggerEnter(Collider collider)
     {
         // Check if the player is in range to grab the bag
         if (collider == _playerLeftCollider || collider == _playerRightCollider)
@@ -148,7 +148,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider collider)
+    protected virtual void OnTriggerExit(Collider collider)
     {
         // Check if the player is out of range to grab the bag
         if (collider == _playerLeftCollider || collider == _playerRightCollider)

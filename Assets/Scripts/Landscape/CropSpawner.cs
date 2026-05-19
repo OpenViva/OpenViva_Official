@@ -1,14 +1,10 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class CropSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject _cropToSpawn;
     private GameObject _currentCrop;
-
-    private float _timer = 0f;
-    public float GrowTimer = 480f; // Should this depend on Day/Night cycle speed?
 
     private void Awake()
     {
@@ -28,18 +24,6 @@ public class CropSpawner : MonoBehaviour
         AssignMethod(true);
     }
 
-    private void CropPicked()
-    {
-        StartCoroutine(StartTimer());
-    }
-
-    private IEnumerator StartTimer()
-    {
-        AssignMethod(false);
-        yield return new WaitForSeconds(GrowTimer);
-        SpawnCrop();
-    }
-
     private void SpawnCrop()
     {
         _currentCrop = ObjectPool.instance.GetObject(_cropToSpawn);
@@ -49,6 +33,7 @@ public class CropSpawner : MonoBehaviour
             rb.isKinematic = true;
         }
         _currentCrop.transform.position = transform.position;
+        _currentCrop.transform.localScale = Vector3.zero;
         _currentCrop.transform.SetParent(transform);
     }
 
@@ -63,11 +48,11 @@ public class CropSpawner : MonoBehaviour
         {
             if (value)
             {
-                crop.OnIsGrabbed += CropPicked;
+                crop.OnIsGrabbed += SpawnCrop;
             }
             else
             {
-                crop.OnIsGrabbed -= CropPicked;
+                crop.OnIsGrabbed -= SpawnCrop;
             }
         }
         else
