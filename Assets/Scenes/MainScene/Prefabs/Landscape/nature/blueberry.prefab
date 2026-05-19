@@ -11,14 +11,13 @@ GameObject:
   - component: {fileID: 6240405472050715275}
   - component: {fileID: 3394218119545989650}
   - component: {fileID: 9068047861092173966}
-  - component: {fileID: 6104677368217464839}
   - component: {fileID: -3298362984368369457}
   - component: {fileID: 8046591937693198267}
   - component: {fileID: 1287730766586271433}
-  - component: {fileID: 2928847061854598626}
   - component: {fileID: 5549419742236526852}
   - component: {fileID: -1223362910855437472}
   - component: {fileID: -648793888789382540}
+  - component: {fileID: 2678885091955137080}
   m_Layer: 0
   m_Name: blueberry
   m_TagString: Item
@@ -100,18 +99,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6104677368217464839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2094382513039933427}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b415372d68105df43b570bb905313238, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &-3298362984368369457
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -183,19 +170,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 7261950012332209861, guid: 0227c7b0c55f5c6458acb6c4d8639cd9, type: 3}
---- !u!114 &2928847061854598626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2094382513039933427}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7aa53ab25af41114397a2b5c34447bd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _objectIndex: 5
 --- !u!114 &5549419742236526852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,6 +334,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PooledObject
   originalPrefab: {fileID: 2094382513039933427}
+--- !u!114 &2678885091955137080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094382513039933427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dfaa679335bbf243af1fac8dd78757a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Crop
+  _objectIndex: 5
 --- !u!1 &5173966645491743785
 GameObject:
   m_ObjectHideFlags: 0

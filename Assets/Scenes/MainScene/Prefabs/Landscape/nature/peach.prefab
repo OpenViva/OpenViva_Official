@@ -11,14 +11,13 @@ GameObject:
   - component: {fileID: 4321506911027111698}
   - component: {fileID: 2225941174055285034}
   - component: {fileID: 4173807493887911381}
-  - component: {fileID: 8492386615744436561}
   - component: {fileID: 4732607076504324957}
   - component: {fileID: 6388969734463395699}
   - component: {fileID: -5792329518104675411}
-  - component: {fileID: 3514350068468768112}
   - component: {fileID: 4937672614964896459}
   - component: {fileID: -2330175895846265174}
   - component: {fileID: 3539112942790635207}
+  - component: {fileID: 2820608271376585808}
   m_Layer: 0
   m_Name: peach
   m_TagString: Item
@@ -100,18 +99,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8492386615744436561
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3355987145470707866}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b415372d68105df43b570bb905313238, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &4732607076504324957
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -183,19 +170,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6395305964202870827, guid: 0f68d7b51eb883c47835f2f115608ee8, type: 3}
---- !u!114 &3514350068468768112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3355987145470707866}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7aa53ab25af41114397a2b5c34447bd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _objectIndex: 2
 --- !u!114 &4937672614964896459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,6 +334,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PooledObject
   originalPrefab: {fileID: 3355987145470707866}
+--- !u!114 &2820608271376585808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3355987145470707866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dfaa679335bbf243af1fac8dd78757a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Crop
+  _objectIndex: 2
 --- !u!1 &3787284984665819940
 GameObject:
   m_ObjectHideFlags: 0

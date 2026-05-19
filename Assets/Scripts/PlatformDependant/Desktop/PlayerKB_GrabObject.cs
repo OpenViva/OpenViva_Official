@@ -15,8 +15,9 @@ public class PlayerKB_GrabObject : MonoBehaviour
     private Rigidbody _grabbableObjectRB; // The Rigidbody of the object to be grabbed
 
     private bool _playerInRange = false; // Check whether the player is in range to grab the object
-    private bool _isGrabbedInLeft = false; // Check whether the object is grabbed in the left hand
-    private bool _isGrabbedInRight = false; // Check whether the object is grabbed in the right hand
+    protected bool _isGrabbedInLeft = false; // Check whether the object is grabbed in the left hand
+    protected bool _isGrabbedInRight = false; // Check whether the object is grabbed in the right hand
+    private bool _didOnce = false; // For crop subclass only
 
     private ObjectHoldPositions _holdPositions; // Calls the script that holds the positions and rotations of all grabbable objects
     [SerializeField] private int _objectIndex; // The index of the object in the ObjectHoldPositions script
@@ -75,6 +76,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObject.transform.localPosition = _holdPositions.GetObjectPositionLeft(_objectIndex);
                 _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
                 _isGrabbedInLeft = true;
+                if (!_didOnce) { _didOnce = true; OnGrabbed(); }
 
                 _hud.ClearHint(HintConstants.GrabHint);
                 _hud.CreateHint(HintConstants.LeftReleaseHint);
@@ -109,6 +111,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObject.transform.localPosition = _holdPositions.GetObjectPositionRight(_objectIndex);
                 _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
                 _isGrabbedInRight = true;
+                if (!_didOnce) { _didOnce = true; OnGrabbed(); }
 
                 _hud.ClearHint(HintConstants.GrabHint);
                 _hud.CreateHint(HintConstants.RightReleaseHint);
@@ -212,6 +215,9 @@ public class PlayerKB_GrabObject : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
+
+    // Crop subclass only
+    protected virtual void OnGrabbed() { }
 
     // If this object is a bag, set whether it is open or closed to enable/disable grabbing
     public void SetIsOpen(bool isOpen)

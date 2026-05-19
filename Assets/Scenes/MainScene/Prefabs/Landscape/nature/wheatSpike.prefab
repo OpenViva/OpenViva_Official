@@ -11,14 +11,13 @@ GameObject:
   - component: {fileID: 3532544776580445599}
   - component: {fileID: 565041505128639283}
   - component: {fileID: 6195439532961421699}
-  - component: {fileID: 1227828028279045367}
   - component: {fileID: -970189034799160831}
   - component: {fileID: -4738954648331043883}
   - component: {fileID: 8328323394810669987}
-  - component: {fileID: -3312533591206249372}
   - component: {fileID: 4353326860353666372}
   - component: {fileID: 7162248826876031551}
   - component: {fileID: 2158038944821047147}
+  - component: {fileID: -2185229297532658251}
   m_Layer: 0
   m_Name: wheatSpike
   m_TagString: Item
@@ -100,18 +99,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1227828028279045367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 23298497509788178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b415372d68105df43b570bb905313238, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!64 &-970189034799160831
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -183,19 +170,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
---- !u!114 &-3312533591206249372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 23298497509788178}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7aa53ab25af41114397a2b5c34447bd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _objectIndex: 6
 --- !u!114 &4353326860353666372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,6 +334,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PooledObject
   originalPrefab: {fileID: 23298497509788178}
+--- !u!114 &-2185229297532658251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23298497509788178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dfaa679335bbf243af1fac8dd78757a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Crop
+  _objectIndex: 6
 --- !u!1 &2250705242457230276
 GameObject:
   m_ObjectHideFlags: 0
