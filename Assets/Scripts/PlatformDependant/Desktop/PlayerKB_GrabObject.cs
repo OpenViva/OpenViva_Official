@@ -217,7 +217,10 @@ public class PlayerKB_GrabObject : MonoBehaviour
     }
 
     // Crop subclass only
-    protected virtual void OnGrabbed() { }
+    protected virtual void OnGrabbed() 
+    {
+        _outline.enabled = false;
+    }
 
     // If this object is a bag, set whether it is open or closed to enable/disable grabbing
     public void SetIsOpen(bool isOpen)
