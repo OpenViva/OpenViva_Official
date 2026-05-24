@@ -9,8 +9,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
 {
     private GameObject _playerLeftHand; // The player's left hand object
     private GameObject _playerRightHand; // The player's right hand object
-    private Collider _playerLeftCollider; // The collider of the player's left hand
-    private Collider _playerRightCollider; // The collider of the player's right hand
+    protected Collider _playerLeftCollider; // The collider of the player's left hand
+    protected Collider _playerRightCollider; // The collider of the player's right hand
     private GameObject _grabbableObject; // The object to be grabbed
     private Rigidbody _grabbableObjectRB; // The Rigidbody of the object to be grabbed
 
@@ -26,7 +26,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
     private Outline _outline;
 
-    private HintManager _hud;
+    protected HintManager _hud;
     private bool _hintIsShowing = false;
 
     private AnimationIndexes _animationIndexes;
@@ -133,16 +133,21 @@ public class PlayerKB_GrabObject : MonoBehaviour
         }
     }
 
+    // TriggerEnetered and TriggerExited may seem unnecessary, but do not change. (Check subclass Crop.cs)
     protected virtual void OnTriggerEnter(Collider collider)
     {
-        // Check if the player is in range to grab the bag
+        TriggerEntered(collider, HintConstants.GrabHint);
+    }
+
+    protected virtual void TriggerEntered(Collider collider, string hint)
+    {
         if (collider == _playerLeftCollider || collider == _playerRightCollider)
         {
             _playerInRange = true;
             _outline.enabled = true;
             if (!_hintIsShowing && !_isGrabbedInLeft && !_isGrabbedInRight)
             {
-                _hud.CreateHint(HintConstants.GrabHint);
+                _hud.CreateHint(hint);
                 _hintIsShowing = true;
             }
         }
@@ -150,13 +155,17 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
     protected virtual void OnTriggerExit(Collider collider)
     {
-        // Check if the player is out of range to grab the bag
+        TriggerExited(collider, HintConstants.GrabHint);
+    }
+
+    protected virtual void TriggerExited(Collider collider, string hint)
+    {
         if (collider == _playerLeftCollider || collider == _playerRightCollider)
         {
-           _playerInRange = false;
-           _outline.enabled = false;
-           _hud.ClearHint(HintConstants.GrabHint);
-           _hintIsShowing = false;
+            _playerInRange = false;
+            _outline.enabled = false;
+            _hud.ClearHint(hint);
+            _hintIsShowing = false;
         }
     }
 

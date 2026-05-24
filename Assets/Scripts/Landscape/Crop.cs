@@ -105,7 +105,11 @@ public class Crop : PlayerKB_GrabObject
     {
         if (!_isGrowing)
         {
-            base.OnTriggerEnter(collider);
+            base.TriggerEntered(collider, HintConstants.GrabHint);
+        }
+        else
+        {
+            base.TriggerEntered(collider, HintConstants.CropGrowingHint);
         }
     }
 
@@ -113,7 +117,11 @@ public class Crop : PlayerKB_GrabObject
     {
         if (!_isGrowing)
         {
-            base.OnTriggerExit(collider);
+            base.TriggerExited(collider, HintConstants.GrabHint);
+        }
+        else
+        {
+            base.TriggerExited(collider, HintConstants.CropGrowingHint);
         }
     }
 }

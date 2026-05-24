@@ -19,6 +19,7 @@ public class HintConstants : MonoBehaviour
     public static readonly string RightFlashlightHint = "Toggle Flashlight: [E]";
     public static readonly string LeftLanternHint = "Toggle Lantern: [Q]";
     public static readonly string RightLanternHint = "Toggle Lantern: [E]";
+    public static readonly string CropGrowingHint = "Still Growing...";
 
     public static readonly string LeftGrabHintVR = "Grip: [lGrip]";
     public static readonly string RightGrabHintVR = "Grip: [rGrip]";
