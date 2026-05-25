@@ -36,6 +36,7 @@ public class CropSpawner : MonoBehaviour
         _currentCrop.transform.localScale = Vector3.zero;
         _currentCrop.transform.SetParent(transform);
         _currentCrop.transform.localRotation = Quaternion.identity;
+        _currentCrop.gameObject.name = _cropToSpawn.name;
     }
 
     private void OnDisable()
