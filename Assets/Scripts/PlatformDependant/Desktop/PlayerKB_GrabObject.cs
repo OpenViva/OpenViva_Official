@@ -184,14 +184,22 @@ public class PlayerKB_GrabObject : MonoBehaviour
     }
 
     // When the item is placed in the inventory, set it as inactive and disable physics. Do the inverse when taken out of the inventory
-    public void SetIsActive(bool set, int handedness)
+    public void SetIsActive(bool set, int handedness, int itemIndex)
     {
         if (set == false)
         {
             _grabbableObject.transform.SetParent(null);
 
-            if (handedness == 1) { _animationIndexes.PlayAnimationLeft(-1); }
-            else { _animationIndexes.PlayAnimationRight(-1); }
+            if (handedness == 1) 
+            { 
+                _animationIndexes.PlayAnimationLeft(-1); 
+                _hud.ClearHint(HintConstants.LeftReleaseHint);
+            }
+            else 
+            { 
+                _animationIndexes.PlayAnimationRight(-1); 
+                _hud.ClearHint(HintConstants.RightReleaseHint);
+            }
         }
         else
         {
@@ -201,6 +209,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObject.transform.SetParent(_playerLeftHand.transform);
                 _grabbableObject.transform.localPosition = _holdPositions.GetObjectPositionLeft(_objectIndex);
                 _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
+                _animationIndexes.PlayAnimationLeft(itemIndex);
                 _isGrabbedInLeft = true;
                 _isGrabbedInRight = false;
             }
@@ -209,6 +218,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObject.transform.SetParent(_playerRightHand.transform);
                 _grabbableObject.transform.localPosition = _holdPositions.GetObjectPositionRight(_objectIndex);
                 _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
+                _animationIndexes.PlayAnimationRight(itemIndex);
                 _isGrabbedInRight = true;
                 _isGrabbedInLeft = false;
             }

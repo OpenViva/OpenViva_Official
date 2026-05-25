@@ -8,11 +8,11 @@ public class ItemIndexes
         return name switch
         {
             "rubberDucky" => 1,
-            "peach(Clone)" => 2,
-            "strawberry(Clone)" => 3,
-            "cantaloupe(Clone)" => 4,
-            "blueberry(Clone)" => 5,
-            "wheatSpike(Clone)" => 6,
+            "peach" => 2,
+            "strawberry" => 3,
+            "cantaloupe" => 4,
+            "blueberry" => 5,
+            "wheatSpike" => 6,
             "flashlight" => 7,
             "egg" => 8,
             "flourJar" => 9,
