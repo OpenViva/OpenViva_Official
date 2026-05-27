@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -5146144381422465321}
   - component: {fileID: -3353020000556257192}
   - component: {fileID: 8619882906755262938}
+  - component: {fileID: 4166301052568862980}
   m_Layer: 0
   m_Name: egg
   m_TagString: Item
@@ -332,6 +333,19 @@ MonoBehaviour:
   _leftAttach: {fileID: 5767518586607644088}
   _rightAttach: {fileID: 112484145487886815}
   ObjectIndex: 8
+--- !u!114 &4166301052568862980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 540473266194088228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcf1c2ef0a1455c49ba1e1fb62e63666, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Egg
+  _uncookedEggPrefab: {fileID: 7245248420323151402, guid: b70804e6310377e4a901c78471844696, type: 3}
 --- !u!1 &2001653335655689939
 GameObject:
   m_ObjectHideFlags: 0
