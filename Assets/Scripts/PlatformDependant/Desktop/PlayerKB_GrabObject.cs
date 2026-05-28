@@ -68,7 +68,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         // If the player is in range and the object is not already grabbed, grab it with the left hand
         if (_isActive && !_isOpen)
         {
-            if (_playerInRange && !_isGrabbedInLeft && !_isGrabbedInRight)
+            if (_playerInRange && !_isGrabbedInLeft && !_isGrabbedInRight && !PlayerManager.Instance.LeftHandOccupied)
             {
                 _grabbableObjectRB.useGravity = false;
                 _grabbableObjectRB.isKinematic = true;
@@ -77,6 +77,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
                 _isGrabbedInLeft = true;
                 if (!_didOnce) { _didOnce = true; OnGrabbed(); }
+                PlayerManager.Instance.LeftHandOccupied = true;
 
                 _hud.ClearHint(HintConstants.GrabHint);
                 _hud.CreateHint(HintConstants.LeftReleaseHint);
@@ -92,6 +93,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _isGrabbedInLeft = false;
 
                 _hud.ClearHint(HintConstants.LeftReleaseHint);
+                PlayerManager.Instance.LeftHandOccupied = false;
 
                 _animationIndexes.PlayAnimationLeft(-1);
             }
@@ -103,7 +105,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         // If the player is in range and the object is not already grabbed, grab it with the right hand
         if (_isActive && !_isOpen)
         {
-            if (_playerInRange && !_isGrabbedInRight && !_isGrabbedInLeft)
+            if (_playerInRange && !_isGrabbedInRight && !_isGrabbedInLeft && !PlayerManager.Instance.RightHandOccupied)
             {
                 _grabbableObjectRB.useGravity = false;
                 _grabbableObjectRB.isKinematic = true;
@@ -112,6 +114,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
                 _isGrabbedInRight = true;
                 if (!_didOnce) { _didOnce = true; OnGrabbed(); }
+                PlayerManager.Instance.RightHandOccupied = true;
 
                 _hud.ClearHint(HintConstants.GrabHint);
                 _hud.CreateHint(HintConstants.RightReleaseHint);
@@ -127,6 +130,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _isGrabbedInRight = false;
 
                 _hud.ClearHint(HintConstants.RightReleaseHint);
+                PlayerManager.Instance.RightHandOccupied = false;
 
                 _animationIndexes.PlayAnimationRight(-1);
             }

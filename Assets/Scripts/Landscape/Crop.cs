@@ -17,9 +17,19 @@ public class Crop : PlayerKB_GrabObject
     private bool _isGrowing = true;
     private Color _currentColor;
 
+    [SerializeField] private bool _shouldGrow = true;
+
     protected override void Start()
     {
         base.Start();
+
+        if (!_shouldGrow)
+        {
+            _isGrowing = false;
+            _timer = 0;
+            CheckPhase();
+            return;
+        }
 
         _growTimer = _data.GrowTimer;
         _maxScale = _data.MaxScale;

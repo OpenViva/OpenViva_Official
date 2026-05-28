@@ -28,6 +28,9 @@ public class PlayerManager : MonoBehaviour
     private ItemIndexes _itemIndexes;
     private Player _player;
 
+    public bool LeftHandOccupied = false;
+    public bool RightHandOccupied = false;
+
     private void Awake()
     {
         if (Instance == null)
