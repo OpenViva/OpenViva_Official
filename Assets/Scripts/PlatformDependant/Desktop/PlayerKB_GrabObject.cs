@@ -68,7 +68,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         // If the player is in range and the object is not already grabbed, grab it with the left hand
         if (_isActive && !_isOpen)
         {
-            if (_playerInRange && !_isGrabbedInLeft && !_isGrabbedInRight && !PlayerManager.Instance.LeftHandOccupied)
+            if (_playerInRange && !_isGrabbedInLeft && !_isGrabbedInRight && !PlayerManager.Instance.LeftHandOccupied && _grabbableObject != null)
             {
                 _grabbableObjectRB.useGravity = false;
                 _grabbableObjectRB.isKinematic = true;
@@ -105,7 +105,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         // If the player is in range and the object is not already grabbed, grab it with the right hand
         if (_isActive && !_isOpen)
         {
-            if (_playerInRange && !_isGrabbedInRight && !_isGrabbedInLeft && !PlayerManager.Instance.RightHandOccupied)
+            if (_playerInRange && !_isGrabbedInRight && !_isGrabbedInLeft && !PlayerManager.Instance.RightHandOccupied && _grabbableObject != null)
             {
                 _grabbableObjectRB.useGravity = false;
                 _grabbableObjectRB.isKinematic = true;

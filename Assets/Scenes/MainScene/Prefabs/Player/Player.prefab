@@ -5323,6 +5323,8 @@ MonoBehaviour:
   _rightHandKB: {fileID: 4360877546320563217}
   _animationKB: {fileID: 5227702063050436759}
   _animationVR: {fileID: 4607818494391237548}
+  LeftHandOccupied: 0
+  RightHandOccupied: 0
 --- !u!1 &4360877546320563217
 GameObject:
   m_ObjectHideFlags: 0
@@ -5335,7 +5337,7 @@ GameObject:
   - component: {fileID: 567464845972833324}
   m_Layer: 0
   m_Name: hand_r
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6856,7 +6858,7 @@ GameObject:
   - component: {fileID: 3530140423693869856}
   m_Layer: 0
   m_Name: hand_l
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7553,7 +7555,7 @@ GameObject:
   - component: {fileID: 4935061885718891571}
   m_Layer: 2
   m_Name: PlayerVR
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8212,7 +8214,7 @@ GameObject:
   - component: {fileID: 567149945703427677}
   m_Layer: 0
   m_Name: PlayerKB
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
