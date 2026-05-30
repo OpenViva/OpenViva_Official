@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 7162248826876031551}
   - component: {fileID: 2158038944821047147}
   - component: {fileID: -2185229297532658251}
-  - component: {fileID: 2531310826437549564}
+  - component: {fileID: 2265046534976289263}
   m_Layer: 0
   m_Name: wheatSpike
   m_TagString: Item
@@ -350,7 +350,7 @@ MonoBehaviour:
   _objectIndex: 6
   _data: {fileID: 11400000, guid: 790ffa2cb56acef4d8b57564aad3fedd, type: 2}
   _shouldGrow: 1
---- !u!114 &2531310826437549564
+--- !u!114 &2265046534976289263
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -359,9 +359,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 23298497509788178}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2a75806daca5c74ead0d9f0c971fe38, type: 3}
+  m_Script: {fileID: 11500000, guid: bfb4ec862d831bc45a874680fafa65f9, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Wheat
+  m_EditorClassIdentifier: Assembly-CSharp::WheatIntoMortar
 --- !u!1 &2250705242457230276
 GameObject:
   m_ObjectHideFlags: 0

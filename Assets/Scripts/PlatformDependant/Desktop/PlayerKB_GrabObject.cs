@@ -1,7 +1,6 @@
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
 
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 // This script allows the player to grab and release objects (KB&M only)
 
@@ -11,7 +10,6 @@ public class PlayerKB_GrabObject : MonoBehaviour
     private GameObject _playerRightHand; // The player's right hand object
     protected Collider _playerLeftCollider; // The collider of the player's left hand
     protected Collider _playerRightCollider; // The collider of the player's right hand
-    private GameObject _grabbableObject; // The object to be grabbed
     private Rigidbody _grabbableObjectRB; // The Rigidbody of the object to be grabbed
 
     private bool _playerInRange = false; // Check whether the player is in range to grab the object
@@ -45,8 +43,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         _playerRightHand = GameObject.Find("hand_r");
 
         // Set the grabbable object and its Rigidbody
-        _grabbableObject = gameObject;
-        _grabbableObjectRB = _grabbableObject.GetComponent<Rigidbody>();
+        _grabbableObjectRB = GetComponent<Rigidbody>();
 
         // Set the colliders of the player's hands
         _playerLeftCollider = _playerLeftHand.GetComponent<Collider>();
@@ -68,13 +65,13 @@ public class PlayerKB_GrabObject : MonoBehaviour
         // If the player is in range and the object is not already grabbed, grab it with the left hand
         if (_isActive && !_isOpen)
         {
-            if (_playerInRange && !_isGrabbedInLeft && !_isGrabbedInRight && !PlayerManager.Instance.LeftHandOccupied && _grabbableObject != null)
+            if (_playerInRange && !_isGrabbedInLeft && !_isGrabbedInRight && !PlayerManager.Instance.LeftHandOccupied && _grabbableObjectRB != null)
             {
                 _grabbableObjectRB.useGravity = false;
                 _grabbableObjectRB.isKinematic = true;
-                _grabbableObject.transform.SetParent(_playerLeftHand.transform);
-                _grabbableObject.transform.localPosition = _holdPositions.GetObjectPositionLeft(_objectIndex);
-                _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
+                transform.SetParent(_playerLeftHand.transform);
+                transform.localPosition = _holdPositions.GetObjectPositionLeft(_objectIndex);
+                transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
                 _isGrabbedInLeft = true;
                 if (!_didOnce) { _didOnce = true; OnGrabbed(); }
                 PlayerManager.Instance.LeftHandOccupied = true;
@@ -87,7 +84,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             // If the object is already grabbed in the left hand, release it
             else if (_isGrabbedInLeft)
             {
-                _grabbableObject.transform.SetParent(null);
+                transform.SetParent(null);
                 _grabbableObjectRB.isKinematic = false;
                 _grabbableObjectRB.useGravity = true;
                 _isGrabbedInLeft = false;
@@ -105,13 +102,13 @@ public class PlayerKB_GrabObject : MonoBehaviour
         // If the player is in range and the object is not already grabbed, grab it with the right hand
         if (_isActive && !_isOpen)
         {
-            if (_playerInRange && !_isGrabbedInRight && !_isGrabbedInLeft && !PlayerManager.Instance.RightHandOccupied && _grabbableObject != null)
+            if (_playerInRange && !_isGrabbedInRight && !_isGrabbedInLeft && !PlayerManager.Instance.RightHandOccupied && _grabbableObjectRB != null)
             {
                 _grabbableObjectRB.useGravity = false;
                 _grabbableObjectRB.isKinematic = true;
-                _grabbableObject.transform.SetParent(_playerRightHand.transform);
-                _grabbableObject.transform.localPosition = _holdPositions.GetObjectPositionRight(_objectIndex);
-                _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
+                transform.SetParent(_playerRightHand.transform);
+                transform.localPosition = _holdPositions.GetObjectPositionRight(_objectIndex);
+                transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
                 _isGrabbedInRight = true;
                 if (!_didOnce) { _didOnce = true; OnGrabbed(); }
                 PlayerManager.Instance.RightHandOccupied = true;
@@ -124,7 +121,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             // If the object is already grabbed in the right hand, release it
             else if (_isGrabbedInRight)
             {
-                _grabbableObject.transform.SetParent(null);
+                transform.SetParent(null);
                 _grabbableObjectRB.isKinematic = false;
                 _grabbableObjectRB.useGravity = true;
                 _isGrabbedInRight = false;
@@ -179,7 +176,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         if (_isGrabbedInLeft)
         {
             return 1;
-        } 
+        }
         else if (_isGrabbedInRight)
         {
             return 2;
@@ -192,16 +189,16 @@ public class PlayerKB_GrabObject : MonoBehaviour
     {
         if (set == false)
         {
-            _grabbableObject.transform.SetParent(null);
+            transform.SetParent(null);
 
-            if (handedness == 1) 
-            { 
-                _animationIndexes.PlayAnimationLeft(-1); 
+            if (handedness == 1)
+            {
+                _animationIndexes.PlayAnimationLeft(-1);
                 _hud.ClearHint(HintConstants.LeftReleaseHint);
             }
-            else 
-            { 
-                _animationIndexes.PlayAnimationRight(-1); 
+            else
+            {
+                _animationIndexes.PlayAnimationRight(-1);
                 _hud.ClearHint(HintConstants.RightReleaseHint);
             }
         }
@@ -210,18 +207,18 @@ public class PlayerKB_GrabObject : MonoBehaviour
             gameObject.SetActive(true);
             if (handedness == 1)
             {
-                _grabbableObject.transform.SetParent(_playerLeftHand.transform);
-                _grabbableObject.transform.localPosition = _holdPositions.GetObjectPositionLeft(_objectIndex);
-                _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
+                transform.SetParent(_playerLeftHand.transform);
+                transform.localPosition = _holdPositions.GetObjectPositionLeft(_objectIndex);
+                transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
                 _animationIndexes.PlayAnimationLeft(itemIndex);
                 _isGrabbedInLeft = true;
                 _isGrabbedInRight = false;
             }
             else
             {
-                _grabbableObject.transform.SetParent(_playerRightHand.transform);
-                _grabbableObject.transform.localPosition = _holdPositions.GetObjectPositionRight(_objectIndex);
-                _grabbableObject.transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
+                transform.SetParent(_playerRightHand.transform);
+                transform.localPosition = _holdPositions.GetObjectPositionRight(_objectIndex);
+                transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
                 _animationIndexes.PlayAnimationRight(itemIndex);
                 _isGrabbedInRight = true;
                 _isGrabbedInLeft = false;
@@ -240,7 +237,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
     }
 
     // Crop subclass only
-    protected virtual void OnGrabbed() 
+    protected virtual void OnGrabbed()
     {
         _outline.enabled = false;
     }
@@ -256,5 +253,12 @@ public class PlayerKB_GrabObject : MonoBehaviour
         _player.Controls.Viva.LeftGrab.performed += context => GrabLeft();
         _player.Controls.Viva.RightGrab.performed += context => GrabRight();
     }
+
+    //    private void OnDisable()
+    //    {
+    //        _player.Controls.Viva.LeftGrab.performed -= context => GrabLeft();
+    //        _player.Controls.Viva.RightGrab.performed -= context => GrabRight();
+    //    }
+    //}
 }
 #endif

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3373091340855616895}
   - component: {fileID: 2627081506871350512}
   - component: {fileID: 404095702952700492}
+  - component: {fileID: 2410112825019584623}
   m_Layer: 0
   m_Name: mortar
   m_TagString: Item
@@ -333,6 +334,20 @@ MonoBehaviour:
   _leftAttach: {fileID: 3757965411720120865}
   _rightAttach: {fileID: 4100216175879661724}
   ObjectIndex: 15
+--- !u!114 &2410112825019584623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404763533869142340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5029173337f5ee4f99e190c6372c6bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MortarLogic
+  _wheatCrushedMeshRenderer: {fileID: 735695854369479171}
+  WheatQuantity: 0
 --- !u!1 &5440048295255373320
 GameObject:
   m_ObjectHideFlags: 0
