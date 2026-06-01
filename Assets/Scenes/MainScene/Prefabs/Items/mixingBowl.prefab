@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4462686125108600158}
   - component: {fileID: 2125343357350181802}
   - component: {fileID: 2889788614101314655}
-  - component: {fileID: 7172021032245382737}
   - component: {fileID: 7546164309851610711}
   - component: {fileID: 4049275493202809994}
   - component: {fileID: 3328921118309770834}
@@ -98,28 +97,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7172021032245382737
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1381515640498995264}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -2840393482201214165, guid: ca02135389290734fa535619b4c6646f, type: 3}
 --- !u!65 &7546164309851610711
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -140,7 +117,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.33, y: 0.17, z: 0.33}
-  m_Center: {x: 0.00000026822096, y: 0.061331663, z: 0.000007666647}
+  m_Center: {x: 0, y: 0.061331663, z: 0}
 --- !u!54 &4049275493202809994
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -213,7 +190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerVR_GrabObject
   m_InteractionManager: {fileID: 0}
   m_Colliders:
-  - {fileID: 7172021032245382737}
+  - {fileID: 0}
   m_InteractionLayers:
     m_Bits: 1
   m_DistanceCalculationMode: 1

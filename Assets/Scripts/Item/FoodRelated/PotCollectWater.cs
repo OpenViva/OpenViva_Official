@@ -11,7 +11,7 @@ public class PotCollectWater : MonoBehaviour
         if (collider.gameObject.CompareTag("Water"))
         {
             if (_volume >= _maxCapacity) { return; }
-            _volume += 10f;
+            _volume += 50f;
             SetBlendShape();
         }
     }
