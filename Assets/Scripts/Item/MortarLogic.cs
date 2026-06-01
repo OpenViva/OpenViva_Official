@@ -23,7 +23,7 @@ public class MortarLogic : MonoBehaviour
 
         _wheatCrushedMeshRenderer.SetBlendShapeWeight(3, FlourQuantity / 3);
 
-        Debug.Log($"Wheat Quantity: {WheatQuantity}, Flour Quantity: {FlourQuantity}");
+        // Debug.Log($"Wheat Quantity: {WheatQuantity}, Flour Quantity: {FlourQuantity}");
     }
 
     public void AddWheat()

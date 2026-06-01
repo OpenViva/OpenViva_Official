@@ -1,5 +1,6 @@
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
 
+using System;
 using UnityEngine;
 
 // This script allows the player to grab and release objects (KB&M only)
@@ -25,12 +26,36 @@ public class PlayerKB_GrabObject : MonoBehaviour
     private Outline _outline;
 
     protected HintManager _hud;
-    private bool _hintIsShowing = false;
+    protected bool _hintIsShowing = false;
 
     private AnimationIndexes _animationIndexes;
 
+    public event Action<bool> OnGrabbedLeft;
+    public bool IsGrabbedLeft
+    {   
+        get => _isGrabbedInLeft;
+        set
+        {
+            if (_isGrabbedInLeft == value) return;
+            _isGrabbedInLeft = value;
+            OnGrabbedLeft?.Invoke(value);
+        }
+    }
+
+    public event Action<bool> OnGrabbedRight;
+    public bool IsGrabbedRight
+    {
+        get => _isGrabbedInRight;
+        set
+        {
+            if (_isGrabbedInRight == value) { return; }
+            _isGrabbedInRight = value;
+            OnGrabbedRight?.Invoke(value);
+        }
+    }
+
     // --- Fields ---
-    private Player _player;
+    protected Player _player;
 
     protected virtual void Start()
     {
@@ -72,7 +97,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 transform.SetParent(_playerLeftHand.transform);
                 transform.localPosition = _holdPositions.GetObjectPositionLeft(_objectIndex);
                 transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
-                _isGrabbedInLeft = true;
+                IsGrabbedLeft = true;
                 if (!_didOnce) { _didOnce = true; OnGrabbed(); }
                 PlayerManager.Instance.LeftHandOccupied = true;
 
@@ -87,7 +112,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 transform.SetParent(null);
                 _grabbableObjectRB.isKinematic = false;
                 _grabbableObjectRB.useGravity = true;
-                _isGrabbedInLeft = false;
+                IsGrabbedLeft = false;
 
                 _hud.ClearHint(HintConstants.LeftReleaseHint);
                 PlayerManager.Instance.LeftHandOccupied = false;
@@ -109,7 +134,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 transform.SetParent(_playerRightHand.transform);
                 transform.localPosition = _holdPositions.GetObjectPositionRight(_objectIndex);
                 transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
-                _isGrabbedInRight = true;
+                IsGrabbedRight = true;
                 if (!_didOnce) { _didOnce = true; OnGrabbed(); }
                 PlayerManager.Instance.RightHandOccupied = true;
 
@@ -124,7 +149,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 transform.SetParent(null);
                 _grabbableObjectRB.isKinematic = false;
                 _grabbableObjectRB.useGravity = true;
-                _isGrabbedInRight = false;
+                IsGrabbedRight = false;
 
                 _hud.ClearHint(HintConstants.RightReleaseHint);
                 PlayerManager.Instance.RightHandOccupied = false;
@@ -135,7 +160,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
     }
 
     // TriggerEnetered and TriggerExited may seem unnecessary, but do not change. (Check subclass Crop.cs)
-    protected virtual void OnTriggerEnter(Collider collider)
+    private void OnTriggerEnter(Collider collider)
     {
         TriggerEntered(collider, HintConstants.GrabHint);
     }
@@ -154,7 +179,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         }
     }
 
-    protected virtual void OnTriggerExit(Collider collider)
+    private void OnTriggerExit(Collider collider)
     {
         TriggerExited(collider, HintConstants.GrabHint);
     }
@@ -195,11 +220,13 @@ public class PlayerKB_GrabObject : MonoBehaviour
             {
                 _animationIndexes.PlayAnimationLeft(-1);
                 _hud.ClearHint(HintConstants.LeftReleaseHint);
+                PlayerManager.Instance.LeftHandOccupied = false;
             }
             else
             {
                 _animationIndexes.PlayAnimationRight(-1);
                 _hud.ClearHint(HintConstants.RightReleaseHint);
+                PlayerManager.Instance.RightHandOccupied = false;
             }
         }
         else
@@ -211,8 +238,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 transform.localPosition = _holdPositions.GetObjectPositionLeft(_objectIndex);
                 transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
                 _animationIndexes.PlayAnimationLeft(itemIndex);
-                _isGrabbedInLeft = true;
-                _isGrabbedInRight = false;
+                IsGrabbedLeft = true;
+                IsGrabbedRight = false;
             }
             else
             {
@@ -220,8 +247,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 transform.localPosition = _holdPositions.GetObjectPositionRight(_objectIndex);
                 transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
                 _animationIndexes.PlayAnimationRight(itemIndex);
-                _isGrabbedInRight = true;
-                _isGrabbedInLeft = false;
+                IsGrabbedRight = true;
+                IsGrabbedLeft = false;
             }
         }
 
@@ -230,8 +257,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
         _isActive = set;
         if (set == false)
         {
-            _isGrabbedInLeft = set;
-            _isGrabbedInRight = set;
+            IsGrabbedLeft = set;
+            IsGrabbedRight = set;
             gameObject.SetActive(false);
         }
     }
@@ -248,7 +275,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         _isOpen = isOpen;
     }
 
-    private void AssignInputs()
+    protected virtual void AssignInputs()
     {
         _player.Controls.Viva.LeftGrab.performed += context => GrabLeft();
         _player.Controls.Viva.RightGrab.performed += context => GrabRight();

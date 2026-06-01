@@ -11,8 +11,8 @@ public class WheatIntoMortar : Ingredient
         {
             if ((mortar.WheatQuantity + mortar.FlourQuantity) >= 250) { return; }
             mortar.AddWheat();
-            Destroy(gameObject);
-            _didOnce = true; // For some reason, this block runs twice even after object is destroyed.
+            SpawnConversion();
+            _didOnce = true; // For some reason, this block runs twice even after object is destroyed. This line fixes that.
         }
     }
 }

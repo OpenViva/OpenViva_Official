@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 5362798973585933563}
   - component: {fileID: 4978763611649001603}
   - component: {fileID: 5570981068016238606}
-  - component: {fileID: 8385294578488010865}
   - component: {fileID: 2493562950431659687}
   - component: {fileID: 7715102348808319067}
+  - component: {fileID: 7002504993150066138}
   m_Layer: 0
   m_Name: pestle
   m_TagString: Item
@@ -168,19 +168,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
---- !u!114 &8385294578488010865
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3277983012787334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7aa53ab25af41114397a2b5c34447bd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _objectIndex: 16
 --- !u!114 &2493562950431659687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,6 +319,20 @@ MonoBehaviour:
   _leftAttach: {fileID: 769926484547923182}
   _rightAttach: {fileID: 4500500453853148653}
   ObjectIndex: 16
+--- !u!114 &7002504993150066138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3277983012787334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29e096aacf5cd5d41b3dbcbbe9e24ff5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PestleGrind
+  _objectIndex: 16
+  IsGrinding: 0
 --- !u!1 &8363060275259887546
 GameObject:
   m_ObjectHideFlags: 0

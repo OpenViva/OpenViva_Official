@@ -1,18 +1,17 @@
 using UnityEngine;
 
-public class PestleGrind : MonoBehaviour
+public class PestleGrind : PlayerKB_GrabObject
 {
-    private Player _player;
-    private PlayerKB_GrabObject _grabScript;
     public bool IsGrinding = false;
     private MortarLogic _currentMortar;
 
-    private void Start()
+    protected override void Start()
     {
-        _player = FindFirstObjectByType<Player>();
-
-        _grabScript = GetComponent<PlayerKB_GrabObject>();
+        base.Start();
         AssignInputs();
+
+        OnGrabbedLeft += ShowLeftHint;
+        OnGrabbedRight += ShowRightHint;
     }
 
     private void Update()
@@ -25,7 +24,7 @@ public class PestleGrind : MonoBehaviour
 
     private void GrindLeft()
     {
-        if (_grabScript == null || _grabScript.GetIsGrabbed() != 2) { return; }
+        if (!_isGrabbedInRight) { return; }
 
         GameObject objectInLeft = PlayerManager.Instance.GetObjectLeft();
         if (objectInLeft.name.Equals("mortar") && objectInLeft.TryGetComponent(out MortarLogic mortar))
@@ -37,8 +36,7 @@ public class PestleGrind : MonoBehaviour
 
     private void GrindRight()
     {
-        if (_grabScript == null || _grabScript.GetIsGrabbed() != 1) { return; }
-
+        if (!_isGrabbedInLeft) { return; }
 
         if (PlayerManager.Instance.GetItemRight() == 15)
         {
@@ -51,17 +49,30 @@ public class PestleGrind : MonoBehaviour
         IsGrinding = false;
     }
 
-    private void AssignInputs()
+    private void ShowLeftHint(bool show)
     {
+        if (show) { _hud.CreateHint(HintConstants.RightGrindHint); }
+        else { _hud.ClearHint(HintConstants.RightGrindHint); }
+    }
+
+    private void ShowRightHint(bool show)
+    {
+        if (show) { _hud.CreateHint(HintConstants.LeftGrindHint); }
+        else { _hud.ClearHint(HintConstants.LeftGrindHint); }
+    }
+
+    protected override void AssignInputs()
+    {
+        base.AssignInputs();
         _player.Controls.Viva.InteractLeft.performed += context => GrindLeft();
         _player.Controls.Viva.InteractRight.performed += context => GrindRight();
         _player.Controls.Viva.InteractLeft.canceled += context => StopGrinding();
         _player.Controls.Viva.InteractRight.canceled += context => StopGrinding();
     }
 
-    //private void OnDisable()
-    //{
-    //    _player.Controls.Viva.InteractLeftHold.performed -= context => GrindLeft();
-    //    _player.Controls.Viva.InteractRightHold.performed -= context => GrindRight();
-    //}
+    private void OnDestroy()
+    {
+        OnGrabbedLeft -= ShowLeftHint;
+        OnGrabbedRight -= ShowRightHint;
+    }
 }
