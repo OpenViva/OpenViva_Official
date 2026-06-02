@@ -28,10 +28,10 @@ public class BuildPostProcessor
                 Debug.Log($"[Build Post-Process] Created Characters folder at: {charactersFolder}");
             }
 
-            string readmePath = Path.Combine(charactersFolder, "README.txt");
+            string readmePath = Path.Combine(charactersFolder, "Place Characters Here!.txt");
             if (!File.Exists(readmePath))
             {
-                File.WriteAllText(readmePath, "Place your character files here.");
+                File.WriteAllText(readmePath, "Place your .viva character files here.");
             }
         }
     }
