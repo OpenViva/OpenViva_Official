@@ -8,7 +8,7 @@ public class PotCollectWater : MonoBehaviour
 
     private void OnParticleCollision(GameObject collider)
     {
-        if (collider.gameObject.CompareTag("Water"))
+        if (collider.gameObject.name.Equals("TapFX"))
         {
             if (_volume >= _maxCapacity) { return; }
             _volume += 50f;

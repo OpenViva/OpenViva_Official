@@ -91,6 +91,11 @@ namespace Unity.VRTemplate
             Application.onBeforeRender += OnBeforeRender;
         }
 
+        void OnDestroy()
+        {
+            Application.onBeforeRender -= OnBeforeRender;
+        }
+
         void OnDisable()
         {
             Application.onBeforeRender -= OnBeforeRender;

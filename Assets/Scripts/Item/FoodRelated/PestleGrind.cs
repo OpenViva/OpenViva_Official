@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PestleGrind : PlayerKB_GrabObject
 {
-    public bool IsGrinding = false;
+    private bool _isGrinding = false;
     private MortarLogic _currentMortar;
 
     protected override void Start()
@@ -16,37 +16,37 @@ public class PestleGrind : PlayerKB_GrabObject
 
     private void Update()
     {
-        if (IsGrinding && _currentMortar != null)
+        if (_isGrinding && _currentMortar != null)
         {
             _currentMortar.GrindWheat();
         }
     }
 
-    private void GrindLeft()
+    private void Grind(bool useLeft)
     {
-        if (!_isGrabbedInRight) { return; }
+        if (useLeft && !_isGrabbedInRight) { return; }
+        else if (!useLeft && !_isGrabbedInLeft) { return; }
 
-        GameObject objectInLeft = PlayerManager.Instance.GetObjectLeft();
-        if (objectInLeft.name.Equals("mortar") && objectInLeft.TryGetComponent(out MortarLogic mortar))
+        GameObject objectInOther;
+        if (useLeft)
         {
-            IsGrinding = true;
-            _currentMortar = mortar;
+            objectInOther = PlayerManager.Instance.GetObjectLeft();
         }
-    }
-
-    private void GrindRight()
-    {
-        if (!_isGrabbedInLeft) { return; }
-
-        if (PlayerManager.Instance.GetItemRight() == 15)
+        else
         {
-            IsGrinding = true;
+            objectInOther = PlayerManager.Instance.GetObjectRight();
+        }
+
+        if (objectInOther.name.Equals("mortar") && objectInOther.TryGetComponent(out MortarLogic mortar))
+        {
+            _isGrinding = true;
+            _currentMortar = mortar;
         }
     }
 
     private void StopGrinding()
     {
-        IsGrinding = false;
+        _isGrinding = false;
     }
 
     private void ShowLeftHint(bool show)
@@ -64,8 +64,8 @@ public class PestleGrind : PlayerKB_GrabObject
     protected override void AssignInputs()
     {
         base.AssignInputs();
-        _player.Controls.Viva.InteractLeft.performed += context => GrindLeft();
-        _player.Controls.Viva.InteractRight.performed += context => GrindRight();
+        _player.Controls.Viva.InteractLeft.performed += context => Grind(true);
+        _player.Controls.Viva.InteractRight.performed += context => Grind(false);
         _player.Controls.Viva.InteractLeft.canceled += context => StopGrinding();
         _player.Controls.Viva.InteractRight.canceled += context => StopGrinding();
     }

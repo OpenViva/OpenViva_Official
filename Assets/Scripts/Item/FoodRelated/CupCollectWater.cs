@@ -8,7 +8,7 @@ public class CupCollectWater : MonoBehaviour
 
     private void OnParticleCollision(GameObject other)
     {
-        if (other.gameObject.CompareTag("Water"))
+        if (other.gameObject.name.Equals("TapFX"))
         {
             if (_volume >= _maxCapacity) { return; }
             _volume += 50f;

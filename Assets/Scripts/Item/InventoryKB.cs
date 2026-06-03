@@ -137,6 +137,8 @@ public class InventoryKB : MonoBehaviour
 
     private void PlaceInBag(InputAction.CallbackContext context)
     {
+        if (_inventory.Count >= _maxInventorySize - 1) { return; }
+
         int itemIndex;
         GameObject itemObject;
         if (_grabbedIn == 1)

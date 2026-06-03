@@ -124,9 +124,27 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "InteractRightHold",
+                    "type": "Button",
+                    "id": "bcfd4611-91e8-481b-b0f5-e535d5c64885",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "InteractLeft",
                     "type": "Button",
                     "id": "5ed36331-0ae9-4480-9e78-327b3b85af61",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "InteractLeftHold",
+                    "type": "Button",
+                    "id": "9b43778a-4617-423e-ac69-dd5ce2496740",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -569,6 +587,28 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "UniversalInteract",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "92f97b2b-d8db-4f88-a1f1-eb88f7e00d31",
+                    "path": "<Keyboard>/#(E)",
+                    "interactions": "Hold(duration=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InteractRightHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1d10f21e-9a54-460d-86ca-6ada064c3a8d",
+                    "path": "<Keyboard>/#(Q)",
+                    "interactions": "Hold(duration=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InteractLeftHold",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

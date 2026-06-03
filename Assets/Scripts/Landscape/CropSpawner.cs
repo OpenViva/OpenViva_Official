@@ -12,7 +12,7 @@ public class CropSpawner : MonoBehaviour
         {
             _currentCrop = transform.GetChild(0).gameObject;
         }
-        catch (Exception spawnerNoCrop)
+        catch (Exception)
         {
             Debug.LogWarning($"Crop Spawner was not given crop at runtime.");
         }

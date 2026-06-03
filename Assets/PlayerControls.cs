@@ -210,9 +210,27 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""InteractRightHold"",
+                    ""type"": ""Button"",
+                    ""id"": ""bcfd4611-91e8-481b-b0f5-e535d5c64885"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""InteractLeft"",
                     ""type"": ""Button"",
                     ""id"": ""5ed36331-0ae9-4480-9e78-327b3b85af61"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InteractLeftHold"",
+                    ""type"": ""Button"",
+                    ""id"": ""9b43778a-4617-423e-ac69-dd5ce2496740"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -657,6 +675,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""UniversalInteract"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""92f97b2b-d8db-4f88-a1f1-eb88f7e00d31"",
+                    ""path"": ""<Keyboard>/#(E)"",
+                    ""interactions"": ""Hold(duration=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InteractRightHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1d10f21e-9a54-460d-86ca-6ada064c3a8d"",
+                    ""path"": ""<Keyboard>/#(Q)"",
+                    ""interactions"": ""Hold(duration=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InteractLeftHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -728,7 +768,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Viva_Run = m_Viva.FindAction("Run", throwIfNotFound: true);
         m_Viva_Pause = m_Viva.FindAction("Pause", throwIfNotFound: true);
         m_Viva_InteractRight = m_Viva.FindAction("InteractRight", throwIfNotFound: true);
+        m_Viva_InteractRightHold = m_Viva.FindAction("InteractRightHold", throwIfNotFound: true);
         m_Viva_InteractLeft = m_Viva.FindAction("InteractLeft", throwIfNotFound: true);
+        m_Viva_InteractLeftHold = m_Viva.FindAction("InteractLeftHold", throwIfNotFound: true);
         m_Viva_UniversalInteract = m_Viva.FindAction("UniversalInteract", throwIfNotFound: true);
     }
 
@@ -823,7 +865,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Viva_Run;
     private readonly InputAction m_Viva_Pause;
     private readonly InputAction m_Viva_InteractRight;
+    private readonly InputAction m_Viva_InteractRightHold;
     private readonly InputAction m_Viva_InteractLeft;
+    private readonly InputAction m_Viva_InteractLeftHold;
     private readonly InputAction m_Viva_UniversalInteract;
     /// <summary>
     /// Provides access to input actions defined in input action map "Viva".
@@ -889,9 +933,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @InteractRight => m_Wrapper.m_Viva_InteractRight;
         /// <summary>
+        /// Provides access to the underlying input action "Viva/InteractRightHold".
+        /// </summary>
+        public InputAction @InteractRightHold => m_Wrapper.m_Viva_InteractRightHold;
+        /// <summary>
         /// Provides access to the underlying input action "Viva/InteractLeft".
         /// </summary>
         public InputAction @InteractLeft => m_Wrapper.m_Viva_InteractLeft;
+        /// <summary>
+        /// Provides access to the underlying input action "Viva/InteractLeftHold".
+        /// </summary>
+        public InputAction @InteractLeftHold => m_Wrapper.m_Viva_InteractLeftHold;
         /// <summary>
         /// Provides access to the underlying input action "Viva/UniversalInteract".
         /// </summary>
@@ -961,9 +1013,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @InteractRight.started += instance.OnInteractRight;
             @InteractRight.performed += instance.OnInteractRight;
             @InteractRight.canceled += instance.OnInteractRight;
+            @InteractRightHold.started += instance.OnInteractRightHold;
+            @InteractRightHold.performed += instance.OnInteractRightHold;
+            @InteractRightHold.canceled += instance.OnInteractRightHold;
             @InteractLeft.started += instance.OnInteractLeft;
             @InteractLeft.performed += instance.OnInteractLeft;
             @InteractLeft.canceled += instance.OnInteractLeft;
+            @InteractLeftHold.started += instance.OnInteractLeftHold;
+            @InteractLeftHold.performed += instance.OnInteractLeftHold;
+            @InteractLeftHold.canceled += instance.OnInteractLeftHold;
             @UniversalInteract.started += instance.OnUniversalInteract;
             @UniversalInteract.performed += instance.OnUniversalInteract;
             @UniversalInteract.canceled += instance.OnUniversalInteract;
@@ -1017,9 +1075,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @InteractRight.started -= instance.OnInteractRight;
             @InteractRight.performed -= instance.OnInteractRight;
             @InteractRight.canceled -= instance.OnInteractRight;
+            @InteractRightHold.started -= instance.OnInteractRightHold;
+            @InteractRightHold.performed -= instance.OnInteractRightHold;
+            @InteractRightHold.canceled -= instance.OnInteractRightHold;
             @InteractLeft.started -= instance.OnInteractLeft;
             @InteractLeft.performed -= instance.OnInteractLeft;
             @InteractLeft.canceled -= instance.OnInteractLeft;
+            @InteractLeftHold.started -= instance.OnInteractLeftHold;
+            @InteractLeftHold.performed -= instance.OnInteractLeftHold;
+            @InteractLeftHold.canceled -= instance.OnInteractLeftHold;
             @UniversalInteract.started -= instance.OnUniversalInteract;
             @UniversalInteract.performed -= instance.OnUniversalInteract;
             @UniversalInteract.canceled -= instance.OnUniversalInteract;
@@ -1207,12 +1271,26 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteractRight(InputAction.CallbackContext context);
         /// <summary>
+        /// Method invoked when associated input action "InteractRightHold" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInteractRightHold(InputAction.CallbackContext context);
+        /// <summary>
         /// Method invoked when associated input action "InteractLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteractLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "InteractLeftHold" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInteractLeftHold(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "UniversalInteract" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

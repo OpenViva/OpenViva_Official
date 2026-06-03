@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1098315197796190471
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7395709977417388779}
+  m_Layer: 0
+  m_Name: FlourParticle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7395709977417388779
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1098315197796190471}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.055, z: 0}
+  m_LocalScale: {x: 0, y: 0.2, z: 0.2}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2115791606457683899}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1404763533869142340
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,13 +42,13 @@ GameObject:
   - component: {fileID: 2115791606457683899}
   - component: {fileID: 8644153860660818152}
   - component: {fileID: 4850240992286367673}
-  - component: {fileID: 6545180784754100668}
+  - component: {fileID: 1040437891252605538}
   - component: {fileID: 6860729961023968539}
   - component: {fileID: 229698476658610879}
-  - component: {fileID: 3373091340855616895}
   - component: {fileID: 2627081506871350512}
   - component: {fileID: 404095702952700492}
   - component: {fileID: 2410112825019584623}
+  - component: {fileID: 4513461628582257149}
   m_Layer: 0
   m_Name: mortar
   m_TagString: Item
@@ -41,6 +72,7 @@ Transform:
   - {fileID: 2090684089396856991}
   - {fileID: 3757965411720120865}
   - {fileID: 4100216175879661724}
+  - {fileID: 7395709977417388779}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -94.064, z: 0}
 --- !u!33 &8644153860660818152
@@ -100,7 +132,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6545180784754100668
+--- !u!64 &1040437891252605538
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,19 +202,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
---- !u!114 &3373091340855616895
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1404763533869142340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7aa53ab25af41114397a2b5c34447bd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _objectIndex: 15
 --- !u!114 &2627081506871350512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,7 +234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerVR_GrabObject
   m_InteractionManager: {fileID: 0}
   m_Colliders:
-  - {fileID: 6545180784754100668}
+  - {fileID: 0}
   m_InteractionLayers:
     m_Bits: 1
   m_DistanceCalculationMode: 1
@@ -348,6 +367,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MortarLogic
   _wheatCrushedMeshRenderer: {fileID: 735695854369479171}
   WheatQuantity: 0
+  FlourQuantity: 0
+--- !u!114 &4513461628582257149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404763533869142340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8081a00b6472bf47aa2e2778e8a2268, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MortarSpill
+  _objectIndex: 15
+  _flourParticle: {fileID: 0}
 --- !u!1 &5440048295255373320
 GameObject:
   m_ObjectHideFlags: 0
