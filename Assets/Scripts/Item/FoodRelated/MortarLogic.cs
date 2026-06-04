@@ -3,8 +3,16 @@ using UnityEngine;
 public class MortarLogic : MonoBehaviour
 {
     [SerializeField] private SkinnedMeshRenderer _wheatCrushedMeshRenderer;
-    public float WheatQuantity = 0;
-    public float FlourQuantity = 0;
+    public float WheatQuantity { private set; get; } = 0;
+    public float FlourQuantity { private set; get; } = 0;
+
+    private int _toSpill = 0;
+    public int GetToSpill()
+    {
+        int temp = _toSpill;
+        _toSpill = 0;
+        return temp;
+    }
 
     private void UpdateBlendShapes()
     {
@@ -36,15 +44,15 @@ public class MortarLogic : MonoBehaviour
     public void GrindWheat()
     {
         if (WheatQuantity <= 0 || FlourQuantity >= 300) { return; }
-        WheatQuantity -= 0.1f;
-        FlourQuantity += 0.1f;
+        WheatQuantity -= 0.25f;
+        FlourQuantity += 0.25f;
         UpdateBlendShapes();
     }
 
     public void SpillWheat()
     {
+        _toSpill = (int)FlourQuantity / 100;
         FlourQuantity = 0;
         UpdateBlendShapes();
-        Debug.Log("Spilled");
     }
 }

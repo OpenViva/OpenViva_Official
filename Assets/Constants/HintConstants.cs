@@ -26,6 +26,8 @@ public class HintConstants : MonoBehaviour
     public static readonly string RightGrindHint = "Grind: [E]";
     public static readonly string LeftMortarSpillHint = "Empty: [Q]";
     public static readonly string RightMortarSpillHint = "Empty: [E]";
+    public static readonly string LeftMixHint = "Mix Batter: [Q]";
+    public static readonly string RightMixHint = "Mix Batter: [E]";
 
     public static readonly string LeftGrabHintVR = "Grip: [lGrip]";
     public static readonly string RightGrabHintVR = "Grip: [rGrip]";

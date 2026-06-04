@@ -37,6 +37,8 @@ public class PestleGrind : PlayerKB_GrabObject
             objectInOther = PlayerManager.Instance.GetObjectRight();
         }
 
+        if (objectInOther == null) { return; }
+
         if (objectInOther.name.Equals("mortar") && objectInOther.TryGetComponent(out MortarLogic mortar))
         {
             _isGrinding = true;

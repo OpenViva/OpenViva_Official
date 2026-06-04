@@ -21,12 +21,7 @@ public class MortarSpill : PlayerKB_GrabObject
         if (useLeft && !_isGrabbedInLeft) { return; }
         else if (!useLeft && !_isGrabbedInRight) { return; }
 
-        int flourToSpill = (int)_logic.FlourQuantity / 100;
-        for (int i = 0; i < flourToSpill; i++)
-        {
-            _flourParticle.Play();
-        }
-
+        _flourParticle.Play();
         _logic.SpillWheat();
     }
 

@@ -45,8 +45,8 @@ GameObject:
   - component: {fileID: 7299570732922640304}
   - component: {fileID: 8962938589163696235}
   - component: {fileID: 2014106664097973412}
-  - component: {fileID: 8582243809757764262}
   - component: {fileID: 5805642613667713572}
+  - component: {fileID: 4324936217307742972}
   - component: {fileID: 7136996490044637699}
   m_Layer: 0
   m_Name: mixingSpoon
@@ -199,19 +199,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.1, y: 0.32, z: 0.06}
   m_Center: {x: 0.000035170473, y: -0.013553246, z: 0.00108667}
---- !u!114 &8582243809757764262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3332256533347672567}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7aa53ab25af41114397a2b5c34447bd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _objectIndex: 14
 --- !u!114 &5805642613667713572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,6 +217,19 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &4324936217307742972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3332256533347672567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51ffdc35a96a7e141a79d880c0ff1591, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpoonMix
+  _objectIndex: 14
 --- !u!114 &7136996490044637699
 MonoBehaviour:
   m_ObjectHideFlags: 0

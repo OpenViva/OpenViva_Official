@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3328921118309770834}
   - component: {fileID: 544418982582027651}
   - component: {fileID: 839054981336679966}
+  - component: {fileID: 2718368139675499470}
   m_Layer: 0
   m_Name: mixingBowl
   m_TagString: Item
@@ -311,6 +312,21 @@ MonoBehaviour:
   _leftAttach: {fileID: 3446035058320649220}
   _rightAttach: {fileID: 2437843812439142581}
   ObjectIndex: 13
+--- !u!114 &2718368139675499470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381515640498995264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aae2e1960c7d72b49807ab1c117d62bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BowlCollectFlour
+  _flourBlendShape: {fileID: 9118432591034907349}
+  _waterBlendShape: {fileID: 630912072564419661}
+  _batterBlendShape: {fileID: 5601293903571844253}
 --- !u!1 &1963484623418662023
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,6 +587,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6c9ceed0c9684fe47aa48bdcaf3b3e1d, type: 3}
   m_PrefabInstance: {fileID: 555696355625755791}
   m_PrefabAsset: {fileID: 0}
+--- !u!137 &5601293903571844253 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3887185075125053422, guid: 6c9ceed0c9684fe47aa48bdcaf3b3e1d, type: 3}
+  m_PrefabInstance: {fileID: 555696355625755791}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3784958714646258375
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -677,6 +698,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6c9ceed0c9684fe47aa48bdcaf3b3e1d, type: 3}
   m_PrefabInstance: {fileID: 3784958714646258375}
   m_PrefabAsset: {fileID: 0}
+--- !u!137 &9118432591034907349 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3887185075125053422, guid: 6c9ceed0c9684fe47aa48bdcaf3b3e1d, type: 3}
+  m_PrefabInstance: {fileID: 3784958714646258375}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4813366047670121567
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -774,6 +800,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c9ceed0c9684fe47aa48bdcaf3b3e1d, type: 3}
+--- !u!137 &630912072564419661 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3887185075125053422, guid: 6c9ceed0c9684fe47aa48bdcaf3b3e1d, type: 3}
+  m_PrefabInstance: {fileID: 4813366047670121567}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4991742754497287092 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6c9ceed0c9684fe47aa48bdcaf3b3e1d, type: 3}
