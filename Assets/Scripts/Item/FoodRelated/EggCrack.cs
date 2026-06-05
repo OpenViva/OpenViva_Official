@@ -49,7 +49,7 @@ public class EggCrack : Ingredient
     {
         if (_grabScript.GetIsGrabbed() == 1)
         {
-            _grabScript.SetIsActive(false, 1, 8);
+            _grabScript.SetIsActive(false, 1);
             SpawnConversion();
         }
     }
@@ -58,7 +58,7 @@ public class EggCrack : Ingredient
     {
         if (_grabScript.GetIsGrabbed() == 2)
         {
-            _grabScript.SetIsActive(false, 2, 8);
+            _grabScript.SetIsActive(false, 2);
             SpawnConversion();
         }
     }

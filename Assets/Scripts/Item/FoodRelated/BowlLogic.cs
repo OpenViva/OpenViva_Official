@@ -14,6 +14,41 @@ public class BowlLogic : MonoBehaviour
     private float _batterVolume = 0;
     private float _maxBatterVolume = 3500;
 
+    private Player _player;
+    private HintManager _hud;
+    private PlayerKB_GrabObject _grabScript;
+    [SerializeField] GameObject _doughPrefab;
+
+    private void Start()
+    {
+        _player = FindFirstObjectByType<Player>();
+        _hud = GameObject.Find("HUD").GetComponent<HintManager>();
+        _grabScript = GetComponent<PlayerKB_GrabObject>();
+
+        _grabScript.OnGrabbedLeft += ShowHintLeft;
+        _grabScript.OnGrabbedRight += ShowHintRight;
+
+        AssignInputs();
+    }
+
+    private void AssignInputs()
+    {
+        _player.Controls.Viva.InteractLeft.performed += context => CreateDough(false);
+        _player.Controls.Viva.InteractRight.performed += context => CreateDough(true);
+    }
+
+    private void ShowHintLeft(bool show)
+    {
+        if (show) { _hud.CreateHint(HintConstants.LeftGrabDoughHint); }
+        else { _hud.ClearHint(HintConstants.LeftGrabDoughHint); }
+    }
+
+    private void ShowHintRight(bool show)
+    {
+        if (show) { _hud.CreateHint(HintConstants.RightGrabDoughHint); }
+        else { _hud.ClearHint(HintConstants.RightGrabDoughHint); }
+    }
+
     private void OnParticleCollision(GameObject other)
     {
         if (other.gameObject.name.Equals("FlourParticle"))
@@ -88,5 +123,47 @@ public class BowlLogic : MonoBehaviour
         _batterVolume += 0.5f;
 
         SetAllBlends();
+    }
+
+    private void CreateDough(bool useLeft)
+    {
+        if (_batterVolume < 500) { return; }
+
+        if (useLeft && (_grabScript.IsGrabbedLeft || !_grabScript.IsGrabbedRight)) { return; }
+        else if (!useLeft && (_grabScript.IsGrabbedRight ||  !_grabScript.IsGrabbedLeft)) { return; }
+
+        GameObject other;
+        if (useLeft)
+        {
+            other = PlayerManager.Instance.GetObjectLeft();
+        }
+        else
+        {
+            other = PlayerManager.Instance.GetObjectRight();
+        }
+
+        if (other != null) { return; }
+
+        int handedness;
+        if (useLeft) { handedness = 1; }
+        else { handedness = 2; }
+
+        GameObject newDough = Instantiate(_doughPrefab);
+        newDough.SetActive(false);
+        if (newDough.TryGetComponent(out PlayerKB_GrabObject grabScript))
+        {
+            grabScript.SetIsActive(true, handedness);
+            _batterVolume -= 500;
+        }
+        else
+        {
+            Debug.Log("A 'PlayerKB_GrabObject' script has not been added to the dough prefab.");
+        }
+    }
+
+    private void OnDestroy()
+    {
+        _grabScript.OnGrabbedLeft -= ShowHintLeft;
+        _grabScript.OnGrabbedRight -= ShowHintRight;
     }
 }

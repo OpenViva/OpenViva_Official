@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum CycleSpeed 
@@ -14,8 +13,6 @@ public enum CycleSpeed
     OneDay
 }
 
-
-
 // This class manages the day-night cycle in the game.
 public class DayNightCycle : MonoBehaviour
 {
@@ -24,12 +21,12 @@ public class DayNightCycle : MonoBehaviour
     [Serializable]
     public class SkyBoxTransition
     {
-        [SerializeField] private static Material _dawnToMorning;
-        [SerializeField] private static Material _morningToDay;
-        [SerializeField] private static Material _dayToAfternoon;
-        [SerializeField] private static Material _afternoonToDusk;
-        [SerializeField] private static Material _duskToNight;
-        [SerializeField] private static Material _nightToDawn;
+        [SerializeField] private Material _dawnToMorning;
+        [SerializeField] private Material _morningToDay;
+        [SerializeField] private Material _dayToAfternoon;
+        [SerializeField] private Material _afternoonToDusk;
+        [SerializeField] private Material _duskToNight;
+        [SerializeField] private Material _nightToDawn;
         
         private DayNightCycle cycle; // Day cycle reference
         
@@ -147,16 +144,6 @@ public class DayNightCycle : MonoBehaviour
             }
             RenderSettings.skybox = _nightToDawn;
             _duskToNight.SetFloat("_Blend", 0);
-        }
-
-        public static void ResetBlends()
-        {
-            _dawnToMorning.SetFloat("_Blend", 0);
-            _morningToDay.SetFloat("_Blend", 0);
-            _dayToAfternoon.SetFloat("_Blend", 0);
-            _afternoonToDusk.SetFloat("_Blend", 0);
-            _duskToNight.SetFloat("_Blend", 0);
-            _nightToDawn.SetFloat("_Blend", 0);
         }
 
         #endregion
@@ -347,11 +334,6 @@ public class DayNightCycle : MonoBehaviour
     public CycleSpeed GetSpeed()
     {
         return currentCycleSpeed;
-    }
-
-    private void OnDestroy()
-    {
-        SkyBoxTransition.ResetBlends();
     }
 
 }

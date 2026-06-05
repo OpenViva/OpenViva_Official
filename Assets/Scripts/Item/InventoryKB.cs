@@ -155,7 +155,7 @@ public class InventoryKB : MonoBehaviour
 
         string itemName = _itemIndexes.GetItemName(itemIndex);
         _inventory.Add(new ItemInList(itemName, itemObject));
-        itemObject.GetComponent<PlayerKB_GrabObject>().SetIsActive(false, 3 - _grabbedIn, itemIndex);
+        itemObject.GetComponent<PlayerKB_GrabObject>().SetIsActive(false, 3 - _grabbedIn);
     }
 
     private void ScrollDown(InputAction.CallbackContext context)
@@ -181,7 +181,7 @@ public class InventoryKB : MonoBehaviour
             GameObject itemObject = _inventory[_selectedItem].item;
             int itemIndex = _itemIndexes.GetItemIndex(itemObject.name);
             _inventory.RemoveAt(_selectedItem);
-            itemObject.GetComponent<PlayerKB_GrabObject>().SetIsActive(true, 3 - _grabbedIn, itemIndex);
+            itemObject.GetComponent<PlayerKB_GrabObject>().SetIsActive(true, 3 - _grabbedIn);
             ClampSelectedIndex();
         }
     }

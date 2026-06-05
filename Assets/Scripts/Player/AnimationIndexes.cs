@@ -79,7 +79,7 @@ public class AnimationIndexes : MonoBehaviour
             case 19:
                 _animationHandler.HoldTowel("Left");
                 break;
-
+            default: break;
         }
     }
 
@@ -150,6 +150,7 @@ public class AnimationIndexes : MonoBehaviour
             case 19:
                 _animationHandler.HoldTowel("Right");
                 break;
+            default: break;
         }
     }
 }

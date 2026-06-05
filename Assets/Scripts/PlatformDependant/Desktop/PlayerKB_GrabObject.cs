@@ -210,8 +210,10 @@ public class PlayerKB_GrabObject : MonoBehaviour
     }
 
     // When the item is placed in the inventory, set it as inactive and disable physics. Do the inverse when taken out of the inventory
-    public void SetIsActive(bool set, int handedness, int itemIndex)
+    public void SetIsActive(bool set, int handedness)
     {
+        if (_playerLeftHand == null) { Start(); }
+
         if (set == false)
         {
             transform.SetParent(null);
@@ -237,7 +239,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 transform.SetParent(_playerLeftHand.transform);
                 transform.localPosition = _holdPositions.GetObjectPositionLeft(_objectIndex);
                 transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
-                _animationIndexes.PlayAnimationLeft(itemIndex);
+                _animationIndexes.PlayAnimationLeft(_objectIndex);
                 IsGrabbedLeft = true;
                 IsGrabbedRight = false;
             }
@@ -246,7 +248,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 transform.SetParent(_playerRightHand.transform);
                 transform.localPosition = _holdPositions.GetObjectPositionRight(_objectIndex);
                 transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
-                _animationIndexes.PlayAnimationRight(itemIndex);
+                _animationIndexes.PlayAnimationRight(_objectIndex);
                 IsGrabbedRight = true;
                 IsGrabbedLeft = false;
             }
