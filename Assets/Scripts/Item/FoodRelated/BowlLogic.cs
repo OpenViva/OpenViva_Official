@@ -4,15 +4,15 @@ public class BowlLogic : MonoBehaviour
 {
     [SerializeField] private SkinnedMeshRenderer _flourBlendShape;
     private float _flourVolume = 0;
-    private float _maxFlourVolume = 700; // recipe needs 600
+    private float _maxFlourVolume = 2100; // recipe needs 300
 
     [SerializeField] private SkinnedMeshRenderer _waterBlendShape;
     private float _waterVolume = 0;
-    private float _maxWaterVolume = 400; // recipe needs 350
+    private float _maxWaterVolume = 1400; // recipe needs 200
 
     [SerializeField] private SkinnedMeshRenderer _batterBlendShape;
     private float _batterVolume = 0;
-    private float _maxBatterVolume = 950;
+    private float _maxBatterVolume = 3500;
 
     private void OnParticleCollision(GameObject other)
     {
@@ -55,7 +55,7 @@ public class BowlLogic : MonoBehaviour
         else { _waterBlendShape.enabled = true; }
 
         float percent = _waterVolume / 3500;
-        _waterBlendShape.SetBlendShapeWeight(0, percent * 250);
+        _waterBlendShape.SetBlendShapeWeight(0, percent * 100);
     }
 
     private void SetBatterBlend()
@@ -81,10 +81,10 @@ public class BowlLogic : MonoBehaviour
 
     public void MixBatter()
     {
-        if (_flourVolume <= 0 || _waterVolume <= 0 || _batterVolume >= 1000) { return; }
+        if (_flourVolume <= 0 || _waterVolume <= 0 || _batterVolume >= _maxBatterVolume) { return; }
 
-        _flourVolume -= 7 / 12f * 0.5f;
-        _waterVolume -= 5 / 12f * 0.5f;
+        _flourVolume -= 0.6f * 0.5f;
+        _waterVolume -= 0.4f * 0.5f;
         _batterVolume += 0.5f;
 
         SetAllBlends();
