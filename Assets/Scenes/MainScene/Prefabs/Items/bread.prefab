@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 5554886187087904092}
   - component: {fileID: 5769869362808798216}
   - component: {fileID: 8075090788682783946}
+  - component: {fileID: 835510032270921910}
+  - component: {fileID: 1557380687572931379}
   m_Layer: 0
   m_Name: bread
   m_TagString: Item
@@ -196,3 +198,30 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.5, y: 1.5, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &835510032270921910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6865319516993053679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82e148d0afb9ad742bd06d56919b63b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BreadToastFrenchly
+  _conversionPrefab: {fileID: 8152808064861046451, guid: 00542f9a4e1513b4885efa0bac6304f4, type: 3}
+  _soakedBreadMaterial: {fileID: 2100000, guid: 766548e10c2971043bf9110d58c1f2ca, type: 2}
+--- !u!114 &1557380687572931379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6865319516993053679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae09d5b40d39e94cad1fc8a23b17f80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Meal
+  _mealData: {fileID: 11400000, guid: cd9b9b52668c10348b105fa6e95af8a3, type: 2}
