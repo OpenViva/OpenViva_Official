@@ -8,8 +8,9 @@ public class EggCrack : Ingredient
     private Player _player;
     private PlayerKB_GrabObject _grabScript;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _player = FindFirstObjectByType<Player>();
         _grabScript = GetComponent<PlayerKB_GrabObject>();
     }
@@ -25,6 +26,7 @@ public class EggCrack : Ingredient
 
     protected override void Update()
     {
+        base.Update();
         CalcDeltaMomentum();
     }
 

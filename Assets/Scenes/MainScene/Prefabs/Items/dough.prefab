@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6910136758943687328}
   - component: {fileID: 6997638587434217076}
   - component: {fileID: 3234907209896801769}
+  - component: {fileID: 5498176073172884908}
   m_Layer: 0
   m_Name: dough
   m_TagString: Item
@@ -196,3 +197,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.5, y: 1.5, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5498176073172884908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3543655900335581838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45db33b76e903114a86423e1129fe508, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoughBake
+  _conversionPrefab: {fileID: 6865319516993053679, guid: cf6a3a89f7333674284056e317db8639, type: 3}
+  _bakeTimer: 60

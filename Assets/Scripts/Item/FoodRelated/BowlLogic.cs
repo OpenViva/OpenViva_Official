@@ -149,6 +149,7 @@ public class BowlLogic : MonoBehaviour
         else { handedness = 2; }
 
         GameObject newDough = Instantiate(_doughPrefab);
+        newDough.name = _doughPrefab.name;
         newDough.SetActive(false);
         if (newDough.TryGetComponent(out PlayerKB_GrabObject grabScript))
         {

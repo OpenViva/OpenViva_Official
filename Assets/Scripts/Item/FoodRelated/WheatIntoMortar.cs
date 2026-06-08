@@ -4,8 +4,10 @@ public class WheatIntoMortar : Ingredient
 {
     private bool _didOnce = false; // DO NOT REMOVE.
 
-    private void OnTriggerEnter(Collider collider)
+    protected override void OnTriggerEnter(Collider collider)
     {
+        base.OnTriggerEnter(collider);
+
         if (rb.isKinematic || _didOnce) { return; }
         if (collider.TryGetComponent(out MortarLogic mortar))
         {
