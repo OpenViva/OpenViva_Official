@@ -36,4 +36,12 @@ public class Meal : MonoBehaviour
             _inOven = true;
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.name.Contains("Oven"))
+        {
+            _inOven = false;
+        }
+    }
 }

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8574620085413753858}
   - component: {fileID: 327661598262548137}
   - component: {fileID: 6725294934813022096}
+  - component: {fileID: -2983182400712219391}
   m_Layer: 0
   m_Name: frenchToast
   m_TagString: Item
@@ -196,3 +197,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.5, y: 1.5, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-2983182400712219391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8152808064861046451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae09d5b40d39e94cad1fc8a23b17f80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Meal
+  _mealData: {fileID: 0}
