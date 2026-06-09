@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 2634896422888571627}
   - component: {fileID: 1665014321255865908}
   - component: {fileID: 3466564820536022372}
+  - component: {fileID: 3075062131465932101}
   - component: {fileID: 2571907216338501824}
   - component: {fileID: 8420179564929963577}
   - component: {fileID: 7116775990263814742}
-  - component: {fileID: 3075062131465932101}
   m_Layer: 0
   m_Name: burntBread
   m_TagString: Item
@@ -32,8 +32,8 @@ Transform:
   m_GameObject: {fileID: 2934341399717259574}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -202.8249, y: 99.9055, z: -145.68535}
-  m_LocalScale: {x: 0.063048, y: -0.029937629, z: 0.063048}
+  m_LocalPosition: {x: -287.0146, y: 101.35999, z: 58.7869}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -45,7 +45,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2934341399717259574}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -8104534754996477809, guid: a8f024f08f1acff47814f903346a55f4, type: 3}
 --- !u!23 &1665014321255865908
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -116,7 +116,28 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -8104534754996477809, guid: a8f024f08f1acff47814f903346a55f4, type: 3}
+--- !u!65 &3075062131465932101
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2934341399717259574}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.1, y: 0.05, z: 0.1}
+  m_Center: {x: 0, y: 0.010984799, z: 0}
 --- !u!54 &2571907216338501824
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -156,7 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aa53ab25af41114397a2b5c34447bd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerKB_GrabObject
-  _objectIndex: 20
+  _objectIndex: 24
 --- !u!114 &7116775990263814742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,24 +196,3 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!65 &3075062131465932101
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2934341399717259574}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.5, y: 1.5, z: 1.5}
-  m_Center: {x: 0, y: 0, z: 0}

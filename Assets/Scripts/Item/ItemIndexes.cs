@@ -27,6 +27,10 @@ public class ItemIndexes
             "soap" => 18,
             "towel" => 19,
             "dough" => 20,
+            "bread" => 21,
+            "toast" => 22,
+            "frenchToast" => 23,
+            "burntBread" => 24,
             _ => -1,
         };
     }
@@ -55,6 +59,10 @@ public class ItemIndexes
             18 => "Soap",
             19 => "Towel",
             20 => "Dough",
+            21 => "Bread",
+            22 => "Toast",
+            23 => "French Toast",
+            24 => "Burnt Bread",
             _ => "Error",
         };
     }

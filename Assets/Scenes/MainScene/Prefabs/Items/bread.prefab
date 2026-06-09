@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 2281434894539666163}
   - component: {fileID: 7466011063110067940}
   - component: {fileID: 933612879932440752}
+  - component: {fileID: 8075090788682783946}
   - component: {fileID: 4740489284750389240}
   - component: {fileID: 5554886187087904092}
   - component: {fileID: 5769869362808798216}
-  - component: {fileID: 8075090788682783946}
   - component: {fileID: 835510032270921910}
   - component: {fileID: 1557380687572931379}
   m_Layer: 0
@@ -34,8 +34,8 @@ Transform:
   m_GameObject: {fileID: 6865319516993053679}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -287.19516, y: 101.35999, z: 58.750637}
-  m_LocalScale: {x: 0.063048, y: -0.029937629, z: 0.063048}
+  m_LocalPosition: {x: -287.18878, y: 101.35999, z: 58.785805}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -47,7 +47,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6865319516993053679}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -8104534754996477809, guid: a8f024f08f1acff47814f903346a55f4, type: 3}
 --- !u!23 &7466011063110067940
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -73,7 +73,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -8848810374240701247, guid: 436757056de26e144b330984c539cecd, type: 3}
+  - {fileID: 2100000, guid: dec33ca9b28fb1148a4172dd915becfd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -118,7 +118,28 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -8104534754996477809, guid: a8f024f08f1acff47814f903346a55f4, type: 3}
+--- !u!65 &8075090788682783946
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6865319516993053679}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.1, y: 0.05, z: 0.1}
+  m_Center: {x: 0, y: 0.010984799, z: 0}
 --- !u!54 &4740489284750389240
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -158,7 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aa53ab25af41114397a2b5c34447bd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerKB_GrabObject
-  _objectIndex: 20
+  _objectIndex: 21
 --- !u!114 &5769869362808798216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,27 +198,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!65 &8075090788682783946
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6865319516993053679}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.5, y: 1.5, z: 1.5}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &835510032270921910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,8 +210,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82e148d0afb9ad742bd06d56919b63b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreadToastFrenchly
-  _conversionPrefab: {fileID: 8152808064861046451, guid: 00542f9a4e1513b4885efa0bac6304f4, type: 3}
-  _soakedBreadMaterial: {fileID: 2100000, guid: 766548e10c2971043bf9110d58c1f2ca, type: 2}
+  _conversionPrefab: {fileID: 346344295895347948, guid: 85efe762299ce4d4f92947c1232592b6, type: 3}
+  _soakedBreadMaterial: {fileID: 2100000, guid: b4cc7c0dea3cd1340a51a8f305812321, type: 2}
 --- !u!114 &1557380687572931379
 MonoBehaviour:
   m_ObjectHideFlags: 0

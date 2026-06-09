@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class AnimationIndexes : MonoBehaviour
 {
-
     // Tells the animation handler which animation to play based on the index provided and handedness
 
     private AnimationHandler _animationHandler;
@@ -79,7 +78,10 @@ public class AnimationIndexes : MonoBehaviour
             case 19:
                 _animationHandler.HoldTowel("Left");
                 break;
-            default: break;
+            default:
+                _animationHandler.Idle("Left");
+                Debug.Log($"Animation does not exist for item index {index}");
+                break;
         }
     }
 
@@ -150,7 +152,10 @@ public class AnimationIndexes : MonoBehaviour
             case 19:
                 _animationHandler.HoldTowel("Right");
                 break;
-            default: break;
+            default:
+                _animationHandler.Idle("Right");
+                Debug.Log($"Animation does not exist for item index {index}");
+                break;
         }
     }
 }

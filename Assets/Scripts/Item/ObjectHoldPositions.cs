@@ -4,7 +4,7 @@ public class ObjectHoldPositions : MonoBehaviour
 {
     // the position and rotation to set different items to when they are held in either hand
 
-    private Vector3[] allObjectPositionsLeft = new Vector3[21]
+    private Vector3[] allObjectPositionsLeft = new Vector3[25]
     {
         new Vector3(0.0424f, 0.0134f, -0.0307f), // BAG
         new Vector3(0.0033f, 0.0239f, -0.0041f), // RUBBER_DUCKY
@@ -26,10 +26,14 @@ public class ObjectHoldPositions : MonoBehaviour
         new Vector3(0.02351847f, 0.01467687f, 0.00121516f), // POT
         new Vector3(0.00144f, 0.01741f, -0.00344f), // SOAP
         new Vector3(0f, 0.0147f, -0.0041f), // TOWEL
-        new Vector3(0, 0, 0)
+        new Vector3(0, 0, 0), // DOUGH
+        new Vector3(0, 0, 0), // BREAD
+        new Vector3(0, 0, 0), // TOAST
+        new Vector3(0, 0, 0), // FRENCH_TOAST
+        new Vector3(0, 0, 0) // BURNT_BREAD
     };
 
-    private Vector3[] allObjectPositionsRight = new Vector3[21]
+    private Vector3[] allObjectPositionsRight = new Vector3[25]
     {
         new Vector3(-0.0373f, 0.0241f, -0.0336f), // BAG
         new Vector3(-0.0075f, 0.024f, -0.0023f), // RUBBER_DUCKY
@@ -51,10 +55,14 @@ public class ObjectHoldPositions : MonoBehaviour
         new Vector3(-0.023f, 0.0154f, -0.0019f), // POT
         new Vector3(-0.00181f, 0.01307f, -0.00302f), // SOAP
         new Vector3(0.0015f, 0.0121f, -0.0021f), // TOWEL
-        new Vector3(0, 0, 0)
+        new Vector3(0, 0, 0), // DOUGH
+        new Vector3(0, 0, 0), // BREAD
+        new Vector3(0, 0, 0), // TOAST
+        new Vector3(0, 0, 0), // FRENCH_TOAST
+        new Vector3(0, 0, 0) // BURNT_BREAD
     };
 
-    private Quaternion[] allObjectRotationsLeft = new Quaternion[21]
+    private Quaternion[] allObjectRotationsLeft = new Quaternion[25]
     {
         Quaternion.Euler(0f, 124.092f, -91.166f), // BAG
         Quaternion.Euler(-26.159f, -128.685f, 142.79f), // RUBBER_DUCKY
@@ -76,10 +84,14 @@ public class ObjectHoldPositions : MonoBehaviour
         Quaternion.Euler(0f, -93.053f, 90f), // POT
         Quaternion.Euler(-192.477f, 130.278f, 85f), // SOAP
         Quaternion.Euler(0f, 34.82f, 100.165f), // TOWEL
-        Quaternion.Euler(0, 0, 0)
+        Quaternion.Euler(0, 0, 0), // DOUGH
+        Quaternion.Euler(0, 0, 0), // BREAD
+        Quaternion.Euler(0, 0, 0), // TOAST
+        Quaternion.Euler(0, 0, 0), // FRENCH_TOAST
+        Quaternion.Euler(0, 0, 0) // BURNT_BREAD
     };
 
-    private Quaternion[] allObjectRotationsRight = new Quaternion[21]
+    private Quaternion[] allObjectRotationsRight = new Quaternion[25]
     {
         Quaternion.Euler(-11.989f, -129.545f, 90f), // BAG
         Quaternion.Euler(155.574f, 141.103f, 346.339f), // RUBBER_DUCKY
@@ -101,7 +113,11 @@ public class ObjectHoldPositions : MonoBehaviour
         Quaternion.Euler(0f, -91.117f, 87.762f), // POT
         Quaternion.Euler(5.078f, 48.841f, 90.273f), // SOAP
         Quaternion.Euler(0f, 138.14f, 92.2f), // TOWEL
-        Quaternion.Euler(0, 0, 0)
+        Quaternion.Euler(0, 0, 0), // DOUGH
+        Quaternion.Euler(0, 0, 0), // BREAD
+        Quaternion.Euler(0, 0, 0), // TOAST
+        Quaternion.Euler(0, 0, 0), // FRENCH_TOAST
+        Quaternion.Euler(0, 0, 0) // BURNT_BREAD
     };
 
     public Vector3 GetObjectPositionLeft(int objectIndex)
