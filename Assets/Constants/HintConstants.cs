@@ -31,6 +31,8 @@ public class HintConstants : MonoBehaviour
     public static readonly string LeftGrabDoughHint = "Take Dough: [Q]";
     public static readonly string RightGrabDoughHint = "Take Dough: [E]";
 
+    public static readonly string CuttingMinigameHint = "Cut fruit: [F]";
+
     public static readonly string LeftGrabHintVR = "Grip: [lGrip]";
     public static readonly string RightGrabHintVR = "Grip: [rGrip]";
     public static readonly string LeftFlashlightHintVR = "Toggle Flashlight: [Y]";

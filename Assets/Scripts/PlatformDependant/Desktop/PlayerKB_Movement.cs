@@ -74,6 +74,7 @@ public class PlayerKB_Movement : MonoBehaviour
     private Vector3 _controllerVelocity;
     private bool _isRunning = false;
     private bool _jumpQueued = false;
+    private bool _inMinigame = false;
 
     private void Start()
     {
@@ -124,7 +125,7 @@ public class PlayerKB_Movement : MonoBehaviour
 
     void HandleMovement()
     {
-        if (Globals.isMenuOpen) return;
+        if (Globals.isMenuOpen || _inMinigame) return;
 
         if (!isGrounded)
         {
@@ -139,7 +140,7 @@ public class PlayerKB_Movement : MonoBehaviour
 
     void HandleLook()
     {
-        if (lookInput == Vector2.zero || Globals.isMenuOpen) return;
+        if (lookInput == Vector2.zero || Globals.isMenuOpen || _inMinigame) return;
 
         Vector2 input = lookInput;
 
@@ -346,6 +347,11 @@ public class PlayerKB_Movement : MonoBehaviour
         JumpHeight = Mathf.Clamp(newJumpHeight, 1f, 20f);
 
         Debug.Log("Changed player jump height to: " + newJumpHeight);
+    }
+
+    public void SetInMinigame(bool set)
+    {
+        _inMinigame = set;
     }
 }
 
