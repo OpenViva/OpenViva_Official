@@ -19,7 +19,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
     [SerializeField] private GameObject _map;
 
     // --- Fields ---
-    [SerializeField] private Player _player;
+    private Player _player;
 
     private bool _isCrouching = false;
     private int _currentHandPos = 10;
