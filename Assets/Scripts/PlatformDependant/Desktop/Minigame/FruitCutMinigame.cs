@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,7 +15,16 @@ public class FruitCutMinigame : MonoBehaviour
     private Camera _mainCamera;
 
     private bool _isPlaying = false;
+    private bool _hasFruit = false;
 
+    private enum Fruit
+    {
+        None = 0,
+        Peach = 2,
+        Strawberry = 3,
+        Cantaloupe = 4
+    }
+    private Fruit _selectedFruit = 0;
     private void Awake()
     {
         _mainCamera = Camera.main;
@@ -58,6 +68,22 @@ public class FruitCutMinigame : MonoBehaviour
     private void EnterMinigame(InputAction.CallbackContext context)
     {
         if (_isPlaying || !Globals.isDesktopMode || _minigameCamera == null) { return; }
+
+        int itemInHand = PlayerManager.Instance.GetItemLeft();
+        bool isDefined = Enum.IsDefined(typeof(Fruit), itemInHand);
+        if (!isDefined)
+        {
+            itemInHand = PlayerManager.Instance.GetItemRight();
+            isDefined = Enum.IsDefined(typeof(Fruit), itemInHand);
+        }
+        if (!isDefined)
+        {
+            // Display HUD message: 'You need a fruit!'
+            Debug.Log("No fruit detected.");
+            return;
+        }
+        _selectedFruit = (Fruit)itemInHand;
+        Debug.Log($"Fruit detected: {_selectedFruit}");
 
         _isPlaying = true;
 
