@@ -20,8 +20,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject _rightHandKB; // PlayerKB's right hand
     private List<PlayerVR_GrabObject> _itemList;
 
-    [SerializeField] public GameObject _animationKB;
-    [SerializeField] public GameObject _animationVR;
+    public GameObject AnimationKB;
+    public GameObject AnimationVR;
 
     // Static Events
     public static event Action OnMoveCharaToCamera;
@@ -105,7 +105,7 @@ public class PlayerManager : MonoBehaviour
     // Check which items are being held in the player's hands, if any
     private GameObject CheckItemInHandsKB(Transform parent)
     {
-        List<GameObject> children = new List<GameObject>();
+        List<GameObject> children = new();
         int numElements = 0;
 
         // Get all child objects of the hand
@@ -170,7 +170,12 @@ public class PlayerManager : MonoBehaviour
         }
         if (item != null)
         {
-            if (destroyItemAfterwards) { Destroy(item.gameObject); }
+            if (destroyItemAfterwards) 
+            {
+                PlayerKB_GrabObject grabScript = item.GetComponent<PlayerKB_GrabObject>();
+                grabScript.SetIsActive(false, 2);
+                Destroy(item); 
+            }
             return _itemIndexes.GetItemIndex(item.name);
         }
         return -1;

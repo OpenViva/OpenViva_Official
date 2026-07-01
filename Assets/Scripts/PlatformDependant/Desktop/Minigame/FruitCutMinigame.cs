@@ -1,5 +1,6 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,9 @@ public class FruitCutMinigame : MonoBehaviour
     [SerializeField] private Camera _minigameCamera;
     [SerializeField] private SkinnedMeshRenderer _minigameHands;
     private Animator _minigameAnimator;
+
+    [SerializeField] private GameObject _strayberryPrefabs;
+    private List<Transform> _strawberries = new();
 
     private GameObject _knife;
     private Transform _knifeOrginalTransform;
@@ -53,6 +57,8 @@ public class FruitCutMinigame : MonoBehaviour
         _knifeHoldTransform = transform.GetChild(3);
 
         AssignInputs();
+
+        _strawberries = _strayberryPrefabs.transform.GetComponentsInChildren<Transform>(true).ToList();
     }
 
     private void Update()
@@ -180,9 +186,16 @@ public class FruitCutMinigame : MonoBehaviour
     {
         switch (_selectedFruit)
         {
-            case Fruit.Peach: _cutsLeft = 6; break;
-            case Fruit.Cantaloupe: _cutsLeft = 18; break;
-            case Fruit.Strawberry: _cutsLeft = 2; break;
+            case Fruit.Peach:
+                _cutsLeft = 6;
+                break;
+            case Fruit.Cantaloupe: 
+                _cutsLeft = 18; 
+                break;
+            case Fruit.Strawberry: 
+                _cutsLeft = 2;
+                _strawberries[1].gameObject.SetActive(true);
+                break;
             default: _cutsLeft = 0; break;
         }
     }

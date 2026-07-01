@@ -5322,8 +5322,8 @@ MonoBehaviour:
   _handSkin: {fileID: 5899278428300482943}
   _leftHandKB: {fileID: 4898988522826338508}
   _rightHandKB: {fileID: 4360877546320563217}
-  _animationKB: {fileID: 5227702063050436759}
-  _animationVR: {fileID: 4607818494391237548}
+  AnimationKB: {fileID: 5227702063050436759}
+  AnimationVR: {fileID: 4607818494391237548}
   LeftHandOccupied: 0
   RightHandOccupied: 0
 --- !u!1 &4360877546320563217
@@ -5586,8 +5586,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0d6cc54869ee974ca79e18a34990377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationHandler
-  _leftAnimator: {fileID: 0}
-  _rightAnimator: {fileID: 0}
+  _leftAnimator: {fileID: 2888290439018592619}
+  _rightAnimator: {fileID: 2988396458492893549}
 --- !u!114 &484731847406279159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8213,6 +8213,7 @@ GameObject:
   - component: {fileID: 5769781198626430020}
   - component: {fileID: 3468353186216344353}
   - component: {fileID: 567149945703427677}
+  - component: {fileID: 5986306757638334485}
   m_Layer: 0
   m_Name: PlayerKB
   m_TagString: Player
@@ -8315,6 +8316,18 @@ CharacterController:
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.78, z: 0}
+--- !u!114 &5986306757638334485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6035623113748730353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e8dfdafab9dfaa478aae683536c9471, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectHoldPositions
 --- !u!1 &6048715056530448356
 GameObject:
   m_ObjectHideFlags: 0

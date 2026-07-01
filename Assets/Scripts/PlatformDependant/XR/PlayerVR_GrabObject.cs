@@ -28,7 +28,7 @@ public class PlayerVR_GrabObject : XRGrabInteractable
 
     private void Start()
     {
-        _animationIndexes = PlayerManager.Instance._animationVR.GetComponent<AnimationIndexes>();
+        _animationIndexes = PlayerManager.Instance.AnimationVR.GetComponent<AnimationIndexes>();
 
         GameObject floatingHint = GameObject.Find("FloatingHint");
         _hintManager = floatingHint.GetComponent<HintManager>();

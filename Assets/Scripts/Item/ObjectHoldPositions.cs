@@ -3,66 +3,79 @@ using UnityEngine;
 public class ObjectHoldPositions : MonoBehaviour
 {
     // the position and rotation to set different items to when they are held in either hand
+    public static ObjectHoldPositions Instance { get; private set; }
 
-    private Vector3[] allObjectPositionsLeft = new Vector3[25]
+    private void Awake()
     {
-        new Vector3(0.0424f, 0.0134f, -0.0307f), // BAG
-        new Vector3(0.0033f, 0.0239f, -0.0041f), // RUBBER_DUCKY
-        new Vector3(0.0025f,0.0158f, -0.0064f), // PEACH
-        new Vector3(0.00077f, 0.03047f, -0.0053f), // STRAWBERRY
-        new Vector3(0.0099f, 0.0175f, -0.008f), // CANTALOUPE
-        new Vector3(-0.00514069f, 0.03108077f, -0.0057312f), // BLUEBERRY
-        new Vector3(0.01392059f, 0.01097836f, 0.01483068f), // WHEAT
-        new Vector3(0.00093f, 0.01507f, -0.0061f), // FLASHLIGHT
-        new Vector3(0f, 0.0208f, -0.00887f), // EGG
-        new Vector3(0.01714588f, 0.01800881f, 0.0001286522f), // FLOUR_JAR
-        new Vector3(1.983345e-05f, 0.02659328f, -0.004195444f), // KNIFE
-        new Vector3(-0.00038f, 0.01314f, -0.00221f), // LANTERN
-        new Vector3(0.021f, 0.0156f, -0.018f), // MILK_CANISTER
-        new Vector3(0.0216f, 0.016f, 0.0059f), // MIXING_BOWL
-        new Vector3(-0.00547f, 0.01417f, -0.00738f), // MIXING_SPOON
-        new Vector3(0.01442f, 0.01936f, 0.00331f), // MORTAR
-        new Vector3(0.00066f, 0.01621f, -0.00778f), // PESTLE
-        new Vector3(0.02351847f, 0.01467687f, 0.00121516f), // POT
-        new Vector3(0.00144f, 0.01741f, -0.00344f), // SOAP
-        new Vector3(0f, 0.0147f, -0.0041f), // TOWEL
-        new Vector3(0, 0, 0), // DOUGH
-        new Vector3(0, 0, 0), // BREAD
-        new Vector3(0, 0, 0), // TOAST
-        new Vector3(0, 0, 0), // FRENCH_TOAST
-        new Vector3(0, 0, 0) // BURNT_BREAD
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
+    private readonly Vector3[] allObjectPositionsLeft = new Vector3[25]
+    {
+        new(0.0424f, 0.0134f, -0.0307f), // BAG
+        new(0.0033f, 0.0239f, -0.0041f), // RUBBER_DUCKY
+        new(0.0025f,0.0158f, -0.0064f), // PEACH
+        new(0.00077f, 0.03047f, -0.0053f), // STRAWBERRY
+        new(0.0099f, 0.0175f, -0.008f), // CANTALOUPE
+        new(-0.00514069f, 0.03108077f, -0.0057312f), // BLUEBERRY
+        new(0.01392059f, 0.01097836f, 0.01483068f), // WHEAT
+        new(0.00093f, 0.01507f, -0.0061f), // FLASHLIGHT
+        new(0f, 0.0208f, -0.00887f), // EGG
+        new(0.01714588f, 0.01800881f, 0.0001286522f), // FLOUR_JAR
+        new(1.983345e-05f, 0.02659328f, -0.004195444f), // KNIFE
+        new(-0.00038f, 0.01314f, -0.00221f), // LANTERN
+        new(0.021f, 0.0156f, -0.018f), // MILK_CANISTER
+        new(0.0216f, 0.016f, 0.0059f), // MIXING_BOWL
+        new(-0.00547f, 0.01417f, -0.00738f), // MIXING_SPOON
+        new(0.01442f, 0.01936f, 0.00331f), // MORTAR
+        new(0.00066f, 0.01621f, -0.00778f), // PESTLE
+        new(0.02351847f, 0.01467687f, 0.00121516f), // POT
+        new(0.00144f, 0.01741f, -0.00344f), // SOAP
+        new(0f, 0.0147f, -0.0041f), // TOWEL
+        new(0, 0, 0), // DOUGH
+        new(0, 0, 0), // BREAD
+        new(0, 0, 0), // TOAST
+        new(0, 0, 0), // FRENCH_TOAST
+        new(0, 0, 0) // BURNT_BREAD
     };
 
-    private Vector3[] allObjectPositionsRight = new Vector3[25]
+    private readonly Vector3[] allObjectPositionsRight = new Vector3[25]
     {
-        new Vector3(-0.0373f, 0.0241f, -0.0336f), // BAG
-        new Vector3(-0.0075f, 0.024f, -0.0023f), // RUBBER_DUCKY
-        new Vector3(-0.0025f, 0.0182f, -0.0062f), // PEACH
-        new Vector3(-0.0003f, 0.0331f, -0.005f), // STRAWBERRY
-        new Vector3(-0.0072f, 0.0196f, -0.0095f), // CANTALOUPE
-        new Vector3(0.0051f, 0.0305f, -0.006f), // BLUEBERRY
-        new Vector3(-0.01840058f, 0.008688283f, 0.01550032f), // WHEAT
-        new Vector3(0.0008140024f, 0.01238399f, -0.006554195f), // FLASHLIGHT
-        new Vector3(0.0013f, 0.02243f, -0.00793f), // EGG
-        new Vector3(-0.0182f, 0.0204f, -0.0023f), // FLOUR_JAR
-        new Vector3(0f, 0.0255f, -0.004f), // KNIFE
-        new Vector3(-0.0011f, 0.0098f, -0.003f), // LANTERN
-        new Vector3(-0.019f, 0.0127f, -0.02f), // MILK_CANISTER
-        new Vector3(-0.0232f, 0.0229f, 0.0049f), // MIXING_BOWL
-        new Vector3(0.00705f, 0.01507f, -0.00916f), // MIXING_SPOON
-        new Vector3(-0.01161f, 0.02078f, 0.00617f), // MORTAR
-        new Vector3(0f, 0.01641f, -0.00632f), // PESTLE
-        new Vector3(-0.023f, 0.0154f, -0.0019f), // POT
-        new Vector3(-0.00181f, 0.01307f, -0.00302f), // SOAP
-        new Vector3(0.0015f, 0.0121f, -0.0021f), // TOWEL
-        new Vector3(0, 0, 0), // DOUGH
-        new Vector3(0, 0, 0), // BREAD
-        new Vector3(0, 0, 0), // TOAST
-        new Vector3(0, 0, 0), // FRENCH_TOAST
-        new Vector3(0, 0, 0) // BURNT_BREAD
+        new(-0.0373f, 0.0241f, -0.0336f), // BAG
+        new(-0.0075f, 0.024f, -0.0023f), // RUBBER_DUCKY
+        new(-0.0025f, 0.0182f, -0.0062f), // PEACH
+        new(-0.0003f, 0.0331f, -0.005f), // STRAWBERRY
+        new(-0.0072f, 0.0196f, -0.0095f), // CANTALOUPE
+        new(0.0051f, 0.0305f, -0.006f), // BLUEBERRY
+        new(-0.01840058f, 0.008688283f, 0.01550032f), // WHEAT
+        new(0.0008140024f, 0.01238399f, -0.006554195f), // FLASHLIGHT
+        new(0.0013f, 0.02243f, -0.00793f), // EGG
+        new(-0.0182f, 0.0204f, -0.0023f), // FLOUR_JAR
+        new(0f, 0.0255f, -0.004f), // KNIFE
+        new(-0.0011f, 0.0098f, -0.003f), // LANTERN
+        new(-0.019f, 0.0127f, -0.02f), // MILK_CANISTER
+        new(-0.0232f, 0.0229f, 0.0049f), // MIXING_BOWL
+        new(0.00705f, 0.01507f, -0.00916f), // MIXING_SPOON
+        new(-0.01161f, 0.02078f, 0.00617f), // MORTAR
+        new(0f, 0.01641f, -0.00632f), // PESTLE
+        new(-0.023f, 0.0154f, -0.0019f), // POT
+        new(-0.00181f, 0.01307f, -0.00302f), // SOAP
+        new(0.0015f, 0.0121f, -0.0021f), // TOWEL
+        new(0, 0, 0), // DOUGH
+        new(0, 0, 0), // BREAD
+        new(0, 0, 0), // TOAST
+        new(0, 0, 0), // FRENCH_TOAST
+        new(0, 0, 0) // BURNT_BREAD
     };
 
-    private Quaternion[] allObjectRotationsLeft = new Quaternion[25]
+    private readonly Quaternion[] allObjectRotationsLeft = new Quaternion[25]
     {
         Quaternion.Euler(0f, 124.092f, -91.166f), // BAG
         Quaternion.Euler(-26.159f, -128.685f, 142.79f), // RUBBER_DUCKY
@@ -91,7 +104,7 @@ public class ObjectHoldPositions : MonoBehaviour
         Quaternion.Euler(0, 0, 0) // BURNT_BREAD
     };
 
-    private Quaternion[] allObjectRotationsRight = new Quaternion[25]
+    private readonly Quaternion[] allObjectRotationsRight = new Quaternion[25]
     {
         Quaternion.Euler(-11.989f, -129.545f, 90f), // BAG
         Quaternion.Euler(155.574f, 141.103f, 346.339f), // RUBBER_DUCKY

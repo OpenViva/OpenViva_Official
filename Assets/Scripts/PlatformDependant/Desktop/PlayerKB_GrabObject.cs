@@ -18,7 +18,6 @@ public class PlayerKB_GrabObject : MonoBehaviour
     protected bool _isGrabbedInRight = false; // Check whether the object is grabbed in the right hand
     private bool _didOnce = false; // For crop subclass only
 
-    private ObjectHoldPositions _holdPositions; // Calls the script that holds the positions and rotations of all grabbable objects
     [SerializeField] private int _objectIndex; // The index of the object in the ObjectHoldPositions script
     private bool _isActive = true; // The item cannot be grabbed if this is false
     private bool _isOpen = false; // If this object is not a bag, this variable is always false
@@ -61,8 +60,6 @@ public class PlayerKB_GrabObject : MonoBehaviour
     {
         _player = FindFirstObjectByType<Player>();
 
-        _holdPositions = new ObjectHoldPositions();
-
         // Find the player's hand objects in the scene
         _playerLeftHand = GameObject.Find("hand_l");
         _playerRightHand = GameObject.Find("hand_r");
@@ -80,7 +77,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         _outline = GetComponent<Outline>();
 
         GameObject animationGameObject = GameObject.Find("AnimationKB");
-        _animationIndexes = PlayerManager.Instance._animationKB.GetComponent<AnimationIndexes>();
+        _animationIndexes = PlayerManager.Instance.AnimationKB.GetComponent<AnimationIndexes>();
 
         AssignInputs();
     }
@@ -95,8 +92,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObjectRB.useGravity = false;
                 _grabbableObjectRB.isKinematic = true;
                 transform.SetParent(_playerLeftHand.transform);
-                transform.localPosition = _holdPositions.GetObjectPositionLeft(_objectIndex);
-                transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
+                transform.SetLocalPositionAndRotation(ObjectHoldPositions.Instance.GetObjectPositionLeft(_objectIndex), ObjectHoldPositions.Instance.GetObjectRotationLeft(_objectIndex));
                 IsGrabbedLeft = true;
                 if (!_didOnce) { _didOnce = true; OnGrabbed(); }
                 PlayerManager.Instance.LeftHandOccupied = true;
@@ -132,8 +128,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _grabbableObjectRB.useGravity = false;
                 _grabbableObjectRB.isKinematic = true;
                 transform.SetParent(_playerRightHand.transform);
-                transform.localPosition = _holdPositions.GetObjectPositionRight(_objectIndex);
-                transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
+                transform.SetLocalPositionAndRotation(ObjectHoldPositions.Instance.GetObjectPositionRight(_objectIndex), ObjectHoldPositions.Instance.GetObjectRotationRight(_objectIndex));
                 IsGrabbedRight = true;
                 if (!_didOnce) { _didOnce = true; OnGrabbed(); }
                 PlayerManager.Instance.RightHandOccupied = true;
@@ -237,8 +232,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             if (handedness == 1)
             {
                 transform.SetParent(_playerLeftHand.transform);
-                transform.localPosition = _holdPositions.GetObjectPositionLeft(_objectIndex);
-                transform.localRotation = _holdPositions.GetObjectRotationLeft(_objectIndex);
+                transform.SetLocalPositionAndRotation(ObjectHoldPositions.Instance.GetObjectPositionLeft(_objectIndex), ObjectHoldPositions.Instance.GetObjectRotationLeft(_objectIndex));
                 _animationIndexes.PlayAnimationLeft(_objectIndex);
                 IsGrabbedLeft = true;
                 IsGrabbedRight = false;
@@ -246,8 +240,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             else
             {
                 transform.SetParent(_playerRightHand.transform);
-                transform.localPosition = _holdPositions.GetObjectPositionRight(_objectIndex);
-                transform.localRotation = _holdPositions.GetObjectRotationRight(_objectIndex);
+                transform.SetLocalPositionAndRotation(ObjectHoldPositions.Instance.GetObjectPositionRight(_objectIndex), ObjectHoldPositions.Instance.GetObjectRotationRight(_objectIndex));
                 _animationIndexes.PlayAnimationRight(_objectIndex);
                 IsGrabbedRight = true;
                 IsGrabbedLeft = false;
