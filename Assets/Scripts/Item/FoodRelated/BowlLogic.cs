@@ -127,7 +127,7 @@ public class BowlLogic : MonoBehaviour
 
     private void CreateDough(bool useLeft)
     {
-        if (_batterVolume < 500) { return; }
+        if (_batterVolume < 250) { return; }
 
         if (useLeft && (_grabScript.IsGrabbedLeft || !_grabScript.IsGrabbedRight)) { return; }
         else if (!useLeft && (_grabScript.IsGrabbedRight ||  !_grabScript.IsGrabbedLeft)) { return; }
@@ -154,7 +154,7 @@ public class BowlLogic : MonoBehaviour
         if (newDough.TryGetComponent(out PlayerKB_GrabObject grabScript))
         {
             grabScript.SetIsActive(true, handedness);
-            _batterVolume -= 500;
+            _batterVolume -= 250;
         }
         else
         {
