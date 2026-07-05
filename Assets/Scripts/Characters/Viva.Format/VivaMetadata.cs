@@ -7,6 +7,7 @@ using UnityEngine;
 public class VivaMetadata
 {
     public int Version = 1;
+    public string PrefabName;
     public List<ScriptData> Scripts = new();
 
     [Serializable]
