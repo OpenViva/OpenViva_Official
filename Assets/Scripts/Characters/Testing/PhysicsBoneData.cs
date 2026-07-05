@@ -1,4 +1,7 @@
-public class PhysicsBoneData
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "PhysBoneData", menuName = "Viva/Physics Bone Data")]
+public class PhysicsBoneData : ScriptableObject
 {
     // TODO: Edit this to fit the game needs
     public string boneName;
