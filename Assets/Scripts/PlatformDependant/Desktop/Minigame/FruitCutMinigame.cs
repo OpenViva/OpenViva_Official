@@ -1,19 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class FruitCutMinigame : MonoBehaviour
 {
-    [SerializeField] private Camera _minigameCamera;
-    [SerializeField] private SkinnedMeshRenderer _minigameHands;
+    private Camera _minigameCamera;
+    private SkinnedMeshRenderer _minigameHands;
     private Animator _minigameAnimator;
     [SerializeField] private Animator _handAnimator;
 
-    [SerializeField] private GameObject _strawberryPrefabs;
-    [SerializeField] private GameObject _peachPrefabs;
-    [SerializeField] private GameObject _cantaloupePrefabs;
+    private GameObject _strawberryPrefabs;
+    private GameObject _peachPrefabs;
+    private GameObject _cantaloupePrefabs;
     private List<GameObject> _strawberries = new();
     private List<GameObject> _peaches = new();
     private List<GameObject> _cantaloupes = new();
@@ -22,13 +24,22 @@ public class FruitCutMinigame : MonoBehaviour
     private const int CANTALOUPE_MAX = 19;
     private GameObject _currentPrefabShowing;
 
-    [SerializeField]private GameObject _knife;
+    [SerializeField] private GameObject _knife;
     private Transform _knifeOrginalTransform;
     private Transform _knifeHoldTransform;
 
     [SerializeField] private Player _player;
     [SerializeField] private HintManager _HUD;
     private Camera _mainCamera;
+
+    private GameObject _minigameHUD;
+    private GameObject _movingPointImage;
+    private GameObject _target;
+    private TextMeshProUGUI _accuracyText;
+    private TextMeshProUGUI _averageText;
+    private GameObject _doneText;
+    private Scrollbar _progressBar;
+    private GameObject _progressBarHandle;
 
     // Minigame fields
     [SerializeField] private float _range = 2f;
@@ -40,6 +51,7 @@ public class FruitCutMinigame : MonoBehaviour
     private bool _isCutting = false;
     private bool _isPlaying = false;
     private int _cutsLeft = 0;
+    private bool _noCutsLeft = false;
 
     private enum Fruit
     {
@@ -54,6 +66,9 @@ public class FruitCutMinigame : MonoBehaviour
     {
         _mainCamera = Camera.main;
 
+        GameObject parent = transform.GetChild(6).gameObject;
+        _minigameHands = parent.transform.GetChild(0).GetComponent<SkinnedMeshRenderer>();
+
         if (_minigameHands == null)
         {
             Debug.LogWarning("No minigame hand model found. Fruit cutting minigame disabled.");
@@ -61,10 +76,28 @@ public class FruitCutMinigame : MonoBehaviour
         }
         _minigameHands.enabled = false;
 
+        _minigameCamera = transform.GetChild(0).GetComponent<Camera>();
         _minigameAnimator = GetComponent<Animator>();
 
         _knifeOrginalTransform = transform.GetChild(1);
         _knifeHoldTransform = transform.GetChild(2);
+
+        _strawberryPrefabs = transform.GetChild(3).gameObject;
+        _peachPrefabs = transform.GetChild(4).gameObject;
+        _cantaloupePrefabs = transform.GetChild(5).gameObject;
+
+        _minigameHUD = _HUD.transform.GetChild(2).gameObject;
+        _movingPointImage = _minigameHUD.transform.GetChild(2).gameObject;
+        parent = _minigameHUD.transform.GetChild(0).gameObject;
+        _target = parent.transform.GetChild(0).gameObject;
+        parent = _minigameHUD.transform.GetChild(3).gameObject;
+        _accuracyText = parent.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        _averageText = parent.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        parent = _minigameHUD.transform.GetChild(5).gameObject;
+        _progressBar = parent.GetComponent<Scrollbar>();
+        parent = parent.transform.GetChild(0).gameObject;
+        _progressBarHandle = parent.transform.GetChild(0).gameObject;
+        _doneText = _minigameHUD.transform.GetChild(4).gameObject;
 
         AssignInputs();
         InitAllLists();
@@ -72,10 +105,7 @@ public class FruitCutMinigame : MonoBehaviour
 
     private void Update()
     {
-        if (_isPlaying)
-        {
-            MovePoint();
-        }
+        if (_isPlaying) { MovePoint(); }
     }
 
     private void AssignInputs()
@@ -87,7 +117,7 @@ public class FruitCutMinigame : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            _HUD.CreateHint(HintConstants.CuttingMinigameHint);
+            _HUD.CreateHint(HintConstants.EnterCuttingMinigameHint);
             _player.Controls.Viva.UniversalInteract.performed += EnterMinigame;
         }
     }
@@ -96,20 +126,23 @@ public class FruitCutMinigame : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            _HUD.ClearHint(HintConstants.CuttingMinigameHint);
+            _HUD.ClearHint(HintConstants.EnterCuttingMinigameHint);
             _player.Controls.Viva.UniversalInteract.performed -= EnterMinigame;
         }
     }
 
     private void Play()
     {
-        _randomPoint = UnityEngine.Random.Range(0, _range);
+        SetRandomPoint();
     }
 
     private void MovePoint()
     {
         if (_goingUp) { _movingPoint += Time.deltaTime; }
         else { _movingPoint -= Time.deltaTime; }
+
+        Vector3 vector = _movingPointImage.transform.localPosition;
+        _movingPointImage.transform.localPosition = new Vector3(-150f + (_movingPoint * 300 / _range), vector.y, vector.z);
 
         if (_movingPoint >= _range) { _goingUp = false; }
         if (_movingPoint <= 0) { _goingUp = true; }
@@ -121,7 +154,7 @@ public class FruitCutMinigame : MonoBehaviour
     {
         if (_isPlaying || !Globals.isDesktopMode || _minigameCamera == null) { return; }
 
-        if (_cutsLeft == 0)
+        if (_cutsLeft == 0 && _selectedFruit == Fruit.None)
         {
             int itemInHand = PlayerManager.Instance.GetItemLeft(true);
             bool isDefined = Enum.IsDefined(typeof(Fruit), itemInHand);
@@ -151,10 +184,14 @@ public class FruitCutMinigame : MonoBehaviour
         _mainCamera.enabled = false;
         _minigameCamera.enabled = true;
         _minigameHands.enabled = true;
+        _minigameHUD.SetActive(true);
 
         Globals.handleMovement = false;
         Globals.handleKBLook = false;
         PlayerManager.Instance.HideHands(true);
+
+        _HUD.ClearHint(HintConstants.EnterCuttingMinigameHint);
+        _HUD.CreateHint(HintConstants.ExitCuttingMinigameHint);
 
         _knife.transform.SetPositionAndRotation(_knifeHoldTransform.position, _knifeHoldTransform.rotation);
 
@@ -174,6 +211,7 @@ public class FruitCutMinigame : MonoBehaviour
         _mainCamera.enabled = true;
         _minigameCamera.enabled = false;
         _minigameHands.enabled = false;
+        _minigameHUD.SetActive(false);
 
         Globals.handleMovement = true;
         Globals.handleKBLook = true;
@@ -182,18 +220,15 @@ public class FruitCutMinigame : MonoBehaviour
         _knife.transform.SetPositionAndRotation(_knifeOrginalTransform.position, _knifeOrginalTransform.rotation);
         _player.Controls.Viva.UniversalInteract.performed -= ExitMinigame;
         _player.Controls.Viva.UniversalInteract.performed += EnterMinigame;
-        _player.Controls.Viva.InteractLeft.performed -= TryCutFruit;
+        _player.Controls.Viva.LeftGrab.performed -= TryCutFruit;
+
+        _HUD.ClearHint(HintConstants.ExitCuttingMinigameHint);
+        _HUD.CreateHint(HintConstants.EnterCuttingMinigameHint);
     }
 
     private void TryCutFruit(InputAction.CallbackContext context)
     {
-        if (_isCutting) { return; }
-
-        if (_cutsLeft <= 0)
-        {
-            // Call end method
-            return;
-        }
+        if (_isCutting || _noCutsLeft) { return; }
 
         _handAnimator.Play("Cut");
         StartCoroutine(InitiateCut());
@@ -202,10 +237,19 @@ public class FruitCutMinigame : MonoBehaviour
         float accuracy = Mathf.Clamp(100 - (diff / 2 * 200), 0, 100);
         _totalAccuracy += accuracy;
         float avgAccuracy = _totalAccuracy / _cutCount;
-        Debug.Log($"Fruit cut. Accuracy: {accuracy}%; Average Acc.: {avgAccuracy}%");
+
+        _accuracyText.text = $"{accuracy:0}%";
+        _averageText.text = $"{avgAccuracy:0}%";
+
+        switch (avgAccuracy)
+        {
+            case float n when n < 80: _averageText.color = Color.red; break;
+            case float n when n >= 80 && n < 95: _averageText.color = Color.white; break;
+            case float n when n >= 95: _averageText.color = Color.green; break;
+        }
 
         PlayAnimation();
-        _randomPoint = UnityEngine.Random.Range(0, _range);
+        SetRandomPoint();
         _cutsLeft--;
 
         _currentPrefabShowing.SetActive(false);
@@ -217,13 +261,36 @@ public class FruitCutMinigame : MonoBehaviour
             default: Debug.LogWarning($"Fruit not recognized: {_selectedFruit}"); break;
         }
         _currentPrefabShowing.SetActive(true);
+
+        _progressBar.size = 1 - (float)_cutsLeft / (_selectedFruit switch
+        {
+            Fruit.Peach => PEACH_MAX,
+            Fruit.Cantaloupe => CANTALOUPE_MAX,
+            Fruit.Strawberry => STRAWBERRY_MAX,
+            _ => 0
+        });
+
+        if (_cutsLeft <= 0)
+        {
+            _noCutsLeft = true;
+            CompleteCutting();
+        }
     }
 
     private IEnumerator InitiateCut()
     {
         _isCutting = true;
+        _movingPointImage.SetActive(false);
         yield return new WaitForSeconds(1.5f);
+        if (!_noCutsLeft) { _movingPointImage.SetActive(true); }
         _isCutting = false;
+    }
+
+    private void CompleteCutting()
+    {
+        _movingPointImage.SetActive(false);
+        _progressBarHandle.SetActive(false);
+        _doneText.SetActive(true);
     }
 
     private void SetFruitState()
@@ -248,6 +315,9 @@ public class FruitCutMinigame : MonoBehaviour
                 break;
             default: _cutsLeft = 0; break;
         }
+
+        _noCutsLeft = false;
+        _progressBarHandle.SetActive(true);
     }
 
     private void InitAllLists()
@@ -284,6 +354,13 @@ public class FruitCutMinigame : MonoBehaviour
         }
     }
 
+    private void SetRandomPoint()
+    {
+        _randomPoint = UnityEngine.Random.Range(0, _range);
+        Vector3 vector = _target.transform.localPosition;
+        _target.transform.localPosition = new Vector3(-150f + (_randomPoint * 300 / _range), vector.y, vector.z);
+    }
+
     private void PlayAnimation()
     {
         switch (_selectedFruit)
@@ -318,7 +395,28 @@ public class FruitCutMinigame : MonoBehaviour
 
         void Cantaloupe()
         {
-            // to add
+            switch (_cutsLeft)
+            {
+                case 19: _minigameAnimator.Play("cutCantaloupe18"); break;
+                case 18: _minigameAnimator.Play("cutCantaloupe17"); break;
+                case 17: _minigameAnimator.Play("cutCantaloupe16"); break;
+                case 16: _minigameAnimator.Play("cutCantaloupe15"); break;
+                case 15: _minigameAnimator.Play("cutCantaloupe14"); break;
+                case 14: _minigameAnimator.Play("cutCantaloupe13"); break;
+                case 13: _minigameAnimator.Play("cutCantaloupe12"); break;
+                case 12: _minigameAnimator.Play("cutCantaloupe11"); break;
+                case 11: _minigameAnimator.Play("cutCantaloupe10"); break;
+                case 10: _minigameAnimator.Play("cutCantaloupe9"); break;
+                case 9: _minigameAnimator.Play("cutCantaloupe8"); break;
+                case 8: _minigameAnimator.Play("cutCantaloupe7"); break;
+                case 7: _minigameAnimator.Play("cutCantaloupe6"); break;
+                case 6: _minigameAnimator.Play("cutCantaloupe5"); break;
+                case 5: _minigameAnimator.Play("cutCantaloupe4"); break;
+                case 4: _minigameAnimator.Play("cutCantaloupe3"); break;
+                case 3: _minigameAnimator.Play("cutCantaloupe2"); break;
+                case 2: _minigameAnimator.Play("cutCantaloupe1"); break;
+                case 1: _minigameAnimator.Play("cutCantaloupe0"); break;
+            }
         }   
     }
 }
