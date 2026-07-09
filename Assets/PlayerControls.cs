@@ -244,6 +244,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UniversalInteractHold"",
+                    ""type"": ""Button"",
+                    ""id"": ""0ae8fd25-7efe-48b6-b262-1a20a8f5d6ae"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""400c308b-3e37-4d4a-a565-5f19d7332b25"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -697,6 +715,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""InteractLeftHold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""119a27b1-1de6-49e1-aa82-8b408e0dcbc5"",
+                    ""path"": ""<Keyboard>/#(X)"",
+                    ""interactions"": ""Hold(duration=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5d743dc5-cfdf-4c16-bd57-f94579c14869"",
+                    ""path"": ""<Keyboard>/#(F)"",
+                    ""interactions"": ""Hold(duration=0.4)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UniversalInteractHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -772,6 +812,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Viva_InteractLeft = m_Viva.FindAction("InteractLeft", throwIfNotFound: true);
         m_Viva_InteractLeftHold = m_Viva.FindAction("InteractLeftHold", throwIfNotFound: true);
         m_Viva_UniversalInteract = m_Viva.FindAction("UniversalInteract", throwIfNotFound: true);
+        m_Viva_UniversalInteractHold = m_Viva.FindAction("UniversalInteractHold", throwIfNotFound: true);
+        m_Viva_Cancel = m_Viva.FindAction("Cancel", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -869,6 +911,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Viva_InteractLeft;
     private readonly InputAction m_Viva_InteractLeftHold;
     private readonly InputAction m_Viva_UniversalInteract;
+    private readonly InputAction m_Viva_UniversalInteractHold;
+    private readonly InputAction m_Viva_Cancel;
     /// <summary>
     /// Provides access to input actions defined in input action map "Viva".
     /// </summary>
@@ -949,6 +993,14 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @UniversalInteract => m_Wrapper.m_Viva_UniversalInteract;
         /// <summary>
+        /// Provides access to the underlying input action "Viva/UniversalInteractHold".
+        /// </summary>
+        public InputAction @UniversalInteractHold => m_Wrapper.m_Viva_UniversalInteractHold;
+        /// <summary>
+        /// Provides access to the underlying input action "Viva/Cancel".
+        /// </summary>
+        public InputAction @Cancel => m_Wrapper.m_Viva_Cancel;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Viva; }
@@ -1025,6 +1077,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @UniversalInteract.started += instance.OnUniversalInteract;
             @UniversalInteract.performed += instance.OnUniversalInteract;
             @UniversalInteract.canceled += instance.OnUniversalInteract;
+            @UniversalInteractHold.started += instance.OnUniversalInteractHold;
+            @UniversalInteractHold.performed += instance.OnUniversalInteractHold;
+            @UniversalInteractHold.canceled += instance.OnUniversalInteractHold;
+            @Cancel.started += instance.OnCancel;
+            @Cancel.performed += instance.OnCancel;
+            @Cancel.canceled += instance.OnCancel;
         }
 
         /// <summary>
@@ -1087,6 +1145,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @UniversalInteract.started -= instance.OnUniversalInteract;
             @UniversalInteract.performed -= instance.OnUniversalInteract;
             @UniversalInteract.canceled -= instance.OnUniversalInteract;
+            @UniversalInteractHold.started -= instance.OnUniversalInteractHold;
+            @UniversalInteractHold.performed -= instance.OnUniversalInteractHold;
+            @UniversalInteractHold.canceled -= instance.OnUniversalInteractHold;
+            @Cancel.started -= instance.OnCancel;
+            @Cancel.performed -= instance.OnCancel;
+            @Cancel.canceled -= instance.OnCancel;
         }
 
         /// <summary>
@@ -1298,5 +1362,19 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnUniversalInteract(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UniversalInteractHold" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUniversalInteractHold(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Cancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCancel(InputAction.CallbackContext context);
     }
 }

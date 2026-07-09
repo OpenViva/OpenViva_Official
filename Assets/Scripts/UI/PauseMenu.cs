@@ -66,6 +66,8 @@ public class PauseMenu : MonoBehaviour
 
     public void TogglePauseMenu()
     {
+        if (!Globals.allowMenuOpen) { return; }
+
         if (!Globals.isMenuOpen)
         {
             OnBeginPauseInput();

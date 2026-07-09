@@ -158,6 +158,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "UniversalInteractHold",
+                    "type": "Button",
+                    "id": "0ae8fd25-7efe-48b6-b262-1a20a8f5d6ae",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Cancel",
+                    "type": "Button",
+                    "id": "400c308b-3e37-4d4a-a565-5f19d7332b25",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -609,6 +627,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "InteractLeftHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "119a27b1-1de6-49e1-aa82-8b408e0dcbc5",
+                    "path": "<Keyboard>/#(X)",
+                    "interactions": "Hold(duration=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5d743dc5-cfdf-4c16-bd57-f94579c14869",
+                    "path": "<Keyboard>/#(F)",
+                    "interactions": "Hold(duration=0.4)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UniversalInteractHold",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -17,13 +17,13 @@ public class Crop : PlayerKB_GrabObject
     private bool _isGrowing = true;
     private Color _currentColor;
 
-    [SerializeField] private bool _shouldGrow = true;
+    [SerializeField] public bool ShouldGrow = true;
 
     protected override void Start()
     {
         base.Start();
 
-        if (!_shouldGrow)
+        if (!ShouldGrow)
         {
             _isGrowing = false;
             _timer = 0;
@@ -55,7 +55,7 @@ public class Crop : PlayerKB_GrabObject
         if (_isGrowing)
         {
             float value = (1 - _timer / _growTimer) * _maxScale;
-            Vector3 scale = new Vector3(value, value, value);
+            Vector3 scale = new(value, value, value);
             transform.localScale = scale;
             CheckPhase();
         }

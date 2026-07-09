@@ -24,15 +24,16 @@ public class HintConstants : MonoBehaviour
     public static readonly string RightCrackEggHint = "Crack Egg: [E]";
     public static readonly string LeftGrindHint = "Grind: [Q]";
     public static readonly string RightGrindHint = "Grind: [E]";
-    public static readonly string LeftMortarSpillHint = "Empty: [Q]";
-    public static readonly string RightMortarSpillHint = "Empty: [E]";
+    public static readonly string LeftMortarSpillHint = "Empty: Hold [Q]";
+    public static readonly string RightMortarSpillHint = "Empty: Hold [E]";
     public static readonly string LeftMixHint = "Mix Batter: [Q]";
     public static readonly string RightMixHint = "Mix Batter: [E]";
     public static readonly string LeftGrabDoughHint = "Take Dough: [Q]";
     public static readonly string RightGrabDoughHint = "Take Dough: [E]";
 
     public static readonly string EnterCuttingMinigameHint = "Cut fruit: [F]";
-    public static readonly string ExitCuttingMinigameHint = "Exit: [F]";
+    public static readonly string ExitCuttingMinigameHint = "Exit: [ESC]";
+    public static readonly string CancelCuttingMinigameHint = "Cancel: Hold [X]";
 
     public static readonly string LeftGrabHintVR = "Grip: [lGrip]";
     public static readonly string RightGrabHintVR = "Grip: [rGrip]";

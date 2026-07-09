@@ -137,7 +137,7 @@ public class InventoryKB : MonoBehaviour
 
     private void PlaceInBag(InputAction.CallbackContext context)
     {
-        if (_inventory.Count >= _maxInventorySize - 1) { return; }
+        if (_inventory.Count >= _maxInventorySize - 1 || !_isOpen) { return; }
 
         int itemIndex;
         GameObject itemObject;

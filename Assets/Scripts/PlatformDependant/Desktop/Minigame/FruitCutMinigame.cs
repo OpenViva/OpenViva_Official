@@ -1,3 +1,4 @@
+using nTools.PrefabPainter;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,9 +14,12 @@ public class FruitCutMinigame : MonoBehaviour
     private Animator _minigameAnimator;
     [SerializeField] private Animator _handAnimator;
 
-    private GameObject _strawberryPrefabs;
-    private GameObject _peachPrefabs;
-    private GameObject _cantaloupePrefabs;
+    [SerializeField] private Prefab _strawberryPrefab;
+    [SerializeField] private Prefab _peachPrefab;
+    [SerializeField] private Prefab _cantaloupePrefab;
+    [SerializeField] private GameObject _strawberryPrefabs;
+    [SerializeField] private GameObject _peachPrefabs;
+    [SerializeField] private GameObject _cantaloupePrefabs;
     private List<GameObject> _strawberries = new();
     private List<GameObject> _peaches = new();
     private List<GameObject> _cantaloupes = new();
@@ -23,6 +27,7 @@ public class FruitCutMinigame : MonoBehaviour
     private const int PEACH_MAX = 7;
     private const int CANTALOUPE_MAX = 19;
     private GameObject _currentPrefabShowing;
+    private GameObject _objectInOtherHand;
 
     [SerializeField] private GameObject _knife;
     private Transform _knifeOrginalTransform;
@@ -37,9 +42,13 @@ public class FruitCutMinigame : MonoBehaviour
     private GameObject _target;
     private TextMeshProUGUI _accuracyText;
     private TextMeshProUGUI _averageText;
-    private GameObject _doneText;
+    private TextMeshProUGUI _doneText;
     private Scrollbar _progressBar;
     private GameObject _progressBarHandle;
+
+    [SerializeField] private Transform _boardAttachPoint;
+    private GameObject _cuttingBoard;
+    private Transform _boardOriginalTransform;
 
     // Minigame fields
     [SerializeField] private float _range = 2f;
@@ -51,9 +60,9 @@ public class FruitCutMinigame : MonoBehaviour
     private bool _isCutting = false;
     private bool _isPlaying = false;
     private int _cutsLeft = 0;
-    private bool _noCutsLeft = false;
+    private bool _noCutsLeft = true;
 
-    private enum Fruit
+    public enum Fruit
     {
         None = 0,
         Peach = 2,
@@ -66,7 +75,7 @@ public class FruitCutMinigame : MonoBehaviour
     {
         _mainCamera = Camera.main;
 
-        GameObject parent = transform.GetChild(6).gameObject;
+        GameObject parent = transform.GetChild(3).gameObject;
         _minigameHands = parent.transform.GetChild(0).GetComponent<SkinnedMeshRenderer>();
 
         if (_minigameHands == null)
@@ -77,14 +86,10 @@ public class FruitCutMinigame : MonoBehaviour
         _minigameHands.enabled = false;
 
         _minigameCamera = transform.GetChild(0).GetComponent<Camera>();
-        _minigameAnimator = GetComponent<Animator>();
+        _minigameAnimator = transform.GetChild(4).GetComponent<Animator>();
 
         _knifeOrginalTransform = transform.GetChild(1);
         _knifeHoldTransform = transform.GetChild(2);
-
-        _strawberryPrefabs = transform.GetChild(3).gameObject;
-        _peachPrefabs = transform.GetChild(4).gameObject;
-        _cantaloupePrefabs = transform.GetChild(5).gameObject;
 
         _minigameHUD = _HUD.transform.GetChild(2).gameObject;
         _movingPointImage = _minigameHUD.transform.GetChild(2).gameObject;
@@ -97,8 +102,14 @@ public class FruitCutMinigame : MonoBehaviour
         _progressBar = parent.GetComponent<Scrollbar>();
         parent = parent.transform.GetChild(0).gameObject;
         _progressBarHandle = parent.transform.GetChild(0).gameObject;
-        _doneText = _minigameHUD.transform.GetChild(4).gameObject;
+        _doneText = _minigameHUD.transform.GetChild(4).gameObject.GetComponent<TextMeshProUGUI>();
 
+        _cuttingBoard = transform.GetChild(4).gameObject;
+        _boardOriginalTransform = _cuttingBoard.transform;
+    }
+
+    private void Start()
+    {
         AssignInputs();
         InitAllLists();
     }
@@ -110,7 +121,7 @@ public class FruitCutMinigame : MonoBehaviour
 
     private void AssignInputs()
     {
-
+        _player.Controls.Viva.Cancel.performed += CancelCutting;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -166,17 +177,39 @@ public class FruitCutMinigame : MonoBehaviour
             if (!isDefined)
             {
                 // Display HUD message: 'You need a fruit!'
-                Debug.Log("No fruit detected.");
                 return;
             }
-            _selectedFruit = (Fruit)itemInHand;
-            Debug.Log($"Fruit detected: {_selectedFruit}");
 
+            PlayerKB_GrabObject grabScript = null;
+            int handedness = 0;
+
+            _objectInOtherHand = PlayerManager.Instance.GetObjectRight();
+            if (_objectInOtherHand != null)
+            {
+                grabScript = _objectInOtherHand.GetComponent<PlayerKB_GrabObject>();
+                handedness = 2;
+            }
+            else
+            {
+                _objectInOtherHand = PlayerManager.Instance.GetObjectLeft();
+                if (_objectInOtherHand != null)
+                {
+                    grabScript = _objectInOtherHand.GetComponent<PlayerKB_GrabObject>();
+                    handedness = 1;
+                }
+            }
+
+            _selectedFruit = (Fruit)itemInHand;
+            if (grabScript != null)
+            {
+                grabScript.SetIsActive(false, grabScript.GetIsGrabbed());
+            }
+            
             SetFruitState();
         }
         else
         {
-            Debug.Log("There is already a fruit on the chopping board."); // Later: Add a way to remove the fruit.
+            // Display HUD message: 'There is already a fruit on the chopping board.'
         }
 
         _isPlaying = true;
@@ -192,13 +225,15 @@ public class FruitCutMinigame : MonoBehaviour
 
         _HUD.ClearHint(HintConstants.EnterCuttingMinigameHint);
         _HUD.CreateHint(HintConstants.ExitCuttingMinigameHint);
+        _HUD.CreateHint(HintConstants.CancelCuttingMinigameHint);
 
         _knife.transform.SetPositionAndRotation(_knifeHoldTransform.position, _knifeHoldTransform.rotation);
 
         _player.Controls.Viva.UniversalInteract.performed -= EnterMinigame;
-        _player.Controls.Viva.UniversalInteract.performed += ExitMinigame;
+        _player.Controls.Viva.Pause.performed += ExitMinigame;
         _player.Controls.Viva.LeftGrab.performed += TryCutFruit;
 
+        Globals.allowMenuOpen = false;
         Play();
     }
 
@@ -218,12 +253,21 @@ public class FruitCutMinigame : MonoBehaviour
         PlayerManager.Instance.HideHands(false);
 
         _knife.transform.SetPositionAndRotation(_knifeOrginalTransform.position, _knifeOrginalTransform.rotation);
-        _player.Controls.Viva.UniversalInteract.performed -= ExitMinigame;
+        _player.Controls.Viva.Pause.performed -= ExitMinigame;
         _player.Controls.Viva.UniversalInteract.performed += EnterMinigame;
         _player.Controls.Viva.LeftGrab.performed -= TryCutFruit;
 
         _HUD.ClearHint(HintConstants.ExitCuttingMinigameHint);
+        _HUD.ClearHint(HintConstants.CancelCuttingMinigameHint);
         _HUD.CreateHint(HintConstants.EnterCuttingMinigameHint);
+
+        if (_objectInOtherHand != null)
+        {
+            PlayerKB_GrabObject grabScript = _objectInOtherHand.GetComponent<PlayerKB_GrabObject>();
+            grabScript.SetIsActive(true, grabScript.GetIsGrabbed());
+        }
+
+        Globals.allowMenuOpen = true;
     }
 
     private void TryCutFruit(InputAction.CallbackContext context)
@@ -243,8 +287,8 @@ public class FruitCutMinigame : MonoBehaviour
 
         switch (avgAccuracy)
         {
-            case float n when n < 80: _averageText.color = Color.red; break;
-            case float n when n >= 80 && n < 95: _averageText.color = Color.white; break;
+            case float n when n < 85: _averageText.color = Color.red; break;
+            case float n when n >= 85 && n < 95: _averageText.color = Color.white; break;
             case float n when n >= 95: _averageText.color = Color.green; break;
         }
 
@@ -273,7 +317,7 @@ public class FruitCutMinigame : MonoBehaviour
         if (_cutsLeft <= 0)
         {
             _noCutsLeft = true;
-            CompleteCutting();
+            CompleteCutting(avgAccuracy);
         }
     }
 
@@ -286,11 +330,81 @@ public class FruitCutMinigame : MonoBehaviour
         _isCutting = false;
     }
 
-    private void CompleteCutting()
+    private void CompleteCutting(float accuracy)
     {
         _movingPointImage.SetActive(false);
         _progressBarHandle.SetActive(false);
-        _doneText.SetActive(true);
+
+        switch (accuracy)
+        {
+            case float n when n < 80:
+                _doneText.text = "Poor. Price -10%";
+                _doneText.color = Color.red;
+                break;
+            case float n when n >= 80 && n < 95:
+                _doneText.text = "Decent.";
+                _doneText.color = Color.white;
+                break;
+            case float n when n >= 95:
+                _doneText.text = "Excellent! Price +10%";
+                _doneText.color = Color.green;
+                break;
+        }
+
+        _doneText.enabled = true;
+        _player.Controls.Viva.UniversalInteractHold.performed += PickUpBoard;
+
+        _cutCount = 0;
+        _cutsLeft = 0;
+        _totalAccuracy = 0;
+        _accuracyText.text = "--%";
+        _averageText.text = "--%";
+        _selectedFruit = Fruit.None;
+    }
+
+    private void CancelCutting(InputAction.CallbackContext context)
+    {
+        if (_noCutsLeft) { return; }
+
+        _currentPrefabShowing.SetActive(false);
+        ExitMinigame(context);
+
+        GameObject obj = null;
+        switch (_selectedFruit)
+        {
+            case Fruit.Peach: 
+                obj = Instantiate(_peachPrefab.gameObject);
+                obj.name = _peachPrefab.gameObject.name;
+                break;
+            case Fruit.Cantaloupe:
+                obj = Instantiate(_cantaloupePrefab.gameObject);
+                obj.name = _cantaloupePrefab.gameObject.name;
+                break;
+            case Fruit.Strawberry: 
+                obj = Instantiate(_strawberryPrefab.gameObject);
+                obj.name = _strawberryPrefab.gameObject.name;
+                break;
+        }
+
+        Crop cropScript = obj.GetComponent<Crop>();
+        cropScript.ShouldGrow = false;
+        obj.transform.localScale = Vector3.one;
+        cropScript.SetIsActive(true, 1);
+
+        _cutCount = 0;
+        _cutsLeft = 0;
+        _totalAccuracy = 0;
+        _accuracyText.text = "--%";
+        _averageText.text = "--%";
+        _selectedFruit = Fruit.None;
+    }
+
+    private void PickUpBoard(InputAction.CallbackContext context)
+    {
+        ExitMinigame(context);
+
+        _cuttingBoard.transform.SetParent(_boardAttachPoint);
+        _cuttingBoard.transform.localPosition = Vector3.zero;
     }
 
     private void SetFruitState()
@@ -299,18 +413,17 @@ public class FruitCutMinigame : MonoBehaviour
         {
             case Fruit.Peach:
                 _cutsLeft = PEACH_MAX;
-                _currentPrefabShowing = _peaches[0].gameObject;
+                _currentPrefabShowing = _peaches[0];
                 _currentPrefabShowing.SetActive(true);
-
                 break;
             case Fruit.Cantaloupe: 
                 _cutsLeft = CANTALOUPE_MAX; 
-                _currentPrefabShowing = _cantaloupes[0].gameObject;
+                _currentPrefabShowing = _cantaloupes[0];
                 _currentPrefabShowing.SetActive(true);
                 break;
             case Fruit.Strawberry: 
                 _cutsLeft = STRAWBERRY_MAX;
-                _currentPrefabShowing = _strawberries[0].gameObject;
+                _currentPrefabShowing = _strawberries[0];
                 _currentPrefabShowing.SetActive(true);
                 break;
             default: _cutsLeft = 0; break;
@@ -318,6 +431,7 @@ public class FruitCutMinigame : MonoBehaviour
 
         _noCutsLeft = false;
         _progressBarHandle.SetActive(true);
+        _doneText.enabled = false;
     }
 
     private void InitAllLists()
@@ -328,7 +442,7 @@ public class FruitCutMinigame : MonoBehaviour
 
         void InitList(Fruit fruit)
         {
-            GameObject parent = null;
+            GameObject parent;
             switch (fruit)
             {
                 case Fruit.Peach: parent = _peachPrefabs; break;
@@ -339,7 +453,7 @@ public class FruitCutMinigame : MonoBehaviour
 
             int count = parent.transform.childCount;
 
-            List<GameObject> list = new List<GameObject>();
+            List<GameObject> list = new();
             for (int i = 0; i < count; i++)
             {
                 list.Add(parent.transform.GetChild(i).gameObject); 
@@ -365,9 +479,9 @@ public class FruitCutMinigame : MonoBehaviour
     {
         switch (_selectedFruit)
         {
-            case (Fruit.Peach): Peach(); break;
-            case (Fruit.Cantaloupe): Cantaloupe(); break;
-            case (Fruit.Strawberry): Strawberry(); break;
+            case Fruit.Peach: Peach(); break;
+            case Fruit.Cantaloupe: Cantaloupe(); break;
+            case Fruit.Strawberry: Strawberry(); break;
         }
 
         void Strawberry()
@@ -419,4 +533,6 @@ public class FruitCutMinigame : MonoBehaviour
             }
         }   
     }
+
+
 }

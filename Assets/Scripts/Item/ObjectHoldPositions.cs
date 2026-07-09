@@ -22,9 +22,9 @@ public class ObjectHoldPositions : MonoBehaviour
         new(0.0424f, 0.0134f, -0.0307f), // BAG
         new(0.0033f, 0.0239f, -0.0041f), // RUBBER_DUCKY
         new(0.0025f,0.0158f, -0.0064f), // PEACH
-        new(0.00077f, 0.03047f, -0.0053f), // STRAWBERRY
+        new(-0.0001f, 0.0224f, -0.0085f), // STRAWBERRY
         new(0.0099f, 0.0175f, -0.008f), // CANTALOUPE
-        new(-0.00514069f, 0.03108077f, -0.0057312f), // BLUEBERRY
+        new(-0.0009f, 0.0243f, -0.0081f), // BLUEBERRY
         new(0.01392059f, 0.01097836f, 0.01483068f), // WHEAT
         new(0.00093f, 0.01507f, -0.0061f), // FLASHLIGHT
         new(0f, 0.0208f, -0.00887f), // EGG
@@ -51,9 +51,9 @@ public class ObjectHoldPositions : MonoBehaviour
         new(-0.0373f, 0.0241f, -0.0336f), // BAG
         new(-0.0075f, 0.024f, -0.0023f), // RUBBER_DUCKY
         new(-0.0025f, 0.0182f, -0.0062f), // PEACH
-        new(-0.0003f, 0.0331f, -0.005f), // STRAWBERRY
+        new(-0.0001f, 0.02494f, -0.01104f), // STRAWBERRY
         new(-0.0072f, 0.0196f, -0.0095f), // CANTALOUPE
-        new(0.0051f, 0.0305f, -0.006f), // BLUEBERRY
+        new(0.00058f, 0.02364f, -0.00768f), // BLUEBERRY
         new(-0.01840058f, 0.008688283f, 0.01550032f), // WHEAT
         new(0.0008140024f, 0.01238399f, -0.006554195f), // FLASHLIGHT
         new(0.0013f, 0.02243f, -0.00793f), // EGG
@@ -80,9 +80,9 @@ public class ObjectHoldPositions : MonoBehaviour
         Quaternion.Euler(0f, 124.092f, -91.166f), // BAG
         Quaternion.Euler(-26.159f, -128.685f, 142.79f), // RUBBER_DUCKY
         Quaternion.Euler(-5.64f, 4.661f, 90.595f), // PEACH
-        Quaternion.Euler(0f, 0f, 90f), // STRAWBERRY
+        Quaternion.Euler(14.119f, -125.103f, 15.214f), // STRAWBERRY
         Quaternion.Euler(0f, 0f, 0f), // CANTALOUPE
-        Quaternion.Euler(4.003f, 24.241f, 91.8f), // BLUEBERRY
+        Quaternion.Euler(0f, 0f, 190.057f), // BLUEBERRY
         Quaternion.Euler(16.234f, 33.554f, 100.504f), // WHEAT
         Quaternion.Euler(216f, 127.409f, 95.321f), // FLASHLIGHT
         Quaternion.Euler(-106.285f, 28.78799f, 49.843f), // EGG
@@ -109,14 +109,14 @@ public class ObjectHoldPositions : MonoBehaviour
         Quaternion.Euler(-11.989f, -129.545f, 90f), // BAG
         Quaternion.Euler(155.574f, 141.103f, 346.339f), // RUBBER_DUCKY
         Quaternion.Euler(-5.64f, -175.339f, 90.595f), // PEACH
-        Quaternion.Euler(0f, 180f, 90f), // STRAWBERRY
+        Quaternion.Euler(-59.843f, 71.277f, -37.405f), // STRAWBERRY
         Quaternion.Euler(0f, 0f, 0f), // CANTALOUPE
         Quaternion.Euler(183.722f, 147.97f, -87.67401f), // BLUEBERRY
         Quaternion.Euler(9.406f, -43.707f, 101.126f), // WHEAT
         Quaternion.Euler(298.122f, 30.88f, 90.377f), // FLASHLIGHT
         Quaternion.Euler(-80.206f, -91.88f, 1.908f), // EGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
         Quaternion.Euler(-8.071f, -96.902f, 92.164f), // FLOUR_JAR
-        Quaternion.Euler(-80f, 180f, 90f), // KNIFE
+        Quaternion.Euler(-80f, 180f, 90f), // KNIFE (Not used)
         Quaternion.Euler(8.833f, 48.026f, -1.891f), // LANTERN
         Quaternion.Euler(86.158f, 48.708f, 0f), // MILK_CANISTER
         Quaternion.Euler(0f, -90.336f, 87.669f), // MIXING_BOWL
