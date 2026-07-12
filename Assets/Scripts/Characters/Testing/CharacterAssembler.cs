@@ -315,16 +315,34 @@ public class CharacterAssembler : MonoBehaviour
         }
 
         string[] pathParts = path.Split('/');
+
+        int startIndex = 0;
+
+        // Skip the first segment ONLY if it looks like the original root name
+        if (pathParts.Length > 1 && !string.IsNullOrEmpty(pathParts[0]))
+        {
+            startIndex = 1;
+        }
+
+        // If path only contains the root name then give that instead
+        if (pathParts.Length == 1)
+        {
+            return root;
+        }
+
         Transform current = root.transform;
 
-        for (int i = 0; i < pathParts.Length; i++)
+        for (int i = startIndex; i < pathParts.Length; i++)
         {
-            string part = pathParts[i];
+            string part = pathParts[i].Trim();
+
+            if (string.IsNullOrEmpty(part)) continue;
+
             Transform found = current.Find(part);
 
             if (found == null)
             {
-                Debug.LogWarning($"[Chara Loader] Failed to find GameObject in path: {part}");
+                Debug.LogWarning($"[Chara Loader] Failed to find {part} in path: {part}");
                 return null;
             }
 
@@ -340,6 +358,8 @@ public class CharacterAssembler : MonoBehaviour
         {
             string json = System.Text.Encoding.UTF8.GetString(data);
             JsonUtility.FromJsonOverwrite(json, component);
+
+            Debug.Log($"[Chara Loader] Deserialized Data for {component} with Data: {json}");
         }
         catch (System.Exception ex)
         {
