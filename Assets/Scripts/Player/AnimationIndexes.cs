@@ -78,6 +78,9 @@ public class AnimationIndexes : MonoBehaviour
             case 19:
                 _animationHandler.HoldTowel("Left");
                 break;
+            case 20:
+                _animationHandler.HoldBread("Left");
+                break;
             default:
                 _animationHandler.Idle("Left");
                 Debug.Log($"Animation does not exist for item index {index}");
@@ -151,6 +154,9 @@ public class AnimationIndexes : MonoBehaviour
                 break;
             case 19:
                 _animationHandler.HoldTowel("Right");
+                break;
+            case 20:
+                _animationHandler.HoldBread("Right");
                 break;
             default:
                 _animationHandler.Idle("Right");
