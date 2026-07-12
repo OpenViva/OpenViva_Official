@@ -10,10 +10,10 @@ public class PlayerKB_Movement : MonoBehaviour
 
     // --- Movement ---
     [Header("Movement")]
-    [field: SerializeField ,Range(1f, 20f)] 
+    [field: SerializeField ,Range(1f, 200f)] 
     public float MovementSpeed { get; private set; } = 2;
     [Tooltip("How much faster do you want to go when running?")]
-    [SerializeField, Range(1f, 20f)] private float _runMultiplier;
+    [SerializeField, Range(1f, 200f)] private float _runMultiplier;
     [Tooltip("How steep of an angle is detected as ground")]
     [SerializeField] private float edgeAngleTolerance = 45f;
     [Tooltip("Radius for ground detection")]
@@ -39,7 +39,7 @@ public class PlayerKB_Movement : MonoBehaviour
 
     // --- Jump & Gravity ---
     [Header("Jump & Gravity")]
-    [field: SerializeField, Range(1f, 20f)]
+    [field: SerializeField, Range(1f, 200f)]
     public float JumpHeight { get; private set; } = 1;
     [SerializeField] private float _gravity = -9.81f;
 
@@ -79,8 +79,9 @@ public class PlayerKB_Movement : MonoBehaviour
     {
         _player = GetComponentInParent<Player>();
 
-        DebugLogConsole.AddCommandInstance("PlayerSpeed", "Change the player speed, a value between 1 and 20", nameof(ChangePlayerSpeed), this);
-        DebugLogConsole.AddCommandInstance("PlayerJump", "Change the player jump height, a value between 1 and 20", nameof(ChangePlayerJumpHeight), this);
+        DebugLogConsole.AddCommandInstance("PlayerSpeed", "Change the player speed, a value between 1 and 200", nameof(ChangePlayerSpeed), this);
+        DebugLogConsole.AddCommandInstance("PlayerJump", "Change the player jump height, a value between 1 and 200", nameof(ChangePlayerJumpHeight), this);
+        DebugLogConsole.AddCommandInstance("PlayerGrav", "Change the player gravity, a value between -1 and -300", nameof(ChangePlayerGravity), this);
 
         // Locks cursor and makes it invisible
         Cursor.lockState = CursorLockMode.Locked;
@@ -336,16 +337,23 @@ public class PlayerKB_Movement : MonoBehaviour
 
     public void ChangePlayerSpeed(float newSpeed)
     {
-        MovementSpeed = Mathf.Clamp(newSpeed, 1f, 20f);
+        MovementSpeed = Mathf.Clamp(newSpeed, 1f, 200f);
 
-        Debug.Log("Changed player speed to: " + newSpeed);
+        Debug.Log("[Default: 2] Changed player speed to: " + newSpeed);
     }
 
     public void ChangePlayerJumpHeight(float newJumpHeight)
     {
-        JumpHeight = Mathf.Clamp(newJumpHeight, 1f, 20f);
+        JumpHeight = Mathf.Clamp(newJumpHeight, 1f, 200f);
 
-        Debug.Log("Changed player jump height to: " + newJumpHeight);
+        Debug.Log("[Default: 1] Changed player jump height to: " + newJumpHeight);
+    }
+
+    public void ChangePlayerGravity(float newGravity)
+    {
+        _gravity = Mathf.Clamp(newGravity, -300f, -1f);
+
+        Debug.Log("[Default: -9.81] Changed player gravity to: " + newGravity);
     }
 }
 
