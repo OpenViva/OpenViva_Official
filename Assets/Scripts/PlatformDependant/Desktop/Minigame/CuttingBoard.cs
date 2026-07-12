@@ -23,6 +23,11 @@ public class CuttingBoard : MonoBehaviour
     public const int PEACH_MAX = 7;
     public const int CANTALOUPE_MAX = 19;
 
+    [SerializeField] GameObject _minigameGameObject;
+    [SerializeField] GameObject _playerHandR;
+    [SerializeField] GameObject _playerHandL;
+    private Transform _initialCuttingBoardPosition;
+
     private void Start()
     {
         _animator = GetComponent<Animator>();
@@ -30,8 +35,9 @@ public class CuttingBoard : MonoBehaviour
         _strawberryPrefabs = transform.GetChild(0).gameObject;
         _peachPrefabs = transform.GetChild(1).gameObject;
         _cantaloupePrefabs = transform.GetChild(2).gameObject;
-
         InitAllLists();
+
+        _initialCuttingBoardPosition = transform;
     }
 
     private void InitAllLists()
@@ -198,6 +204,15 @@ public class CuttingBoard : MonoBehaviour
 
     public void PickBoardUp()
     {
+        transform.SetParent(_playerHandR.transform);
+        transform.SetLocalPositionAndRotation(
+            ObjectHoldPositions.Instance.GetCuttingBoardPosition(),
+            ObjectHoldPositions.Instance.GetCuttingBoardRotation()
+        );
 
+        Animator animator = _playerHandL.transform.GetComponentInParent<Animator>();
+        animator.Play("holdCuttingBoardL");
+        animator = _playerHandR.transform.GetComponentInParent<Animator>();
+        animator.Play("holdCuttingBoardR");
     }
 }

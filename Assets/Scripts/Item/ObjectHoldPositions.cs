@@ -136,4 +136,14 @@ public class ObjectHoldPositions : MonoBehaviour
     {
         return allObjectRotationsRight[objectIndex];
     }
+
+    public Vector3 GetCuttingBoardPosition()
+    {
+        return new(-0.02688979f, 0.02538382f, 0.03744633f);
+    }
+
+    public Quaternion GetCuttingBoardRotation()
+    {
+        return Quaternion.Euler(4.554f, 58.956f, -6.963f);
+    }
 }
