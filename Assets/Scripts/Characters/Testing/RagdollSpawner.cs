@@ -19,6 +19,8 @@ public class RagdollSpawner : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] private PhysicsAttacher _physicsAttacher;
+    [SerializeField] private CharacterAssembler _characterReader;
+    public List<GameObject> loadedCharacters;
 
     private Vector3 _startingCoords;
     List<GameObject> rootBoneObjects;
@@ -28,14 +30,39 @@ public class RagdollSpawner : MonoBehaviour
         _startingCoords = transform.position;
 
         _physicsAttacher = GetComponent<PhysicsAttacher>();
+
+        _characterReader = GetComponent<CharacterAssembler>();
+
+        if (_characterReader != null)
+        {
+            _characterReader.ReadAllCharacters();
+        }
+
+        List<CharacterAssembler.CharacterModel> loadedModels = _characterReader.GetAllModels();
+
+        foreach (var model in loadedModels)
+        {
+            loadedCharacters.Add(model.prefab);
+        }
     }
 
-    GameObject SpawnCharacter()
+    GameObject SpawnCharacter(GameObject prefabToSpawn)
     {
-        GameObject instance = Instantiate(characterPrefab, _startingCoords, transform.rotation.normalized);
+        GameObject instance = Instantiate(prefabToSpawn, _startingCoords, transform.rotation.normalized);
         instance.name = "RagdollCharacter_" + Time.frameCount;
 
         return instance;
+    }
+
+    [Button("Instantiate First Char", EButtonEnableMode.Playmode)]
+    public void SpawnFirstLoaded()
+    {
+        // TODO: Get the whole list and make a method to set up and spawn a single character at a specific location
+        CharacterAssembler.CharacterModel model = _characterReader.GetFirstModel();
+        characterPrefab = model.prefab;
+
+        loadedCharacters.Add(model.prefab);
+        //Instantiate(model.prefab, _startingCoords, transform.rotation.normalized);
     }
 
     [Button("Spawn & Setup Ragdoll", EButtonEnableMode.Playmode)]
@@ -43,7 +70,9 @@ public class RagdollSpawner : MonoBehaviour
     {
         if (characterPrefab == null) return;
 
-        GameObject instance = SpawnCharacter();
+        GameObject instance = SpawnCharacter(characterPrefab);
+
+        // TODO: Collect bones and add them here before settting up the model!!!
 
         // Find root bones for cloth physics if script is present
         rootBoneObjects = instance.GetComponent<RootBonesHolder>().rootBoneObjects;
@@ -97,6 +126,7 @@ public class RagdollSpawner : MonoBehaviour
         // 7. Set up cloth physics
         if (rootBoneObjects.Count != 0)
         {
+            // TODO: Use PhysicsBone parameters instead of default values here
             _physicsAttacher.CreateBoneCloth(instance, rootBoneObjects, "Hair_BoneCloth");
         }
         else
