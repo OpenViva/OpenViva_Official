@@ -4,6 +4,10 @@ public class PhysicsBone : MonoBehaviour
 {
     [Header("Bone Configuration")]
     public Transform boneTransform;
+
+    [HideInInspector]
+    public string bonePath; // The bone path used for root bone reference at runtime
+
     public string boneName;
 
     // Preset System
@@ -80,6 +84,58 @@ public class PhysicsBone : MonoBehaviour
                 stiffnessValue = 0.35f;
                 break;
         }
+    }
+
+    public void ResolveBoneReference(GameObject root)
+    {
+        if (string.IsNullOrEmpty(bonePath))
+        {
+            Debug.LogWarning($"[PhysicsBone] No bonePath set on {gameObject.name}");
+            return;
+        }
+
+        Transform found = FindTransformByPath(root.transform, bonePath);
+        if (found != null)
+        {
+            boneTransform = found;
+            boneName = found.name;
+            Debug.Log($"[PhysicsBone] Resolved bone reference: {bonePath}");
+        }
+        else
+        {
+            Debug.LogError($"[PhysicsBone] Failed to resolve bone path: {bonePath} on root {root.name}");
+        }
+    }
+
+    private Transform FindTransformByPath(Transform root, string path)
+    {
+        if (string.IsNullOrEmpty(path)) return root;
+
+        string[] parts = path.Split('/');
+        Transform current = root;
+
+        int start = 0;
+        if (parts.Length > 0 && parts[0] == root.name)
+        {
+            start = 1;
+        }
+
+        for (int i = start; i < parts.Length; i++)
+        {
+            string part = parts[i].Trim();
+            if (string.IsNullOrEmpty(part)) continue;
+
+            Transform next = current.Find(part);
+            if (next == null)
+            {
+                Debug.LogWarning($"[PhysicsBone] Could not find {part} in path {path}");
+                return null;
+            }
+
+            current = next;
+        }
+
+        return current;
     }
 
     private void OnDrawGizmosSelected()
