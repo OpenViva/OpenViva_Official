@@ -1,6 +1,9 @@
 using nTools.PrefabPainter;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static FruitCutMinigame;
 
 public class CuttingBoard : MonoBehaviour
@@ -26,52 +29,30 @@ public class CuttingBoard : MonoBehaviour
     [SerializeField] GameObject _minigameGameObject;
     [SerializeField] GameObject _playerHandR;
     [SerializeField] GameObject _playerHandL;
-    private Transform _initialCuttingBoardPosition;
+    private Animator _playerAnimatorL;
+    private Animator _playerAnimatorR;
+    private Vector3 _initialBoardPosition;
+    private Quaternion _initialBoardRotation;
 
-    private void Start()
+    [SerializeField] private Player _player;
+    private bool _isBoardCarried;
+
+    private void Awake()
     {
         _animator = GetComponent<Animator>();
+        _playerAnimatorL = _playerHandL.transform.GetComponentInParent<Animator>();
+        _playerAnimatorR = _playerHandR.transform.GetComponentInParent<Animator>();
 
         _strawberryPrefabs = transform.GetChild(0).gameObject;
         _peachPrefabs = transform.GetChild(1).gameObject;
         _cantaloupePrefabs = transform.GetChild(2).gameObject;
-        InitAllLists();
 
-        _initialCuttingBoardPosition = transform;
-    }
+        _peachPrefabs.GetChildGameObjects(_peaches);
+        _strawberryPrefabs.GetChildGameObjects(_strawberries);
+        _cantaloupePrefabs.GetChildGameObjects(_cantaloupes);
 
-    private void InitAllLists()
-    {
-        InitList(Fruit.Peach);
-        InitList(Fruit.Cantaloupe);
-        InitList(Fruit.Strawberry);
-
-        void InitList(Fruit fruit)
-        {
-            GameObject parent;
-            switch (fruit)
-            {
-                case Fruit.Peach: parent = _peachPrefabs; break;
-                case Fruit.Cantaloupe: parent = _cantaloupePrefabs; break;
-                case Fruit.Strawberry: parent = _strawberryPrefabs; break;
-                default: Debug.LogWarning($"Fruit not recognized: {fruit}"); return;
-            }
-
-            int count = parent.transform.childCount;
-
-            List<GameObject> list = new();
-            for (int i = 0; i < count; i++)
-            {
-                list.Add(parent.transform.GetChild(i).gameObject);
-            }
-
-            switch (fruit)
-            {
-                case Fruit.Peach: _peaches = list; ; break;
-                case Fruit.Cantaloupe: _cantaloupes = list; break;
-                case Fruit.Strawberry: _strawberries = list; break;
-            }
-        }
+        _initialBoardPosition = transform.localPosition;
+        _initialBoardRotation = transform.localRotation;
     }
 
     public int ActivateNewFruit(Fruit fruit)
@@ -202,7 +183,7 @@ public class CuttingBoard : MonoBehaviour
         cropScript.SetIsActive(true, 1);
     }
 
-    public void PickBoardUp()
+    public void PickBoardUp(Fruit fruit)
     {
         transform.SetParent(_playerHandR.transform);
         transform.SetLocalPositionAndRotation(
@@ -210,9 +191,91 @@ public class CuttingBoard : MonoBehaviour
             ObjectHoldPositions.Instance.GetCuttingBoardRotation()
         );
 
-        Animator animator = _playerHandL.transform.GetComponentInParent<Animator>();
-        animator.Play("holdCuttingBoardL");
-        animator = _playerHandR.transform.GetComponentInParent<Animator>();
-        animator.Play("holdCuttingBoardR");
+        _playerAnimatorL.Play("holdCuttingBoardL");
+        _playerAnimatorR.Play("holdCuttingBoardR");
+
+        _player.Controls.Viva.InteractLeft.performed += context => TiltAnticlockwise(context, fruit);
+        _player.Controls.Viva.InteractRight.performed += context => TiltClockwise(context, fruit);
+        _player.Controls.Viva.InteractLeft.canceled += context => AnticlockwiseStraigten(context, fruit);
+        _player.Controls.Viva.InteractRight.canceled += context => ClockwiseStraighten(context, fruit);
+
+        _isBoardCarried = true;
+    }
+
+    public void PutBoardDown()
+    {
+        transform.SetParent(_minigameGameObject.transform);
+        transform.SetLocalPositionAndRotation(_initialBoardPosition, _initialBoardRotation);
+
+        _playerAnimatorL.Play("handIdle");
+        _playerAnimatorR.Play("handIdle");
+    }
+
+    private void TiltClockwise(InputAction.CallbackContext context, Fruit fruit)
+    {
+        _playerAnimatorL.Play("clockwiseCuttingBoardL");
+        _playerAnimatorR.Play("clockwiseCuttingBoardR");
+
+        EnableFruitPhysics(true, fruit);
+    }
+
+    private void TiltAnticlockwise(InputAction.CallbackContext context, Fruit fruit)
+    {
+        _playerAnimatorL.Play("anticlockwiseCuttingBoardL");
+        _playerAnimatorR.Play("anticlockwiseCuttingBoardR");
+
+        EnableFruitPhysics(true, fruit);
+    }
+
+    private void ClockwiseStraighten(InputAction.CallbackContext context, Fruit fruit)
+    {
+        _playerAnimatorL.Play("clockwiseStraightenL");
+        _playerAnimatorR.Play("clockwiseStraightenR");
+
+        EnableFruitPhysics(false, fruit);
+    }
+
+    private void AnticlockwiseStraigten(InputAction.CallbackContext context, Fruit fruit)
+    { 
+        _playerAnimatorR.Play("anticlockwiseStraightenR");
+        _playerAnimatorL.Play("anticlockwiseStraightenL");
+
+        EnableFruitPhysics(false, fruit);
+    }
+
+    private void EnableFruitPhysics(bool enable, Fruit fruit)
+    {
+        List<Rigidbody> rbList = new();
+        switch (fruit)
+        {
+            case Fruit.Peach:
+                rbList = _peaches[_peaches.Count - 1].GetComponentsInChildren<Rigidbody>(true).ToList();
+                break;
+
+            case Fruit.Cantaloupe:
+                rbList = _cantaloupes[_cantaloupes.Count - 1].GetComponentsInChildren<Rigidbody>(true).ToList();
+                break;
+
+            case Fruit.Strawberry:
+                rbList = _strawberries[_strawberries.Count - 1].GetComponentsInChildren<Rigidbody>(true).ToList();
+                break;
+
+            default: Debug.LogWarning($"Fruit not recognized: {fruit}"); break;
+        }
+
+        string s = null;
+        for (int i = 0;  i < rbList.Count; i++)
+        {
+            s += $"\n{rbList[i]}";
+        }
+        Debug.Log(s);
+
+        foreach (Rigidbody rb in rbList)
+        {
+            rb.isKinematic = !enable;
+            rb.useGravity = enable;
+        }
+
+        rbList[0].transform.parent.transform.SetParent(gameObject.transform);
     }
 }

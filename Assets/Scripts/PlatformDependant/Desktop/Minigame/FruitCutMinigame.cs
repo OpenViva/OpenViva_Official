@@ -201,9 +201,10 @@ public class FruitCutMinigame : MonoBehaviour
 
         _HUD.ClearHint(HintConstants.EnterCuttingMinigameHint);
         _HUD.CreateHint(HintConstants.ExitCuttingMinigameHint);
-        _HUD.CreateHint(HintConstants.CancelCuttingMinigameHint);
+        if (_cutsLeft > 0) { _HUD.CreateHint(HintConstants.CancelCuttingMinigameHint); }
 
         _knife.transform.SetPositionAndRotation(_knifeHoldTransform.position, _knifeHoldTransform.rotation);
+        _cuttingBoard.PutBoardDown();
 
         _player.Controls.Viva.UniversalInteract.performed -= EnterMinigame;
         _player.Controls.Viva.Pause.performed += ExitMinigame;
@@ -319,13 +320,14 @@ public class FruitCutMinigame : MonoBehaviour
 
         _doneText.enabled = true;
         _player.Controls.Viva.UniversalInteractHold.performed += CompleteMinigame;
+        _HUD.ClearHint(HintConstants.CancelCuttingMinigameHint);
+        _HUD.CreateHint(HintConstants.TakeCuttingBoardHint);
 
         _cutCount = 0;
         _cutsLeft = 0;
         _totalAccuracy = 0;
         _accuracyText.text = "--%";
         _averageText.text = "--%";
-        _selectedFruit = Fruit.None;
     }
 
     private void CancelCutting(InputAction.CallbackContext context)
@@ -346,7 +348,8 @@ public class FruitCutMinigame : MonoBehaviour
     private void CompleteMinigame(InputAction.CallbackContext context)
     {
         ExitMinigame(context);
-        _cuttingBoard.PickBoardUp();
+        _cuttingBoard.PickBoardUp(_selectedFruit);
+        _HUD.ClearHint(HintConstants.TakeCuttingBoardHint);
     }
 
     private void SetCutsLeft()
