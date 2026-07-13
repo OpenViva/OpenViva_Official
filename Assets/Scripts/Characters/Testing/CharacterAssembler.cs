@@ -317,12 +317,7 @@ public class CharacterAssembler : MonoBehaviour
         string[] pathParts = path.Split('/');
 
         int startIndex = 0;
-
-        // Skip the first segment ONLY if it looks like the original root name
-        if (pathParts.Length > 1 && !string.IsNullOrEmpty(pathParts[0]))
-        {
-            startIndex = 1;
-        }
+        if (pathParts.Length > 1 || pathParts[0] == root.name) startIndex = 1;
 
         // If path only contains the root name then give that instead
         if (pathParts.Length == 1)
