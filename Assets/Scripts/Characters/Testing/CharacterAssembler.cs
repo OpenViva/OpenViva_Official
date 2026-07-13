@@ -15,8 +15,13 @@ public class CharacterAssembler : MonoBehaviour
     private string charactersFolder = null;
 
     // Cached invocations
-    private static WaitForSecondsRealtime _waitForSecondsRealtime3 = new(3f);
+    private static readonly WaitForSecondsRealtime _waitForSecondsRealtime3 = new(3f);
     #endregion
+
+    private void Start()
+    {
+        GetCharactersFolder();
+    }
 
     private void GetCharactersFolder()
     {
@@ -41,46 +46,21 @@ public class CharacterAssembler : MonoBehaviour
 #endif
     }
 
-    private void Start()
-    {
-        GetCharactersFolder();
-    }
-
     #region Public Access
     /// <summary>
-    /// Returns all loaded character models
+    /// Returns all loaded character models.
     /// </summary>
-    public List<CharacterModel> GetAllModels()
-    {
-        return loadedCharacters;
-    }
+    public List<CharacterModel> GetAllModels() => loadedCharacters;
 
     /// <summary>
-    /// Returns a character model by its name
+    /// Returns a character model by its name.
     /// </summary>
-    public CharacterModel GetModelByName(string name)
-    {
-        foreach (var model in loadedCharacters)
-        {
-            if (model.bundleName == name)
-            {
-                return model;
-            }
-        }
-        return null;
-    }
+    public CharacterModel GetModelByName(string name) => loadedCharacters.Find(m => m.bundleName == name);
 
     /// <summary>
-    /// Returns the first loaded character model (if any exists)
+    /// Returns the first loaded character model (if any exists).
     /// </summary>
-    public CharacterModel GetFirstModel()
-    {
-        if (loadedCharacters.Count > 0)
-        {
-            return loadedCharacters[0];
-        }
-        return null;
-    }
+    public CharacterModel GetFirstModel() => loadedCharacters.Count > 0 ? loadedCharacters[0] : null;
     #endregion
 
     public void ReadAllCharacters()
@@ -126,7 +106,7 @@ public class CharacterAssembler : MonoBehaviour
             ReadSingleCharacter(vivaFile, bundleName);
         }
 
-        Debug.Log($"[Chara Loader] Total characters read: {loadedCharacters.Count}");
+        Debug.Log($"[Chara Loader] Loaded {loadedCharacters.Count} characters.");
         isLoading = false;
     }
 
