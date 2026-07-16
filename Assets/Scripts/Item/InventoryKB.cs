@@ -143,12 +143,12 @@ public class InventoryKB : MonoBehaviour
         GameObject itemObject;
         if (_grabbedIn == 1)
         {
-            itemIndex = PlayerManager.Instance.GetItemRight(false);
+            itemIndex = PlayerManager.Instance.GetItemRight();
             itemObject = PlayerManager.Instance.GetObjectRight();
         }
         else
         {
-            itemIndex = PlayerManager.Instance.GetItemLeft(false);
+            itemIndex = PlayerManager.Instance.GetItemLeft();
             itemObject = PlayerManager.Instance.GetObjectLeft();
         }
         if (itemIndex == -1 || itemObject == null) { return; }

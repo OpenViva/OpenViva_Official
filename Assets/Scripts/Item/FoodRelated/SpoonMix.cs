@@ -4,6 +4,7 @@ public class SpoonMix : PlayerKB_GrabObject
 {
     private bool _isMixing = false;
     private BowlLogic _currentBowl;
+    private PotCollect _currentPot;
 
     protected override void Start()
     {
@@ -14,11 +15,27 @@ public class SpoonMix : PlayerKB_GrabObject
         OnGrabbedRight += ShowHintRight;
     }
 
+    protected override void AssignInputs()
+    {
+        base.AssignInputs();
+        _player.Controls.Viva.InteractLeft.performed += context => Mix(true);
+        _player.Controls.Viva.InteractRight.performed += context => Mix(false);
+        _player.Controls.Viva.InteractLeft.canceled += context => StopMixing();
+        _player.Controls.Viva.InteractRight.canceled += context => StopMixing();
+    }
+
     private void Update()
     {
-        if (_isMixing &&  _currentBowl != null)
+        if (!_isMixing) { return; }
+
+        if (_currentBowl != null)
         {
             _currentBowl.MixBatter();
+        }
+
+        if (_currentPot != null)
+        {
+            _currentPot.MixIngredients();
         }
     }
 
@@ -44,6 +61,12 @@ public class SpoonMix : PlayerKB_GrabObject
             _isMixing = true;
             _currentBowl = bowl;
         }
+
+        if (objectInOther.name.Equals("pot") && objectInOther.TryGetComponent(out PotCollect pot))
+        {
+            _isMixing = true;
+            _currentPot = pot;
+        }
     }
 
     private void StopMixing()
@@ -61,15 +84,6 @@ public class SpoonMix : PlayerKB_GrabObject
     {
         if (show) { _hud.CreateHint(HintConstants.LeftMixHint); }
         else { _hud.ClearHint(HintConstants.LeftMixHint); }
-    }
-
-    protected override void AssignInputs()
-    {
-        base.AssignInputs();
-        _player.Controls.Viva.InteractLeft.performed += context => Mix(true);
-        _player.Controls.Viva.InteractRight.performed += context => Mix(false);
-        _player.Controls.Viva.InteractLeft.canceled += context => StopMixing();
-        _player.Controls.Viva.InteractRight.canceled += context => StopMixing();
     }
 
     private void OnDestroy()

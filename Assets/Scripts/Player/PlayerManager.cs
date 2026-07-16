@@ -130,7 +130,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     // Specifically get the index of the item held in each hand
-    public int GetItemLeft(bool destroyItemAfterwards)
+    public int GetItemLeft()
     {
         GameObject item;
         if (Globals.isDesktopMode)
@@ -144,20 +144,12 @@ public class PlayerManager : MonoBehaviour
 
         if (item != null)
         {
-            
-            if (destroyItemAfterwards)
-            {
-                PlayerKB_GrabObject grabScript = item.GetComponent<PlayerKB_GrabObject>();
-                grabScript.SetIsActive(false, 1);
-                Destroy(item);
-            }
-
             return _itemIndexes.GetItemIndex(item.name);
         }
         return -1;
     }
 
-    public int GetItemRight(bool destroyItemAfterwards)
+    public int GetItemRight()
     {
         GameObject item;
         if (Globals.isDesktopMode)
@@ -170,12 +162,6 @@ public class PlayerManager : MonoBehaviour
         }
         if (item != null)
         {
-            if (destroyItemAfterwards) 
-            {
-                PlayerKB_GrabObject grabScript = item.GetComponent<PlayerKB_GrabObject>();
-                grabScript.SetIsActive(false, 2);
-                Destroy(item); 
-            }
             return _itemIndexes.GetItemIndex(item.name);
         }
         return -1;
