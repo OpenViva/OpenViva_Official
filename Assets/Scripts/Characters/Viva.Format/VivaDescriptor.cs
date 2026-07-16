@@ -1,5 +1,11 @@
 using UnityEngine;
 
+public enum VoicePack
+{
+    Female,
+    Male
+}
+
 [ExecuteInEditMode]
 public class VivaDescriptor : MonoBehaviour
 {
@@ -17,6 +23,8 @@ public class VivaDescriptor : MonoBehaviour
     [Tooltip("The personality type in a number (0 = default)")]
     public int PersonalityType = 0;
 
+    public VoicePack VoicePack;
+
     [Header("Optional Info")]
     [Tooltip("Optional description")]
     public string Description = "";
@@ -26,6 +34,14 @@ public class VivaDescriptor : MonoBehaviour
 
     [Tooltip("Custom color for UI highlighting")]
     public Color CustomColor = Color.orange;
+
+    [Header("Unused Values")]
+    public int Aux1;
+    public int Aux2;
+    public int Aux3;
+    public string AuxString1;
+    public string AuxString2;
+    public string AuxString3;
 
     private void OnValidate()
     {
