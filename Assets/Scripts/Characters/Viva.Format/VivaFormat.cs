@@ -8,7 +8,7 @@ public static class VivaFormat
     public const int CurrentVersion = 3;
     public const int MaxScriptCount = 8;
 
-    public struct Header
+    public struct VivaHeader
     {
         public string VivaKey;
         public int Version;
@@ -18,7 +18,7 @@ public static class VivaFormat
         public uint Checksum;
     }
 
-    public static void WriteHeader(BinaryWriter writer, Header header)
+    public static void WriteHeader(BinaryWriter writer, VivaHeader header)
     {
         writer.Write(header.VivaKey);
         writer.Write(header.Version);
@@ -28,9 +28,9 @@ public static class VivaFormat
         writer.Write(header.Checksum);
     }
 
-    public static Header ReadHeader(BinaryReader reader)
+    public static VivaHeader ReadHeader(BinaryReader reader)
     {
-        Header header = new()
+        VivaHeader header = new()
         {
             VivaKey = reader.ReadString(),
             Version = reader.ReadInt32(),
