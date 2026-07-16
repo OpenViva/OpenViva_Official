@@ -45,12 +45,12 @@ public class PhysicsAttacher : MonoBehaviour
         }
 
         // Setup parameters
-        sdata.gravity = physicsBoneData.gravity;
-        sdata.damping.SetValue(physicsBoneData.damping);
-        sdata.angleRestorationConstraint.stiffness.SetValue(physicsBoneData.stiffnessValue, physicsBoneData.stiffnessCurveStart, physicsBoneData.stiffnessCurveEnd, physicsBoneData.useStiffnessCurve);
-        sdata.angleRestorationConstraint.velocityAttenuation = physicsBoneData.velocityAttenuation;
-        sdata.tetherConstraint.distanceCompression = physicsBoneData.distanceCompression;
-        sdata.inertiaConstraint.particleSpeedLimit.SetValue(physicsBoneData.useLimit, physicsBoneData.speedLimit);
+        sdata.gravity = physicsBoneData.Gravity;
+        sdata.damping.SetValue(physicsBoneData.Damping);
+        sdata.angleRestorationConstraint.stiffness.SetValue(physicsBoneData.StiffnessValue, physicsBoneData.StiffnessCurveStart, physicsBoneData.StiffnessCurveEnd, physicsBoneData.UseStiffnessCurve);
+        sdata.angleRestorationConstraint.velocityAttenuation = physicsBoneData.VelocityAttenuation;
+        sdata.tetherConstraint.distanceCompression = physicsBoneData.DistanceCompression;
+        sdata.inertiaConstraint.particleSpeedLimit.SetValue(physicsBoneData.UseLimit, physicsBoneData.SpeedLimit);
         sdata.colliderCollisionConstraint.mode = ColliderCollisionConstraint.Mode.None;
 
         cloth.name = clothName;

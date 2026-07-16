@@ -1,10 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class CharacterAssembler : MonoBehaviour
 {
@@ -139,8 +136,12 @@ public class CharacterAssembler : MonoBehaviour
                     return;
                 }
 
-                byte[] bundleData = reader.ReadBytes((int)header.BundleSize);
-                byte[] metadataData = reader.ReadBytes((int)header.MetadataSize);
+                byte[] characterDataBytes = reader.ReadBytes(header.CharacterDataSize);
+                byte[] bundleData = reader.ReadBytes(header.BundleSize);
+
+                // Load Character data
+                VivaCharacterData charData = JsonUtility.FromJson<VivaCharacterData>(
+                System.Text.Encoding.UTF8.GetString(characterDataBytes));
 
                 // Load AssetBundle from memory
                 var assetBundle = AssetBundle.LoadFromMemory(bundleData);
@@ -150,15 +151,11 @@ public class CharacterAssembler : MonoBehaviour
                     return;
                 }
 
-                // Read metadata
-                VivaMetadata metadata = new();
-                metadata.Deserialize(metadataData);
-
                 GameObject prefab = null;
 
-                if (!string.IsNullOrEmpty(metadata.PrefabName))
+                if (!string.IsNullOrEmpty(charData.PrefabName))
                 {
-                    prefab = assetBundle.LoadAsset<GameObject>(metadata.PrefabName);
+                    prefab = assetBundle.LoadAsset<GameObject>(charData.PrefabName);
                 }
 
                 // Fallback, load all assets and read first one
@@ -179,106 +176,28 @@ public class CharacterAssembler : MonoBehaviour
                     return;
                 }
 
-                ApplyScriptMetadata(prefab, metadataData);
+                VivaCharacter newData = prefab.AddComponent<VivaCharacter>();
+                newData.characterData = charData;
 
-                // Store prefab reference
-                string fileName = Path.GetFileNameWithoutExtension(characterPath);
-
-                // Add character to the list
-                CharacterModel characterModel = new()
+                CharacterModel newCharacterModel = new()
                 {
-                    bundleName = fileName,
+                    bundleName = bundleName,
                     prefab = prefab,
+                    characterData = charData
                 };
 
-                loadedCharacters.Add(characterModel);
+                // Add character to the list
+                loadedCharacters.Add(newCharacterModel);
 
                 // Cleanup AssetBundle
                 assetBundle.Unload(false);
-
-                Debug.Log($"[Chara Loader] Character loaded with prefab name: {fileName}");
+                Debug.Log($"[Chara Loader] Character loaded with prefab name: {prefab.name}");
             }
         }
         catch (System.Exception ex)
         {
             Debug.LogError($"[Chara Loader] Failed to load character: {ex.Message}\n{ex.StackTrace}");
         }
-    }
-
-    private void ApplyScriptMetadata(GameObject prefab, byte[] metadataData)
-    {
-        VivaMetadata metadata = new();
-        metadata.Deserialize(metadataData);
-
-        // Validate checksum
-        if (!metadata.ValidateChecksums())
-        {
-            Debug.LogError("[Chara Loader] Metadata checksum validation failed!");
-        }
-
-        // Apply each script's data to the prefab
-        foreach (var scriptData in metadata.Scripts)
-        {
-            // Find matching component type
-            Type scriptType = null;
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                scriptType = assembly.GetType(scriptData.TypeName);
-                if (scriptType != null) break;
-            }
-
-            if (scriptType == null)
-            {
-                Debug.LogError("[Chara Loader] Script type not found!");
-            }
-
-            // Find the correct GameObject by the given path
-            GameObject targetGameObject = FindGameObjectByPath(prefab, scriptData.GameObjectPath);
-            if (targetGameObject == null)
-            {
-                Debug.LogError($"[Chara Loader] GameObject not found for path: {scriptData.GameObjectPath}");
-                continue;
-            }
-
-            // Find or add component on the correct GameObject
-            Component component = targetGameObject.GetComponent(scriptType);
-            if (component == null)
-            {
-                component = targetGameObject.AddComponent(scriptType);
-            }
-
-            // Deserialize component data
-            DeserializeComponent(component, scriptData.SerializedData);
-        }
-    }
-
-    private void LoadAssetBundleWithAddressables(string bundlePath, string bundleName, CharacterPackageConfig config)
-    {
-        var handle = Addressables.LoadAssetAsync<GameObject>(bundleName);
-
-        handle.Completed += (operation) =>
-        {
-            if (operation.Status == AsyncOperationStatus.Succeeded)
-            {
-                GameObject loadedPrefab = operation.Result;
-
-                CharacterModel currentModel = new()
-                {
-                    bundleName = bundleName,
-                    prefab = loadedPrefab,
-                    boneData = config.boneData,
-                };
-
-                // Store the loaded character
-                loadedCharacters.Add(currentModel);
-
-                Debug.Log($"[Chara Loader] Character loaded: {bundleName}");
-            }
-            else
-            {
-                Debug.LogError($"[Chara Loader] Failed to load bundle: {bundleName}");
-            }
-        };
     }
 
     private GameObject FindGameObjectByPath(GameObject root, string path)
@@ -327,42 +246,12 @@ public class CharacterAssembler : MonoBehaviour
         return current.gameObject;
     }
 
-    private void DeserializeComponent(Component component, byte[] data)
-    {
-        try
-        {
-            string json = System.Text.Encoding.UTF8.GetString(data);
-            JsonUtility.FromJsonOverwrite(json, component);
-
-            Debug.Log($"[Chara Loader] Deserialized Data for {component} with Data: {json}");
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogWarning($"[Chara Loader] Failed to deserialize component: {ex.Message}");
-        }
-    }
-
     #region Data Classes
     public class CharacterModel
     {
         public string bundleName;
         public GameObject prefab;
-        public List<PhysicsBoneData> boneData;
-    }
-
-    public class CharacterPackageConfig
-    {
-        public string bundleName;
-        public List<PhysicsBoneData> boneData;
-    }
-
-    public enum BonePreset
-    {
-        Skirt,
-        ShortHair,
-        LongHair,
-        AnimalTail,
-        AnimalEars
+        public VivaCharacterData characterData;
     }
     #endregion
 }
