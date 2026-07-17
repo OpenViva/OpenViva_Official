@@ -101,9 +101,9 @@ public class FruitCutMinigame : MonoBehaviour
 
                 switch (_selectedFruit)
                 {
-                    case Fruit.Strawberry: _totalCutsNeeded = 2; break;
-                    case Fruit.Peach: _totalCutsNeeded = 7; break;
-                    case Fruit.Cantaloupe: _totalCutsNeeded = 19; break;
+                    case Fruit.Strawberry: _totalCutsNeeded = CuttingBoard.STRAWBERRY_MAX_CUTS; break;
+                    case Fruit.Peach: _totalCutsNeeded = CuttingBoard.PEACH_MAX_CUTS; break;
+                    case Fruit.Cantaloupe: _totalCutsNeeded = CuttingBoard.CANTALOUPE_MAX_CUTS; break;
                 }
             }
         }
@@ -158,7 +158,12 @@ public class FruitCutMinigame : MonoBehaviour
         _accuracy = (_accuracy * ((_cutsMadeThisAttempt - 1f) / _cutsMadeThisAttempt)) + (cutAccuracy * (1f / _cutsMadeThisAttempt));
         CuttingMinigame.Instance.SetAccuracy(cutAccuracy, _accuracy);
         SetNewTarget();
-        CuttingBoard.Instance.EnableNextObject(_cutsMadeThisAttempt);
+        if (_cutsMadeThisAttempt < _totalCutsNeeded) { CuttingBoard.Instance.EnableNextObject(_cutsMadeThisAttempt); }
+        else
+        {
+            CuttingBoard.Instance.EnableLastObject();
+            OnMinigameCompleted();
+        }
 
         IEnumerator DeclareCut()
         {
@@ -170,4 +175,8 @@ public class FruitCutMinigame : MonoBehaviour
         }
     }
 
+    private void OnMinigameCompleted()
+    {
+        Debug.Log("Minigame complete");
+    }
 }

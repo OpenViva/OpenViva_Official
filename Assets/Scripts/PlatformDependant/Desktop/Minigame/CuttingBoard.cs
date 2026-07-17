@@ -19,6 +19,10 @@ public class CuttingBoard : MonoBehaviour
     [SerializeField] private Prefab _finalPeachPrefab;
     [SerializeField] private Prefab _finalCantaloupePrefab;
 
+    public const int STRAWBERRY_MAX_CUTS = 2;
+    public const int PEACH_MAX_CUTS = 7;
+    public const int CANTALOUPE_MAX_CUTS = 19;
+
     private Fruit _selectedFruit = Fruit.None;
     private GameObject _currentlyShowing;
 
@@ -56,24 +60,50 @@ public class CuttingBoard : MonoBehaviour
         _currentlyShowing.SetActive(false);
         switch (_selectedFruit)
         {
-            case Fruit.Strawberry: 
-                _currentlyShowing = _strawberryObjects[cutsMade]; 
-
-                break;
-
-            case Fruit.Peach: 
-                _currentlyShowing = _peachObjects[cutsMade]; 
-                break;
-
-            case Fruit.Cantaloupe: 
-                _currentlyShowing = _cantaloupeObjects[cutsMade]; 
-                break;
-
+            case Fruit.Strawberry: _currentlyShowing = _strawberryObjects[cutsMade];  break;
+            case Fruit.Peach:  _currentlyShowing = _peachObjects[cutsMade];  break;
+            case Fruit.Cantaloupe:  _currentlyShowing = _cantaloupeObjects[cutsMade];  break;
             default: return;
         }
         _currentlyShowing.SetActive(true);
 
         PlayObjectAnimation(cutsMade);
+    }
+
+    public void EnableLastObject()
+    {
+        _currentlyShowing.SetActive(false);
+        switch (_selectedFruit)
+        {
+            case Fruit.Strawberry:
+                _currentlyShowing = Instantiate(_finalStrawberryPrefab.gameObject);
+                _currentlyShowing.transform.SetParent(transform.GetChild(0).transform, true);
+                _currentlyShowing.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                _currentlyShowing.SetActive(true);
+                _currentlyShowing.name = _finalStrawberryPrefab.gameObject.name;
+                PlayObjectAnimation(STRAWBERRY_MAX_CUTS);
+                break;
+
+            case Fruit.Peach: 
+                _currentlyShowing = Instantiate(_finalPeachPrefab.gameObject);
+                _currentlyShowing.transform.SetParent(transform.GetChild(1).transform, true);
+                _currentlyShowing.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                _currentlyShowing.SetActive(true);
+                _currentlyShowing.name = _finalPeachPrefab.gameObject.name;
+                PlayObjectAnimation(PEACH_MAX_CUTS);
+                break;
+
+            case Fruit.Cantaloupe:
+                _currentlyShowing = Instantiate(_finalCantaloupePrefab.gameObject);
+                _currentlyShowing.transform.SetParent(transform.GetChild(2).transform, true);
+                _currentlyShowing.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                _currentlyShowing.SetActive(true);
+                _currentlyShowing.name = _finalStrawberryPrefab.gameObject.name;
+                PlayObjectAnimation(CANTALOUPE_MAX_CUTS);
+                break;
+
+            default: return;
+        }
     }
 
     private void PlayObjectAnimation(int cutsMade)
