@@ -24,7 +24,7 @@ public class CuttingBoard : MonoBehaviour
     private void Awake()
     {
         if (Instance == null) { Instance = this; }
-        // else { Destroy(this); }
+        else { Destroy(this); }
 
         transform.GetChild(0).gameObject.GetChildGameObjects(_strawberryObjects);
         transform.GetChild(1).gameObject.GetChildGameObjects(_peachObjects);

@@ -1,9 +1,11 @@
+using MinigameUIController;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class FruitCutMinigame : MonoBehaviour
 {
+    // Setup Fields
     private Camera _mainCamera;
     [SerializeField] private Player _player;
 
@@ -15,6 +17,12 @@ public class FruitCutMinigame : MonoBehaviour
     [SerializeField] private Transform _knifeHoldTransform;
 
     private bool _isPlaying;
+
+    // Gameplay Fields
+    [SerializeField] private float _range = 1.5f;
+    private float _randomizedTarget;
+    private float _timingLine;
+    private bool _goingUp = true;
 
     public enum Fruit
     {
@@ -33,6 +41,11 @@ public class FruitCutMinigame : MonoBehaviour
     private void Start()
     {
         AssignInputs();
+    }
+
+    private void Update()
+    {
+        if (_isPlaying) { MoveTimingLine(); }
     }
 
     private void AssignInputs()
@@ -75,6 +88,7 @@ public class FruitCutMinigame : MonoBehaviour
             if (fruitFound)
             {
                 CuttingBoard.Instance.EnableFirstObject(_selectedFruit);
+                SetNewTarget();
             }
         }
         else { fruitFound = true; }
@@ -92,5 +106,26 @@ public class FruitCutMinigame : MonoBehaviour
         Globals.handleMovement = false;
         Globals.allowMenuOpen = false;
         _knife.transform.SetPositionAndRotation(_knifeHoldTransform.position, _knifeHoldTransform.rotation);
+
+        // Show UI
+        CuttingMinigame.Instance.CuttingMinigameUIEnabled(true);
+    }
+
+    private void SetNewTarget()
+    {
+        _randomizedTarget = UnityEngine.Random.Range(0, _range);
+        CuttingMinigame.Instance.SetBackgroundPosition(_randomizedTarget, _range);
+    }
+
+    private void MoveTimingLine()
+    {
+        if (_goingUp) { _timingLine += Time.deltaTime; }
+        else { _timingLine -= Time.deltaTime; }
+
+        _timingLine = Mathf.Clamp(_timingLine, 0, _range);
+        CuttingMinigame.Instance.SetMovingPointPosition(_timingLine, _range);
+
+        if (_timingLine >= _range) { _goingUp = false; }
+        else if (_timingLine <= 0) { _goingUp = true; }
     }
 }
