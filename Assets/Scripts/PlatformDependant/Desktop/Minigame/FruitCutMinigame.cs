@@ -20,7 +20,8 @@ public class FruitCutMinigame : MonoBehaviour
     [SerializeField] private Transform _knifeOriginalTransform;
     [SerializeField] private Transform _knifeHoldTransform;
 
-    private bool _isPlaying;
+    private bool _playerInRange = false;
+    private bool _isPlaying = false;
     private PlayerKB_GrabObject _otherObjectGrabScriptL;
     private PlayerKB_GrabObject _otherObjectGrabScriptR;
 
@@ -66,6 +67,16 @@ public class FruitCutMinigame : MonoBehaviour
         if (_isPlaying) { MoveTimingLine(); }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player")) { _playerInRange = true; }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player")) { _playerInRange = false; }
+    }
+
     private void AssignInputs()
     {
         _player.Controls.Viva.UniversalInteract.performed += EnterMinigame;
@@ -77,7 +88,7 @@ public class FruitCutMinigame : MonoBehaviour
 
     private void EnterMinigame(InputAction.CallbackContext context)
     {
-        if (_isPlaying || !Globals.isDesktopMode) { return; }
+        if (_isPlaying || !Globals.isDesktopMode || !_playerInRange) { return; }
 
         bool fruitChanged = false;
 
@@ -293,5 +304,14 @@ public class FruitCutMinigame : MonoBehaviour
         OnMinigameCompleted();
         CuttingMinigame.Instance.SetProgressBarSize((float)_cutsMadeThisAttempt / _totalCutsNeeded);
         CuttingMinigame.Instance.MovingPointEnabled(false);
+    }
+
+    private void OnDisable()
+    {
+        _player.Controls.Viva.UniversalInteract.performed -= EnterMinigame;
+        _player.Controls.Viva.LeftGrab.performed -= PerformCut;
+        _player.Controls.Viva.Pause.performed -= LeaveMinigame;
+        _player.Controls.Viva.Cancel.performed -= QuitMinigame;
+        _player.Controls.Viva.InteractRightHold.performed -= SkipMinigame;
     }
 }
