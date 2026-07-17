@@ -39,5 +39,20 @@ namespace MinigameUIController
             Vector3 currentPosition = _movingPoint.transform.localPosition;
             _movingPoint.transform.localPosition = new Vector3(-375f + (position * 300 / range), currentPosition.y, currentPosition.z);
         }
+
+        public void MovingPointEnabled(bool enable) { _movingPoint.SetActive(enable); }
+
+        public void SetAccuracy(float cutAccuracy, float average)
+        {
+            _accuracyText.SetText($"{cutAccuracy:0}%");
+            _averageText.SetText($"{average:0}%");
+
+            switch (average)
+            {
+                case float n when n < 85: _averageText.color = Color.red; break;
+                case float n when n >= 85 && n < 95: _averageText.color = Color.white; break;
+                case float n when n >= 95: _averageText.color = Color.green; break;
+            }
+        }
     }
 }
