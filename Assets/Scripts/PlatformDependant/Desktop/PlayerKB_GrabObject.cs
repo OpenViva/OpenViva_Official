@@ -236,6 +236,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _animationIndexes.PlayAnimationLeft(_objectIndex);
                 IsGrabbedLeft = true;
                 IsGrabbedRight = false;
+                PlayerManager.Instance.LeftHandOccupied = true;
             }
             else
             {
@@ -244,6 +245,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
                 _animationIndexes.PlayAnimationRight(_objectIndex);
                 IsGrabbedRight = true;
                 IsGrabbedLeft = false;
+                PlayerManager.Instance.RightHandOccupied = true;
             }
         }
 

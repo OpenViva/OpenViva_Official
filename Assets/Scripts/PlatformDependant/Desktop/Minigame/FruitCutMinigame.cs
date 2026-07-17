@@ -10,6 +10,7 @@ public class FruitCutMinigame : MonoBehaviour
     // Setup Fields
     private Camera _mainCamera;
     [SerializeField] private Player _player;
+    private AnimationIndexes _animationIndexes;
 
     [SerializeField] private Camera _minigameCamera;
     [SerializeField] private SkinnedMeshRenderer _minigameHands;
@@ -19,6 +20,8 @@ public class FruitCutMinigame : MonoBehaviour
     [SerializeField] private Transform _knifeHoldTransform;
 
     private bool _isPlaying;
+    private PlayerKB_GrabObject _otherObjectGrabScriptL;
+    private PlayerKB_GrabObject _otherObjectGrabScriptR;
 
     // Gameplay Fields
     [SerializeField] private float _range = 1.5f;
@@ -48,6 +51,7 @@ public class FruitCutMinigame : MonoBehaviour
 
     private void Start()
     {
+        _animationIndexes = PlayerManager.Instance.AnimationKB.GetComponent<AnimationIndexes>();
         AssignInputs();
     }
 
@@ -60,71 +64,74 @@ public class FruitCutMinigame : MonoBehaviour
     {
         _player.Controls.Viva.UniversalInteract.performed += EnterMinigame;
         _player.Controls.Viva.LeftGrab.performed += PerformCut;
+        _player.Controls.Viva.Pause.performed += LeaveMinigame;
     }
 
     private void EnterMinigame(InputAction.CallbackContext context)
     {
         if (_isPlaying || !Globals.isDesktopMode) { return; }
 
-        // Check for fruit
-        bool fruitFound = false;
-        if (_selectedFruit == Fruit.None)
+        bool fruitChanged = false;
+
+        if (PlayerManager.Instance.LeftHandOccupied)
         {
-            PlayerKB_GrabObject grabScript = null;
-            if (PlayerManager.Instance.LeftHandOccupied)
-            {
-                int itemInLeft = PlayerManager.Instance.GetItemLeft();
-                if (Enum.IsDefined(typeof(Fruit), itemInLeft))
-                {
-                    _selectedFruit = (Fruit)itemInLeft;
-                    grabScript = PlayerManager.Instance.GetObjectLeft().GetComponent<PlayerKB_GrabObject>();
-                    grabScript.SetIsActive(false, 1);
-                    fruitFound = true;
-                }
-            }
-            else if (PlayerManager.Instance.RightHandOccupied)
-            {
-                int itemInLeft = PlayerManager.Instance.GetItemRight();
-                if (Enum.IsDefined(typeof(Fruit), itemInLeft))
-                {
-                    _selectedFruit = (Fruit)itemInLeft;
-                    grabScript = PlayerManager.Instance.GetObjectRight().GetComponent<PlayerKB_GrabObject>();
-                    grabScript.SetIsActive(false, 2);
-                    fruitFound = true;
-                }
-            }
+            int itemIndexLeft = PlayerManager.Instance.GetItemLeft();
+            PlayerKB_GrabObject grabScript = PlayerManager.Instance.GetObjectLeft().GetComponent<PlayerKB_GrabObject>();
+            grabScript.SetIsActive(false, 1);
 
-            if (fruitFound)
+            if (Enum.IsDefined(typeof(Fruit), itemIndexLeft) && _selectedFruit == Fruit.None)
             {
-                CuttingBoard.Instance.EnableFirstObject(_selectedFruit);
-                SetNewTarget();
+                _selectedFruit = (Fruit)itemIndexLeft;
+                Destroy(grabScript.gameObject);
+                fruitChanged = true;
+            }
+            else { _otherObjectGrabScriptL = grabScript; }
+        }
 
-                switch (_selectedFruit)
-                {
-                    case Fruit.Strawberry: _totalCutsNeeded = CuttingBoard.STRAWBERRY_MAX_CUTS; break;
-                    case Fruit.Peach: _totalCutsNeeded = CuttingBoard.PEACH_MAX_CUTS; break;
-                    case Fruit.Cantaloupe: _totalCutsNeeded = CuttingBoard.CANTALOUPE_MAX_CUTS; break;
-                }
+        if (PlayerManager.Instance.RightHandOccupied)
+        {
+            int itemIndexRight = PlayerManager.Instance.GetItemRight();
+            PlayerKB_GrabObject grabScript = PlayerManager.Instance.GetObjectRight().GetComponent<PlayerKB_GrabObject>();
+            grabScript.SetIsActive(false, 2);
+
+            if (Enum.IsDefined(typeof(Fruit), itemIndexRight) && _selectedFruit == Fruit.None)
+            {
+                _selectedFruit = (Fruit)itemIndexRight;
+                Destroy(grabScript.gameObject);
+                fruitChanged = true;
+            }
+            else { _otherObjectGrabScriptR = grabScript; }
+        }
+
+        if (fruitChanged)
+        {
+            CuttingBoard.Instance.EnableFirstObject(_selectedFruit);
+            SetNewTarget();
+
+            switch (_selectedFruit)
+            {
+                case Fruit.Strawberry: _totalCutsNeeded = CuttingBoard.STRAWBERRY_MAX_CUTS; break;
+                case Fruit.Peach: _totalCutsNeeded = CuttingBoard.PEACH_MAX_CUTS; break;
+                case Fruit.Cantaloupe: _totalCutsNeeded = CuttingBoard.CANTALOUPE_MAX_CUTS; break;
             }
         }
-        else { fruitFound = true; }
 
-        // Setup
-        if (!fruitFound) { return; }
-        _isPlaying = true;
-        _mainCamera.enabled = false;
-        _minigameCamera.enabled = true;
-        _minigameHands.enabled = true;
-        PlayerManager.Instance.HideHands(true);
-        PlayerManager.Instance.LeftHandOccupied = true;
-        PlayerManager.Instance.RightHandOccupied = true;
-        Globals.handleKBLook = false;
-        Globals.handleMovement = false;
-        Globals.allowMenuOpen = false;
-        _knife.transform.SetPositionAndRotation(_knifeHoldTransform.position, _knifeHoldTransform.rotation);
+        if (_selectedFruit != Fruit.None)
+        {
+            _isPlaying = true;
+            _mainCamera.enabled = false;
+            _minigameCamera.enabled = true;
+            _minigameHands.enabled = true;
+            PlayerManager.Instance.HideHands(true);
+            PlayerManager.Instance.LeftHandOccupied = true;
+            PlayerManager.Instance.RightHandOccupied = true;
+            Globals.handleKBLook = false;
+            Globals.handleMovement = false;
+            Globals.allowMenuOpen = false;
+            _knife.transform.SetPositionAndRotation(_knifeHoldTransform.position, _knifeHoldTransform.rotation);
 
-        // Show UI
-        CuttingMinigame.Instance.CuttingMinigameUIEnabled(true);
+            CuttingMinigame.Instance.CuttingMinigameUIEnabled(true);
+        }
     }
 
     private void SetNewTarget()
@@ -147,7 +154,7 @@ public class FruitCutMinigame : MonoBehaviour
 
     private void PerformCut(InputAction.CallbackContext context)
     {
-        if (!_isPlaying || _isCutting) { return; }
+        if (!_isPlaying || _isCutting || _cutsMadeThisAttempt >= _totalCutsNeeded) { return; }
 
         _minigameHandAnimator.Play("Cut");
         StartCoroutine(DeclareCut());
@@ -178,5 +185,35 @@ public class FruitCutMinigame : MonoBehaviour
     private void OnMinigameCompleted()
     {
         Debug.Log("Minigame complete");
+    }
+
+    private void LeaveMinigame(InputAction.CallbackContext context)
+    {
+        if (!_isPlaying || _cutsMadeThisAttempt >= _totalCutsNeeded) {  return; }
+
+         CuttingMinigame.Instance.CuttingMinigameUIEnabled(false);
+        _knife.transform.SetPositionAndRotation(_knifeOriginalTransform.position, _knifeOriginalTransform.rotation);
+        Globals.allowMenuOpen = true;
+        Globals.handleMovement = true;
+        Globals.handleKBLook = true;
+        PlayerManager.Instance.RightHandOccupied = false;
+        PlayerManager.Instance.LeftHandOccupied = false;
+        PlayerManager.Instance.HideHands(false);
+        _minigameHands.enabled = false;
+        _minigameCamera.enabled = false;
+        _mainCamera.enabled = true;
+        _isPlaying = false;
+
+        if (_otherObjectGrabScriptL != null)
+        {
+            _otherObjectGrabScriptL.SetIsActive(true, 1);
+            _otherObjectGrabScriptL = null;
+        }
+
+        if (_otherObjectGrabScriptR != null)
+        {
+            _otherObjectGrabScriptR.SetIsActive(true, 2);
+            _otherObjectGrabScriptR = null;
+        }
     }
 }
