@@ -1,4 +1,5 @@
 using MinigameUIController;
+using nTools.PrefabPainter;
 using System;
 using System.Collections;
 using System.Threading.Tasks;
@@ -35,6 +36,11 @@ public class FruitCutMinigame : MonoBehaviour
     private int _totalCutsNeeded = 0;
     private float _accuracy;
 
+    // Cancelling
+    [SerializeField] private Prefab _strawberryCrop;
+    [SerializeField] private Prefab _peachCrop;
+    [SerializeField] private Prefab _cantaloupeCrop;
+
     public enum Fruit
     {
         None = 0,
@@ -65,6 +71,7 @@ public class FruitCutMinigame : MonoBehaviour
         _player.Controls.Viva.UniversalInteract.performed += EnterMinigame;
         _player.Controls.Viva.LeftGrab.performed += PerformCut;
         _player.Controls.Viva.Pause.performed += LeaveMinigame;
+        _player.Controls.Viva.Cancel.performed += QuitMinigame;
     }
 
     private void EnterMinigame(InputAction.CallbackContext context)
@@ -218,5 +225,58 @@ public class FruitCutMinigame : MonoBehaviour
             _otherObjectGrabScriptR.SetIsActive(true, 2);
             _otherObjectGrabScriptR = null;
         }
+    }
+
+    private void QuitMinigame(InputAction.CallbackContext context)
+    {
+        if (!_isPlaying || _cutsMadeThisAttempt >= _totalCutsNeeded) { return; }
+
+        // At least one hand must be free.
+        int freeHand = 0;
+        if (_otherObjectGrabScriptL != null && _otherObjectGrabScriptR != null)
+        {
+            _otherObjectGrabScriptR.SetIsActive(true, 2);
+            _otherObjectGrabScriptR.gameObject.transform.SetParent(null, true);
+            _otherObjectGrabScriptR = null;
+            freeHand = 2;
+        }
+        else if (_otherObjectGrabScriptL != null)
+        {
+            _otherObjectGrabScriptL.SetIsActive(true, 1);
+            _otherObjectGrabScriptL = null;
+            freeHand = 2;
+        }
+        else if ( _otherObjectGrabScriptR != null)
+        {
+            _otherObjectGrabScriptR.SetIsActive(true, 2);
+            _otherObjectGrabScriptR = null;
+            freeHand = 1;
+        }
+
+        Crop cropScript = null;
+        switch (_selectedFruit)
+        {
+            case Fruit.Strawberry:
+                cropScript = Instantiate(_strawberryCrop.gameObject).GetComponent<Crop>();
+                cropScript.gameObject.name = _strawberryCrop.gameObject.name;
+                break;
+
+            case Fruit.Peach:
+                cropScript = Instantiate(_peachCrop.gameObject).GetComponent<Crop>();
+                cropScript.gameObject.name = _peachCrop.gameObject.name;
+                break;
+
+            case Fruit.Cantaloupe:
+                cropScript = Instantiate(_cantaloupeCrop.gameObject).GetComponent<Crop>();
+                cropScript.gameObject.name = _cantaloupeCrop.gameObject.name;
+                break;
+        }
+        cropScript.ShouldGrow = false;
+        cropScript.gameObject.transform.localScale = Vector3.one;
+        cropScript.SetIsActive(true, freeHand);
+
+        _selectedFruit = Fruit.None;
+        CuttingBoard.Instance.EnableFirstObject(_selectedFruit);
+        LeaveMinigame(context);
     }
 }

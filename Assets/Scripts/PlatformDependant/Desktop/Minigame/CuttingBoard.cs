@@ -12,9 +12,6 @@ public class CuttingBoard : MonoBehaviour
     private List<GameObject> _peachObjects = new();
     private List<GameObject> _cantaloupeObjects = new();
 
-    [SerializeField] private Prefab _strawberryCrop;
-    [SerializeField] private Prefab _peachCrop;
-    [SerializeField] private Prefab _cantaloupeCrop;
     [SerializeField] private Prefab _finalStrawberryPrefab;
     [SerializeField] private Prefab _finalPeachPrefab;
     [SerializeField] private Prefab _finalCantaloupePrefab;
