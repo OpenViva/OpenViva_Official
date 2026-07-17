@@ -72,6 +72,7 @@ public class FruitCutMinigame : MonoBehaviour
         _player.Controls.Viva.LeftGrab.performed += PerformCut;
         _player.Controls.Viva.Pause.performed += LeaveMinigame;
         _player.Controls.Viva.Cancel.performed += QuitMinigame;
+        _player.Controls.Viva.InteractRightHold.performed += SkipMinigame;
     }
 
     private void EnterMinigame(InputAction.CallbackContext context)
@@ -199,9 +200,9 @@ public class FruitCutMinigame : MonoBehaviour
 
     private void LeaveMinigame(InputAction.CallbackContext context)
     {
-        if (!_isPlaying) {  return; }
+        if (!_isPlaying) { return; }
 
-         CuttingMinigame.Instance.CuttingMinigameUIEnabled(false);
+        CuttingMinigame.Instance.CuttingMinigameUIEnabled(false);
         _knife.transform.SetPositionAndRotation(_knifeOriginalTransform.position, _knifeOriginalTransform.rotation);
         Globals.allowMenuOpen = true;
         Globals.handleMovement = true;
@@ -246,7 +247,7 @@ public class FruitCutMinigame : MonoBehaviour
             _otherObjectGrabScriptL = null;
             freeHand = 2;
         }
-        else if ( _otherObjectGrabScriptR != null)
+        else if (_otherObjectGrabScriptR != null)
         {
             _otherObjectGrabScriptR.SetIsActive(true, 2);
             _otherObjectGrabScriptR = null;
@@ -278,5 +279,19 @@ public class FruitCutMinigame : MonoBehaviour
         _selectedFruit = Fruit.None;
         CuttingBoard.Instance.EnableFirstObject(_selectedFruit);
         LeaveMinigame(context);
+    }
+
+    private void SkipMinigame(InputAction.CallbackContext context)
+    {
+        if (!_isPlaying || _cutsMadeThisAttempt >= _totalCutsNeeded) { return; }
+
+        _minigameHandAnimator.Play("Cut");
+        _cutsMadeThisAttempt = _totalCutsNeeded;
+        _accuracy = 85;
+        CuttingMinigame.Instance.SetAccuracy(_accuracy, _accuracy);
+        CuttingBoard.Instance.EnableLastObject();
+        OnMinigameCompleted();
+        CuttingMinigame.Instance.SetProgressBarSize((float)_cutsMadeThisAttempt / _totalCutsNeeded);
+        CuttingMinigame.Instance.MovingPointEnabled(false);
     }
 }
