@@ -1,7 +1,9 @@
 using nTools.PrefabPainter;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static FruitCutMinigame;
 
 public class CuttingBoard : MonoBehaviour
@@ -26,6 +28,7 @@ public class CuttingBoard : MonoBehaviour
     private GameObject _currentlyShowing;
 
     // Picking up the board
+    [SerializeField] private Player _player;
     [SerializeField] private Transform _minigameTransform;
     [SerializeField] private Transform _playerRightHand;
     [SerializeField] private Animator _leftHandAnimator;
@@ -34,7 +37,10 @@ public class CuttingBoard : MonoBehaviour
     private Quaternion _boardHoldRotation;
     private Vector3 _boardOriginalPosition;
     private Quaternion _boardOriginalRotation;
-    private bool _boardIsHeld = false;
+    public bool BoardIsHeld = false;
+
+    // Putting the board down
+    public bool TiltKeyPressed = false;
 
     private void Awake()
     {
@@ -49,8 +55,8 @@ public class CuttingBoard : MonoBehaviour
 
         _boardHoldPosition = ObjectHoldPositions.Instance.GetCuttingBoardPosition();
         _boardHoldRotation = ObjectHoldPositions.Instance.GetCuttingBoardRotation();
-        _boardOriginalPosition = transform.position;
-        _boardOriginalRotation = transform.rotation;
+        _boardOriginalPosition = transform.localPosition;
+        _boardOriginalRotation = transform.localRotation;
     }
 
     private void Start()
@@ -60,7 +66,7 @@ public class CuttingBoard : MonoBehaviour
 
     private void AssignInputs()
     {
-
+        _player.Controls.Viva.InteractRight.performed += TiltClockwise;
     }
 
     public void EnableFirstObject(Fruit selectedFruit)
@@ -101,32 +107,27 @@ public class CuttingBoard : MonoBehaviour
             case Fruit.Strawberry:
                 _currentlyShowing = Instantiate(_finalStrawberryPrefab.gameObject);
                 _currentlyShowing.transform.SetParent(transform.GetChild(0).transform, true);
-                _currentlyShowing.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-                _currentlyShowing.SetActive(true);
                 _currentlyShowing.name = _finalStrawberryPrefab.gameObject.name;
-                PlayObjectAnimation(STRAWBERRY_MAX_CUTS);
                 break;
 
             case Fruit.Peach: 
                 _currentlyShowing = Instantiate(_finalPeachPrefab.gameObject);
                 _currentlyShowing.transform.SetParent(transform.GetChild(1).transform, true);
-                _currentlyShowing.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-                _currentlyShowing.SetActive(true);
                 _currentlyShowing.name = _finalPeachPrefab.gameObject.name;
-                PlayObjectAnimation(PEACH_MAX_CUTS);
                 break;
 
             case Fruit.Cantaloupe:
                 _currentlyShowing = Instantiate(_finalCantaloupePrefab.gameObject);
                 _currentlyShowing.transform.SetParent(transform.GetChild(2).transform, true);
-                _currentlyShowing.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-                _currentlyShowing.SetActive(true);
                 _currentlyShowing.name = _finalStrawberryPrefab.gameObject.name;
-                PlayObjectAnimation(CANTALOUPE_MAX_CUTS);
                 break;
 
             default: return;
         }
+
+        _currentlyShowing.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        _currentlyShowing.SetActive(true);
+        _currentlyShowing = null;
     }
 
     private void PlayObjectAnimation(int cutsMade)
@@ -190,8 +191,27 @@ public class CuttingBoard : MonoBehaviour
         _leftHandAnimator.Play("holdCuttingBoardL");
         _rightHandAnimator.Play("holdCuttingBoardR");
 
-        _boardIsHeld = true;
         PlayerManager.Instance.LeftHandOccupied = true;
         PlayerManager.Instance.RightHandOccupied = true;
+    }
+
+    public void PutBoardDown()
+    {
+        if (!BoardIsHeld) { return; }
+
+        transform.SetParent(_minigameTransform, true);
+        transform.SetLocalPositionAndRotation(_boardOriginalPosition, _boardOriginalRotation);
+
+        _leftHandAnimator.Play("handIdle");
+        _rightHandAnimator.Play("handIdle");
+
+        PlayerManager.Instance.LeftHandOccupied = false;
+        PlayerManager.Instance.RightHandOccupied = false;
+    }
+
+    private void TiltClockwise(InputAction.CallbackContext context)
+    {
+        if (!BoardIsHeld) { return; }
+        TiltKeyPressed = true;
     }
 }

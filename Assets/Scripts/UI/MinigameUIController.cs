@@ -50,7 +50,7 @@ namespace MinigameUIController
             {
                 case float n when n < 85: _averageText.color = Color.red; break;
                 case float n when n >= 85 && n < 95: _averageText.color = Color.white; break;
-                case float n when n >= 95: _averageText.color = Color.green; break;
+                case float n when n >= 95 && n <= 100: _averageText.color = Color.green; break;
 
                 case float n when n > 100:
                     _accuracyText.SetText("--%");
