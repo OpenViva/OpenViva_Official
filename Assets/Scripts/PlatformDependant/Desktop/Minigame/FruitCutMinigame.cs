@@ -81,9 +81,10 @@ public class FruitCutMinigame : MonoBehaviour
     {
         _player.Controls.Viva.UniversalInteract.performed += EnterMinigame;
         _player.Controls.Viva.LeftGrab.performed += PerformCut;
-        _player.Controls.Viva.Pause.performed += LeaveMinigame;
+        _player.Controls.Viva.Pause.performed += context => LeaveMinigame(context, false);
         _player.Controls.Viva.Cancel.performed += QuitMinigame;
         _player.Controls.Viva.InteractRightHold.performed += SkipMinigame;
+        _player.Controls.Viva.UniversalInteractHold.performed += CompleteMinigame;
     }
 
     private void EnterMinigame(InputAction.CallbackContext context)
@@ -190,7 +191,7 @@ public class FruitCutMinigame : MonoBehaviour
         else
         {
             CuttingBoard.Instance.EnableLastObject();
-            OnMinigameCompleted();
+            CuttingMinigame.Instance.DoneTextEnabled(true, _accuracy);
         }
         CuttingMinigame.Instance.SetProgressBarSize((float)_cutsMadeThisAttempt / _totalCutsNeeded);
 
@@ -204,12 +205,7 @@ public class FruitCutMinigame : MonoBehaviour
         }
     }
 
-    private void OnMinigameCompleted()
-    {
-        CuttingMinigame.Instance.DoneTextEnabled(true, _accuracy);
-    }
-
-    private void LeaveMinigame(InputAction.CallbackContext context)
+    private void LeaveMinigame(InputAction.CallbackContext context, bool dropOtherItems)
     {
         if (!_isPlaying) { return; }
 
@@ -228,13 +224,15 @@ public class FruitCutMinigame : MonoBehaviour
 
         if (_otherObjectGrabScriptL != null)
         {
-            _otherObjectGrabScriptL.SetIsActive(true, 1);
+            _otherObjectGrabScriptL.SetIsActive(!dropOtherItems, 1);
+            if (dropOtherItems) { _otherObjectGrabScriptL.gameObject.SetActive(true); }
             _otherObjectGrabScriptL = null;
         }
 
         if (_otherObjectGrabScriptR != null)
         {
-            _otherObjectGrabScriptR.SetIsActive(true, 2);
+            _otherObjectGrabScriptR.SetIsActive(!dropOtherItems, 2);
+            if (dropOtherItems) { _otherObjectGrabScriptR.gameObject.SetActive(true); }
             _otherObjectGrabScriptR = null;
         }
     }
@@ -289,7 +287,7 @@ public class FruitCutMinigame : MonoBehaviour
 
         _selectedFruit = Fruit.None;
         CuttingBoard.Instance.EnableFirstObject(_selectedFruit);
-        LeaveMinigame(context);
+        LeaveMinigame(context, false);
     }
 
     private void SkipMinigame(InputAction.CallbackContext context)
@@ -301,17 +299,31 @@ public class FruitCutMinigame : MonoBehaviour
         _accuracy = 85;
         CuttingMinigame.Instance.SetAccuracy(_accuracy, _accuracy);
         CuttingBoard.Instance.EnableLastObject();
-        OnMinigameCompleted();
+        CuttingMinigame.Instance.DoneTextEnabled(true, _accuracy);
         CuttingMinigame.Instance.SetProgressBarSize((float)_cutsMadeThisAttempt / _totalCutsNeeded);
         CuttingMinigame.Instance.MovingPointEnabled(false);
+    }
+
+    private void CompleteMinigame(InputAction.CallbackContext context)
+    {
+        if (!_isPlaying || _cutsMadeThisAttempt < _totalCutsNeeded) { return; }
+
+        CuttingMinigame.Instance.SetAccuracy(101, 101); // Set text to '--%'
+        CuttingMinigame.Instance.DoneTextEnabled(false, _accuracy);
+        CuttingMinigame.Instance.SetProgressBarSize(0);
+        CuttingMinigame.Instance.MovingPointEnabled(false);
+
+        LeaveMinigame(context, true);
+        CuttingBoard.Instance.PickBoardUp();
     }
 
     private void OnDisable()
     {
         _player.Controls.Viva.UniversalInteract.performed -= EnterMinigame;
         _player.Controls.Viva.LeftGrab.performed -= PerformCut;
-        _player.Controls.Viva.Pause.performed -= LeaveMinigame;
+        _player.Controls.Viva.Pause.performed -= context => LeaveMinigame(context, false);
         _player.Controls.Viva.Cancel.performed -= QuitMinigame;
         _player.Controls.Viva.InteractRightHold.performed -= SkipMinigame;
+        _player.Controls.Viva.UniversalInteractHold.performed -= CompleteMinigame;
     }
 }

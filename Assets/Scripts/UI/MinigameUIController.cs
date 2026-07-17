@@ -39,10 +39,7 @@ namespace MinigameUIController
 
         public void MovingPointEnabled(bool enable) { _movingPoint.SetActive(enable); }
 
-        public void SetProgressBarSize(float ratio)
-        {
-            _progressBar.size = ratio;
-        }
+        public void SetProgressBarSize(float ratio) {  _progressBar.size = ratio; }
 
         public void SetAccuracy(float cutAccuracy, float average)
         {
@@ -54,6 +51,12 @@ namespace MinigameUIController
                 case float n when n < 85: _averageText.color = Color.red; break;
                 case float n when n >= 85 && n < 95: _averageText.color = Color.white; break;
                 case float n when n >= 95: _averageText.color = Color.green; break;
+
+                case float n when n > 100:
+                    _accuracyText.SetText("--%");
+                    _averageText.SetText("--%");
+                    _averageText.color = Color.white; 
+                    break;
             }
         }
 

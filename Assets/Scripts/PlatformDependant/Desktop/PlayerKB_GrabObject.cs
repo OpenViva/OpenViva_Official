@@ -76,7 +76,6 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
         _outline = GetComponent<Outline>();
 
-        GameObject animationGameObject = GameObject.Find("AnimationKB");
         _animationIndexes = PlayerManager.Instance.AnimationKB.GetComponent<AnimationIndexes>();
 
         AssignInputs();

@@ -731,7 +731,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""5d743dc5-cfdf-4c16-bd57-f94579c14869"",
                     ""path"": ""<Keyboard>/#(F)"",
-                    ""interactions"": ""Hold(duration=0.4)"",
+                    ""interactions"": ""Hold(duration=1)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""UniversalInteractHold"",

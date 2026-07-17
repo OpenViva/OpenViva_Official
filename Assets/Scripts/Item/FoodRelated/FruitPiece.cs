@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FruitPiece : MonoBehaviour
 {
-    [SerializeField] public FruitCutMinigame.Fruit Fruit;
+    public FruitCutMinigame.Fruit Fruit;
     [SerializeField] private float _price;
 
     private bool _didOnce;

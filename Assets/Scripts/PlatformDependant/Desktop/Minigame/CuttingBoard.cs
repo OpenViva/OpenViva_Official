@@ -8,6 +8,8 @@ public class CuttingBoard : MonoBehaviour
 {
     public static CuttingBoard Instance { get; private set; }
 
+    // Objects, prefabs and animations
+    private Animator _animator;
     private List<GameObject> _strawberryObjects = new();
     private List<GameObject> _peachObjects = new();
     private List<GameObject> _cantaloupeObjects = new();
@@ -23,7 +25,16 @@ public class CuttingBoard : MonoBehaviour
     private Fruit _selectedFruit = Fruit.None;
     private GameObject _currentlyShowing;
 
-    private Animator _animator;
+    // Picking up the board
+    [SerializeField] private Transform _minigameTransform;
+    [SerializeField] private Transform _playerRightHand;
+    [SerializeField] private Animator _leftHandAnimator;
+    [SerializeField] private Animator _rightHandAnimator;
+    private Vector3 _boardHoldPosition;
+    private Quaternion _boardHoldRotation;
+    private Vector3 _boardOriginalPosition;
+    private Quaternion _boardOriginalRotation;
+    private bool _boardIsHeld = false;
 
     private void Awake()
     {
@@ -35,13 +46,28 @@ public class CuttingBoard : MonoBehaviour
         transform.GetChild(2).gameObject.GetChildGameObjects(_cantaloupeObjects);
 
         _animator = GetComponent<Animator>();
+
+        _boardHoldPosition = ObjectHoldPositions.Instance.GetCuttingBoardPosition();
+        _boardHoldRotation = ObjectHoldPositions.Instance.GetCuttingBoardRotation();
+        _boardOriginalPosition = transform.position;
+        _boardOriginalRotation = transform.rotation;
+    }
+
+    private void Start()
+    {
+        AssignInputs();
+    }
+
+    private void AssignInputs()
+    {
+
     }
 
     public void EnableFirstObject(Fruit selectedFruit)
     {
         _selectedFruit = selectedFruit;
 
-        _currentlyShowing?.SetActive(false);
+        if (_currentlyShowing != null) { _currentlyShowing.SetActive(false); }
         switch (_selectedFruit)
         {
             case Fruit.Strawberry:  _currentlyShowing = _strawberryObjects[0]; break;
@@ -154,5 +180,18 @@ public class CuttingBoard : MonoBehaviour
                 case 18: _animator.Play("cutCantaloupe1"); break;
             }
         }
+    }
+
+    public void PickBoardUp()
+    {
+        transform.SetParent(_playerRightHand, true);
+        transform.SetLocalPositionAndRotation(_boardHoldPosition, _boardHoldRotation);
+
+        _leftHandAnimator.Play("holdCuttingBoardL");
+        _rightHandAnimator.Play("holdCuttingBoardR");
+
+        _boardIsHeld = true;
+        PlayerManager.Instance.LeftHandOccupied = true;
+        PlayerManager.Instance.RightHandOccupied = true;
     }
 }
