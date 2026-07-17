@@ -114,6 +114,8 @@ public class FruitCutMinigame : MonoBehaviour
                 case Fruit.Peach: _totalCutsNeeded = CuttingBoard.PEACH_MAX_CUTS; break;
                 case Fruit.Cantaloupe: _totalCutsNeeded = CuttingBoard.CANTALOUPE_MAX_CUTS; break;
             }
+
+            CuttingMinigame.Instance.DoneTextEnabled(false, _accuracy);
         }
 
         if (_selectedFruit != Fruit.None)
@@ -171,6 +173,7 @@ public class FruitCutMinigame : MonoBehaviour
             CuttingBoard.Instance.EnableLastObject();
             OnMinigameCompleted();
         }
+        CuttingMinigame.Instance.SetProgressBarSize((float)_cutsMadeThisAttempt / _totalCutsNeeded);
 
         IEnumerator DeclareCut()
         {
@@ -184,12 +187,12 @@ public class FruitCutMinigame : MonoBehaviour
 
     private void OnMinigameCompleted()
     {
-        Debug.Log("Minigame complete");
+        CuttingMinigame.Instance.DoneTextEnabled(true, _accuracy);
     }
 
     private void LeaveMinigame(InputAction.CallbackContext context)
     {
-        if (!_isPlaying || _cutsMadeThisAttempt >= _totalCutsNeeded) {  return; }
+        if (!_isPlaying) {  return; }
 
          CuttingMinigame.Instance.CuttingMinigameUIEnabled(false);
         _knife.transform.SetPositionAndRotation(_knifeOriginalTransform.position, _knifeOriginalTransform.rotation);

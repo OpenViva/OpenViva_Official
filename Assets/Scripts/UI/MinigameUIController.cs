@@ -16,14 +16,11 @@ namespace MinigameUIController
         [SerializeField] private TextMeshProUGUI _averageText;
         [SerializeField] private TextMeshProUGUI _doneText;
         [SerializeField] private Scrollbar _progressBar;
-        private GameObject _progressBarHandle;
 
         private void Awake()
         {
             if (Instance == null) { Instance = this; }
             else { Destroy(this); }
-
-            _progressBarHandle = _progressBar.handleRect.gameObject;
         }
 
         public void CuttingMinigameUIEnabled(bool enable) { _cuttingUIParent.SetActive(enable); }
@@ -42,6 +39,11 @@ namespace MinigameUIController
 
         public void MovingPointEnabled(bool enable) { _movingPoint.SetActive(enable); }
 
+        public void SetProgressBarSize(float ratio)
+        {
+            _progressBar.size = ratio;
+        }
+
         public void SetAccuracy(float cutAccuracy, float average)
         {
             _accuracyText.SetText($"{cutAccuracy:0}%");
@@ -52,6 +54,38 @@ namespace MinigameUIController
                 case float n when n < 85: _averageText.color = Color.red; break;
                 case float n when n >= 85 && n < 95: _averageText.color = Color.white; break;
                 case float n when n >= 95: _averageText.color = Color.green; break;
+            }
+        }
+
+        public void DoneTextEnabled(bool enable, float accuracy)
+        {
+            if (!enable) { _doneText.enabled = false; }
+            else
+            {
+                switch (accuracy)
+                {
+                    case float n when n < 80:
+                        _doneText.SetText("Poor. Price -10%");
+                        _doneText.color = Color.red;
+                        break;
+
+                    case float n when n >= 80 && n < 95:
+                        _doneText.SetText("Decent.");
+                        _doneText.color = Color.white;
+                        break;
+
+                    case float n when n >= 95 && n < 99:
+                        _doneText.SetText("Excellent! Price +10%");
+                        _doneText.color = Color.green;
+                        break;
+
+                    case float n when n >= 99:
+                        _doneText.SetText("PERFECT! Price +15%");
+                        _doneText.color = Color.green;
+                        break;
+                }
+
+                _doneText.enabled = true;
             }
         }
     }
