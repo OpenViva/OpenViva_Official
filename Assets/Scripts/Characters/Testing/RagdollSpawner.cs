@@ -1,6 +1,7 @@
 using FIMSpace.FProceduralAnimation;
 using NaughtyAttributes;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,6 +9,9 @@ public class RagdollSpawner : MonoBehaviour
 {
     [Header("Prefab to Spawn")]
     public GameObject characterPrefab;
+
+    [Header("Animation Settings")]
+    public string animationControllerName;
 
     [Header("NavMeshAgent Settings")]
     public float agentSpeed = 1.5f;
@@ -62,34 +66,48 @@ public class RagdollSpawner : MonoBehaviour
         characterPrefab = model.prefab;
 
         loadedCharacters.Add(model.prefab);
-        //Instantiate(model.prefab, _startingCoords, transform.rotation.normalized);
     }
 
     [Button("Spawn & Setup Ragdoll", EButtonEnableMode.Playmode)]
-    public void SpawnAndSetupRagdoll()
+    public void SpawnAndSetupRagdoll(bool spawnPrefab = true)
     {
         if (characterPrefab == null) return;
 
-        GameObject instance = SpawnCharacter(characterPrefab);
+        GameObject newChar = new GameObject();
+
+        if (spawnPrefab)
+        {
+            newChar = SpawnCharacter(characterPrefab);
+        }
+        else
+        {
+            CharacterAssembler.CharacterModel model = _characterReader.GetFirstModel();
+            characterPrefab = model.prefab;
+            loadedCharacters.Add(model.prefab);
+
+            newChar = SpawnCharacter(characterPrefab);
+        }
+
+        AssignAnimatorController(newChar, animationControllerName);
 
         // TODO: Collect bones and add them here before settting up the model!!!
 
         // Find root bones for cloth physics if script is present
-        rootBoneObjects = instance.GetComponent<RootBonesHolder>().rootBoneObjects;
+        rootBoneObjects = newChar.GetComponent<RootBonesHolder>().rootBoneObjects;
 
         // 1. Add the component
-        RagdollAnimator2 ragdoll = instance.AddComponent<RagdollAnimator2>();
+        RagdollAnimator2 ragdoll = newChar.AddComponent<RagdollAnimator2>();
 
         // 2. Set BaseTransform BEFORE setup!
-        ragdoll.Settings.BaseTransform = instance.transform;
+        ragdoll.Settings.BaseTransform = newChar.transform;
 
         // 3. Auto-detect bones and generate colliders, rigidbodies, joints, dummy, etc.
         ragdoll.TryFindBonesAndDoFullSetup();
 
         // 4. Add and configure NavMeshAgent
-        if (!instance.TryGetComponent<NavMeshAgent>(out var agent))
+        if (!newChar.TryGetComponent<NavMeshAgent>(out var agent))
         {
-            agent = instance.AddComponent<NavMeshAgent>();
+            agent = newChar.AddComponent<NavMeshAgent>();
         }
 
         agent.speed = agentSpeed;
@@ -106,34 +124,74 @@ public class RagdollSpawner : MonoBehaviour
         agent.updateRotation = true;
 
         // 5. Add additional scripts
-        if (!instance.TryGetComponent(out RagdollController _))
+        if (!newChar.TryGetComponent(out RagdollController _))
         {
-            instance.AddComponent<RagdollController>();
+            newChar.AddComponent<RagdollController>();
         }
 
-        if (!instance.TryGetComponent(out NavAgentController navAgentController))
+        if (!newChar.TryGetComponent(out NavAgentController navAgentController))
         {
-            navAgentController = instance.AddComponent<NavAgentController>();
+            navAgentController = newChar.AddComponent<NavAgentController>();
         }
         navAgentController.offsetCoords = moveCoords;
         navAgentController.startingCoords = _startingCoords;
 
         // 6. Enable and set initial state
         ragdoll.enabled = true;
-        ragdoll.Settings.Initialize(ragdoll, instance); // Prevents some runtime exceptions
+        ragdoll.Settings.Initialize(ragdoll, newChar); // Prevents some runtime exceptions
         ragdoll.User_SwitchFallState(RagdollHandler.EAnimatingMode.Standing);
 
         // 7. Set up cloth physics
         if (rootBoneObjects.Count != 0)
         {
             // TODO: Use PhysicsBone parameters instead of default values here
-            _physicsAttacher.CreateBoneCloth(instance, rootBoneObjects, "Hair_BoneCloth");
+            _physicsAttacher.CreateBoneCloth(newChar, rootBoneObjects, "Hair_BoneCloth");
         }
         else
         {
             Debug.LogError("Root bones List for cloth physics is empty or missing on character!");
         }
 
-        Debug.Log($"Ragdoll fully auto-setup on {instance.name}");
+        Debug.Log($"Ragdoll fully auto-setup on {newChar.name}");
+    }
+
+    private void AssignAnimatorController(GameObject characterRoot, string controllerName)
+    {
+        if (string.IsNullOrEmpty(controllerName))
+        {
+            Debug.LogWarning("[Chara Loader] No Animator Controller specified.");
+            return;
+        }
+
+        Animator animator = characterRoot.GetComponentInChildren<Animator>(true);
+        if (animator == null)
+        {
+            Debug.LogWarning($"[Chara Loader] No Animator found on character {characterRoot.name}");
+            return;
+        }
+
+        RuntimeAnimatorController controller = null;
+
+#if UNITY_EDITOR
+        string[] guids = AssetDatabase.FindAssets($"t:RuntimeAnimatorController {controllerName}");
+        if (guids.Length > 0)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+            controller = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(path);
+        }
+#else
+    // Runtime / Build mode
+    controller = Resources.Load<RuntimeAnimatorController>(controllerName);
+#endif
+
+        if (controller != null)
+        {
+            animator.runtimeAnimatorController = controller;
+            Debug.Log($"[Chara Loader] Assigned Animator Controller: {controllerName}");
+        }
+        else
+        {
+            Debug.LogError($"[Chara Loader] Failed to load Animator Controller: {controllerName}");
+        }
     }
 }
