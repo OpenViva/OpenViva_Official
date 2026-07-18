@@ -93,7 +93,10 @@ public class RagdollSpawner : MonoBehaviour
         // TODO: Collect bones and add them here before settting up the model!!!
 
         // Find root bones for cloth physics if script is present
-        rootBoneObjects = newChar.GetComponent<RootBonesHolder>().rootBoneObjects;
+        if (newChar.TryGetComponent<RootBonesHolder>(out var boneHolder))
+        {
+            rootBoneObjects = boneHolder.rootBoneObjects;
+        }
 
         // 1. Add the component
         RagdollAnimator2 ragdoll = newChar.AddComponent<RagdollAnimator2>();
