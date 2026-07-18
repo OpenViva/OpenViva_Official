@@ -96,6 +96,8 @@ public class RagdollSpawner : MonoBehaviour
         if (newChar.TryGetComponent<RootBonesHolder>(out var boneHolder))
         {
             rootBoneObjects = boneHolder.rootBoneObjects;
+
+            // TODO: Add BoneData collection to this script from VivaCharacterData
         }
 
         // 1. Add the component
