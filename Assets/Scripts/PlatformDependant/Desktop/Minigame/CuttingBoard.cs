@@ -15,6 +15,7 @@ public class CuttingBoard : MonoBehaviour
     private List<GameObject> _strawberryObjects = new();
     private List<GameObject> _peachObjects = new();
     private List<GameObject> _cantaloupeObjects = new();
+    private List<GameObject> _piecesOnBoard = new();
 
     [SerializeField] private Prefab _finalStrawberryPrefab;
     [SerializeField] private Prefab _finalPeachPrefab;
@@ -69,6 +70,20 @@ public class CuttingBoard : MonoBehaviour
     private void Update()
     {
         if (_animationTimer > 0) { _animationTimer -= Time.deltaTime; }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out FruitPiece pieceScript) && other.gameObject.transform.parent != null) { _piecesOnBoard.Add(pieceScript.gameObject); }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (_piecesOnBoard.Contains(other.gameObject)) 
+        { 
+            _peachObjects.Remove(other.gameObject);
+            other.gameObject.transform.SetParent(null, true);
+        }
     }
 
     private void AssignInputs()
@@ -247,6 +262,14 @@ public class CuttingBoard : MonoBehaviour
             _rightHandAnimator.Play("boardRotateR");
             _animationTimer = 0.5f;
             _isTilted = true;
+
+            foreach (GameObject @object in _piecesOnBoard)
+            {
+                Rigidbody rb = @object.GetComponent<Rigidbody>();
+                rb.isKinematic = false;
+                rb.useGravity = true;
+                @object.transform.SetParent(rb.transform, true);
+            }
         }
         else if (!TiltKeyDown && _isTilted)
         {
