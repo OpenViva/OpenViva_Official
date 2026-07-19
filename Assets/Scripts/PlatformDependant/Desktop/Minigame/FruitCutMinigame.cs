@@ -322,8 +322,8 @@ public class FruitCutMinigame : MonoBehaviour
         CuttingBoard.Instance.PickBoardUp();
         CuttingBoard.Instance.BoardIsHeld = true;
 
-        yield return new WaitUntil(() => CuttingBoard.Instance.TiltKeyPressed == true);
-        CuttingBoard.Instance.TiltKeyPressed = false;
+        yield return new WaitUntil(() => CuttingBoard.Instance.TiltKeyDown == true);
+        CuttingBoard.Instance.TiltKeyDown = false;
 
         CuttingMinigame.Instance.SetAccuracy(101, 101); // Set text to '--%'
         CuttingMinigame.Instance.DoneTextEnabled(false, _accuracy);

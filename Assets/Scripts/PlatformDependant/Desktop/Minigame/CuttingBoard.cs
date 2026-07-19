@@ -39,8 +39,10 @@ public class CuttingBoard : MonoBehaviour
     private Quaternion _boardOriginalRotation;
     public bool BoardIsHeld = false;
 
-    // Putting the board down
-    public bool TiltKeyPressed = false;
+    // Rotating the board
+    public bool TiltKeyDown = false;
+    private float _animationTimer = 0;
+    private bool _isTilted = false;
 
     private void Awake()
     {
@@ -64,9 +66,15 @@ public class CuttingBoard : MonoBehaviour
         AssignInputs();
     }
 
+    private void Update()
+    {
+        if (_animationTimer > 0) { _animationTimer -= Time.deltaTime; }
+    }
+
     private void AssignInputs()
     {
-        _player.Controls.Viva.InteractRight.performed += TiltClockwise;
+        _player.Controls.Viva.InteractRight.performed += KeyDown;
+        _player.Controls.Viva.InteractRight.canceled += KeyUp;
     }
 
     public void EnableFirstObject(Fruit selectedFruit)
@@ -185,6 +193,8 @@ public class CuttingBoard : MonoBehaviour
 
     public void PickBoardUp()
     {
+        if (BoardIsHeld) { return; }
+
         transform.SetParent(_playerRightHand, true);
         transform.SetLocalPositionAndRotation(_boardHoldPosition, _boardHoldRotation);
 
@@ -209,9 +219,41 @@ public class CuttingBoard : MonoBehaviour
         PlayerManager.Instance.RightHandOccupied = false;
     }
 
-    private void TiltClockwise(InputAction.CallbackContext context)
+    private void KeyDown(InputAction.CallbackContext context)
     {
         if (!BoardIsHeld) { return; }
-        TiltKeyPressed = true;
+
+        TiltKeyDown = true;
+        StopCoroutine(RotateBoard());
+        StartCoroutine(RotateBoard());
+    }
+
+    private void KeyUp(InputAction.CallbackContext context)
+    {
+        if (!BoardIsHeld) { return; }
+
+        TiltKeyDown = false;
+        StopCoroutine(RotateBoard());
+        StartCoroutine(RotateBoard());
+    }
+
+    private IEnumerator RotateBoard()
+    {
+        if (_animationTimer > 0) { yield return new WaitForSeconds(_animationTimer); }
+
+        if (TiltKeyDown && !_isTilted)
+        {
+            _leftHandAnimator.Play("boardRotateL");
+            _rightHandAnimator.Play("boardRotateR");
+            _animationTimer = 0.5f;
+            _isTilted = true;
+        }
+        else if (!TiltKeyDown && _isTilted)
+        {
+            _leftHandAnimator.Play("boardStraightenL");
+            _rightHandAnimator.Play("boardStraightenR");
+            _animationTimer = 0.5f;
+            _isTilted = false;
+        }
     }
 }
