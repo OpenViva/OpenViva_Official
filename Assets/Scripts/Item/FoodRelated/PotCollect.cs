@@ -31,6 +31,7 @@ public class PotCollect : MonoBehaviour
         {
             if (_volume >= _maxCapacity) { return; }
             _volume += 50f;
+            if (_temperature > 27.5f) { _temperature -= 2.5f; }
             SetBlendShape();
         }
     }
@@ -61,14 +62,30 @@ public class PotCollect : MonoBehaviour
 
     public void MixIngredients()
     {
-        if (_volume <= 0 && (_strawberryPieces <= 0 || _peachPieces <= 0 || _cantaloupePieces <= 0 || _blueberryPieces <= 0) && _temperature > 65) { return; }
+        if (_volume <= 0 && (_strawberryPieces <= 0.5f || _peachPieces <= 0.5f || _cantaloupePieces <= 0.5f || _blueberryPieces <= 0.5f) || _temperature < 65) { return; }
 
-        if (_strawberryPieces > 0) { _strawberryJam += 0.1f; }
-        if (_peachPieces > 0) { _peachJam += 0.1f; }
-        if (_cantaloupePieces > 0) { _cantaloupeJam += 0.1f; }
-        if (_blueberryPieces > 0) { _blueberryJam += 0.1f; }
+        if (_strawberryPieces > 0) 
+        { 
+            _strawberryJam += 0.01f;
+            _strawberryPieces -= 0.01f;
+        }
+        if (_peachPieces > 0) 
+        {
+            _peachJam += 0.01f;
+            _peachPieces -= 0.01f;
+        }
+        if (_cantaloupePieces > 0) 
+        { 
+            _cantaloupeJam += 0.01f;
+            _cantaloupePieces -= 0.01f;
+        }
+        if (_blueberryPieces > 0) 
+        { 
+            _blueberryJam += 0.01f;
+            _blueberryPieces -= 0.01f;
+        }
 
-        _volume -= 0.2f;
+        _volume -= 0.5f;
     }
 
     private void SetBlendShape()
