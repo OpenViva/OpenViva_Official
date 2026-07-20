@@ -279,11 +279,9 @@ public class PlayerKB_GrabObject : MonoBehaviour
         _player.Controls.Viva.RightGrab.performed += context => GrabRight();
     }
 
-    //    private void OnDisable()
-    //    {
-    //        _player.Controls.Viva.LeftGrab.performed -= context => GrabLeft();
-    //        _player.Controls.Viva.RightGrab.performed -= context => GrabRight();
-    //    }
-    //
+    private void OnDestroy()
+    {
+        IsActive = false;
+    }
 }
 #endif

@@ -44,6 +44,7 @@ public class PotCollect : MonoBehaviour
                 case FruitCutMinigame.Fruit.Strawberry: _strawberryPieces += 1; break;
                 case FruitCutMinigame.Fruit.Peach: _peachPieces += 1; break;
                 case FruitCutMinigame.Fruit.Cantaloupe: _cantaloupePieces += 1; break;
+                case FruitCutMinigame.Fruit.Blueberry: _blueberryPieces += 1; break;
                 default: Debug.LogWarning($"Fruit not recognized: {pieceScript.Fruit}"); return;
             }
 
