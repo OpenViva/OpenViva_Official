@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: -1223362910855437472}
   - component: {fileID: -648793888789382540}
   - component: {fileID: 2678885091955137080}
+  - component: {fileID: 8256369360766761169}
   m_Layer: 0
   m_Name: blueberry
   m_TagString: Item
@@ -35,7 +36,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 6.6015306, y: 6.6015296, z: 6.6015315}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 224371685614065183}
@@ -347,8 +348,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Crop
   _objectIndex: 5
+  IsActive: 1
   _data: {fileID: 11400000, guid: 2dedf22f79dc60d4b9faa7562ab2f625, type: 2}
-  _shouldGrow: 1
+  ShouldGrow: 1
+--- !u!114 &8256369360766761169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094382513039933427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3794ed302f076af4fa0f0542b81c98a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FruitPiece
+  Fruit: 5
+  _price: 1
 --- !u!1 &5173966645491743785
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,16 +27,8 @@ public class SpoonMix : PlayerKB_GrabObject
     private void Update()
     {
         if (!_isMixing) { return; }
-
-        if (_currentBowl != null)
-        {
-            _currentBowl.MixBatter();
-        }
-
-        if (_currentPot != null)
-        {
-            _currentPot.MixIngredients();
-        }
+        if (_currentBowl != null) { _currentBowl.MixBatter(); }
+        if (_currentPot != null) { _currentPot.MixIngredients(); }
     }
 
     private void Mix(bool useLeft)

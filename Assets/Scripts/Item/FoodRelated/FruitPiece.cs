@@ -11,5 +11,6 @@ public class FruitPiece : MonoBehaviour
     {
         if (_didOnce) return;
         _price *= price;
+        _didOnce = true;
     }
 }

@@ -47,7 +47,8 @@ public class FruitCutMinigame : MonoBehaviour
         None = 0,
         Peach = 2,
         Strawberry = 3,
-        Cantaloupe = 4
+        Cantaloupe = 4,
+        Blueberry = 5
     }
     private Fruit _selectedFruit = Fruit.None;
 
@@ -105,11 +106,11 @@ public class FruitCutMinigame : MonoBehaviour
         {
             int itemIndexLeft = PlayerManager.Instance.GetItemLeft();
             PlayerKB_GrabObject grabScript = PlayerManager.Instance.GetObjectLeft().GetComponent<PlayerKB_GrabObject>();
-            grabScript.SetIsActive(false, 1);
 
             if (Enum.IsDefined(typeof(Fruit), itemIndexLeft) && _selectedFruit == Fruit.None)
             {
                 _selectedFruit = (Fruit)itemIndexLeft;
+                grabScript.SetIsActive(false, 1);
                 Destroy(grabScript.gameObject);
                 fruitChanged = true;
             }
@@ -120,11 +121,11 @@ public class FruitCutMinigame : MonoBehaviour
         {
             int itemIndexRight = PlayerManager.Instance.GetItemRight();
             PlayerKB_GrabObject grabScript = PlayerManager.Instance.GetObjectRight().GetComponent<PlayerKB_GrabObject>();
-            grabScript.SetIsActive(false, 2);
 
             if (Enum.IsDefined(typeof(Fruit), itemIndexRight) && _selectedFruit == Fruit.None)
             {
                 _selectedFruit = (Fruit)itemIndexRight;
+                grabScript.SetIsActive(false, 2);
                 Destroy(grabScript.gameObject);
                 fruitChanged = true;
             }
@@ -162,7 +163,15 @@ public class FruitCutMinigame : MonoBehaviour
             Globals.allowMenuOpen = false;
             _knife.transform.SetPositionAndRotation(_knifeHoldTransform.position, _knifeHoldTransform.rotation);
 
+            if (_otherObjectGrabScriptL != null) { _otherObjectGrabScriptL.SetIsActive(false, 1); }
+            if (_otherObjectGrabScriptR != null) { _otherObjectGrabScriptR.SetIsActive(false, 2); }
+
             CuttingMinigame.Instance.CuttingMinigameUIEnabled(true);
+        }
+        else
+        {
+            _otherObjectGrabScriptL = null;
+            _otherObjectGrabScriptR = null;
         }
     }
 
@@ -234,15 +243,33 @@ public class FruitCutMinigame : MonoBehaviour
 
         if (_otherObjectGrabScriptL != null)
         {
-            _otherObjectGrabScriptL.SetIsActive(!dropOtherItems, 1);
-            if (dropOtherItems) { _otherObjectGrabScriptL.gameObject.SetActive(true); }
+            if (dropOtherItems)
+            {
+                _otherObjectGrabScriptL.SetIsActive(false, 1);
+                _otherObjectGrabScriptL.gameObject.SetActive(true);
+                _otherObjectGrabScriptL.IsActive = true;
+            }
+            else
+            {
+                _otherObjectGrabScriptL.SetIsActive(true, 1);
+            }
+
             _otherObjectGrabScriptL = null;
         }
 
         if (_otherObjectGrabScriptR != null)
         {
-            _otherObjectGrabScriptR.SetIsActive(!dropOtherItems, 2);
-            if (dropOtherItems) { _otherObjectGrabScriptR.gameObject.SetActive(true); }
+            if (dropOtherItems)
+            {
+                _otherObjectGrabScriptR.SetIsActive(false, 2);
+                _otherObjectGrabScriptR.gameObject.SetActive(true);
+                _otherObjectGrabScriptR.IsActive = true;
+            }
+            else
+            {
+                _otherObjectGrabScriptR.SetIsActive(true, 2);
+            }
+
             _otherObjectGrabScriptR = null;
         }
     }
@@ -319,7 +346,7 @@ public class FruitCutMinigame : MonoBehaviour
         if (!_isPlaying || _cutsMadeThisAttempt < _totalCutsNeeded) { yield break; }
 
         LeaveMinigame(context, true);
-        CuttingBoard.Instance.PickBoardUp();
+        CuttingBoard.Instance.PickBoardUp(_accuracy);
         CuttingBoard.Instance.BoardIsHeld = true;
 
         yield return new WaitUntil(() => CuttingBoard.Instance.TiltKeyDown == true);

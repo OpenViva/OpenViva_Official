@@ -19,7 +19,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
     private bool _didOnce = false; // For crop subclass only
 
     [SerializeField] private int _objectIndex; // The index of the object in the ObjectHoldPositions script
-    private bool _isActive = true; // The item cannot be grabbed if this is false
+    public bool IsActive = true; // The item cannot be grabbed if this is false
     private bool _isOpen = false; // If this object is not a bag, this variable is always false
 
     private Outline _outline;
@@ -84,72 +84,74 @@ public class PlayerKB_GrabObject : MonoBehaviour
     protected virtual void GrabLeft()
     {
         // If the player is in range and the object is not already grabbed, grab it with the left hand
-        if (_isActive && !_isOpen)
+        if (!IsActive) { return; }
+
+        if (_isOpen || !gameObject.activeSelf) { return; }
+
+        if (_playerInRange && !_isGrabbedInLeft && !_isGrabbedInRight && !PlayerManager.Instance.LeftHandOccupied && _grabbableObjectRB != null)
         {
-            if (_playerInRange && !_isGrabbedInLeft && !_isGrabbedInRight && !PlayerManager.Instance.LeftHandOccupied && _grabbableObjectRB != null)
-            {
-                _grabbableObjectRB.useGravity = false;
-                _grabbableObjectRB.isKinematic = true;
-                transform.SetParent(_playerLeftHand.transform);
-                transform.SetLocalPositionAndRotation(ObjectHoldPositions.Instance.GetObjectPositionLeft(_objectIndex), ObjectHoldPositions.Instance.GetObjectRotationLeft(_objectIndex));
-                IsGrabbedLeft = true;
-                if (!_didOnce) { _didOnce = true; OnGrabbed(); }
-                PlayerManager.Instance.LeftHandOccupied = true;
+            _grabbableObjectRB.useGravity = false;
+            _grabbableObjectRB.isKinematic = true;
+            transform.SetParent(_playerLeftHand.transform);
+            transform.SetLocalPositionAndRotation(ObjectHoldPositions.Instance.GetObjectPositionLeft(_objectIndex), ObjectHoldPositions.Instance.GetObjectRotationLeft(_objectIndex));
+            IsGrabbedLeft = true;
+            if (!_didOnce) { _didOnce = true; OnGrabbed(); }
+            PlayerManager.Instance.LeftHandOccupied = true;
 
-                _hud.ClearHint(HintConstants.GrabHint);
-                _hud.CreateHint(HintConstants.LeftReleaseHint);
+            _hud.ClearHint(HintConstants.GrabHint);
+            _hud.CreateHint(HintConstants.LeftReleaseHint);
 
-                _animationIndexes.PlayAnimationLeft(_objectIndex);
-            }
-            // If the object is already grabbed in the left hand, release it
-            else if (_isGrabbedInLeft)
-            {
-                transform.SetParent(null);
-                _grabbableObjectRB.isKinematic = false;
-                _grabbableObjectRB.useGravity = true;
-                IsGrabbedLeft = false;
+            _animationIndexes.PlayAnimationLeft(_objectIndex);
+        }
+        // If the object is already grabbed in the left hand, release it
+        else if (_isGrabbedInLeft)
+        {
+            transform.SetParent(null);
+            _grabbableObjectRB.isKinematic = false;
+            _grabbableObjectRB.useGravity = true;
+            IsGrabbedLeft = false;
 
-                _hud.ClearHint(HintConstants.LeftReleaseHint);
-                PlayerManager.Instance.LeftHandOccupied = false;
+            _hud.ClearHint(HintConstants.LeftReleaseHint);
+            PlayerManager.Instance.LeftHandOccupied = false;
 
-                _animationIndexes.PlayAnimationLeft(-1);
-            }
+            _animationIndexes.PlayAnimationLeft(-1);
         }
     }
 
     protected virtual void GrabRight()
     {
         // If the player is in range and the object is not already grabbed, grab it with the right hand
-        if (_isActive && !_isOpen)
+        if (!IsActive) { return; }
+
+        if (_isOpen || !gameObject.activeSelf) { return; }
+
+        if (_playerInRange && !_isGrabbedInRight && !_isGrabbedInLeft && !PlayerManager.Instance.RightHandOccupied && _grabbableObjectRB != null)
         {
-            if (_playerInRange && !_isGrabbedInRight && !_isGrabbedInLeft && !PlayerManager.Instance.RightHandOccupied && _grabbableObjectRB != null)
-            {
-                _grabbableObjectRB.useGravity = false;
-                _grabbableObjectRB.isKinematic = true;
-                transform.SetParent(_playerRightHand.transform);
-                transform.SetLocalPositionAndRotation(ObjectHoldPositions.Instance.GetObjectPositionRight(_objectIndex), ObjectHoldPositions.Instance.GetObjectRotationRight(_objectIndex));
-                IsGrabbedRight = true;
-                if (!_didOnce) { _didOnce = true; OnGrabbed(); }
-                PlayerManager.Instance.RightHandOccupied = true;
+            _grabbableObjectRB.useGravity = false;
+            _grabbableObjectRB.isKinematic = true;
+            transform.SetParent(_playerRightHand.transform);
+            transform.SetLocalPositionAndRotation(ObjectHoldPositions.Instance.GetObjectPositionRight(_objectIndex), ObjectHoldPositions.Instance.GetObjectRotationRight(_objectIndex));
+            IsGrabbedRight = true;
+            if (!_didOnce) { _didOnce = true; OnGrabbed(); }
+            PlayerManager.Instance.RightHandOccupied = true;
 
-                _hud.ClearHint(HintConstants.GrabHint);
-                _hud.CreateHint(HintConstants.RightReleaseHint);
+            _hud.ClearHint(HintConstants.GrabHint);
+            _hud.CreateHint(HintConstants.RightReleaseHint);
 
-                _animationIndexes.PlayAnimationRight(_objectIndex);
-            }
-            // If the object is already grabbed in the right hand, release it
-            else if (_isGrabbedInRight)
-            {
-                transform.SetParent(null);
-                _grabbableObjectRB.isKinematic = false;
-                _grabbableObjectRB.useGravity = true;
-                IsGrabbedRight = false;
+            _animationIndexes.PlayAnimationRight(_objectIndex);
+        }
+        // If the object is already grabbed in the right hand, release it
+        else if (_isGrabbedInRight)
+        {
+            transform.SetParent(null);
+            _grabbableObjectRB.isKinematic = false;
+            _grabbableObjectRB.useGravity = true;
+            IsGrabbedRight = false;
 
-                _hud.ClearHint(HintConstants.RightReleaseHint);
-                PlayerManager.Instance.RightHandOccupied = false;
+            _hud.ClearHint(HintConstants.RightReleaseHint);
+            PlayerManager.Instance.RightHandOccupied = false;
 
-                _animationIndexes.PlayAnimationRight(-1);
-            }
+            _animationIndexes.PlayAnimationRight(-1);
         }
     }
 
@@ -250,11 +252,11 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
         _grabbableObjectRB.isKinematic = set;
         _grabbableObjectRB.useGravity = !set;
-        _isActive = set;
+        IsActive = set;
         if (set == false)
         {
-            IsGrabbedLeft = set;
-            IsGrabbedRight = set;
+            IsGrabbedLeft = false;
+            IsGrabbedRight = false;
             gameObject.SetActive(false);
         }
     }
@@ -282,6 +284,6 @@ public class PlayerKB_GrabObject : MonoBehaviour
     //        _player.Controls.Viva.LeftGrab.performed -= context => GrabLeft();
     //        _player.Controls.Viva.RightGrab.performed -= context => GrabRight();
     //    }
-    //}
+    //
 }
 #endif

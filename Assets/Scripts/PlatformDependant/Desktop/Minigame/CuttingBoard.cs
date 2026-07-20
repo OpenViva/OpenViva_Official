@@ -39,6 +39,7 @@ public class CuttingBoard : MonoBehaviour
     private Vector3 _boardOriginalPosition;
     private Quaternion _boardOriginalRotation;
     public bool BoardIsHeld = false;
+    private float _accuracy;
 
     // Rotating the board
     public bool TiltKeyDown = false;
@@ -150,7 +151,6 @@ public class CuttingBoard : MonoBehaviour
 
         _currentlyShowing.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         _currentlyShowing.SetActive(true);
-        _currentlyShowing = null;
     }
 
     private void PlayObjectAnimation(int cutsMade)
@@ -206,7 +206,7 @@ public class CuttingBoard : MonoBehaviour
         }
     }
 
-    public void PickBoardUp()
+    public void PickBoardUp(float accuracy)
     {
         if (BoardIsHeld) { return; }
 
@@ -218,6 +218,8 @@ public class CuttingBoard : MonoBehaviour
 
         PlayerManager.Instance.LeftHandOccupied = true;
         PlayerManager.Instance.RightHandOccupied = true;
+
+        _accuracy = accuracy;
     }
 
     public void PutBoardDown()
@@ -263,13 +265,26 @@ public class CuttingBoard : MonoBehaviour
             _animationTimer = 0.5f;
             _isTilted = true;
 
+            for (int i = 0; i < _piecesOnBoard.Count; i++)
+            {
+                if (_piecesOnBoard[i] == null)
+                {
+                    _piecesOnBoard.RemoveAt(i);
+                    i--;
+                }
+            }
+
             foreach (GameObject @object in _piecesOnBoard)
             {
                 Rigidbody rb = @object.GetComponent<Rigidbody>();
                 rb.isKinematic = false;
                 rb.useGravity = true;
-                @object.transform.SetParent(rb.transform, true);
+                @object.transform.SetParent(null, true);
+
+                SetPiecePrices(@object);
             }
+
+            if (_currentlyShowing != null) { Destroy(_currentlyShowing); }
         }
         else if (!TiltKeyDown && _isTilted)
         {
@@ -277,6 +292,21 @@ public class CuttingBoard : MonoBehaviour
             _rightHandAnimator.Play("boardStraightenR");
             _animationTimer = 0.5f;
             _isTilted = false;
+        }
+
+        void SetPiecePrices(GameObject @object)
+        {
+            float multiplier = 1;
+            switch (_accuracy)
+            {
+                case float x when x < 85: multiplier = 0.9f; break;
+                case float x when x >= 85 && x < 95: multiplier = 1; break;
+                case float x when x >= 95 && x < 99: multiplier = 1.1f; break;
+                case float x when x >= 99: multiplier = 1.15f; break;
+                default: multiplier = 1; break;
+            }
+
+            @object.GetComponent<FruitPiece>().SetPrice(multiplier);
         }
     }
 }
