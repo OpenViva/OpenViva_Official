@@ -61,7 +61,7 @@ public class PotCollect : MonoBehaviour
 
     public void MixIngredients()
     {
-        if (_volume <= 0 && (_strawberryPieces <= 0 || _peachPieces <= 0 || _cantaloupePieces <= 0 || _blueberryPieces <= 0)) { return; }
+        if (_volume <= 0 && (_strawberryPieces <= 0 || _peachPieces <= 0 || _cantaloupePieces <= 0 || _blueberryPieces <= 0) && _temperature > 65) { return; }
 
         if (_strawberryPieces > 0) { _strawberryJam += 0.1f; }
         if (_peachPieces > 0) { _peachJam += 0.1f; }
