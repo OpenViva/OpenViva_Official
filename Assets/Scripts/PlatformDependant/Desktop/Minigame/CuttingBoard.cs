@@ -1,9 +1,6 @@
-using nTools.PrefabPainter;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using static FruitCutMinigame;
 
 public class CuttingBoard : MonoBehaviour
@@ -15,11 +12,6 @@ public class CuttingBoard : MonoBehaviour
     private List<GameObject> _strawberryObjects = new();
     private List<GameObject> _peachObjects = new();
     private List<GameObject> _cantaloupeObjects = new();
-    private List<GameObject> _piecesOnBoard = new();
-
-    [SerializeField] private Prefab _finalStrawberryPrefab;
-    [SerializeField] private Prefab _finalPeachPrefab;
-    [SerializeField] private Prefab _finalCantaloupePrefab;
 
     public const int STRAWBERRY_MAX_CUTS = 2;
     public const int PEACH_MAX_CUTS = 7;
@@ -27,24 +19,6 @@ public class CuttingBoard : MonoBehaviour
 
     private Fruit _selectedFruit = Fruit.None;
     private GameObject _currentlyShowing;
-
-    // Picking up the board
-    [SerializeField] private Player _player;
-    [SerializeField] private Transform _minigameTransform;
-    [SerializeField] private Transform _playerRightHand;
-    [SerializeField] private Animator _leftHandAnimator;
-    [SerializeField] private Animator _rightHandAnimator;
-    private Vector3 _boardHoldPosition;
-    private Quaternion _boardHoldRotation;
-    private Vector3 _boardOriginalPosition;
-    private Quaternion _boardOriginalRotation;
-    public bool BoardIsHeld = false;
-    private float _accuracy;
-
-    // Rotating the board
-    public bool TiltKeyDown = false;
-    private float _animationTimer = 0;
-    private bool _isTilted = false;
 
     private void Awake()
     {
@@ -56,41 +30,6 @@ public class CuttingBoard : MonoBehaviour
         transform.GetChild(2).gameObject.GetChildGameObjects(_cantaloupeObjects);
 
         _animator = GetComponent<Animator>();
-
-        _boardHoldPosition = ObjectHoldPositions.Instance.GetCuttingBoardPosition();
-        _boardHoldRotation = ObjectHoldPositions.Instance.GetCuttingBoardRotation();
-        _boardOriginalPosition = transform.localPosition;
-        _boardOriginalRotation = transform.localRotation;
-    }
-
-    private void Start()
-    {
-        AssignInputs();
-    }
-
-    private void Update()
-    {
-        if (_animationTimer > 0) { _animationTimer -= Time.deltaTime; }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent(out FruitPiece pieceScript) && other.gameObject.transform.parent != null) { _piecesOnBoard.Add(pieceScript.gameObject); }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (_piecesOnBoard.Contains(other.gameObject)) 
-        { 
-            _peachObjects.Remove(other.gameObject);
-            other.gameObject.transform.SetParent(null, true);
-        }
-    }
-
-    private void AssignInputs()
-    {
-        _player.Controls.Viva.InteractRight.performed += KeyDown;
-        _player.Controls.Viva.InteractRight.canceled += KeyUp;
     }
 
     public void EnableFirstObject(Fruit selectedFruit)
@@ -121,36 +60,6 @@ public class CuttingBoard : MonoBehaviour
         _currentlyShowing.SetActive(true);
 
         PlayObjectAnimation(cutsMade);
-    }
-
-    public void EnableLastObject()
-    {
-        _currentlyShowing.SetActive(false);
-        switch (_selectedFruit)
-        {
-            case Fruit.Strawberry:
-                _currentlyShowing = Instantiate(_finalStrawberryPrefab.gameObject);
-                _currentlyShowing.transform.SetParent(transform.GetChild(0).transform, true);
-                _currentlyShowing.name = _finalStrawberryPrefab.gameObject.name;
-                break;
-
-            case Fruit.Peach: 
-                _currentlyShowing = Instantiate(_finalPeachPrefab.gameObject);
-                _currentlyShowing.transform.SetParent(transform.GetChild(1).transform, true);
-                _currentlyShowing.name = _finalPeachPrefab.gameObject.name;
-                break;
-
-            case Fruit.Cantaloupe:
-                _currentlyShowing = Instantiate(_finalCantaloupePrefab.gameObject);
-                _currentlyShowing.transform.SetParent(transform.GetChild(2).transform, true);
-                _currentlyShowing.name = _finalStrawberryPrefab.gameObject.name;
-                break;
-
-            default: return;
-        }
-
-        _currentlyShowing.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-        _currentlyShowing.SetActive(true);
     }
 
     private void PlayObjectAnimation(int cutsMade)
@@ -203,110 +112,6 @@ public class CuttingBoard : MonoBehaviour
                 case 17: _animator.Play("cutCantaloupe2"); break;
                 case 18: _animator.Play("cutCantaloupe1"); break;
             }
-        }
-    }
-
-    public void PickBoardUp(float accuracy)
-    {
-        if (BoardIsHeld) { return; }
-
-        transform.SetParent(_playerRightHand, true);
-        transform.SetLocalPositionAndRotation(_boardHoldPosition, _boardHoldRotation);
-
-        _leftHandAnimator.Play("holdCuttingBoardL");
-        _rightHandAnimator.Play("holdCuttingBoardR");
-
-        PlayerManager.Instance.LeftHandOccupied = true;
-        PlayerManager.Instance.RightHandOccupied = true;
-
-        _accuracy = accuracy;
-    }
-
-    public void PutBoardDown()
-    {
-        if (!BoardIsHeld) { return; }
-
-        transform.SetParent(_minigameTransform, true);
-        transform.SetLocalPositionAndRotation(_boardOriginalPosition, _boardOriginalRotation);
-
-        _leftHandAnimator.Play("handIdle");
-        _rightHandAnimator.Play("handIdle");
-
-        PlayerManager.Instance.LeftHandOccupied = false;
-        PlayerManager.Instance.RightHandOccupied = false;
-    }
-
-    private void KeyDown(InputAction.CallbackContext context)
-    {
-        if (!BoardIsHeld) { return; }
-
-        TiltKeyDown = true;
-        StopCoroutine(RotateBoard());
-        StartCoroutine(RotateBoard());
-    }
-
-    private void KeyUp(InputAction.CallbackContext context)
-    {
-        if (!BoardIsHeld) { return; }
-
-        TiltKeyDown = false;
-        StopCoroutine(RotateBoard());
-        StartCoroutine(RotateBoard());
-    }
-
-    private IEnumerator RotateBoard()
-    {
-        if (_animationTimer > 0) { yield return new WaitForSeconds(_animationTimer); }
-
-        if (TiltKeyDown && !_isTilted)
-        {
-            _leftHandAnimator.Play("boardRotateL");
-            _rightHandAnimator.Play("boardRotateR");
-            _animationTimer = 0.5f;
-            _isTilted = true;
-
-            for (int i = 0; i < _piecesOnBoard.Count; i++)
-            {
-                if (_piecesOnBoard[i] == null)
-                {
-                    _piecesOnBoard.RemoveAt(i);
-                    i--;
-                }
-            }
-
-            foreach (GameObject @object in _piecesOnBoard)
-            {
-                Rigidbody rb = @object.GetComponent<Rigidbody>();
-                rb.isKinematic = false;
-                rb.useGravity = true;
-                @object.transform.SetParent(null, true);
-
-                SetPiecePrices(@object);
-            }
-
-            if (_currentlyShowing != null) { Destroy(_currentlyShowing); }
-        }
-        else if (!TiltKeyDown && _isTilted)
-        {
-            _leftHandAnimator.Play("boardStraightenL");
-            _rightHandAnimator.Play("boardStraightenR");
-            _animationTimer = 0.5f;
-            _isTilted = false;
-        }
-
-        void SetPiecePrices(GameObject @object)
-        {
-            float multiplier = 1;
-            switch (_accuracy)
-            {
-                case float x when x < 85: multiplier = 0.9f; break;
-                case float x when x >= 85 && x < 95: multiplier = 1; break;
-                case float x when x >= 95 && x < 99: multiplier = 1.1f; break;
-                case float x when x >= 99: multiplier = 1.15f; break;
-                default: multiplier = 1; break;
-            }
-
-            @object.GetComponent<FruitPiece>().SetPrice(multiplier);
         }
     }
 }

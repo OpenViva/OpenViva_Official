@@ -38,20 +38,6 @@ public class PotCollect : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out FruitPiece pieceScript))
-        {
-            switch (pieceScript.Fruit)
-            {
-                case FruitCutMinigame.Fruit.Strawberry: _strawberryPieces += 1; break;
-                case FruitCutMinigame.Fruit.Peach: _peachPieces += 1; break;
-                case FruitCutMinigame.Fruit.Cantaloupe: _cantaloupePieces += 1; break;
-                case FruitCutMinigame.Fruit.Blueberry: _blueberryPieces += 1; break;
-                default: Debug.LogWarning($"Fruit not recognized: {pieceScript.Fruit}"); return;
-            }
-
-            Destroy(pieceScript.gameObject);
-        }
-
         if (other.gameObject.name.Contains("Oven")) { _isInOven = true; }
     }
 

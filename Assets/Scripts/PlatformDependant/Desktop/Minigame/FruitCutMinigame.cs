@@ -2,7 +2,6 @@ using MinigameUIController;
 using nTools.PrefabPainter;
 using System;
 using System.Collections;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -84,21 +83,12 @@ public class FruitCutMinigame : MonoBehaviour
         _player.Controls.Viva.LeftGrab.performed += PerformCut;
         _player.Controls.Viva.Pause.performed += context => LeaveMinigame(context, false);
         _player.Controls.Viva.Cancel.performed += QuitMinigame;
-        _player.Controls.Viva.InteractRightHold.performed += SkipMinigame;
-        _player.Controls.Viva.UniversalInteractHold.performed += context => StartCoroutine(CompleteMinigame(context));
+        _player.Controls.Viva.InteractLeftHold.performed += SkipMinigame;
     }
 
     private void EnterMinigame(InputAction.CallbackContext context)
     {
         if (_isPlaying || !Globals.isDesktopMode || !_playerInRange) { return; }
-
-        if (CuttingBoard.Instance.BoardIsHeld)
-        {
-            StopCoroutine(CompleteMinigame(context));
-            CuttingBoard.Instance.PutBoardDown();
-            CuttingBoard.Instance.BoardIsHeld = false;
-            return;
-        }
 
         bool fruitChanged = false;
 
@@ -204,15 +194,14 @@ public class FruitCutMinigame : MonoBehaviour
         float diff = Mathf.Abs(_timingLine - _randomizedTarget);
         float cutAccuracy = Mathf.Clamp(100 - (diff / 2 * 200), 0, 100);
         _accuracy = (_accuracy * ((_cutsMadeThisAttempt - 1f) / _cutsMadeThisAttempt)) + (cutAccuracy * (1f / _cutsMadeThisAttempt));
+
         CuttingMinigame.Instance.SetAccuracy(cutAccuracy, _accuracy);
-        SetNewTarget();
-        if (_cutsMadeThisAttempt < _totalCutsNeeded) { CuttingBoard.Instance.EnableNextObject(_cutsMadeThisAttempt); }
-        else
-        {
-            CuttingBoard.Instance.EnableLastObject();
-            CuttingMinigame.Instance.DoneTextEnabled(true, _accuracy);
-        }
+        CuttingBoard.Instance.EnableNextObject(_cutsMadeThisAttempt);
         CuttingMinigame.Instance.SetProgressBarSize((float)_cutsMadeThisAttempt / _totalCutsNeeded);
+
+        if (_cutsMadeThisAttempt == _totalCutsNeeded) { CuttingMinigame.Instance.DoneTextEnabled(true, _accuracy); }
+
+        SetNewTarget();
 
         IEnumerator DeclareCut()
         {
@@ -334,31 +323,27 @@ public class FruitCutMinigame : MonoBehaviour
         _minigameHandAnimator.Play("Cut");
         _cutsMadeThisAttempt = _totalCutsNeeded;
         _accuracy = 85;
+        CuttingBoard.Instance.EnableNextObject(_cutsMadeThisAttempt);
         CuttingMinigame.Instance.SetAccuracy(_accuracy, _accuracy);
-        CuttingBoard.Instance.EnableLastObject();
         CuttingMinigame.Instance.DoneTextEnabled(true, _accuracy);
         CuttingMinigame.Instance.SetProgressBarSize((float)_cutsMadeThisAttempt / _totalCutsNeeded);
         CuttingMinigame.Instance.MovingPointEnabled(false);
     }
 
-    private IEnumerator CompleteMinigame(InputAction.CallbackContext context)
-    {
-        if (!_isPlaying || _cutsMadeThisAttempt < _totalCutsNeeded) { yield break; }
+    //private IEnumerator ResetMinigame(InputAction.CallbackContext context)
+    //{
+    //    if (!_isPlaying || _cutsMadeThisAttempt < _totalCutsNeeded) { yield break; }
 
-        LeaveMinigame(context, true);
-        CuttingBoard.Instance.PickBoardUp(_accuracy);
-        CuttingBoard.Instance.BoardIsHeld = true;
+    //    LeaveMinigame(context, true);
 
-        yield return new WaitUntil(() => CuttingBoard.Instance.TiltKeyDown == true);
-        CuttingBoard.Instance.TiltKeyDown = false;
+    //    CuttingMinigame.Instance.SetAccuracy(101, 101); // Set text to '--%'
+    //    CuttingMinigame.Instance.DoneTextEnabled(false, _accuracy);
+    //    CuttingMinigame.Instance.SetProgressBarSize(0);
+    //    CuttingMinigame.Instance.MovingPointEnabled(false);   
+    //    _selectedFruit = Fruit.None;
+    //    _cutsMadeThisAttempt = 0;
+    //}
 
-        CuttingMinigame.Instance.SetAccuracy(101, 101); // Set text to '--%'
-        CuttingMinigame.Instance.DoneTextEnabled(false, _accuracy);
-        CuttingMinigame.Instance.SetProgressBarSize(0);
-        CuttingMinigame.Instance.MovingPointEnabled(false);
-        _selectedFruit = Fruit.None;
-        _cutsMadeThisAttempt = 0;
-    }
 
     private void OnDisable()
     {
@@ -366,7 +351,6 @@ public class FruitCutMinigame : MonoBehaviour
         _player.Controls.Viva.LeftGrab.performed -= PerformCut;
         _player.Controls.Viva.Pause.performed -= context => LeaveMinigame(context, false);
         _player.Controls.Viva.Cancel.performed -= QuitMinigame;
-        _player.Controls.Viva.InteractRightHold.performed -= SkipMinigame;
-        _player.Controls.Viva.UniversalInteractHold.performed -= context => CompleteMinigame(context);
+        _player.Controls.Viva.InteractLeftHold.performed -= SkipMinigame;
     }
 }
