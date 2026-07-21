@@ -27,7 +27,7 @@ public class Ingredient : MonoBehaviour
             GameObject newItem = Instantiate(_conversionPrefab, transform.position, Quaternion.identity);
             newItem.name = _conversionPrefab.name; // don't want it to be '{name}(clone)'
         }
-        Crop cropScript = gameObject.GetComponent<Crop>();
+        PlayerKB_GrabObject cropScript = gameObject.GetComponent<PlayerKB_GrabObject>();
         cropScript.IsActive = false;
         Destroy(gameObject);
     }
