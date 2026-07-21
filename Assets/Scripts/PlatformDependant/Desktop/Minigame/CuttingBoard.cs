@@ -20,6 +20,9 @@ public class CuttingBoard : MonoBehaviour
     private Fruit _selectedFruit = Fruit.None;
     private GameObject _currentlyShowing;
 
+    public BowlLogic LastTouchedBowl;
+    public PotCollect LastTouchedPot;
+
     private void Awake()
     {
         if (Instance == null) { Instance = this; }
@@ -60,6 +63,13 @@ public class CuttingBoard : MonoBehaviour
         _currentlyShowing.SetActive(true);
 
         PlayObjectAnimation(cutsMade);
+    }
+
+    public void ResetBoard()
+    {
+        _currentlyShowing.SetActive(false);
+        _currentlyShowing = null;
+        _selectedFruit = Fruit.None;
     }
 
     private void PlayObjectAnimation(int cutsMade)

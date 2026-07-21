@@ -84,6 +84,8 @@ public class FruitCutMinigame : MonoBehaviour
         _player.Controls.Viva.Pause.performed += context => LeaveMinigame(context, false);
         _player.Controls.Viva.Cancel.performed += QuitMinigame;
         _player.Controls.Viva.InteractLeftHold.performed += SkipMinigame;
+        _player.Controls.Viva.InteractRightHold.performed += MovePiecesToBowl;
+        _player.Controls.Viva.UniversalInteractHold.performed += MovePiecesToPot;
     }
 
     private void EnterMinigame(InputAction.CallbackContext context)
@@ -330,20 +332,34 @@ public class FruitCutMinigame : MonoBehaviour
         CuttingMinigame.Instance.MovingPointEnabled(false);
     }
 
-    //private IEnumerator ResetMinigame(InputAction.CallbackContext context)
-    //{
-    //    if (!_isPlaying || _cutsMadeThisAttempt < _totalCutsNeeded) { yield break; }
+    private void MovePiecesToBowl(InputAction.CallbackContext context)
+    {
+        if (!_isPlaying || _cutsMadeThisAttempt < _totalCutsNeeded) { return; };
 
-    //    LeaveMinigame(context, true);
+        CuttingBoard.Instance.LastTouchedBowl.CollectFruitPieces(_selectedFruit);
+        CuttingBoard.Instance.ResetBoard();
+        ResetMinigame(context);
+    }
 
-    //    CuttingMinigame.Instance.SetAccuracy(101, 101); // Set text to '--%'
-    //    CuttingMinigame.Instance.DoneTextEnabled(false, _accuracy);
-    //    CuttingMinigame.Instance.SetProgressBarSize(0);
-    //    CuttingMinigame.Instance.MovingPointEnabled(false);   
-    //    _selectedFruit = Fruit.None;
-    //    _cutsMadeThisAttempt = 0;
-    //}
+    private void MovePiecesToPot(InputAction.CallbackContext context)
+    {
+        if (!_isPlaying || _cutsMadeThisAttempt < _totalCutsNeeded) { return; }
 
+        CuttingBoard.Instance.LastTouchedPot.CollectFruitPieces(_selectedFruit);
+        CuttingBoard.Instance.ResetBoard();
+        ResetMinigame(context);
+    }
+
+    private void ResetMinigame(InputAction.CallbackContext context)
+    {
+        LeaveMinigame(context, true);
+
+        CuttingMinigame.Instance.SetAccuracy(101, 101);
+        CuttingMinigame.Instance.DoneTextEnabled(false, _accuracy);
+        CuttingMinigame.Instance.SetProgressBarSize(0);
+        _selectedFruit = Fruit.None;
+        _cutsMadeThisAttempt = 0;
+    }
 
     private void OnDisable()
     {
@@ -352,5 +368,7 @@ public class FruitCutMinigame : MonoBehaviour
         _player.Controls.Viva.Pause.performed -= context => LeaveMinigame(context, false);
         _player.Controls.Viva.Cancel.performed -= QuitMinigame;
         _player.Controls.Viva.InteractLeftHold.performed -= SkipMinigame;
+        _player.Controls.Viva.InteractRightHold.performed -= MovePiecesToBowl;
+        _player.Controls.Viva.UniversalInteractHold.performed -= MovePiecesToPot;
     }
 }

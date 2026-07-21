@@ -22,6 +22,7 @@ public class BowlLogic : MonoBehaviour
     private int _strawberryPieces;
     private int _peachPieces;
     private int _cantaloupePieces;
+    private int _blueberryPieces;
 
     private void Start()
     {
@@ -29,8 +30,8 @@ public class BowlLogic : MonoBehaviour
         _hud = GameObject.Find("HUD").GetComponent<HintManager>();
         _grabScript = GetComponent<PlayerKB_GrabObject>();
 
-        _grabScript.OnGrabbedLeft += ShowHintLeft;
-        _grabScript.OnGrabbedRight += ShowHintRight;
+        _grabScript.OnGrabbedLeft += BowlGrabbedLeft;
+        _grabScript.OnGrabbedRight += BowlGrabbedRight;
 
         AssignInputs();
     }
@@ -41,16 +42,20 @@ public class BowlLogic : MonoBehaviour
         _player.Controls.Viva.InteractRight.performed += context => CreateDough(true);
     }
 
-    private void ShowHintLeft(bool show)
+    private void BowlGrabbedLeft(bool show)
     {
         if (show) { _hud.CreateHint(HintConstants.LeftGrabDoughHint); }
         else { _hud.ClearHint(HintConstants.LeftGrabDoughHint); }
+
+        CuttingBoard.Instance.LastTouchedBowl = this;
     }
 
-    private void ShowHintRight(bool show)
+    private void BowlGrabbedRight(bool show)
     {
         if (show) { _hud.CreateHint(HintConstants.RightGrabDoughHint); }
         else { _hud.ClearHint(HintConstants.RightGrabDoughHint); }
+
+        CuttingBoard.Instance.LastTouchedBowl = this;
     }
 
     private void OnParticleCollision(GameObject other)
@@ -182,9 +187,20 @@ public class BowlLogic : MonoBehaviour
         }
     }
 
+    public void CollectFruitPieces(FruitCutMinigame.Fruit fruit)
+    {
+        switch (fruit)
+        {
+            case FruitCutMinigame.Fruit.Strawberry: _strawberryPieces += 2; break;
+            case FruitCutMinigame.Fruit.Peach: _peachPieces += 8; break;
+            case FruitCutMinigame.Fruit.Cantaloupe: _cantaloupePieces += 20; break;
+            case FruitCutMinigame.Fruit.Blueberry: _blueberryPieces += 1; break;
+        }
+    }
+
     private void OnDestroy()
     {
-        _grabScript.OnGrabbedLeft -= ShowHintLeft;
-        _grabScript.OnGrabbedRight -= ShowHintRight;
+        _grabScript.OnGrabbedLeft -= BowlGrabbedLeft;
+        _grabScript.OnGrabbedRight -= BowlGrabbedRight;
     }
 }

@@ -14,10 +14,20 @@ public class PotCollect : MonoBehaviour
     private bool _isInOven = false;
     private float _temperature = 25;
 
+    private PlayerKB_GrabObject _grabScript;
+
     private float _strawberryJam = 0;
     private float _peachJam = 0;
     private float _cantaloupeJam = 0;
     private float _blueberryJam = 0;
+
+    private void Awake()
+    {
+        _grabScript = GetComponent<PlayerKB_GrabObject>();
+
+        _grabScript.OnGrabbedLeft += OnPotGrabbedLeft;
+        _grabScript.OnGrabbedRight += OnPotGrabbedRight;
+    }
 
     private void Update()
     {
@@ -45,6 +55,10 @@ public class PotCollect : MonoBehaviour
     {
         if (other.gameObject.name.Contains("Oven")) { _isInOven = false; ; }
     }
+
+    private void OnPotGrabbedLeft(bool held) { CuttingBoard.Instance.LastTouchedPot = this; }
+
+    private void OnPotGrabbedRight(bool held) { CuttingBoard.Instance.LastTouchedPot = this; }
 
     public void MixIngredients()
     {
@@ -74,9 +88,26 @@ public class PotCollect : MonoBehaviour
         _volume -= 0.5f;
     }
 
+    public void CollectFruitPieces(FruitCutMinigame.Fruit fruit)
+    {
+        switch (fruit)
+        {
+            case FruitCutMinigame.Fruit.Strawberry: _strawberryPieces += 2; break;
+            case FruitCutMinigame.Fruit.Peach: _peachPieces += 8; break;
+            case FruitCutMinigame.Fruit.Cantaloupe: _cantaloupePieces += 20; break;
+            case FruitCutMinigame.Fruit.Blueberry: _blueberryPieces += 1; break;
+        }
+    }
+
     private void SetBlendShape()
     {
         float percent = _volume / _maxCapacity;
         _potWater.SetBlendShapeWeight(0, percent * 100);
+    }
+
+    private void OnDestroy()
+    {
+        _grabScript.OnGrabbedLeft -= OnPotGrabbedLeft;
+        _grabScript.OnGrabbedRight -= OnPotGrabbedRight;
     }
 }
