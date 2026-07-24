@@ -88,7 +88,7 @@ public class FruitCutMinigame : MonoBehaviour
     {
         _player.Controls.Viva.UniversalInteract.performed += EnterMinigame;
         _player.Controls.Viva.LeftGrab.performed += PerformCut;
-        _player.Controls.Viva.Pause.performed += context => LeaveMinigame(context, false);
+        _player.Controls.Viva.Pause.performed +=  LeaveMinigame;
         _player.Controls.Viva.Cancel.performed += QuitMinigame;
         _player.Controls.Viva.InteractLeftHold.performed += SkipMinigame;
         _player.Controls.Viva.InteractRightHold.performed += MovePiecesToBowl;
@@ -227,7 +227,7 @@ public class FruitCutMinigame : MonoBehaviour
         }
     }
 
-    private void LeaveMinigame(InputAction.CallbackContext context, bool dropOtherItems)
+    private void LeaveMinigame(InputAction.CallbackContext context)
     {
         if (!_isPlaying) { return; }
 
@@ -246,33 +246,13 @@ public class FruitCutMinigame : MonoBehaviour
 
         if (_otherObjectGrabScriptL != null)
         {
-            if (dropOtherItems)
-            {
-                _otherObjectGrabScriptL.SetIsActive(false, 1);
-                _otherObjectGrabScriptL.gameObject.SetActive(true);
-                _otherObjectGrabScriptL.IsActive = true;
-            }
-            else
-            {
-                _otherObjectGrabScriptL.SetIsActive(true, 1);
-            }
-
+            _otherObjectGrabScriptL.SetIsActive(true, 1);
             _otherObjectGrabScriptL = null;
         }
 
         if (_otherObjectGrabScriptR != null)
         {
-            if (dropOtherItems)
-            {
-                _otherObjectGrabScriptR.SetIsActive(false, 2);
-                _otherObjectGrabScriptR.gameObject.SetActive(true);
-                _otherObjectGrabScriptR.IsActive = true;
-            }
-            else
-            {
-                _otherObjectGrabScriptR.SetIsActive(true, 2);
-            }
-
+            _otherObjectGrabScriptR.SetIsActive(true, 2);
             _otherObjectGrabScriptR = null;
         }
     }
@@ -326,7 +306,7 @@ public class FruitCutMinigame : MonoBehaviour
 
         _selectedFruit = Fruit.None;
         CuttingBoard.Instance.EnableFirstObject(_selectedFruit);
-        LeaveMinigame(context, false);
+        LeaveMinigame(context);
     }
 
     private void SkipMinigame(InputAction.CallbackContext context)
@@ -364,7 +344,7 @@ public class FruitCutMinigame : MonoBehaviour
 
     private void ResetMinigame(InputAction.CallbackContext context)
     {
-        LeaveMinigame(context, true);
+        LeaveMinigame(context);
 
         CuttingMinigame.Instance.SetAccuracy(101, 101);
         CuttingMinigame.Instance.DoneTextEnabled(false, _accuracy);
@@ -378,7 +358,7 @@ public class FruitCutMinigame : MonoBehaviour
     {
         _player.Controls.Viva.UniversalInteract.performed -= EnterMinigame;
         _player.Controls.Viva.LeftGrab.performed -= PerformCut;
-        _player.Controls.Viva.Pause.performed -= context => LeaveMinigame(context, false);
+        _player.Controls.Viva.Pause.performed -= LeaveMinigame;
         _player.Controls.Viva.Cancel.performed -= QuitMinigame;
         _player.Controls.Viva.InteractLeftHold.performed -= SkipMinigame;
         _player.Controls.Viva.InteractRightHold.performed -= MovePiecesToBowl;
