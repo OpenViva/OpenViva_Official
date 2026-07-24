@@ -65,13 +65,6 @@ public class CuttingBoard : MonoBehaviour
         PlayObjectAnimation(cutsMade);
     }
 
-    public void ResetBoard()
-    {
-        _currentlyShowing.SetActive(false);
-        _currentlyShowing = null;
-        _selectedFruit = Fruit.None;
-    }
-
     private void PlayObjectAnimation(int cutsMade)
     {
         switch (_selectedFruit)
@@ -123,5 +116,12 @@ public class CuttingBoard : MonoBehaviour
                 case 18: _animator.Play("cutCantaloupe1"); break;
             }
         }
+    }
+
+    public void ResetBoard()
+    {
+        _currentlyShowing.SetActive(false);
+        _currentlyShowing = null;
+        _selectedFruit = Fruit.None;
     }
 }

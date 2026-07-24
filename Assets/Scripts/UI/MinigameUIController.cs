@@ -16,6 +16,8 @@ namespace MinigameUIController
         [SerializeField] private TextMeshProUGUI _averageText;
         [SerializeField] private TextMeshProUGUI _doneText;
         [SerializeField] private Scrollbar _progressBar;
+        [SerializeField] private GameObject _controlsDuring;
+        [SerializeField] private GameObject _controlsAfter;
 
         private void Awake()
         {
@@ -57,6 +59,20 @@ namespace MinigameUIController
                     _averageText.SetText("--%");
                     _averageText.color = Color.white; 
                     break;
+            }
+        }
+
+        public void SetControlHints(bool isComplete)
+        {
+            if (isComplete)
+            {
+                _controlsDuring.SetActive(false);
+                _controlsAfter.SetActive(true);
+            }
+            else
+            {
+                _controlsDuring.SetActive(true);
+                _controlsAfter.SetActive(false);
             }
         }
 

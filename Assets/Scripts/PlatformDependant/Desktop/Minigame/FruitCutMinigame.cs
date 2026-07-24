@@ -10,7 +10,7 @@ public class FruitCutMinigame : MonoBehaviour
     // Setup Fields
     private Camera _mainCamera;
     [SerializeField] private Player _player;
-    private AnimationIndexes _animationIndexes;
+    [SerializeField] private HintManager _HUD;
 
     [SerializeField] private Camera _minigameCamera;
     [SerializeField] private SkinnedMeshRenderer _minigameHands;
@@ -58,7 +58,6 @@ public class FruitCutMinigame : MonoBehaviour
 
     private void Start()
     {
-        _animationIndexes = PlayerManager.Instance.AnimationKB.GetComponent<AnimationIndexes>();
         AssignInputs();
     }
 
@@ -69,12 +68,20 @@ public class FruitCutMinigame : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player")) { _playerInRange = true; }
+        if (other.gameObject.CompareTag("Player")) 
+        { 
+            _playerInRange = true;
+            _HUD.CreateHint(HintConstants.EnterCuttingMinigameHint);
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Player")) { _playerInRange = false; }
+        if (other.gameObject.CompareTag("Player")) 
+        { 
+            _playerInRange = false;
+            _HUD.ClearHint(HintConstants.EnterCuttingMinigameHint);
+        }
     }
 
     private void AssignInputs()
@@ -147,6 +154,7 @@ public class FruitCutMinigame : MonoBehaviour
             _mainCamera.enabled = false;
             _minigameCamera.enabled = true;
             _minigameHands.enabled = true;
+            _HUD.ClearHint(HintConstants.EnterCuttingMinigameHint);
             PlayerManager.Instance.HideHands(true);
             PlayerManager.Instance.LeftHandOccupied = true;
             PlayerManager.Instance.RightHandOccupied = true;
@@ -201,7 +209,11 @@ public class FruitCutMinigame : MonoBehaviour
         CuttingBoard.Instance.EnableNextObject(_cutsMadeThisAttempt);
         CuttingMinigame.Instance.SetProgressBarSize((float)_cutsMadeThisAttempt / _totalCutsNeeded);
 
-        if (_cutsMadeThisAttempt == _totalCutsNeeded) { CuttingMinigame.Instance.DoneTextEnabled(true, _accuracy); }
+        if (_cutsMadeThisAttempt == _totalCutsNeeded) 
+        { 
+            CuttingMinigame.Instance.DoneTextEnabled(true, _accuracy);
+            CuttingMinigame.Instance.SetControlHints(true);
+        }
 
         SetNewTarget();
 
@@ -269,7 +281,6 @@ public class FruitCutMinigame : MonoBehaviour
     {
         if (!_isPlaying || _cutsMadeThisAttempt >= _totalCutsNeeded) { return; }
 
-        // At least one hand must be free.
         int freeHand = 0;
         if (_otherObjectGrabScriptL != null && _otherObjectGrabScriptR != null)
         {
@@ -330,6 +341,7 @@ public class FruitCutMinigame : MonoBehaviour
         CuttingMinigame.Instance.DoneTextEnabled(true, _accuracy);
         CuttingMinigame.Instance.SetProgressBarSize((float)_cutsMadeThisAttempt / _totalCutsNeeded);
         CuttingMinigame.Instance.MovingPointEnabled(false);
+        CuttingMinigame.Instance.SetControlHints(true);
     }
 
     private void MovePiecesToBowl(InputAction.CallbackContext context)
@@ -357,6 +369,7 @@ public class FruitCutMinigame : MonoBehaviour
         CuttingMinigame.Instance.SetAccuracy(101, 101);
         CuttingMinigame.Instance.DoneTextEnabled(false, _accuracy);
         CuttingMinigame.Instance.SetProgressBarSize(0);
+        CuttingMinigame.Instance.SetControlHints(false);
         _selectedFruit = Fruit.None;
         _cutsMadeThisAttempt = 0;
     }
