@@ -1,4 +1,5 @@
 using UnityEngine;
+using static FruitCutMinigame;
 
 public class SpoonMix : PlayerKB_GrabObject
 {
@@ -8,6 +9,7 @@ public class SpoonMix : PlayerKB_GrabObject
 
     [SerializeField] private GameObject _filling;
     bool _fillingVisible = false;
+    Fruit _fruitOnSpoon = Fruit.None;
 
     protected override void Start()
     {
@@ -21,8 +23,8 @@ public class SpoonMix : PlayerKB_GrabObject
     protected override void AssignInputs()
     {
         base.AssignInputs();
-        _player.Controls.Viva.InteractLeft.performed += context => Mix(true);
-        _player.Controls.Viva.InteractRight.performed += context => Mix(false);
+        _player.Controls.Viva.InteractLeft.performed += context => UseSpoon(true);
+        _player.Controls.Viva.InteractRight.performed += context => UseSpoon(false);
         _player.Controls.Viva.InteractLeft.canceled += context => StopMixing();
         _player.Controls.Viva.InteractRight.canceled += context => StopMixing();
     }
@@ -34,7 +36,7 @@ public class SpoonMix : PlayerKB_GrabObject
         if (_currentPot != null) { _currentPot.MixIngredients(); }
     }
 
-    private void Mix(bool useLeft)
+    private void UseSpoon(bool useLeft)
     {
         if (useLeft && !_isGrabbedInRight) { return; }
         else if (!useLeft && !_isGrabbedInLeft) { return; }
@@ -62,6 +64,18 @@ public class SpoonMix : PlayerKB_GrabObject
             _isMixing = true;
             _currentPot = pot;
         }
+
+        if (objectInOther.name.Contains("toast") && objectInOther.TryGetComponent(out JamOnToast toast))
+        {
+            if (!_fillingVisible) { return; }
+
+            bool itWorked = toast.TrySpreadJam(_fruitOnSpoon);
+            if (itWorked) 
+            { 
+                _filling.SetActive(false);
+                _fillingVisible = false; 
+            }
+        }
     }
 
     private void StopMixing()
@@ -81,7 +95,7 @@ public class SpoonMix : PlayerKB_GrabObject
         else { _hud.ClearHint(HintConstants.LeftMixHint); }
     }
 
-    public bool TrySetFillingVisible(bool visible, FruitCutMinigame.Fruit fruit) 
+    public bool TrySetFillingVisible(bool visible, Fruit fruit) 
     { 
         if (visible == _fillingVisible) {  return false; }
 
@@ -89,10 +103,25 @@ public class SpoonMix : PlayerKB_GrabObject
         {
             switch (fruit)
             {
-                case FruitCutMinigame.Fruit.Strawberry: renderer.material.color = Color.firebrick; break;
-                case FruitCutMinigame.Fruit.Peach: renderer.material.color = Color.sandyBrown; break;
-                case FruitCutMinigame.Fruit.Cantaloupe: renderer.material.color = Color.orangeRed; break;
-                default: renderer.material.color = Color.tomato; break;
+                case Fruit.Strawberry: 
+                    renderer.material.color = Color.firebrick;
+                    _fruitOnSpoon = Fruit.Strawberry;
+                    break;
+
+                case Fruit.Peach: 
+                    renderer.material.color = Color.sandyBrown;
+                    _fruitOnSpoon =  Fruit.Peach;
+                    break;
+
+                case Fruit.Cantaloupe: 
+                    renderer.material.color = Color.orangeRed; 
+                    _fruitOnSpoon = Fruit.Cantaloupe;
+                    break;
+
+                default: 
+                    renderer.material.color = Color.tomato;
+                    _fruitOnSpoon = Fruit.None;
+                    break;
             }
         }
         else { return false; }

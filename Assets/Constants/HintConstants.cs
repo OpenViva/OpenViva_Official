@@ -26,8 +26,8 @@ public class HintConstants : MonoBehaviour
     public static readonly string RightGrindHint = "Grind: [E]";
     public static readonly string LeftMortarSpillHint = "Empty: Hold [Q]";
     public static readonly string RightMortarSpillHint = "Empty: Hold [E]";
-    public static readonly string LeftMixHint = "Mix: [Q]";
-    public static readonly string RightMixHint = "Mix: [E]";
+    public static readonly string LeftMixHint = "Use Spoon: [Q]";
+    public static readonly string RightMixHint = "Use Spoon: [E]";
     public static readonly string LeftGrabDoughHint = "Take Dough: [Q]";
     public static readonly string RightGrabDoughHint = "Take Dough: [E]";
     public static readonly string LeftScoopJamHint = "Scoop Jam [Q]";

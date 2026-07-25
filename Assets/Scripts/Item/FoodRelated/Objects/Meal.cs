@@ -7,11 +7,13 @@ public class Meal : MonoBehaviour
     public float BurnTimer { private set; get; } = 60f;
     private bool _inOven = false;
     private GameObject _burnVariant;
+    private float _price;
 
     private void Awake()
     {
         BurnTimer = _mealData.BurnTimer;
         _burnVariant = _mealData.BurnVariant;
+        _price = _mealData.Price;
     }
 
     private void Update()
@@ -44,4 +46,6 @@ public class Meal : MonoBehaviour
             _inOven = false;
         }
     }
+
+    public void IncreasePrice(float amount) { _price += amount; }
 }
