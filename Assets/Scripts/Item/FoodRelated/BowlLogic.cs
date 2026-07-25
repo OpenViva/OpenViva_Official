@@ -30,14 +30,14 @@ public class BowlLogic : MonoBehaviour
         _hud = GameObject.Find("HUD").GetComponent<HintManager>();
         _grabScript = GetComponent<PlayerKB_GrabObject>();
 
-        _grabScript.OnGrabbedLeft += BowlGrabbedLeft;
-        _grabScript.OnGrabbedRight += BowlGrabbedRight;
-
         AssignInputs();
     }
 
     private void AssignInputs()
     {
+        _grabScript.OnGrabbedLeft += BowlGrabbedLeft;
+        _grabScript.OnGrabbedRight += BowlGrabbedRight;
+
         _player.Controls.Viva.InteractLeft.performed += context => CreateDough(false);
         _player.Controls.Viva.InteractRight.performed += context => CreateDough(true);
     }
@@ -153,20 +153,13 @@ public class BowlLogic : MonoBehaviour
     private void CreateDough(bool useLeft)
     {
         if (_batterVolume < 250) { return; }
-
-        if (useLeft && (_grabScript.IsGrabbedLeft || !_grabScript.IsGrabbedRight)) { return; }
+        else if (useLeft && (_grabScript.IsGrabbedLeft || !_grabScript.IsGrabbedRight)) { return; }
         else if (!useLeft && (_grabScript.IsGrabbedRight ||  !_grabScript.IsGrabbedLeft)) { return; }
 
         GameObject other;
-        if (useLeft)
-        {
-            other = PlayerManager.Instance.GetObjectLeft();
-        }
-        else
-        {
-            other = PlayerManager.Instance.GetObjectRight();
-        }
-
+        if (useLeft) { other = PlayerManager.Instance.GetObjectLeft(); }
+        else { other = PlayerManager.Instance.GetObjectRight(); }
+        // Other hand must be empty.
         if (other != null) { return; }
 
         int handedness;
@@ -194,7 +187,6 @@ public class BowlLogic : MonoBehaviour
             case FruitCutMinigame.Fruit.Strawberry: _strawberryPieces += 2; break;
             case FruitCutMinigame.Fruit.Peach: _peachPieces += 8; break;
             case FruitCutMinigame.Fruit.Cantaloupe: _cantaloupePieces += 20; break;
-            case FruitCutMinigame.Fruit.Blueberry: _blueberryPieces += 1; break;
         }
     }
 

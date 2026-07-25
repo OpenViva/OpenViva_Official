@@ -1,7 +1,11 @@
 using UnityEngine;
+using static FruitCutMinigame;
 
 public class PotCollect : MonoBehaviour
 {
+    [SerializeField] private Player _player;
+    [SerializeField] private HintManager _HUD;
+
     [SerializeField] private SkinnedMeshRenderer _potWater;
     private float _volume = 0f;
     [SerializeField] private float _maxCapacity = 5000f;
@@ -23,9 +27,20 @@ public class PotCollect : MonoBehaviour
     private void Awake()
     {
         _grabScript = GetComponent<PlayerKB_GrabObject>();
+    }
 
+    private void Start()
+    {
+        AssignInputs();
+    }
+
+    private void AssignInputs()
+    {
         _grabScript.OnGrabbedLeft += OnPotGrabbedLeft;
         _grabScript.OnGrabbedRight += OnPotGrabbedRight;
+
+        _player.Controls.Viva.InteractLeft.performed += context => ScoopJam(true);
+        _player.Controls.Viva.InteractRight.performed += context => ScoopJam(false);
     }
 
     private void Update()
@@ -56,9 +71,21 @@ public class PotCollect : MonoBehaviour
         if (other.gameObject.name.Contains("Oven")) { _isInOven = false; ; }
     }
 
-    private void OnPotGrabbedLeft(bool held) { CuttingBoard.Instance.LastTouchedPot = this; }
+    private void OnPotGrabbedLeft(bool held) 
+    { 
+        CuttingBoard.Instance.LastTouchedPot = this;
 
-    private void OnPotGrabbedRight(bool held) { CuttingBoard.Instance.LastTouchedPot = this; }
+        if (held) { _HUD.CreateHint(HintConstants.RightScoopJamHint); }
+        else { _HUD.ClearHint(HintConstants.RightScoopJamHint); }
+    }
+
+    private void OnPotGrabbedRight(bool held) 
+    { 
+        CuttingBoard.Instance.LastTouchedPot = this;
+
+        if (held) { _HUD.CreateHint(HintConstants.LeftScoopJamHint); }
+        else { _HUD.ClearHint(HintConstants.LeftScoopJamHint); }
+    }
 
     public void MixIngredients()
     {
@@ -83,13 +110,90 @@ public class PotCollect : MonoBehaviour
         _volume -= 0.5f;
     }
 
-    public void CollectFruitPieces(FruitCutMinigame.Fruit fruit)
+    public void CollectFruitPieces(Fruit fruit)
     {
         switch (fruit)
         {
-            case FruitCutMinigame.Fruit.Strawberry: _strawberryPieces += 2; break;
-            case FruitCutMinigame.Fruit.Peach: _peachPieces += 8; break;
-            case FruitCutMinigame.Fruit.Cantaloupe: _cantaloupePieces += 20; break;
+            case Fruit.Strawberry: _strawberryPieces += 2; break;
+            case Fruit.Peach: _peachPieces += 8; break;
+            case Fruit.Cantaloupe: _cantaloupePieces += 20; break;
+        }
+    }
+
+    private void ScoopJam(bool leftTriggered)
+    {
+        if (_strawberryJam < 1f && _peachJam < 1f && _cantaloupeJam < 1f) { return; }
+        else if (leftTriggered && (_grabScript.IsGrabbedLeft || !_grabScript.IsGrabbedRight)) { return; }
+        else if (!leftTriggered && (_grabScript.IsGrabbedRight || !_grabScript.IsGrabbedLeft)) { return; }
+
+        GameObject other = null;
+        if (leftTriggered) { other = PlayerManager.Instance.GetObjectLeft(); }
+        else { other = PlayerManager.Instance.GetObjectRight(); }
+        SpoonMix spoonScript = other.GetComponent<SpoonMix>();
+        if (spoonScript == null) { return; }
+
+        string combination = "";
+        if (_strawberryJam >= 1f) { combination += "s"; }
+        if (_peachJam >= 1f) { combination += "p"; }
+        if (_cantaloupeJam >= 1f) { combination += "c"; }
+
+        switch (combination)
+        {
+            case "spc":
+                if (spoonScript.TrySetFillingVisible(true, Fruit.None))
+                {
+                    _strawberryJam -= 1 / 3f;
+                    _peachJam -= 1 / 3f;
+                    _cantaloupeJam -= 1 / 3f;
+                }
+                break;
+
+            case "sp":
+                if (spoonScript.TrySetFillingVisible(true, Fruit.None))
+                {
+                    _strawberryJam -= 0.5f;
+                    _peachJam -= 0.5f;
+                }
+                break;
+
+            case "sc":
+                if (spoonScript.TrySetFillingVisible(true, Fruit.None))
+                {
+                    _strawberryJam -= 0.5f;
+                    _cantaloupeJam -= 0.5f;
+                }
+                break;
+
+            case "pc":
+                if (spoonScript.TrySetFillingVisible(true, Fruit.None))
+                {
+                    _peachJam -= 0.5f;
+                    _cantaloupeJam -= 0.5f;
+                }
+                break;
+
+            case "s":
+                if (spoonScript.TrySetFillingVisible(true, Fruit.Strawberry))
+                {
+                    _strawberryJam -= 1f;
+                }
+                break;
+
+            case "p":
+                if (spoonScript.TrySetFillingVisible(true, Fruit.Peach))
+                {
+                    _peachJam -= 1f;
+                }
+                break;
+
+            case "c":
+                if (spoonScript.TrySetFillingVisible(true, Fruit.Cantaloupe))
+                {
+                    _cantaloupeJam -= 1f;
+                }
+                break;
+
+            default: break;
         }
     }
 

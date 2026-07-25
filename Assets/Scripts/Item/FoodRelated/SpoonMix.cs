@@ -6,6 +6,9 @@ public class SpoonMix : PlayerKB_GrabObject
     private BowlLogic _currentBowl;
     private PotCollect _currentPot;
 
+    [SerializeField] private GameObject _filling;
+    bool _fillingVisible = false;
+
     protected override void Start()
     {
         base.Start();
@@ -76,6 +79,27 @@ public class SpoonMix : PlayerKB_GrabObject
     {
         if (show) { _hud.CreateHint(HintConstants.LeftMixHint); }
         else { _hud.ClearHint(HintConstants.LeftMixHint); }
+    }
+
+    public bool TrySetFillingVisible(bool visible, FruitCutMinigame.Fruit fruit) 
+    { 
+        if (visible == _fillingVisible) {  return false; }
+
+        if (visible && _filling.TryGetComponent(out Renderer renderer))
+        {
+            switch (fruit)
+            {
+                case FruitCutMinigame.Fruit.Strawberry: renderer.material.color = Color.firebrick; break;
+                case FruitCutMinigame.Fruit.Peach: renderer.material.color = Color.sandyBrown; break;
+                case FruitCutMinigame.Fruit.Cantaloupe: renderer.material.color = Color.orangeRed; break;
+                default: renderer.material.color = Color.tomato; break;
+            }
+        }
+        else { return false; }
+
+        _filling.SetActive(visible);
+        _fillingVisible = visible;
+        return true;
     }
 
     private void OnDestroy()

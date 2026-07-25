@@ -46,8 +46,7 @@ public class FruitCutMinigame : MonoBehaviour
         None = 0,
         Peach = 2,
         Strawberry = 3,
-        Cantaloupe = 4,
-        Blueberry = 5
+        Cantaloupe = 4
     }
     private Fruit _selectedFruit = Fruit.None;
 
