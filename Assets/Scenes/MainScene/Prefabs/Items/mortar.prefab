@@ -56,7 +56,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 0.5
+    scalar: 0
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -5184,6 +5184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MortarSpill
   _objectIndex: 15
+  IsActive: 1
   _flourParticle: {fileID: 8767962256605948772}
 --- !u!1 &5440048295255373320
 GameObject:

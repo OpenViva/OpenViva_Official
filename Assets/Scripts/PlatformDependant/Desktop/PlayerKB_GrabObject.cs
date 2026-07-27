@@ -212,7 +212,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
         if (set == false)
         {
-            transform.SetParent(null);
+            transform.SetParent(null, true);
 
             if (handedness == 1)
             {
@@ -232,7 +232,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             gameObject.SetActive(true);
             if (handedness == 1)
             {
-                transform.SetParent(_playerLeftHand.transform);
+                transform.SetParent(_playerLeftHand.transform, true);
                 transform.SetLocalPositionAndRotation(ObjectHoldPositions.Instance.GetObjectPositionLeft(_objectIndex), ObjectHoldPositions.Instance.GetObjectRotationLeft(_objectIndex));
                 _animationIndexes.PlayAnimationLeft(_objectIndex);
                 IsGrabbedLeft = true;
@@ -241,7 +241,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             }
             else
             {
-                transform.SetParent(_playerRightHand.transform);
+                transform.SetParent(_playerRightHand.transform, true);
                 transform.SetLocalPositionAndRotation(ObjectHoldPositions.Instance.GetObjectPositionRight(_objectIndex), ObjectHoldPositions.Instance.GetObjectRotationRight(_objectIndex));
                 _animationIndexes.PlayAnimationRight(_objectIndex);
                 IsGrabbedRight = true;

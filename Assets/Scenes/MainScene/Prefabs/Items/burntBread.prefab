@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4853137564098898330}
   - component: {fileID: 2634896422888571627}
   - component: {fileID: 1665014321255865908}
-  - component: {fileID: 3466564820536022372}
+  - component: {fileID: 5825625023733477905}
   - component: {fileID: 3075062131465932101}
   - component: {fileID: 2571907216338501824}
   - component: {fileID: 8420179564929963577}
@@ -95,8 +95,8 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3466564820536022372
-MeshCollider:
+--- !u!65 &5825625023733477905
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -113,10 +113,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -8104534754996477809, guid: a8f024f08f1acff47814f903346a55f4, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.09830568, y: 0.022299763, z: 0.09830568}
+  m_Center: {x: 0, y: 0.010984799, z: 0}
 --- !u!65 &3075062131465932101
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -178,6 +177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerKB_GrabObject
   _objectIndex: 20
+  IsActive: 1
 --- !u!114 &7116775990263814742
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -90,7 +90,7 @@ public class FruitCutMinigame : MonoBehaviour
         _player.Controls.Viva.Pause.performed +=  LeaveMinigame;
         _player.Controls.Viva.Cancel.performed += QuitMinigame;
         _player.Controls.Viva.InteractLeftHold.performed += SkipMinigame;
-        _player.Controls.Viva.InteractRightHold.performed += MovePiecesToBowl;
+        // _player.Controls.Viva.InteractRightHold.performed += MovePiecesToBowl;
         _player.Controls.Viva.UniversalInteractHold.performed += MovePiecesToPot;
     }
 
@@ -249,7 +249,7 @@ public class FruitCutMinigame : MonoBehaviour
             _otherObjectGrabScriptL = null;
         }
 
-        if (_otherObjectGrabScriptR != null)
+        if (_otherObjectGrabScriptR != null && !_otherObjectGrabScriptR.IsActive)
         {
             _otherObjectGrabScriptR.SetIsActive(true, 2);
             _otherObjectGrabScriptR = null;
@@ -260,26 +260,15 @@ public class FruitCutMinigame : MonoBehaviour
     {
         if (!_isPlaying || _cutsMadeThisAttempt >= _totalCutsNeeded) { return; }
 
-        int freeHand = 0;
+        int freeHand = 1;
         if (_otherObjectGrabScriptL != null && _otherObjectGrabScriptR != null)
         {
-            _otherObjectGrabScriptR.SetIsActive(true, 2);
-            _otherObjectGrabScriptR.gameObject.transform.SetParent(null, true);
+            _otherObjectGrabScriptR.SetIsActive(false, 2);
+            _otherObjectGrabScriptR.gameObject.SetActive(true);
             _otherObjectGrabScriptR = null;
             freeHand = 2;
         }
-        else if (_otherObjectGrabScriptL != null)
-        {
-            _otherObjectGrabScriptL.SetIsActive(true, 1);
-            _otherObjectGrabScriptL = null;
-            freeHand = 2;
-        }
-        else if (_otherObjectGrabScriptR != null)
-        {
-            _otherObjectGrabScriptR.SetIsActive(true, 2);
-            _otherObjectGrabScriptR = null;
-            freeHand = 1;
-        }
+        else if (_otherObjectGrabScriptL != null) { freeHand = 2; }
 
         Crop cropScript = null;
         switch (_selectedFruit)
@@ -301,10 +290,13 @@ public class FruitCutMinigame : MonoBehaviour
         }
         cropScript.ShouldGrow = false;
         cropScript.gameObject.transform.localScale = Vector3.one;
-        cropScript.SetIsActive(true, freeHand);
+        cropScript.SetIsActive(false, freeHand);
 
-        _selectedFruit = Fruit.None;
+        if (freeHand == 1) { _otherObjectGrabScriptL = cropScript; }
+        else {  _otherObjectGrabScriptR = cropScript; }
+
         CuttingBoard.Instance.EnableFirstObject(_selectedFruit);
+        ResetMinigame(context);
         LeaveMinigame(context);
     }
 
@@ -350,6 +342,7 @@ public class FruitCutMinigame : MonoBehaviour
         CuttingMinigame.Instance.SetProgressBarSize(0);
         CuttingMinigame.Instance.SetControlHints(false);
         _selectedFruit = Fruit.None;
+        CuttingBoard.Instance.EnableFirstObject(_selectedFruit);
         _cutsMadeThisAttempt = 0;
     }
 
@@ -360,7 +353,7 @@ public class FruitCutMinigame : MonoBehaviour
         _player.Controls.Viva.Pause.performed -= LeaveMinigame;
         _player.Controls.Viva.Cancel.performed -= QuitMinigame;
         _player.Controls.Viva.InteractLeftHold.performed -= SkipMinigame;
-        _player.Controls.Viva.InteractRightHold.performed -= MovePiecesToBowl;
+        // _player.Controls.Viva.InteractRightHold.performed -= MovePiecesToBowl;
         _player.Controls.Viva.UniversalInteractHold.performed -= MovePiecesToPot;
     }
 }
