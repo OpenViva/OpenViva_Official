@@ -28,7 +28,7 @@ public class PlayerVR_GrabObject : XRGrabInteractable
 
     private void Start()
     {
-        _animationIndexes = PlayerManager.Instance._animationVR.GetComponent<AnimationIndexes>();
+        _animationIndexes = PlayerManager.Instance.AnimationVR.GetComponent<AnimationIndexes>();
 
         GameObject floatingHint = GameObject.Find("FloatingHint");
         _hintManager = floatingHint.GetComponent<HintManager>();
@@ -76,7 +76,7 @@ public class PlayerVR_GrabObject : XRGrabInteractable
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (!collider.CompareTag("Player") || IsGrabbed != 0) { return; }
+        if (!collider.CompareTag("Player") || IsGrabbed != 0 || Globals.isDesktopMode) { return; }
 
         if (collider.gameObject.name.Contains("Left"))
         {

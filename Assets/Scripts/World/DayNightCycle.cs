@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum CycleSpeed 
@@ -14,12 +13,9 @@ public enum CycleSpeed
     OneDay
 }
 
-
-
 // This class manages the day-night cycle in the game.
 public class DayNightCycle : MonoBehaviour
 {
-
     #region Transitioner
 
     [Serializable]
@@ -338,5 +334,6 @@ public class DayNightCycle : MonoBehaviour
     public CycleSpeed GetSpeed()
     {
         return currentCycleSpeed;
-    }   
+    }
+
 }

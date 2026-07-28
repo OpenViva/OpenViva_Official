@@ -18,7 +18,7 @@ public class HintManager : MonoBehaviour
             if (string.IsNullOrEmpty(element.text))
             {
                 element.text = hintType;
-                Debug.Log($"Added hint text '{hintType}' to UI element.");
+                // Debug.Log($"Added hint text '{hintType}' to UI element.");
                 return;
             }
         }
@@ -46,7 +46,7 @@ public class HintManager : MonoBehaviour
             if (element.text == hintType)
             {
                 element.text = "";
-                Debug.Log($"Removed hint text '{hintType}' from UI element.");
+                // Debug.Log($"Removed hint text '{hintType}' from UI element.");
                 //return;  // Exit after clearing the first match (assuming unique texts)
             }
         }

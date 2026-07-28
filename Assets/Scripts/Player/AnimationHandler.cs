@@ -123,4 +123,9 @@ public class AnimationHandler : MonoBehaviour
     {
         PlayAnimation("holdTowel", hand);
     }
+
+    public void HoldBread(string hand)
+    {
+        PlayAnimation("holdBread", hand);
+    }
 }

@@ -124,7 +124,7 @@ public class PlayerKB_Movement : MonoBehaviour
 
     void HandleMovement()
     {
-        if (Globals.isMenuOpen) return;
+        if (Globals.isMenuOpen || !Globals.handleMovement) return;
 
         if (!isGrounded)
         {
@@ -139,7 +139,7 @@ public class PlayerKB_Movement : MonoBehaviour
 
     void HandleLook()
     {
-        if (lookInput == Vector2.zero || Globals.isMenuOpen) return;
+        if (lookInput == Vector2.zero || Globals.isMenuOpen || !Globals.handleKBLook) return;
 
         Vector2 input = lookInput;
 

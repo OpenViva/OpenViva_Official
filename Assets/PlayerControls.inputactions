@@ -124,6 +124,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "InteractRightHold",
+                    "type": "Button",
+                    "id": "bcfd4611-91e8-481b-b0f5-e535d5c64885",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "InteractLeft",
                     "type": "Button",
                     "id": "5ed36331-0ae9-4480-9e78-327b3b85af61",
@@ -133,9 +142,36 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "InteractLeftHold",
+                    "type": "Button",
+                    "id": "9b43778a-4617-423e-ac69-dd5ce2496740",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "UniversalInteract",
                     "type": "Button",
                     "id": "25c151ac-f890-4e6e-9ec7-f6f0ff0353fc",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UniversalInteractHold",
+                    "type": "Button",
+                    "id": "0ae8fd25-7efe-48b6-b262-1a20a8f5d6ae",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Cancel",
+                    "type": "Button",
+                    "id": "400c308b-3e37-4d4a-a565-5f19d7332b25",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -569,6 +605,50 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "UniversalInteract",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "92f97b2b-d8db-4f88-a1f1-eb88f7e00d31",
+                    "path": "<Keyboard>/#(E)",
+                    "interactions": "Hold(duration=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InteractRightHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1d10f21e-9a54-460d-86ca-6ada064c3a8d",
+                    "path": "<Keyboard>/#(Q)",
+                    "interactions": "Hold(duration=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InteractLeftHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "119a27b1-1de6-49e1-aa82-8b408e0dcbc5",
+                    "path": "<Keyboard>/#(X)",
+                    "interactions": "Hold(duration=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5d743dc5-cfdf-4c16-bd57-f94579c14869",
+                    "path": "<Keyboard>/#(F)",
+                    "interactions": "Hold(duration=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UniversalInteractHold",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

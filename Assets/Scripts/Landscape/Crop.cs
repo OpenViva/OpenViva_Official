@@ -17,9 +17,19 @@ public class Crop : PlayerKB_GrabObject
     private bool _isGrowing = true;
     private Color _currentColor;
 
+    [SerializeField] public bool ShouldGrow = true;
+
     protected override void Start()
     {
         base.Start();
+
+        if (!ShouldGrow)
+        {
+            _isGrowing = false;
+            _timer = 0;
+            CheckPhase();
+            return;
+        }
 
         _growTimer = _data.GrowTimer;
         _maxScale = _data.MaxScale;
@@ -45,7 +55,7 @@ public class Crop : PlayerKB_GrabObject
         if (_isGrowing)
         {
             float value = (1 - _timer / _growTimer) * _maxScale;
-            Vector3 scale = new Vector3(value, value, value);
+            Vector3 scale = new(value, value, value);
             transform.localScale = scale;
             CheckPhase();
         }
@@ -101,27 +111,27 @@ public class Crop : PlayerKB_GrabObject
         }
     }
 
-    protected override void OnTriggerEnter(Collider collider)
+    private void OnTriggerEnter(Collider collider)
     {
         if (!_isGrowing)
         {
-            base.TriggerEntered(collider, HintConstants.GrabHint);
+            TriggerEntered(collider, HintConstants.GrabHint);
         }
         else
         {
-            base.TriggerEntered(collider, HintConstants.CropGrowingHint);
+            TriggerEntered(collider, HintConstants.CropGrowingHint);
         }
     }
 
-    protected override void OnTriggerExit(Collider collider)
+    private void OnTriggerExit(Collider collider)
     {
         if (!_isGrowing)
         {
-            base.TriggerExited(collider, HintConstants.GrabHint);
+            TriggerExited(collider, HintConstants.GrabHint);
         }
         else
         {
-            base.TriggerExited(collider, HintConstants.CropGrowingHint);
+            TriggerExited(collider, HintConstants.CropGrowingHint);
         }
     }
 }

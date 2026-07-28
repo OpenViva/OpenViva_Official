@@ -961,7 +961,7 @@ namespace nTools.PrefabPainter
             if (!HasSelectedBrushes ())
                 return;
 
-            Undo.RegisterCompleteObjectUndo (PrefabPainterSettings.current, "PP: Reset Brush(es)");
+            Undo.RegisterCompleteObjectUndo (PrefabPainterSettings.current, "PP: ResetBoard Brush(es)");
 
             brushes.ForEach ((brush) => { if(brush.selected) brush.settings.Reset(); } );
         }
