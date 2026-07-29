@@ -4,21 +4,7 @@ using UnityEngine;
 
 public class PhysicsAttacher : MonoBehaviour
 {
-    [Header("Default Bone Data")]
-    [SerializeField] private float gravity = 3;
-    [SerializeField] private float damping = 0.05f;
-    [SerializeField] private float distanceCompression = 0.5f;
-
-    [Header("Angle Restoration Constraint Data")]
-    [SerializeField] private float stiffnessValue = 0.15f;
-    [SerializeField] private bool useStiffnessCurve = true;
-    [SerializeField] private float stiffnessCurveStart = 1;
-    [SerializeField] private float stiffnessCurveEnd = 0.15f;
-    [SerializeField] private float velocityAttenuation = 0.6f;
-
-    [Header("Inertia Constraint Particle SpeedLimit")]
-    [SerializeField] private bool useLimit = true;
-    [SerializeField] private float speedLimit = 3;
+    public PhysicsBoneData physicsBoneData;
 
     /// <summary>
     /// Creates a BoneCloth at runtime from a list of root bone objects and sets default parameters.
@@ -59,40 +45,17 @@ public class PhysicsAttacher : MonoBehaviour
         }
 
         // Setup parameters
-        sdata.gravity = gravity;
-        sdata.damping.SetValue(damping);
-        sdata.angleRestorationConstraint.stiffness.SetValue(stiffnessValue, stiffnessCurveStart, stiffnessCurveEnd, useStiffnessCurve);
-        sdata.angleRestorationConstraint.velocityAttenuation = velocityAttenuation;
-        sdata.tetherConstraint.distanceCompression = distanceCompression;
-        sdata.inertiaConstraint.particleSpeedLimit.SetValue(useLimit, speedLimit);
+        sdata.gravity = physicsBoneData.Gravity;
+        sdata.damping.SetValue(physicsBoneData.Damping);
+        sdata.angleRestorationConstraint.stiffness.SetValue(physicsBoneData.StiffnessValue, physicsBoneData.StiffnessCurveStart, physicsBoneData.StiffnessCurveEnd, physicsBoneData.UseStiffnessCurve);
+        sdata.angleRestorationConstraint.velocityAttenuation = physicsBoneData.VelocityAttenuation;
+        sdata.tetherConstraint.distanceCompression = physicsBoneData.DistanceCompression;
+        sdata.inertiaConstraint.particleSpeedLimit.SetValue(physicsBoneData.UseLimit, physicsBoneData.SpeedLimit);
         sdata.colliderCollisionConstraint.mode = ColliderCollisionConstraint.Mode.None;
 
         cloth.name = clothName;
 
         // Build and start simulation
         cloth.BuildAndRun();
-    }
-
-    public void ChangeDefaultBoneData(float gravity = 3, 
-        float damping = 0.05f, 
-        float distanceCompression = 0.5f, 
-        float stiffnessValue = 0.15f, 
-        bool useStiffnessCurve = true, 
-        float stiffnessCurveStart = 1, 
-        float stiffnessCurveEnd = 0.15f, 
-        float velocityAttenuation = 0.6f, 
-        bool useLimit = true, 
-        float speedLimit = 3)
-    {
-        this.gravity = gravity;
-        this.damping = damping;
-        this.distanceCompression = distanceCompression;
-        this.stiffnessValue = stiffnessValue;
-        this.useStiffnessCurve = useStiffnessCurve;
-        this.stiffnessCurveStart = stiffnessCurveStart;
-        this.stiffnessCurveEnd = stiffnessCurveEnd;
-        this.velocityAttenuation = velocityAttenuation;
-        this.useLimit = useLimit;
-        this.speedLimit = speedLimit;
     }
 }

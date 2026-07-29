@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8922610627035144663}
   - component: {fileID: 1628474514004048686}
   - component: {fileID: 7673939924837776509}
+  - component: {fileID: 897538130277987214}
   m_Layer: 0
   m_Name: RagdollSpawner
   m_TagString: Untagged
@@ -51,6 +52,7 @@ MonoBehaviour:
   agentHeight: 1.4
   moveCoords: {x: 0, y: 0, z: -3}
   _physicsAttacher: {fileID: 0}
+  _characterReader: {fileID: 0}
 --- !u!114 &7673939924837776509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,3 +65,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf4e0663bd389644d88e661740c56da8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PhysicsAttacher
+  gravity: 3
+  damping: 0.05
+  distanceCompression: 0.5
+  stiffnessValue: 0.15
+  useStiffnessCurve: 1
+  stiffnessCurveStart: 1
+  stiffnessCurveEnd: 0.15
+  velocityAttenuation: 0.6
+  useLimit: 1
+  speedLimit: 3
+--- !u!114 &897538130277987214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165164437074693842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e256b4bc6ff4c9a49a1ddc7d8a66883d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterAssembler

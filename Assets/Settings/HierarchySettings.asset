@@ -14,14 +14,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalData:
     showActiveToggles: 1
+    activeToggleType: 0
     activeSwiping: 1
     swipeSameState: 1
     swipeSelectionOnly: 1
     depthMode: 0
     tagLayerLayout: 0
-    showTags: 0
-    showLayers: 0
-    applyChildLayers: 0
+    tagSettings:
+      show: 0
+      colorSettings:
+        useSolidColor: 0
+        useRandomColor: 0
+        solidColor: {r: 0.56078434, g: 0.9372549, b: 1, a: 1}
+        hue: 0
+        saturation: 0.5
+        brightness: 2
+      hideUntagged: 0
+    layerSettings:
+      show: 0
+      colorSettings:
+        useSolidColor: 0
+        useRandomColor: 0
+        solidColor: {r: 0.75686276, g: 1, b: 0.6745098, a: 1}
+        hue: 0
+        saturation: 0.5
+        brightness: 2
+      applyChildLayers: 1
     showAllComponents: 1
     showBreadcrumbs: 1
     instanceBreadcrumbs:
@@ -41,6 +59,7 @@ MonoBehaviour:
     styles:
     - prefix: =
       noSpaceAfterPrefix: 0
+      isRegex: 0
       name: Header (Centered)
       font: {fileID: 0}
       fontSize: 11
@@ -119,8 +138,10 @@ MonoBehaviour:
         m_FixedHeight: 0
         m_StretchWidth: 1
         m_StretchHeight: 0
+      capturedGroups: []
     - prefix: '-'
       noSpaceAfterPrefix: 0
+      isRegex: 0
       name: Subheader
       font: {fileID: 0}
       fontSize: 10
@@ -199,8 +220,10 @@ MonoBehaviour:
         m_FixedHeight: 0
         m_StretchWidth: 1
         m_StretchHeight: 0
+      capturedGroups: []
     - prefix: +
       noSpaceAfterPrefix: 0
+      isRegex: 0
       name: Mini Header (Centered)
       font: {fileID: 0}
       fontSize: 10
@@ -279,6 +302,7 @@ MonoBehaviour:
         m_FixedHeight: 0
         m_StretchWidth: 1
         m_StretchHeight: 0
+      capturedGroups: []
     twoToneBackground: 1
     lightMode:
       colorOne: {r: 0.8, g: 0.8, b: 0.8, a: 1}
@@ -286,6 +310,10 @@ MonoBehaviour:
     darkMode:
       colorOne: {r: 0.245, g: 0.245, b: 0.245, a: 1}
       colorTwo: {r: 0.225, g: 0.225, b: 0.225, a: 1}
+    showSceneItemHighlight: 1
+    sceneItemHighlight:
+      color: {r: 0.16078432, g: 0.16078432, b: 0.16078432, a: 0.19607843}
+      lineThickness: 16
   components:
     enableIcons: 1
     clickToToggleComponent: 1
@@ -342,19 +370,6 @@ MonoBehaviour:
           m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
           m_Tooltip: ActionBasedSnapTurnProvider
           m_TextWithWhitespace: "ActionBasedSnapTurnProvider\u200B"
-        shown: 0
-        excluded: 0
-        isBuiltIn: 1
-        script: {fileID: 0}
-        hasToggle: 1
-      - displayName: AdaptivePerformanceManager
-        name: UnityEngine.AdaptivePerformance.AdaptivePerformanceManager, Unity.AdaptivePerformance,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        content:
-          m_Text: AdaptivePerformanceManager
-          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
-          m_Tooltip: AdaptivePerformanceManager
-          m_TextWithWhitespace: "AdaptivePerformanceManager\u200B"
         shown: 0
         excluded: 0
         isBuiltIn: 1
@@ -1302,7 +1317,7 @@ MonoBehaviour:
         hasToggle: 1
       - displayName: FrameTimeMeasurement
         name: Unity.PerformanceTesting.Measurements.FrameTimeMeasurement, Unity.PerformanceTesting,
-          Version=3.1.0.0, Culture=neutral, PublicKeyToken=null
+          Version=3.2.0.0, Culture=neutral, PublicKeyToken=null
         content:
           m_Text: FrameTimeMeasurement
           m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
@@ -1321,19 +1336,6 @@ MonoBehaviour:
           m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
           m_Tooltip: FreeCamera
           m_TextWithWhitespace: "FreeCamera\u200B"
-        shown: 0
-        excluded: 0
-        isBuiltIn: 1
-        script: {fileID: 0}
-        hasToggle: 1
-      - displayName: GameObjectLocalizer
-        name: UnityEngine.Localization.PropertyVariants.GameObjectLocalizer, Unity.Localization,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        content:
-          m_Text: GameObjectLocalizer
-          m_Image: {fileID: 2800000, guid: f7d64662387363144abf7a7c729fb5dc, type: 3}
-          m_Tooltip: GameObjectLocalizer
-          m_TextWithWhitespace: "GameObjectLocalizer\u200B"
         shown: 0
         excluded: 0
         isBuiltIn: 1
@@ -1915,97 +1917,6 @@ MonoBehaviour:
         isBuiltIn: 1
         script: {fileID: 0}
         hasToggle: 1
-      - displayName: LocalizationBehaviour
-        name: UnityEngine.Localization.LocalizationBehaviour, Unity.Localization,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        content:
-          m_Text: LocalizationBehaviour
-          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
-          m_Tooltip: LocalizationBehaviour
-          m_TextWithWhitespace: "LocalizationBehaviour\u200B"
-        shown: 0
-        excluded: 0
-        isBuiltIn: 1
-        script: {fileID: 0}
-        hasToggle: 1
-      - displayName: LocalizedAssetEvent`3
-        name: UnityEngine.Localization.Components.LocalizedAssetEvent`3, Unity.Localization,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        content:
-          m_Text: LocalizedAssetEvent`3
-          m_Image: {fileID: 8779834242249542326, guid: 0000000000000000d000000000000000, type: 0}
-          m_Tooltip: LocalizedAssetEvent`3
-          m_TextWithWhitespace: "LocalizedAssetEvent`3\u200B"
-        shown: 0
-        excluded: 0
-        isBuiltIn: 1
-        script: {fileID: 0}
-        hasToggle: 1
-      - displayName: LocalizedGameObjectEvent
-        name: UnityEngine.Localization.Components.LocalizedGameObjectEvent, Unity.Localization,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        content:
-          m_Text: LocalizedGameObjectEvent
-          m_Image: {fileID: 2800000, guid: f1463cc71e1383946b2e99b7fec4a01b, type: 3}
-          m_Tooltip: LocalizedGameObjectEvent
-          m_TextWithWhitespace: "LocalizedGameObjectEvent\u200B"
-        shown: 0
-        excluded: 0
-        isBuiltIn: 1
-        script: {fileID: 0}
-        hasToggle: 1
-      - displayName: LocalizedMonoBehaviour
-        name: UnityEngine.Localization.Components.LocalizedMonoBehaviour, Unity.Localization,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        content:
-          m_Text: LocalizedMonoBehaviour
-          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
-          m_Tooltip: LocalizedMonoBehaviour
-          m_TextWithWhitespace: "LocalizedMonoBehaviour\u200B"
-        shown: 0
-        excluded: 0
-        isBuiltIn: 1
-        script: {fileID: 0}
-        hasToggle: 1
-      - displayName: LocalizeSpriteEvent
-        name: UnityEngine.Localization.Components.LocalizeSpriteEvent, Unity.Localization,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        content:
-          m_Text: LocalizeSpriteEvent
-          m_Image: {fileID: 2800000, guid: f1463cc71e1383946b2e99b7fec4a01b, type: 3}
-          m_Tooltip: LocalizeSpriteEvent
-          m_TextWithWhitespace: "LocalizeSpriteEvent\u200B"
-        shown: 0
-        excluded: 0
-        isBuiltIn: 1
-        script: {fileID: 0}
-        hasToggle: 1
-      - displayName: LocalizeStringEvent
-        name: UnityEngine.Localization.Components.LocalizeStringEvent, Unity.Localization,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        content:
-          m_Text: LocalizeStringEvent
-          m_Image: {fileID: 2800000, guid: f905fbed7b9cc4540ad8cda4844e10fc, type: 3}
-          m_Tooltip: LocalizeStringEvent
-          m_TextWithWhitespace: "LocalizeStringEvent\u200B"
-        shown: 0
-        excluded: 0
-        isBuiltIn: 1
-        script: {fileID: 0}
-        hasToggle: 1
-      - displayName: LocalizeTextureEvent
-        name: UnityEngine.Localization.Components.LocalizeTextureEvent, Unity.Localization,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        content:
-          m_Text: LocalizeTextureEvent
-          m_Image: {fileID: 2800000, guid: f1463cc71e1383946b2e99b7fec4a01b, type: 3}
-          m_Tooltip: LocalizeTextureEvent
-          m_TextWithWhitespace: "LocalizeTextureEvent\u200B"
-        shown: 0
-        excluded: 0
-        isBuiltIn: 1
-        script: {fileID: 0}
-        hasToggle: 1
       - displayName: LocalPositionOffsetAffordanceReceiver
         name: UnityEngine.XR.Interaction.Toolkit.Samples.Hands.LocalPositionOffsetAffordanceReceiver,
           Unity.XR.Interaction.Toolkit.Samples.Hands, Version=0.0.0.0, Culture=neutral,
@@ -2234,7 +2145,7 @@ MonoBehaviour:
         hasToggle: 1
       - displayName: OnScreenButton
         name: UnityEngine.InputSystem.OnScreen.OnScreenButton, Unity.InputSystem,
-          Version=1.14.2.0, Culture=neutral, PublicKeyToken=null
+          Version=1.18.0.0, Culture=neutral, PublicKeyToken=null
         content:
           m_Text: OnScreenButton
           m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
@@ -2247,7 +2158,7 @@ MonoBehaviour:
         hasToggle: 1
       - displayName: OnScreenStick
         name: UnityEngine.InputSystem.OnScreen.OnScreenStick, Unity.InputSystem,
-          Version=1.14.2.0, Culture=neutral, PublicKeyToken=null
+          Version=1.18.0.0, Culture=neutral, PublicKeyToken=null
         content:
           m_Text: OnScreenStick
           m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
@@ -2299,7 +2210,7 @@ MonoBehaviour:
         hasToggle: 1
       - displayName: PerformanceTestHelper
         name: Unity.PerformanceTesting.PerformanceTestHelper, Unity.PerformanceTesting,
-          Version=3.1.0.0, Culture=neutral, PublicKeyToken=null
+          Version=3.2.0.0, Culture=neutral, PublicKeyToken=null
         content:
           m_Text: PerformanceTestHelper
           m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
@@ -2351,7 +2262,7 @@ MonoBehaviour:
         script: {fileID: 0}
         hasToggle: 1
       - displayName: PlayerInput
-        name: UnityEngine.InputSystem.PlayerInput, Unity.InputSystem, Version=1.14.2.0,
+        name: UnityEngine.InputSystem.PlayerInput, Unity.InputSystem, Version=1.18.0.0,
           Culture=neutral, PublicKeyToken=null
         content:
           m_Text: PlayerInput
@@ -2364,7 +2275,7 @@ MonoBehaviour:
         script: {fileID: 0}
         hasToggle: 1
       - displayName: PlayerInputManager
-        name: UnityEngine.InputSystem.PlayerInputManager, Unity.InputSystem, Version=1.14.2.0,
+        name: UnityEngine.InputSystem.PlayerInputManager, Unity.InputSystem, Version=1.18.0.0,
           Culture=neutral, PublicKeyToken=null
         content:
           m_Text: PlayerInputManager
@@ -2522,7 +2433,7 @@ MonoBehaviour:
         hasToggle: 1
       - displayName: ProfilerMarkerMeasurement
         name: Unity.PerformanceTesting.Measurements.ProfilerMarkerMeasurement, Unity.PerformanceTesting,
-          Version=3.1.0.0, Culture=neutral, PublicKeyToken=null
+          Version=3.2.0.0, Culture=neutral, PublicKeyToken=null
         content:
           m_Text: ProfilerMarkerMeasurement
           m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
@@ -3034,7 +2945,7 @@ MonoBehaviour:
         hasToggle: 1
       - displayName: TouchSimulation
         name: UnityEngine.InputSystem.EnhancedTouch.TouchSimulation, Unity.InputSystem,
-          Version=1.14.2.0, Culture=neutral, PublicKeyToken=null
+          Version=1.18.0.0, Culture=neutral, PublicKeyToken=null
         content:
           m_Text: TouchSimulation
           m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
@@ -3059,7 +2970,7 @@ MonoBehaviour:
         script: {fileID: 0}
         hasToggle: 1
       - displayName: TrackedPoseDriver
-        name: UnityEngine.InputSystem.XR.TrackedPoseDriver, Unity.InputSystem, Version=1.14.2.0,
+        name: UnityEngine.InputSystem.XR.TrackedPoseDriver, Unity.InputSystem, Version=1.18.0.0,
           Culture=neutral, PublicKeyToken=null
         content:
           m_Text: TrackedPoseDriver
@@ -3080,7 +2991,7 @@ MonoBehaviour:
           m_Tooltip: Transform
           m_TextWithWhitespace: "Transform\u200B"
         shown: 0
-        excluded: 0
+        excluded: 1
         isBuiltIn: 1
         script: {fileID: 0}
         hasToggle: 0
@@ -3659,7 +3570,7 @@ MonoBehaviour:
         script: {fileID: 0}
         hasToggle: 1
       - displayName: VirtualMouseInput
-        name: UnityEngine.InputSystem.UI.VirtualMouseInput, Unity.InputSystem, Version=1.14.2.0,
+        name: UnityEngine.InputSystem.UI.VirtualMouseInput, Unity.InputSystem, Version=1.18.0.0,
           Culture=neutral, PublicKeyToken=null
         content:
           m_Text: VirtualMouseInput
@@ -3689,7 +3600,7 @@ MonoBehaviour:
           Culture=neutral, PublicKeyToken=null
         content:
           m_Text: Volume
-          m_Image: {fileID: 2800000, guid: 32b23d5d74f3aee4f9364e34e2f59379, type: 3}
+          m_Image: {fileID: 2800000, guid: 177b2538515c71b4a86aa1cad939807a, type: 2}
           m_Tooltip: Volume
           m_TextWithWhitespace: "Volume\u200B"
         shown: 0
@@ -4059,34 +3970,6 @@ MonoBehaviour:
           m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
           m_Tooltip: XRInteractionSimulator
           m_TextWithWhitespace: "XRInteractionSimulator\u200B"
-        shown: 0
-        excluded: 0
-        isBuiltIn: 1
-        script: {fileID: 0}
-        hasToggle: 1
-      - displayName: XRInteractionSimulatorInputFeedbackUI
-        name: UnityEngine.XR.Interaction.Toolkit.Samples.DeviceSimulator.XRInteractionSimulatorInputFeedbackUI,
-          Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-        content:
-          m_Text: XRInteractionSimulatorInputFeedbackUI
-          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
-          m_Tooltip: XRInteractionSimulatorInputFeedbackUI
-          m_TextWithWhitespace: "XRInteractionSimulatorInputFeedbackUI\u200B"
-        shown: 0
-        excluded: 0
-        isBuiltIn: 1
-        script: {fileID: 0}
-        hasToggle: 1
-      - displayName: XRInteractionSimulatorPlayModeMenu
-        name: UnityEngine.XR.Interaction.Toolkit.Samples.DeviceSimulator.XRInteractionSimulatorPlayModeMenu,
-          Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-        content:
-          m_Text: XRInteractionSimulatorPlayModeMenu
-          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
-          m_Tooltip: XRInteractionSimulatorPlayModeMenu
-          m_TextWithWhitespace: "XRInteractionSimulatorPlayModeMenu\u200B"
         shown: 0
         excluded: 0
         isBuiltIn: 1
@@ -4947,7 +4830,7 @@ MonoBehaviour:
         script: {fileID: 0}
         hasToggle: 1
       - displayName: BaseInputOverride
-        name: UnityEngine.InputSystem.UI.BaseInputOverride, Unity.InputSystem, Version=1.14.2.0,
+        name: UnityEngine.InputSystem.UI.BaseInputOverride, Unity.InputSystem, Version=1.18.0.0,
           Culture=neutral, PublicKeyToken=null
         content:
           m_Text: BaseInputOverride
@@ -5182,7 +5065,7 @@ MonoBehaviour:
         hasToggle: 1
       - displayName: InputSystemUIInputModule
         name: UnityEngine.InputSystem.UI.InputSystemUIInputModule, Unity.InputSystem,
-          Version=1.14.2.0, Culture=neutral, PublicKeyToken=null
+          Version=1.18.0.0, Culture=neutral, PublicKeyToken=null
         content:
           m_Text: InputSystemUIInputModule
           m_Image: {fileID: 2800000, guid: 3028dc075ba8c584d9bc7d1e0255e038, type: 3}
@@ -5234,7 +5117,7 @@ MonoBehaviour:
         hasToggle: 1
       - displayName: MultiplayerEventSystem
         name: UnityEngine.InputSystem.UI.MultiplayerEventSystem, Unity.InputSystem,
-          Version=1.14.2.0, Culture=neutral, PublicKeyToken=null
+          Version=1.18.0.0, Culture=neutral, PublicKeyToken=null
         content:
           m_Text: MultiplayerEventSystem
           m_Image: {fileID: 2800000, guid: 6a237171e2346e3458db37eb0f90d42b, type: 3}
@@ -5533,7 +5416,7 @@ MonoBehaviour:
         hasToggle: 1
       - displayName: TrackedDeviceRaycaster
         name: UnityEngine.InputSystem.UI.TrackedDeviceRaycaster, Unity.InputSystem,
-          Version=1.14.2.0, Culture=neutral, PublicKeyToken=null
+          Version=1.18.0.0, Culture=neutral, PublicKeyToken=null
         content:
           m_Text: TrackedDeviceRaycaster
           m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
@@ -5723,19 +5606,6 @@ MonoBehaviour:
           m_Image: {fileID: 5988843443690612340, guid: 0000000000000000d000000000000000, type: 0}
           m_Tooltip: AudioSource
           m_TextWithWhitespace: "AudioSource\u200B"
-        shown: 0
-        excluded: 0
-        isBuiltIn: 1
-        script: {fileID: 0}
-        hasToggle: 1
-      - displayName: LocalizeAudioClipEvent
-        name: UnityEngine.Localization.Components.LocalizeAudioClipEvent, Unity.Localization,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        content:
-          m_Text: LocalizeAudioClipEvent
-          m_Image: {fileID: 2800000, guid: f1463cc71e1383946b2e99b7fec4a01b, type: 3}
-          m_Tooltip: LocalizeAudioClipEvent
-          m_TextWithWhitespace: "LocalizeAudioClipEvent\u200B"
         shown: 0
         excluded: 0
         isBuiltIn: 1
@@ -6086,7 +5956,7 @@ MonoBehaviour:
           Culture=neutral, PublicKeyToken=null
         content:
           m_Text: VFXRenderer
-          m_Image: {fileID: 8779834242249542326, guid: 0000000000000000d000000000000000, type: 0}
+          m_Image: {fileID: 7304178788510838001, guid: 0000000000000000d000000000000000, type: 0}
           m_Tooltip: VFXRenderer
           m_TextWithWhitespace: "VFXRenderer\u200B"
         shown: 0
@@ -6307,18 +6177,209 @@ MonoBehaviour:
         isBuiltIn: 0
         script: {fileID: 11500000, guid: 002468b4704502f48b44973cbe4db51b, type: 3}
         hasToggle: 1
-      - displayName: Player_Manager
-        name: Player_Manager, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
+      - displayName: PlayerManager
+        name: PlayerManager, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         content:
-          m_Text: Player_Manager
+          m_Text: PlayerManager
           m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
-          m_Tooltip: Player_Manager
-          m_TextWithWhitespace: "Player_Manager\u200B"
+          m_Tooltip: PlayerManager
+          m_TextWithWhitespace: "PlayerManager\u200B"
         shown: 0
         excluded: 0
         isBuiltIn: 0
         script: {fileID: 11500000, guid: 7ebcda83390f1854381e4be79953c7ee, type: 3}
         hasToggle: 1
-    unityVersion: 6000.0.58f2
-    unityCount: 458
+      - displayName: RagdollSpawner
+        name: RagdollSpawner, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        content:
+          m_Text: RagdollSpawner
+          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
+          m_Tooltip: RagdollSpawner
+          m_TextWithWhitespace: "RagdollSpawner\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: 9f432fedd8062dd43b4acb3309b50f12, type: 3}
+        hasToggle: 1
+      - displayName: PhysicsAttacher
+        name: PhysicsAttacher, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        content:
+          m_Text: PhysicsAttacher
+          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
+          m_Tooltip: PhysicsAttacher
+          m_TextWithWhitespace: "PhysicsAttacher\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: cf4e0663bd389644d88e661740c56da8, type: 3}
+        hasToggle: 1
+      - displayName: CharacterAssembler
+        name: CharacterAssembler, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        content:
+          m_Text: CharacterAssembler
+          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
+          m_Tooltip: CharacterAssembler
+          m_TextWithWhitespace: "CharacterAssembler\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: e256b4bc6ff4c9a49a1ddc7d8a66883d, type: 3}
+        hasToggle: 1
+      - displayName: NavMeshSurface
+        name: Unity.AI.Navigation.NavMeshSurface, Unity.AI.Navigation, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        content:
+          m_Text: NavMeshSurface
+          m_Image: {fileID: 2800000, guid: e4f97225bcfb64760a1c81f460837f01, type: 3}
+          m_Tooltip: NavMeshSurface
+          m_TextWithWhitespace: "NavMeshSurface\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+        hasToggle: 1
+      - displayName: RootBonesHolder
+        name: RootBonesHolder, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        content:
+          m_Text: RootBonesHolder
+          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
+          m_Tooltip: RootBonesHolder
+          m_TextWithWhitespace: "RootBonesHolder\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: fb49e48ff9507134983fdf38a9c5f032, type: 3}
+        hasToggle: 1
+      - displayName: RagdollAnimator2
+        name: FIMSpace.FProceduralAnimation.RagdollAnimator2, Assembly-CSharp-firstpass,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        content:
+          m_Text: RagdollAnimator2
+          m_Image: {fileID: 2800000, guid: 0b270edf7535b144fb4fbee0470edab5, type: 3}
+          m_Tooltip: RagdollAnimator2
+          m_TextWithWhitespace: "RagdollAnimator2\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: 104179351ca7dd24a8f5bd7beecf8d06, type: 3}
+        hasToggle: 1
+      - displayName: RagdollController
+        name: RagdollController, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        content:
+          m_Text: RagdollController
+          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
+          m_Tooltip: RagdollController
+          m_TextWithWhitespace: "RagdollController\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: a43ba587ef54e24498a829a43a6f5275, type: 3}
+        hasToggle: 1
+      - displayName: NavAgentController
+        name: NavAgentController, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        content:
+          m_Text: NavAgentController
+          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
+          m_Tooltip: NavAgentController
+          m_TextWithWhitespace: "NavAgentController\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: 269a80b356323294b95ec6b92cf4c9a8, type: 3}
+        hasToggle: 1
+      - displayName: RagdollAnimatorDummyReference
+        name: FIMSpace.FProceduralAnimation.RagdollAnimatorDummyReference, Assembly-CSharp-firstpass,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        content:
+          m_Text: RagdollAnimatorDummyReference
+          m_Image: {fileID: 2800000, guid: 0b270edf7535b144fb4fbee0470edab5, type: 3}
+          m_Tooltip: RagdollAnimatorDummyReference
+          m_TextWithWhitespace: "RagdollAnimatorDummyReference\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: 648272d4f50784445a999f9f2d96f57b, type: 3}
+        hasToggle: 1
+      - displayName: DebugLogManager
+        name: IngameDebugConsole.DebugLogManager, IngameDebugConsole.Runtime, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        content:
+          m_Text: DebugLogManager
+          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
+          m_Tooltip: DebugLogManager
+          m_TextWithWhitespace: "DebugLogManager\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: 6a4f16ed905adcd4ab0d7c8c11f0d72c, type: 3}
+        hasToggle: 1
+      - displayName: EventSystemHandler
+        name: IngameDebugConsole.EventSystemHandler, IngameDebugConsole.Runtime,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        content:
+          m_Text: EventSystemHandler
+          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
+          m_Tooltip: EventSystemHandler
+          m_TextWithWhitespace: "EventSystemHandler\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: c3cc1b407f337e641ad32a2e91d5b478, type: 3}
+        hasToggle: 1
+      - displayName: ObjectPool
+        name: ObjectPool, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        content:
+          m_Text: ObjectPool
+          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
+          m_Tooltip: ObjectPool
+          m_TextWithWhitespace: "ObjectPool\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: b6b11b0f2ba541b4398f4cf674bd264b, type: 3}
+        hasToggle: 1
+      - displayName: PlayerKB_HUD
+        name: PlayerKB_HUD, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        content:
+          m_Text: PlayerKB_HUD
+          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
+          m_Tooltip: PlayerKB_HUD
+          m_TextWithWhitespace: "PlayerKB_HUD\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: 4ce2d05e9a5c313479c8eb92b4c4c113, type: 3}
+        hasToggle: 1
+      - displayName: HintManager
+        name: HintManager, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        content:
+          m_Text: HintManager
+          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
+          m_Tooltip: HintManager
+          m_TextWithWhitespace: "HintManager\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: 54034e1ab62a052469d97fd2fb540bba, type: 3}
+        hasToggle: 1
+      - displayName: FloatingCanvas
+        name: FloatingCanvas, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        content:
+          m_Text: FloatingCanvas
+          m_Image: {fileID: -8204150473280056172, guid: 0000000000000000d000000000000000, type: 0}
+          m_Tooltip: FloatingCanvas
+          m_TextWithWhitespace: "FloatingCanvas\u200B"
+        shown: 0
+        excluded: 0
+        isBuiltIn: 0
+        script: {fileID: 11500000, guid: 0362184741d8bc04198314b4c2bd5fd3, type: 3}
+        hasToggle: 1
+    unityVersion: 6000.3.6f1
+    unityCount: 466
