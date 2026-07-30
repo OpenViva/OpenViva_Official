@@ -5,6 +5,8 @@ public class MortarSpill : PlayerKB_GrabObject
     [SerializeField] private ParticleSystem _flourParticle;
     private MortarLogic _logic;
 
+    [SerializeField] private GameObject _mortarUI;
+
     protected override void Start()
     {
         base.Start();
@@ -29,12 +31,16 @@ public class MortarSpill : PlayerKB_GrabObject
     {
         if (show) { _hud.CreateHint(HintConstants.LeftMortarSpillHint); }
         else { _hud.ClearHint(HintConstants.LeftMortarSpillHint); }
+
+        _mortarUI.SetActive(show);
     }
 
     private void ShowLeftHint(bool show)
     {
         if (show) { _hud.CreateHint(HintConstants.RightMortarSpillHint); }
         else { _hud.ClearHint(HintConstants.RightMortarSpillHint); }
+
+        _mortarUI.SetActive(show);
     }
             
 

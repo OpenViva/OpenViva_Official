@@ -5,8 +5,11 @@ public class MortarLogic : MonoBehaviour
     [SerializeField] private SkinnedMeshRenderer _wheatCrushedMeshRenderer;
     public float WheatQuantity { private set; get; } = 0;
     public float FlourQuantity { private set; get; } = 0;
-
     private int _toSpill = 0;
+
+    [SerializeField] private RectTransform _displayBackground;
+    [SerializeField] private RectTransform _displayForeground;
+
     public int GetToSpill()
     {
         int temp = _toSpill;
@@ -34,11 +37,24 @@ public class MortarLogic : MonoBehaviour
         // Debug.Log($"Wheat Quantity: {WheatQuantity}, Flour Quantity: {FlourQuantity}");
     }
 
+    private void UpdateDisplay()
+    {
+        float width = (WheatQuantity + FlourQuantity) * 2f;
+        _displayBackground.sizeDelta = new Vector2(width, _displayBackground.sizeDelta.y);
+        float posX = -0.188f + (0.188f * (width / 600));
+        _displayBackground.anchoredPosition = new Vector2(posX, _displayBackground.anchoredPosition.y);
+
+        _displayForeground.sizeDelta = new Vector2(FlourQuantity * 2f, _displayForeground.sizeDelta.y);
+        posX = -0.188f + (0.188f * (FlourQuantity / 300));
+        _displayForeground.anchoredPosition = new Vector2(posX, _displayForeground.anchoredPosition.y);
+    }
+
     public void AddWheat()
     {
         WheatQuantity += 100;
         WheatQuantity = Mathf.Clamp(WheatQuantity, 0, 300);
         UpdateBlendShapes();
+        UpdateDisplay();
     }
 
     public void GrindWheat()
@@ -47,6 +63,7 @@ public class MortarLogic : MonoBehaviour
         WheatQuantity -= 0.25f;
         FlourQuantity += 0.25f;
         UpdateBlendShapes();
+        UpdateDisplay();
     }
 
     public void SpillWheat()
@@ -54,5 +71,6 @@ public class MortarLogic : MonoBehaviour
         _toSpill = (int)FlourQuantity / 100;
         FlourQuantity = 0;
         UpdateBlendShapes();
+        UpdateDisplay();
     }
 }
