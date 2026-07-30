@@ -315,14 +315,14 @@ public class FruitCutMinigame : MonoBehaviour
         CuttingMinigame.Instance.SetControlHints(true);
     }
 
-    private void MovePiecesToBowl(InputAction.CallbackContext context)
-    {
-        if (!_isPlaying || _cutsMadeThisAttempt < _totalCutsNeeded) { return; };
+    //private void MovePiecesToBowl(InputAction.CallbackContext context)
+    //{
+    //    if (!_isPlaying || _cutsMadeThisAttempt < _totalCutsNeeded) { return; };
 
-        CuttingBoard.Instance.LastTouchedBowl.CollectFruitPieces(_selectedFruit);
-        CuttingBoard.Instance.ResetBoard();
-        ResetMinigame(context);
-    }
+    //    CuttingBoard.Instance.LastTouchedBowl.CollectFruitPieces(_selectedFruit);
+    //    CuttingBoard.Instance.ResetBoard();
+    //    ResetMinigame(context);
+    //}
 
     private void MovePiecesToPot(InputAction.CallbackContext context)
     {

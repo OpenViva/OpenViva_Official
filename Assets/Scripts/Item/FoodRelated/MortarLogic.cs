@@ -5,14 +5,14 @@ public class MortarLogic : MonoBehaviour
     [SerializeField] private SkinnedMeshRenderer _wheatCrushedMeshRenderer;
     public float WheatQuantity { private set; get; } = 0;
     public float FlourQuantity { private set; get; } = 0;
-    private int _toSpill = 0;
+    private float _toSpill = 0;
 
     [SerializeField] private RectTransform _displayBackground;
     [SerializeField] private RectTransform _displayForeground;
 
-    public int GetToSpill()
+    public float GetToSpill()
     {
-        int temp = _toSpill;
+        float temp = _toSpill;
         _toSpill = 0;
         return temp;
     }
@@ -68,7 +68,7 @@ public class MortarLogic : MonoBehaviour
 
     public void SpillWheat()
     {
-        _toSpill = (int)FlourQuantity / 100;
+        _toSpill = FlourQuantity;
         FlourQuantity = 0;
         UpdateBlendShapes();
         UpdateDisplay();
