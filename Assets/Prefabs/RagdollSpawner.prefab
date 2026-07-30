@@ -47,12 +47,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RagdollSpawner
   characterPrefab: {fileID: 3605110169217932567, guid: 868adafc5137cbc4082485d64c6244d0, type: 3}
+  animationControllerName: KoyukiLocomotionLayer
   agentSpeed: 1.5
   agentRadius: 0.3
   agentHeight: 1.4
   moveCoords: {x: 0, y: 0, z: -3}
   _physicsAttacher: {fileID: 0}
   _characterReader: {fileID: 0}
+  loadedCharacters: []
 --- !u!114 &7673939924837776509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,16 +67,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf4e0663bd389644d88e661740c56da8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PhysicsAttacher
-  gravity: 3
-  damping: 0.05
-  distanceCompression: 0.5
-  stiffnessValue: 0.15
-  useStiffnessCurve: 1
-  stiffnessCurveStart: 1
-  stiffnessCurveEnd: 0.15
-  velocityAttenuation: 0.6
-  useLimit: 1
-  speedLimit: 3
+  physicsBoneData:
+    GameObjectPath: 
+    BonePath: 
+    BoneName: 
+    Gravity: 2
+    Damping: 0.05
+    DistanceCompression: 0.5
+    StiffnessValue: 0.15
+    UseStiffnessCurve: 1
+    StiffnessCurveStart: 1
+    StiffnessCurveEnd: 0.15
+    VelocityAttenuation: 0.6
+    UseLimit: 1
+    SpeedLimit: 3
 --- !u!114 &897538130277987214
 MonoBehaviour:
   m_ObjectHideFlags: 0
