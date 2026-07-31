@@ -21,7 +21,7 @@ public class CuttingBoard : MonoBehaviour
     private GameObject _currentlyShowing;
 
     public BowlLogic LastTouchedBowl;
-    public PotCollect LastTouchedPot;
+    public PotLogic LastTouchedPot;
 
     private void Awake()
     {

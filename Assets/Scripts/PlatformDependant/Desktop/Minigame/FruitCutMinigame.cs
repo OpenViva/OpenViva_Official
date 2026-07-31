@@ -328,9 +328,15 @@ public class FruitCutMinigame : MonoBehaviour
     {
         if (!_isPlaying || _cutsMadeThisAttempt < _totalCutsNeeded) { return; }
 
-        CuttingBoard.Instance.LastTouchedPot.CollectFruitPieces(_selectedFruit);
-        CuttingBoard.Instance.ResetBoard();
-        ResetMinigame(context);
+        if (CuttingBoard.Instance.LastTouchedPot.CollectFruitPieces(_selectedFruit))
+        {
+            CuttingBoard.Instance.ResetBoard();
+            ResetMinigame(context);
+        }
+        else
+        {
+            StartCoroutine(CuttingMinigame.Instance.ShowContainerFullText());
+        }
     }
 
     private void ResetMinigame(InputAction.CallbackContext context)
