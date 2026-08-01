@@ -37,9 +37,9 @@ public class FruitCutMinigame : MonoBehaviour
     private float _accuracy;
 
     // Cancelling
-    [SerializeField] private Prefab _strawberryCrop;
-    [SerializeField] private Prefab _peachCrop;
-    [SerializeField] private Prefab _cantaloupeCrop;
+    [SerializeField] private GameObject _strawberryCrop;
+    [SerializeField] private GameObject _peachCrop;
+    [SerializeField] private GameObject _cantaloupeCrop;
 
     public enum Fruit
     {

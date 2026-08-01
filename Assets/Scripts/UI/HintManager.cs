@@ -46,12 +46,12 @@ public class HintManager : MonoBehaviour
             if (element.text == hintType)
             {
                 element.text = "";
-                // Debug.Log($"Removed hint text '{hintType}' from UI element.");
-                //return;  // Exit after clearing the first match (assuming unique texts)
+                 // Debug.Log($"Removed hint text '{hintType}' from UI element.");
+                return;  // Exit after clearing the first match (assuming unique texts)
             }
         }
 
         // If no match found, do nothing
-        //Debug.Log($"No matching UI element found for HintType: {hintType}. No changes made.");
+        // Debug.Log($"No matching UI element found for HintType: {hintType}. No changes made.");
     }
 }
