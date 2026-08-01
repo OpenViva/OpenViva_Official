@@ -39,13 +39,14 @@ public class MortarLogic : MonoBehaviour
 
     private void UpdateDisplay()
     {
+        // These numbers might seem random...it's not.
         float width = (WheatQuantity + FlourQuantity) * 2f;
         _displayBackground.sizeDelta = new Vector2(width, _displayBackground.sizeDelta.y);
-        float posX = -0.188f + (0.188f * (width / 600));
+        float posX = -0.114f + (0.1896f * (width / 600));
         _displayBackground.anchoredPosition = new Vector2(posX, _displayBackground.anchoredPosition.y);
 
         _displayForeground.sizeDelta = new Vector2(FlourQuantity * 2f, _displayForeground.sizeDelta.y);
-        posX = -0.188f + (0.188f * (FlourQuantity / 300));
+        posX = -0.114f + (0.188f * (FlourQuantity / 300));
         _displayForeground.anchoredPosition = new Vector2(posX, _displayForeground.anchoredPosition.y);
     }
 

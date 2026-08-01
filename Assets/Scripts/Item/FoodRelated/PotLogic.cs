@@ -135,7 +135,7 @@ public class PotLogic : MonoBehaviour
         width = GetSumOfJam() / JAM_CAPACITY * 900;
         RectTransform rectTransform = _jamBackground.GetComponent<RectTransform>();
         rectTransform.sizeDelta = new(width, rectTransform.sizeDelta.y);
-        posX = -232.7f + (164.2f * (GetSumOfJam() / JAM_CAPACITY));
+        posX = -233.7f + (165.2f * (GetSumOfJam() / JAM_CAPACITY));
         rectTransform.anchoredPosition = new(posX, rectTransform.anchoredPosition.y);
 
         _jamAmount.SetText(((int)GetSumOfJam()).ToString());
