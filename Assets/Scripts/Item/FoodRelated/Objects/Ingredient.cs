@@ -28,7 +28,7 @@ public class Ingredient : MonoBehaviour
             newItem.name = _conversionPrefab.name; // don't want it to be '{name}(clone)'
         }
         PlayerKB_GrabObject cropScript = gameObject.GetComponent<PlayerKB_GrabObject>();
-        cropScript.IsActive = false;
+        if (cropScript != null) { cropScript.IsActive = false; }
         Destroy(gameObject);
     }
 }

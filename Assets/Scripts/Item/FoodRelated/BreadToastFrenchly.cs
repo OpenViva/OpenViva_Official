@@ -49,10 +49,9 @@ public class BreadToastFrenchly : Ingredient
             _inOven = true;
         }
 
-        if (gameObject.TryGetComponent(out EggCook eggScript) && !Soaked)
+        if (gameObject.GetComponent<EggDisappear>() && !Soaked)
         {
             Soaked = true;
-            EggTimer = eggScript.GetCookTimer();
             Destroy(gameObject);
         }
     }

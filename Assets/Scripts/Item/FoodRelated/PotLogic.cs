@@ -115,7 +115,7 @@ public class PotLogic : MonoBehaviour
         if (held) { _HUD.CreateHint(HintConstants.LeftScoopJamHint); }
         else { _HUD.ClearHint(HintConstants.LeftScoopJamHint); }
 
-        _cookingPotUI.transform.SetParent(_worldUILeft);
+        _cookingPotUI.transform.SetParent(_worldUIRight);
         _cookingPotUI.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         _cookingPotUI.SetActive(held);
     }
