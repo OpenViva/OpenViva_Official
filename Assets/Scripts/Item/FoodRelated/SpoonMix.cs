@@ -5,7 +5,7 @@ public class SpoonMix : PlayerKB_GrabObject
 {
     private bool _isMixing = false;
     private BowlLogic _currentBowl;
-    private PotCollect _currentPot;
+    private PotLogic _currentPot;
 
     [SerializeField] private GameObject _filling;
     bool _fillingVisible = false;
@@ -59,7 +59,7 @@ public class SpoonMix : PlayerKB_GrabObject
             _currentBowl = bowl;
         }
 
-        if (objectInOther.name.Equals("pot") && objectInOther.TryGetComponent(out PotCollect pot))
+        if (objectInOther.name.Equals("pot") && objectInOther.TryGetComponent(out PotLogic pot))
         {
             _isMixing = true;
             _currentPot = pot;
