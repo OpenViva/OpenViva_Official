@@ -29,6 +29,9 @@ public class PotLogic : MonoBehaviour
     [SerializeField] private const float JAM_CAPACITY = 20;
 
     [SerializeField] private GameObject _cookingPotUI;
+    [SerializeField] private Transform _worldUILeft;
+    [SerializeField] private Transform _worldUIRight;
+
     [SerializeField] private TextMeshProUGUI _waterQuantity;
     [SerializeField] private TextMeshProUGUI _strawberryText;
     [SerializeField] private TextMeshProUGUI _peachText;
@@ -100,6 +103,8 @@ public class PotLogic : MonoBehaviour
         if (held) { _HUD.CreateHint(HintConstants.RightScoopJamHint); }
         else { _HUD.ClearHint(HintConstants.RightScoopJamHint); }
 
+        _cookingPotUI.transform.SetParent(_worldUILeft);
+        _cookingPotUI.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         _cookingPotUI.SetActive(held);
     }
 
@@ -110,6 +115,8 @@ public class PotLogic : MonoBehaviour
         if (held) { _HUD.CreateHint(HintConstants.LeftScoopJamHint); }
         else { _HUD.ClearHint(HintConstants.LeftScoopJamHint); }
 
+        _cookingPotUI.transform.SetParent(_worldUILeft);
+        _cookingPotUI.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         _cookingPotUI.SetActive(held);
     }
 

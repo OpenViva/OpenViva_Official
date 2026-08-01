@@ -27,6 +27,9 @@ public class BowlLogic : MonoBehaviour
     //private int _blueberryPieces;
 
     [SerializeField] private GameObject _mixingBowlUI;
+    [SerializeField] private Transform _worldUILeft;
+    [SerializeField] private Transform _worldUIRight;
+
     [SerializeField] private RectTransform _displayBackground;
     [SerializeField] private RectTransform _displayForeground;
     [SerializeField] private GameObject _waterIcon;
@@ -65,6 +68,8 @@ public class BowlLogic : MonoBehaviour
 
         CuttingBoard.Instance.LastTouchedBowl = this;
 
+        _mixingBowlUI.transform.SetParent(_worldUILeft);
+        _mixingBowlUI.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         _mixingBowlUI.SetActive(show);
     }
 
@@ -75,6 +80,8 @@ public class BowlLogic : MonoBehaviour
 
         CuttingBoard.Instance.LastTouchedBowl = this;
 
+        _mixingBowlUI.transform.SetParent(_worldUIRight);
+        _mixingBowlUI.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         _mixingBowlUI.SetActive(show);
     }
 
