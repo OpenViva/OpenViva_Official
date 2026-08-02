@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 2107143417796064683}
   - component: {fileID: -4829681543698749069}
   - component: {fileID: 3807091117015021643}
-  - component: {fileID: 3549601177392744244}
+  - component: {fileID: 7449116734532631878}
   m_Layer: 0
   m_Name: uncookedEgg
   m_TagString: Untagged
@@ -265,7 +265,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.1566396, y: 0.1621751, z: 4.3254004}
   m_Center: {x: -0.27063572, y: 0.076955706, z: -0.034796763}
---- !u!114 &3549601177392744244
+--- !u!114 &7449116734532631878
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -274,11 +274,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7245248420323151402}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b8ebcf9caefcc48bfc31e33fa069fa, type: 3}
+  m_Script: {fileID: 11500000, guid: ca9939f388d5de74ea35044650870b32, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EggCook
-  _conversionPrefab: {fileID: 6765230105853524618, guid: b748ae3df4378964b8c6cb25fb6eb7e8, type: 3}
-  _cookTimer: 30
+  m_EditorClassIdentifier: Assembly-CSharp::EggDisappear
+  _timer: 3
 --- !u!1 &7446015719883825229
 GameObject:
   m_ObjectHideFlags: 0

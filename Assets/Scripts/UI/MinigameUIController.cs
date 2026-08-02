@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,11 +19,24 @@ namespace MinigameUIController
         [SerializeField] private Scrollbar _progressBar;
         [SerializeField] private GameObject _controlsDuring;
         [SerializeField] private GameObject _controlsAfter;
+        [SerializeField] private TextMeshProUGUI _containerFull;
+
+        private float _transition = 1f;
+        private bool _fading = false;
 
         private void Awake()
         {
             if (Instance == null) { Instance = this; }
             else { Destroy(this); }
+        }
+
+        private void Update()
+        {
+            if (_fading && _transition > 0)
+            {
+                _transition -= Time.deltaTime * 0.5f;
+                _containerFull.alpha = _transition;
+            }
         }
 
         public void CuttingMinigameUIEnabled(bool enable) { _cuttingUIParent.SetActive(enable); }
@@ -106,6 +120,14 @@ namespace MinigameUIController
 
                 _doneText.enabled = true;
             }
+        }
+
+        public IEnumerator ShowContainerFullText()
+        {
+            _fading = true;
+            yield return new WaitForSeconds(2f);
+            _fading = false;
+            _transition = 1f;
         }
     }
 }

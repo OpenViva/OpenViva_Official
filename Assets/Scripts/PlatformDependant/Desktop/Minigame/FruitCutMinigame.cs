@@ -37,9 +37,9 @@ public class FruitCutMinigame : MonoBehaviour
     private float _accuracy;
 
     // Cancelling
-    [SerializeField] private Prefab _strawberryCrop;
-    [SerializeField] private Prefab _peachCrop;
-    [SerializeField] private Prefab _cantaloupeCrop;
+    [SerializeField] private GameObject _strawberryCrop;
+    [SerializeField] private GameObject _peachCrop;
+    [SerializeField] private GameObject _cantaloupeCrop;
 
     public enum Fruit
     {
@@ -315,22 +315,28 @@ public class FruitCutMinigame : MonoBehaviour
         CuttingMinigame.Instance.SetControlHints(true);
     }
 
-    private void MovePiecesToBowl(InputAction.CallbackContext context)
-    {
-        if (!_isPlaying || _cutsMadeThisAttempt < _totalCutsNeeded) { return; };
+    //private void MovePiecesToBowl(InputAction.CallbackContext context)
+    //{
+    //    if (!_isPlaying || _cutsMadeThisAttempt < _totalCutsNeeded) { return; };
 
-        CuttingBoard.Instance.LastTouchedBowl.CollectFruitPieces(_selectedFruit);
-        CuttingBoard.Instance.ResetBoard();
-        ResetMinigame(context);
-    }
+    //    CuttingBoard.Instance.LastTouchedBowl.CollectFruitPieces(_selectedFruit);
+    //    CuttingBoard.Instance.ResetBoard();
+    //    ResetMinigame(context);
+    //}
 
     private void MovePiecesToPot(InputAction.CallbackContext context)
     {
         if (!_isPlaying || _cutsMadeThisAttempt < _totalCutsNeeded) { return; }
 
-        CuttingBoard.Instance.LastTouchedPot.CollectFruitPieces(_selectedFruit);
-        CuttingBoard.Instance.ResetBoard();
-        ResetMinigame(context);
+        if (CuttingBoard.Instance.LastTouchedPot.CollectFruitPieces(_selectedFruit))
+        {
+            CuttingBoard.Instance.ResetBoard();
+            ResetMinigame(context);
+        }
+        else
+        {
+            StartCoroutine(CuttingMinigame.Instance.ShowContainerFullText());
+        }
     }
 
     private void ResetMinigame(InputAction.CallbackContext context)

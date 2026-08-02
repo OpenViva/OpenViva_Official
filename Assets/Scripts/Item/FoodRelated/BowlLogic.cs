@@ -1,14 +1,16 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BowlLogic : MonoBehaviour
 {
     [SerializeField] private SkinnedMeshRenderer _flourBlendShape;
     private float _flourVolume = 0;
-    private float _maxFlourVolume = 2100; // recipe needs 300
+    private float _maxFlourVolume = 2100; // recipe needs 210
 
     [SerializeField] private SkinnedMeshRenderer _waterBlendShape;
     private float _waterVolume = 0;
-    private float _maxWaterVolume = 1400; // recipe needs 200
+    private float _maxWaterVolume = 1400; // recipe needs 140
 
     [SerializeField] private SkinnedMeshRenderer _batterBlendShape;
     private float _batterVolume = 0;
@@ -19,17 +21,34 @@ public class BowlLogic : MonoBehaviour
     private PlayerKB_GrabObject _grabScript;
     [SerializeField] GameObject _doughPrefab;
 
-    private int _strawberryPieces;
-    private int _peachPieces;
-    private int _cantaloupePieces;
-    private int _blueberryPieces;
+    //private int _strawberryPieces;
+    //private int _peachPieces;
+    //private int _cantaloupePieces;
+    //private int _blueberryPieces;
 
-    private void Start()
+    [SerializeField] private GameObject _mixingBowlUI;
+    [SerializeField] private Transform _worldUILeft;
+    [SerializeField] private Transform _worldUIRight;
+
+    [SerializeField] private RectTransform _displayBackground;
+    [SerializeField] private RectTransform _displayForeground;
+    [SerializeField] private GameObject _waterIcon;
+    [SerializeField] private GameObject _flourIcon;
+    private List<RectTransform> _waterDots = new();
+    private List<RectTransform> _flourDots = new();
+
+    private void Awake()
     {
         _player = FindFirstObjectByType<Player>();
         _hud = GameObject.Find("HUD").GetComponent<HintManager>();
         _grabScript = GetComponent<PlayerKB_GrabObject>();
 
+        _waterDots = _waterIcon.GetComponentsInChildren<RectTransform>().ToList();
+        _flourDots = _flourIcon.GetComponentsInChildren<RectTransform>().ToList();
+    }
+
+    private void Start()
+    {
         AssignInputs();
     }
 
@@ -48,6 +67,10 @@ public class BowlLogic : MonoBehaviour
         else { _hud.ClearHint(HintConstants.LeftGrabDoughHint); }
 
         CuttingBoard.Instance.LastTouchedBowl = this;
+
+        _mixingBowlUI.transform.SetParent(_worldUILeft);
+        _mixingBowlUI.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        _mixingBowlUI.SetActive(show);
     }
 
     private void BowlGrabbedRight(bool show)
@@ -56,6 +79,10 @@ public class BowlLogic : MonoBehaviour
         else { _hud.ClearHint(HintConstants.RightGrabDoughHint); }
 
         CuttingBoard.Instance.LastTouchedBowl = this;
+
+        _mixingBowlUI.transform.SetParent(_worldUIRight);
+        _mixingBowlUI.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        _mixingBowlUI.SetActive(show);
     }
 
     private void OnParticleCollision(GameObject other)
@@ -63,14 +90,16 @@ public class BowlLogic : MonoBehaviour
         if (other.gameObject.name.Equals("FlourParticle"))
         {
             if (_flourVolume >= _maxFlourVolume) { return; }
-            _flourVolume += other.GetComponentInParent<MortarLogic>().GetToSpill() * 100;
+            _flourVolume += other.GetComponentInParent<MortarLogic>().GetToSpill() * 2.1f;
             SetFlourBlend();
+            UpdateDisplay();
         }
         else if (other.gameObject.name.Equals("TapFX"))
         {
             if (_waterVolume >= _maxWaterVolume) { return; }
-            _waterVolume += 50f;
+            _waterVolume += 14;
             SetWaterBlend();
+            UpdateDisplay();
         }
     }
 
@@ -132,6 +161,32 @@ public class BowlLogic : MonoBehaviour
         _batterBlendShape.SetBlendShapeWeight(0, percent * 100);
     }
 
+    private void UpdateDisplay()
+    {
+        int waterWhole = (int)(_waterVolume / 140);
+        int wheatWhole = (int)(_flourVolume / 210);
+        float waterRemainder = _waterVolume % 140 / 140;
+        float wheatRemainder = _flourVolume % 210 / 210;
+
+        for (int i = 1; i <= waterWhole; i++) { _waterDots[i].localScale = new(0.5f, 0.5f, 0.5f); }
+        for (int i = 1; i <= wheatWhole; i++) { _flourDots[i].localScale = new(0.5f, 0.5f, 0.5f); }
+
+        if (waterWhole >= 10) { return; }
+        _waterDots[waterWhole + 1].localScale = new(waterRemainder * 0.5f, waterRemainder * 0.5f, waterRemainder * 0.5f);
+        if (wheatWhole >= 10) { return; }
+        _flourDots[wheatWhole + 1].localScale = new(wheatRemainder * 0.5f, wheatRemainder * 0.5f, wheatRemainder * 0.5f);
+
+        float width = _batterVolume / _maxBatterVolume * 600;
+        _displayBackground.sizeDelta = new(width, _displayBackground.sizeDelta.y);
+        float posX = -111 + (111 * (_batterVolume / _maxBatterVolume));
+        _displayBackground.anchoredPosition = new(posX, _displayBackground.anchoredPosition.y);
+
+        int batterWhole = (int)(_batterVolume / 350);
+        _displayForeground.sizeDelta = new(batterWhole * 60, _displayForeground.sizeDelta.y);
+        posX = -111 + (111 * (batterWhole * 350 / _maxBatterVolume));
+        _displayForeground.anchoredPosition = new(posX, _displayForeground.anchoredPosition.y);
+    }
+
     private void SetAllBlends()
     {
         SetFlourBlend();
@@ -148,6 +203,7 @@ public class BowlLogic : MonoBehaviour
         _batterVolume += 0.5f;
 
         SetAllBlends();
+        UpdateDisplay();
     }
 
     private void CreateDough(bool useLeft)
@@ -172,7 +228,8 @@ public class BowlLogic : MonoBehaviour
         if (newDough.TryGetComponent(out PlayerKB_GrabObject grabScript))
         {
             grabScript.SetIsActive(true, handedness);
-            _batterVolume -= 250;
+            _batterVolume -= 350;
+            UpdateDisplay();
         }
         else
         {
@@ -180,15 +237,15 @@ public class BowlLogic : MonoBehaviour
         }
     }
 
-    public void CollectFruitPieces(FruitCutMinigame.Fruit fruit)
-    {
-        switch (fruit)
-        {
-            case FruitCutMinigame.Fruit.Strawberry: _strawberryPieces += 2; break;
-            case FruitCutMinigame.Fruit.Peach: _peachPieces += 8; break;
-            case FruitCutMinigame.Fruit.Cantaloupe: _cantaloupePieces += 20; break;
-        }
-    }
+    //public void CollectFruitPieces(FruitCutMinigame.Fruit fruit)
+    //{
+    //    switch (fruit)
+    //    {
+    //        case FruitCutMinigame.Fruit.Strawberry: _strawberryPieces += 2; break;
+    //        case FruitCutMinigame.Fruit.Peach: _peachPieces += 8; break;
+    //        case FruitCutMinigame.Fruit.Cantaloupe: _cantaloupePieces += 20; break;
+    //    }
+    //}
 
     private void OnDestroy()
     {
