@@ -3,7 +3,7 @@
 --- !u!159 &1
 EditorSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 14
+  serializedVersion: 15
   m_SerializationMode: 2
   m_LineEndingsForNewScripts: 0
   m_DefaultBehaviorMode: 0
@@ -35,7 +35,7 @@ EditorSettings:
   m_DisableCookiesInLightmapper: 1
   m_ShadowmaskStitching: 0
   m_AssetPipelineMode: 1
-  m_RefreshImportMode: 0
+  m_RefreshImportMode: 1
   m_CacheServerMode: 0
   m_CacheServerEndpoint: 
   m_CacheServerNamespacePrefix: default
@@ -47,3 +47,4 @@ EditorSettings:
   m_CacheServerDownloadBatchSize: 128
   m_EnableEnlightenBakedGI: 0
   m_ReferencedClipsExactNaming: 1
+  m_ForceAssetUnloadAndGCOnSceneLoad: 1
