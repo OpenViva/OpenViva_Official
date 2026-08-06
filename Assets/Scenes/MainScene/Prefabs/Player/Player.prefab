@@ -8401,8 +8401,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6021373277379701439}
   - component: {fileID: 273176718416991193}
-  - component: {fileID: 8961162176200296035}
   - component: {fileID: 625611095587831597}
+  - component: {fileID: 4548768785807470006}
+  - component: {fileID: 3264912294127184091}
   m_Layer: 0
   m_Name: Main Camera KB
   m_TagString: MainCamera
@@ -8478,14 +8479,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &8961162176200296035
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6080327504994115313}
-  m_Enabled: 1
 --- !u!114 &625611095587831597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8530,6 +8523,64 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!81 &4548768785807470006
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6080327504994115313}
+  m_Enabled: 1
+--- !u!114 &3264912294127184091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6080327504994115313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fd9ebf1401392e4bbd47fea32f47642, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioListener
+  currentBakedListener: {fileID: 0}
+  applyReverb: 1
+  reverbType: 0
+  useAllProbeBatches: 1
+  probeBatches: []
+  mTotalDataSize: 432942
+  mProbeDataSizes: 96250000cc1200009625000060380000cc120000cc120000cc120000be700000cc1200009625000096250000f45d0000e42002009625000096250000962500009625000036520100962500006038000060380000
+  mIdentifier:
+    type: 0
+    variation: 0
+    endpointInfluence:
+      center:
+        x: 0
+        y: 0
+        z: 0
+      radius: 0
+  mProbeBatchesUsed:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &6230147661258422568
 GameObject:
   m_ObjectHideFlags: 0
@@ -9277,6 +9328,7 @@ GameObject:
   - component: {fileID: 4652537519095794433}
   - component: {fileID: 4138311959748214675}
   - component: {fileID: 8305642740801463995}
+  - component: {fileID: 8013944945065336729}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -9503,6 +9555,56 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &8013944945065336729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6665571375804640709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fd9ebf1401392e4bbd47fea32f47642, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioListener
+  currentBakedListener: {fileID: 0}
+  applyReverb: 1
+  reverbType: 0
+  useAllProbeBatches: 1
+  probeBatches: []
+  mTotalDataSize: 432942
+  mProbeDataSizes: 96250000cc1200009625000060380000cc120000cc120000cc120000be700000cc1200009625000096250000f45d0000e42002009625000096250000962500009625000036520100962500006038000060380000
+  mIdentifier:
+    type: 0
+    variation: 0
+    endpointInfluence:
+      center:
+        x: 0
+        y: 0
+        z: 0
+      radius: 0
+  mProbeBatchesUsed:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &6671258565699875974
 GameObject:
   m_ObjectHideFlags: 0
