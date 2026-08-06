@@ -12,5 +12,5 @@ public class AmbianceCollection : MonoBehaviour
         _collection = GetComponentsInChildren<AudioSource>().ToList();
     }
 
-    public List<AudioSource> GetCollection() { return _collection; }
+    public void PlayAll() { foreach (AudioSource aS in _collection) { aS.Play(); } }
 }
