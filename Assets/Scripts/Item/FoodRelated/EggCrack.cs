@@ -6,7 +6,6 @@ public class EggCrack : Ingredient
     private float t = 0;
 
     private Player _player;
-    private PlayerKB_GrabObject _grabScript;
 
     protected override void Awake()
     {
