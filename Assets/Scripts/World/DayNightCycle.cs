@@ -302,9 +302,9 @@ public class DayNightCycle : MonoBehaviour
 
         switch (value)
         {
-            case 6: AmbianceController.Instance.CurrentTimeOfDay = AmbianceController.TimeOfDay.Morning; break;
-            case 12: AmbianceController.Instance.CurrentTimeOfDay = AmbianceController.TimeOfDay.Day; break;
-            case 18: AmbianceController.Instance.CurrentTimeOfDay = AmbianceController.TimeOfDay.Night; break;
+            case 6: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Morning; break;
+            case 12: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Day; break;
+            case 18: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Night; break;
         }
     }
 
