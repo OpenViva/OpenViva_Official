@@ -183,7 +183,7 @@ public class CharacterAssembler : MonoBehaviour
                 {
                     bundleName = bundleName,
                     prefab = prefab,
-                    characterData = charData
+                    vivaCharacterData = charData
                 };
 
                 // Add character to the list
@@ -251,7 +251,7 @@ public class CharacterAssembler : MonoBehaviour
     {
         public string bundleName;
         public GameObject prefab;
-        public VivaCharacterData characterData;
+        public VivaCharacterData vivaCharacterData;
     }
     #endregion
 }
