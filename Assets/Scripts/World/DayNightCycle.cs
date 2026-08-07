@@ -299,6 +299,13 @@ public class DayNightCycle : MonoBehaviour
         }
 
         StartCoroutine(ChurchTimer.Instance.TryRingBells(value));
+
+        switch (value)
+        {
+            case 6: AmbianceController.Instance.CurrentTimeOfDay = AmbianceController.TimeOfDay.Morning; break;
+            case 12: AmbianceController.Instance.CurrentTimeOfDay = AmbianceController.TimeOfDay.Day; break;
+            case 18: AmbianceController.Instance.CurrentTimeOfDay = AmbianceController.TimeOfDay.Night; break;
+        }
     }
 
     // Adjusts the sun's intensity based on the current time of day
