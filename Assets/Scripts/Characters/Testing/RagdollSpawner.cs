@@ -5,6 +5,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(CharacterAssembler))]
+[RequireComponent(typeof(PhysicsAttacher))]
 public class RagdollSpawner : MonoBehaviour
 {
     [Header("Prefab to Spawn")]
