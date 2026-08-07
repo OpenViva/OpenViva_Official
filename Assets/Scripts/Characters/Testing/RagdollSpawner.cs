@@ -1,7 +1,6 @@
 using FIMSpace.FProceduralAnimation;
 using NaughtyAttributes;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -29,7 +28,8 @@ public class RagdollSpawner : MonoBehaviour
     public List<GameObject> loadedCharacters;
 
     private Vector3 _startingCoords;
-    List<GameObject> rootBoneObjects;
+    List<GameObject> rootBoneObjects; // DEPRECATED
+    List<PhysicsBoneData> physicsBoneDataList;
 
     private void Start()
     {
@@ -60,46 +60,23 @@ public class RagdollSpawner : MonoBehaviour
         return instance;
     }
 
-    [Button("Instantiate First Char", EButtonEnableMode.Playmode)]
-    public void SpawnFirstLoaded()
-    {
-        // TODO: Get the whole list and make a method to set up and spawn a single character at a specific location
-        CharacterAssembler.CharacterModel model = _characterReader.GetFirstModel();
-        characterPrefab = model.prefab;
-
-        loadedCharacters.Add(model.prefab);
-    }
-
     [Button("Spawn & Setup Ragdoll", EButtonEnableMode.Playmode)]
     public void SpawnAndSetupRagdoll(bool spawnPrefab = true)
     {
         if (characterPrefab == null) return;
 
-        GameObject newChar = new GameObject();
+        CharacterAssembler.CharacterModel importedModel = _characterReader.GetFirstModel();
+        characterPrefab = importedModel.prefab;
+        loadedCharacters.Add(importedModel.prefab);
 
-        if (spawnPrefab)
-        {
-            newChar = SpawnCharacter(characterPrefab);
-        }
-        else
-        {
-            CharacterAssembler.CharacterModel model = _characterReader.GetFirstModel();
-            characterPrefab = model.prefab;
-            loadedCharacters.Add(model.prefab);
-
-            newChar = SpawnCharacter(characterPrefab);
-        }
+        GameObject newChar = SpawnCharacter(characterPrefab);
 
         AssignAnimatorController(newChar, animationControllerName);
 
-        // TODO: Collect bones and add them here before settting up the model!!!
-
         // Find root bones for cloth physics if script is present
-        if (newChar.TryGetComponent<RootBonesHolder>(out var boneHolder))
+        if (importedModel.vivaCharacterData != null)
         {
-            rootBoneObjects = boneHolder.rootBoneObjects;
-
-            // TODO: Add BoneData collection to this script from VivaCharacterData
+            physicsBoneDataList = importedModel.vivaCharacterData.PhysicsBones;
         }
 
         // 1. Add the component
@@ -152,7 +129,7 @@ public class RagdollSpawner : MonoBehaviour
         if (rootBoneObjects.Count != 0)
         {
             // TODO: Use PhysicsBone parameters instead of default values here
-            _physicsAttacher.CreateBoneCloth(newChar, rootBoneObjects, "Hair_BoneCloth");
+            _physicsAttacher.CreateBoneCloth(newChar, physicsBoneDataList);
         }
         else
         {
