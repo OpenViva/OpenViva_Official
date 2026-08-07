@@ -13,7 +13,7 @@ public class RagdollSpawner : MonoBehaviour
     public GameObject characterPrefab;
 
     [Header("Animation Settings")]
-    public string animationControllerName;
+    public RuntimeAnimatorController animationControllerName;
 
     [Header("NavMeshAgent Settings")]
     public float agentSpeed = 1.5f;
@@ -162,9 +162,9 @@ public class RagdollSpawner : MonoBehaviour
         Debug.Log($"Ragdoll fully auto-setup on {newChar.name}");
     }
 
-    private void AssignAnimatorController(GameObject characterRoot, string controllerName)
+    private void AssignAnimatorController(GameObject characterRoot, RuntimeAnimatorController animatorController)
     {
-        if (string.IsNullOrEmpty(controllerName))
+        if (animatorController == null)
         {
             Debug.LogWarning("[Chara Loader] No Animator Controller specified.");
             return;
@@ -177,28 +177,14 @@ public class RagdollSpawner : MonoBehaviour
             return;
         }
 
-        RuntimeAnimatorController controller = null;
-
-#if UNITY_EDITOR
-        string[] guids = AssetDatabase.FindAssets($"t:RuntimeAnimatorController {controllerName}");
-        if (guids.Length > 0)
+        if (animatorController != null)
         {
-            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            controller = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(path);
-        }
-#else
-    // Runtime / Build mode
-    controller = Resources.Load<RuntimeAnimatorController>(controllerName);
-#endif
-
-        if (controller != null)
-        {
-            animator.runtimeAnimatorController = controller;
-            Debug.Log($"[Chara Loader] Assigned Animator Controller: {controllerName}");
+            animator.runtimeAnimatorController = animatorController;
+            Debug.Log($"[Chara Loader] Assigned Animator Controller: {animatorController}");
         }
         else
         {
-            Debug.LogError($"[Chara Loader] Failed to load Animator Controller: {controllerName}");
+            Debug.LogError($"[Chara Loader] Failed to load Animator Controller: {animatorController}");
         }
     }
 }
