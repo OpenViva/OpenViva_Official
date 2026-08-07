@@ -34,6 +34,7 @@ public class StaticAmbianceManager : MonoBehaviour
             if (value == _currentTimeOfDay) { return; }
             _currentTimeOfDay = value;
             OnTimeOfDayChanged();
+            DynamicAmbianceController.Instance.OnTimeOfDayChanged(_currentTimeOfDay);
         }
     }
     private TimeOfDay _currentTimeOfDay = TimeOfDay.Day;
@@ -87,7 +88,7 @@ public class StaticAmbianceManager : MonoBehaviour
             {
                 _ambianceCollections[i].PlayAll();
                 SetPlayPoint(i);
-                Debug.Log($"Playing audio source {_ambianceCollections[i].gameObject.name}");
+                // Debug.Log($"Playing audio source {_ambianceCollections[i].gameObject.name}");
             }
         }
     }
