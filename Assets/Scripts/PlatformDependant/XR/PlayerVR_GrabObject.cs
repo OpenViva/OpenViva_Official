@@ -76,7 +76,7 @@ public class PlayerVR_GrabObject : XRGrabInteractable
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (!collider.CompareTag("Player") || IsGrabbed != 0 || Globals.isDesktopMode) { return; }
+        if (!collider.CompareTag(TagConstants.Player) || IsGrabbed != 0 || Globals.isDesktopMode) { return; }
 
         if (collider.gameObject.name.Contains("Left"))
         {
@@ -92,7 +92,7 @@ public class PlayerVR_GrabObject : XRGrabInteractable
 
     private void OnTriggerExit(Collider collider)
     {
-        if (!collider.CompareTag("Player")) { return; }
+        if (!collider.CompareTag(TagConstants.Player)) { return; }
 
         FloatingCanvas.Instance.WarpToOrigin();
         _hintManager.ClearHint(HintConstants.LeftGrabHintVR);

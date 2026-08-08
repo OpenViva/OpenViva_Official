@@ -44,7 +44,7 @@ public class InteractFaucet : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.CompareTag("Player"))
+        if (collider.gameObject.CompareTag(TagConstants.Player))
         {
             _playerInRange = true;
             _outline.enabled = true;
@@ -54,7 +54,7 @@ public class InteractFaucet : MonoBehaviour
 
     private void OnTriggerExit(Collider collider)
     {
-        if (collider.gameObject.CompareTag("Player"))
+        if (collider.gameObject.CompareTag(TagConstants.Player))
         {
             _playerInRange = false;
             _outline.enabled = false;

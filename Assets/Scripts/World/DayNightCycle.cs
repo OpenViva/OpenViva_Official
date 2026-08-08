@@ -49,22 +49,22 @@ public class DayNightCycle : MonoBehaviour
             // Transition to next skybox phase as the day progresses
             switch (minutes)
             {
-                case 300:
+                case 180:
                     cycle.StartCoroutine(NightToDawn());
                     break;
-                case 420:
+                case 360:
                     cycle.StartCoroutine(DawnToMorning());
                     break;
-                case 600:
+                case 540:
                     cycle.StartCoroutine(MorningToDay());
                     break;
-                case 840:
+                case 720:
                     cycle.StartCoroutine(DayToAfternoon());
                     break;
-                case 1020:
+                case 900:
                     cycle.StartCoroutine(AfternoonToDusk());
                     break;
-                case 1140:
+                case 1080:
                     cycle.StartCoroutine(DuskToNight());
                     break;
             }
@@ -175,7 +175,13 @@ public class DayNightCycle : MonoBehaviour
     private int _minutes { get { return minutes; } set { minutes = value; OnMinutesChange(value);  } }  // Call the method every minute
     
     [SerializeField] private int hours;                                                                 // Total hours passed in the current day.
-    private int _hours { get { return hours; } set { hours = value; OnHourChange(value); } }            // Call the method every hour
+    private int _hours { get { return hours; } 
+        set 
+        {
+            if (_hours == value) { return; }
+            hours = value; 
+            OnHourChange(value); 
+        } }            // Call the method every hour
     
     private int days;                                                                                   // Total days passed in the game.
     private int _days { get { return days; } set { days = value; } }
@@ -212,9 +218,6 @@ public class DayNightCycle : MonoBehaviour
 
     private void UpdateCycle()
     {
-        // Increment minutes every second based on the cycle speed                                                              
-        // NOTE: Since this is method is only called every frame, accuracy worsens over time, especially at lower cycle speeds. 
-                                                                                                                        
         float minutesPerSecond = 1440f / (360f / rotateSpeed);                                                                  
                                                                                                                         
         float delta = minutesPerSecond * Time.deltaTime;                                                                        
@@ -295,6 +298,14 @@ public class DayNightCycle : MonoBehaviour
             revolutionPoint.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
 
+        StartCoroutine(ChurchTimer.Instance.TryRingBells(value));
+
+        switch (value)
+        {
+            case 3: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Morning; break;
+            case 9: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Day; break;
+            case 18: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Night; break;
+        }
     }
 
     // Adjusts the sun's intensity based on the current time of day

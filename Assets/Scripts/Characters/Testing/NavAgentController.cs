@@ -145,7 +145,7 @@ public class NavAgentController : MonoBehaviour
 
         foreach (Camera c in Camera.allCameras)
         {
-            if (c.CompareTag("MainCamera") && c.isActiveAndEnabled)
+            if (c.CompareTag(TagConstants.MainCamera) && c.isActiveAndEnabled)
                 return c;
         }
         return null;
