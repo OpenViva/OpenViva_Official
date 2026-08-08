@@ -15,4 +15,5 @@ public static class TagConstants
 
     // --- GENERATED ---
     public static readonly string Anchor = "Anchor";
+    public static readonly string MainPlayer = "MainPlayer";
 }
