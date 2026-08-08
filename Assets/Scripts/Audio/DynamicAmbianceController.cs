@@ -120,7 +120,14 @@ public class DynamicAmbianceController : MonoBehaviour
 
     private void PlayFadingIn()
     {
-        foreach (AudioSource aS in _fadeIn) { aS.Play(); }
+        foreach (AudioSource aS in _fadeIn) 
+        { 
+            switch (_areaAmbiancePlaying)
+            {
+                case IndoorArea.House: if (_allHouseAmbiance.Contains(aS)) { aS.Play(); } break;
+                default: if (_allOutdoorAmbiance.Contains(aS)) { aS.Play(); } break;
+            }
+        }
     }
 
     private void StopFadedOut()
@@ -147,18 +154,12 @@ public class DynamicAmbianceController : MonoBehaviour
     {
         if (_areaPlayerIsIn == newArea) { yield break; }
         _areaPlayerIsIn = newArea;
-        Debug.Log($"New area entered: {newArea.ToString()}");
 
-        if (_changeTimer > 0) 
-        {
-            Debug.Log($"Awaiting conclusion of current transition.");
-            yield return new WaitUntil(() => _changeTimer <= 0); 
-        }
+        if (_changeTimer > 0) { yield return new WaitUntil(() => _changeTimer <= 0); }
         if (_areaAmbiancePlaying == _areaPlayerIsIn) { yield break; }
         _changeTimer = 1f;
         _areaTransitioningTo = _areaPlayerIsIn;
 
-        Debug.Log("Beginning transition.");
         _changingFrom = _changingTo;
         switch (_areaTransitioningTo)
         {
@@ -195,7 +196,6 @@ public class DynamicAmbianceController : MonoBehaviour
         {
             _areaAmbiancePlaying = _areaTransitioningTo;
             StopChangedFrom();
-            Debug.Log("Transition concluded.");
         }
 
         float volume = _changeTimer * _dynamicAmbMaxVolume;
