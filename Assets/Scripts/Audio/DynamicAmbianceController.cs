@@ -9,66 +9,114 @@ public class DynamicAmbianceController : MonoBehaviour
 {
     public static DynamicAmbianceController Instance;
 
-    [SerializeField] private AudioMixerGroup _dynamicSFXGroup;
+    [SerializeField] AudioMixerGroup _dynamicSFXGroup;
     private const string EXPOSED_PARAM_NAME = "DynamicAmbVolume";
 
     [SerializeField] private GameObject _outdoorAmbiance;
     [SerializeField] private GameObject _houseAmbiance;
 
-    private List<AudioSource> _allOutdoorAmbiance;
-    private List<AudioSource> _allHouseAmbiance;
+    private List<AudioSource> _outdoorAmbList = new();
+    private List<AudioSource> _houseAmbList = new();
+    private List<AudioSource> _allAmbList = new();
 
     [SerializeField] private Transform _playerKB;
-    [SerializeField] private List<Transform> _allAreaAmbiance;
+    [SerializeField] private List<Transform> _allAmbPositions;
 
     [SerializeField] private float _fadeDuration;
     [SerializeField] private float _dynamicAmbMaxVolume = 0.5f;
-    private float _fadeTimer = 0;
-    private bool _fading = false;
-    private List<AudioSource> _allMorningAmbiance = new();
-    private List<AudioSource> _allDayAmbiance = new();
-    private List<AudioSource> _allNightAmbiance = new();
-    private List<AudioSource> _fadeIn;
-    private List<AudioSource> _fadeOut;
 
-    private float _changeTimer = 0;
-    private List<AudioSource> _changingTo;
-    private List<AudioSource> _changingFrom;
+    private List<AudioSource> _morningAmbList = new();
+    private List<AudioSource> _dayAmbList = new();
+    private List<AudioSource> _nightAmbList = new();
+
+    private bool _timeTransitioning;
+    private float _timeTransitionTimer;
+
+    private TimeOfDay _currentTimeOfDay = TimeOfDay.Day;
+    private TimeOfDay _targetTimeOfDay = TimeOfDay.Day;
+
+    private Dictionary<AudioSource, float> _timeWeights = new();
+    private Dictionary<AudioSource, float> _timeTransitionFrom = new();
+    private Dictionary<AudioSource, float> _timeTransitionTo = new();
 
     public enum IndoorArea
     {
         None, // Outdoors
         House
     }
-    private IndoorArea _areaPlayerIsIn = IndoorArea.House;
-    private IndoorArea _areaAmbiancePlaying = IndoorArea.House;
-    private IndoorArea _areaTransitioningTo = IndoorArea.None;
 
-    private TimeOfDay _currentTimeOfDay = TimeOfDay.Day;
+    private IndoorArea _areaPlayerIsIn = IndoorArea.House;
+    private IndoorArea _areaCurrentlyPlaying = IndoorArea.House;
+    private IndoorArea _areaTarget = IndoorArea.House;
+
+    private bool _areaTransitioning;
+    private float _areaTransitionTimer;
+
+    private Dictionary<AudioSource, float> _areaWeights = new();
+    private Dictionary<AudioSource, float> _areaTransitionFrom = new();
+    private Dictionary<AudioSource, float> _areaTransitionTo = new();
 
     private void Awake()
     {
         if (Instance == null) { Instance = this; }
         else { Destroy(gameObject); }
 
-        _allOutdoorAmbiance = _outdoorAmbiance.GetComponentsInChildren<AudioSource>().ToList();
-        _allHouseAmbiance = _houseAmbiance.GetComponentsInChildren<AudioSource>().ToList();
+        _outdoorAmbList = _outdoorAmbiance.GetComponentsInChildren<AudioSource>().ToList();
+        _houseAmbList = _houseAmbiance.GetComponentsInChildren<AudioSource>().ToList();
+        _allAmbList.AddRange(_outdoorAmbList);
+        _allAmbList.AddRange(_houseAmbList);
 
-        foreach (AudioSource aS in _allOutdoorAmbiance) { PopulateTimedLists(aS); }
-        foreach (AudioSource aS in _allHouseAmbiance) { PopulateTimedLists(aS); }
+        foreach (AudioSource aS in _allAmbList) { PopulateTimedLists(aS); }
+
+        InitAudio();
     }
 
     private void Start()
     {
-        _fadeIn = _allDayAmbiance;
-        _changingTo = _allHouseAmbiance;
+        UpdateVolumes();
     }
 
     private void Update()
     {
         CalcCurrentStaticAmbVolume();
-        TryPerformFade();
-        TryPerformChange();
+        TryTransitionTime();
+        TryTransitionArea();
+        UpdateVolumes();
+    }
+
+    private void PopulateTimedLists(AudioSource aS)
+    {
+        if (aS.gameObject.name.Contains("Morning")) { _morningAmbList.Add(aS); }
+        if (aS.gameObject.name.Contains("Day")) { _dayAmbList.Add(aS); }
+        if (aS.gameObject.name.Contains("Night")) { _nightAmbList.Add(aS); }
+    }
+
+    private void InitAudio()
+    {
+        foreach (AudioSource aS in _allAmbList)
+        {
+            if (_dayAmbList.Contains(aS)) { _timeWeights[aS] = 1f; }
+            else { _timeWeights[aS] = 0f; }
+
+            if (_houseAmbList.Contains(aS)) { _areaWeights[aS] = 1f; }
+            else { _areaWeights[aS] = 0f; }
+
+            aS.volume = 0f;
+            aS.Stop();
+        }
+
+        foreach (AudioSource aS in _dayAmbList)
+        {
+            if (_houseAmbList.Contains(aS)) { aS.Play(); }
+        }
+    }
+
+    private void UpdateVolumes()
+    {
+        foreach (AudioSource aS in _allAmbList)
+        {
+            aS.volume = _timeWeights[aS] * _areaWeights[aS] * _dynamicAmbMaxVolume;
+        }
     }
 
     private void CalcCurrentStaticAmbVolume()
@@ -78,8 +126,8 @@ public class DynamicAmbianceController : MonoBehaviour
         else { player = _playerKB; } // Will change later
 
         float distanceFromNearestAreaAmb = Mathf.Infinity;
-        AudioSource closestAudioSource = _allAreaAmbiance[0].gameObject.GetComponent<AudioSource>();
-        foreach (Transform t in _allAreaAmbiance)
+        AudioSource closestAudioSource = _allAmbList[0].gameObject.GetComponent<AudioSource>();
+        foreach (Transform t in _allAmbPositions)
         {
             float temp = Vector3.Distance(t.position, player.position);
             if (temp < distanceFromNearestAreaAmb)
@@ -96,126 +144,155 @@ public class DynamicAmbianceController : MonoBehaviour
         _dynamicSFXGroup.audioMixer.SetFloat(EXPOSED_PARAM_NAME, volume);
     }
 
-    private void PopulateTimedLists(AudioSource aS)
+    public void OnTimeOfDayChanged(TimeOfDay time)
     {
-        if (aS.gameObject.name.Contains("Morning")) { _allMorningAmbiance.Add(aS); }
-        if (aS.gameObject.name.Contains("Day")) { _allDayAmbiance.Add(aS); }
-        if (aS.gameObject.name.Contains("Night")) { _allNightAmbiance.Add(aS); }
-    }
+        if (_targetTimeOfDay == time && !_timeTransitioning) { return; }
+        _targetTimeOfDay = time;
 
-    public void OnTimeOfDayChanged(TimeOfDay timeOfDay)
-    {
-        _fadeOut = _fadeIn;
-        switch (timeOfDay)
+        foreach (AudioSource aS in _allAmbList)
         {
-            case TimeOfDay.Morning: _fadeIn = _allMorningAmbiance; break;
-            case TimeOfDay.Day: _fadeIn = _allDayAmbiance; break;
-            case TimeOfDay.Night: _fadeIn = _allNightAmbiance; break;
+            float weight;
+            if (_timeWeights.TryGetValue(aS, out float value)) { weight = value; }
+            else { weight = 0f; }
+            _timeTransitionFrom[aS] = weight;
+
+            _timeTransitionTo[aS] = SetTimeWeightTarget(aS, time);
         }
-        _currentTimeOfDay = timeOfDay;
-        PlayFadingIn();
-        _fading = true;
-        _fadeTimer = _fadeDuration;
+
+        PlayTimeTransitionSources();
+        _timeTransitionTimer = 0f;
+        _timeTransitioning = true;
     }
 
-    private void PlayFadingIn()
+    private void TryTransitionTime()
     {
-        foreach (AudioSource aS in _fadeIn) 
-        { 
-            switch (_areaAmbiancePlaying)
+        if (!_timeTransitioning) { return; }
+
+        _timeTransitionTimer += Time.deltaTime;
+
+        float transitionProgress = Mathf.Clamp01(_timeTransitionTimer / _fadeDuration);
+        foreach (AudioSource aS in _allAmbList) 
+        {
+            _timeWeights[aS] = Mathf.Lerp(_timeTransitionFrom[aS], _timeTransitionTo[aS], transitionProgress);
+        }
+
+        if (transitionProgress >= 1f)
+        {
+            _timeTransitioning = false;
+            _currentTimeOfDay = _targetTimeOfDay;
+
+            foreach (AudioSource aS in _allAmbList) { _timeWeights[aS] = _timeTransitionTo[aS]; }
+        }
+    }
+
+    private float SetTimeWeightTarget(AudioSource aS, TimeOfDay time)
+    {
+        switch (time)
+        {
+            case TimeOfDay.Morning:
+                if (_morningAmbList.Contains(aS)) { return 1f; }
+                else { return 0f; }
+
+            case TimeOfDay.Day:
+                if (_dayAmbList.Contains(aS)) { return 1f; }
+                else { return 0f; }
+
+            case TimeOfDay.Night:
+                if (_nightAmbList.Contains(aS)) { return 1f; }
+                else { return 0f; }
+
+            default: return 0f;
+        }
+    }
+
+    private void PlayTimeTransitionSources()
+    {
+        foreach (AudioSource aS in _allAmbList)
+        {
+            if ((_timeTransitionFrom[aS] > 0f || _timeTransitionTo[aS] > 0f) && !aS.isPlaying)
             {
-                case IndoorArea.House: if (_allHouseAmbiance.Contains(aS)) { aS.Play(); } break;
-                default: if (_allOutdoorAmbiance.Contains(aS)) { aS.Play(); } break;
+                aS.Play();
             }
         }
     }
 
-    private void StopFadedOut()
+    public IEnumerator OnAreaChanged(IndoorArea area)
     {
-        foreach (AudioSource aS in _fadeOut) { aS.Stop(); }
-    }
+        if (_areaPlayerIsIn == area) { yield break; }
 
-    private void TryPerformFade()
-    {
-        if (!_fading || _fadeIn == null || _fadeOut == null) { return; }
-        _fadeTimer -= Time.deltaTime;
-        if (_fadeTimer <= 0)
+        _areaPlayerIsIn = area;
+        _areaTarget = area;
+
+        foreach (AudioSource aS in _allAmbList)
         {
-            _fading = false;
-            StopFadedOut();
-            return;
+            float weight;
+            if (_areaWeights.TryGetValue(aS, out float value)) { weight = value; }
+            else { weight = 0f; }
+            _areaTransitionFrom[aS] = weight;
+
+            _areaTransitionTo[aS] = SetAreaWeightTarget(aS, _areaTarget);
         }
-        float volume = _fadeTimer / _fadeDuration * _dynamicAmbMaxVolume;
-        foreach (AudioSource aS in _fadeOut) { aS.volume = volume; }
-        foreach (AudioSource aS in _fadeIn) { aS.volume = _dynamicAmbMaxVolume - volume; }
+
+        PlayAreaTransitionSources();
+        _areaTransitionTimer = 0f;
+        _areaTransitioning = true;
+
+        yield break;
     }
 
-    public IEnumerator OnAreaChanged(IndoorArea newArea)
+    private void TryTransitionArea()
     {
-        if (_areaPlayerIsIn == newArea) { yield break; }
-        _areaPlayerIsIn = newArea;
+        if (!_areaTransitioning) { return; }
 
-        if (_changeTimer > 0) { yield return new WaitUntil(() => _changeTimer <= 0); }
-        if (_areaAmbiancePlaying == _areaPlayerIsIn) { yield break; }
-        _changeTimer = 1f;
-        _areaTransitioningTo = _areaPlayerIsIn;
+        _areaTransitionTimer += Time.deltaTime;
 
-        _changingFrom = _changingTo;
-        switch (_areaTransitioningTo)
+        float transitionProgress = Mathf.Clamp01(_areaTransitionTimer / 1f);
+        foreach (AudioSource aS in _allAmbList)
         {
-            case IndoorArea.House: _changingTo = _allHouseAmbiance; break;
-            default: _changingTo = _allOutdoorAmbiance; break;
+            _areaWeights[aS] = Mathf.Lerp(_areaTransitionFrom[aS], _areaTransitionTo[aS], transitionProgress);
         }
-        PlayChangingTo();
+
+        if (transitionProgress >= 1f)
+        {
+            _areaTransitioning = false;
+            _areaCurrentlyPlaying = _areaTarget;
+
+            foreach (AudioSource aS in _allAmbList) { _areaWeights[aS] = _areaTransitionTo [aS]; }
+
+            StopSources();
+        }
     }
 
-    private void PlayChangingTo()
+    private float SetAreaWeightTarget(AudioSource aS, IndoorArea area)
     {
-        foreach (AudioSource aS in _changingTo) 
+        switch (area)
         {
-            switch (_currentTimeOfDay)
+            case IndoorArea.House:
+                if (_houseAmbList.Contains(aS)) { return 1f; }
+                else { return 0f; }
+
+            default:
+                if (_outdoorAmbList.Contains(aS)) { return 1f; }
+                else { return 0f; }
+        }
+    }
+
+    private void PlayAreaTransitionSources()
+    {
+        foreach (AudioSource aS in _allAmbList)
+        {
+            if ((_areaTransitionFrom[aS] > 0f || _areaTransitionTo[aS] > 0f) && !aS.isPlaying)
             {
-                case TimeOfDay.Morning: if (_allMorningAmbiance.Contains(aS)) { aS.Play(); }; break;
-                case TimeOfDay.Day: if (_allDayAmbiance.Contains(aS)) { aS.Play(); }; break;
-                case TimeOfDay.Night: if (_allNightAmbiance.Contains(aS)) { aS.Play(); }; break;
+                aS.Play();
             }
         }
     }
 
-    private void StopChangedFrom()
+    private void StopSources()
     {
-        foreach (AudioSource aS in _changingFrom) { aS.Stop(); }
-    }
-
-    private void TryPerformChange()
-    {
-        if (_changeTimer <= 0) { return; }
-
-        _changeTimer -= Time.deltaTime;
-        if (_changeTimer <= 0)
+        foreach (AudioSource aS in _allAmbList)
         {
-            _areaAmbiancePlaying = _areaTransitioningTo;
-            StopChangedFrom();
-        }
-
-        float volume = _changeTimer * _dynamicAmbMaxVolume;
-        foreach (AudioSource aS in _changingFrom) { aS.volume = volume; }
-        foreach (AudioSource aS in _changingTo) 
-        { 
-            switch (_currentTimeOfDay)
-            {
-                case TimeOfDay.Morning: 
-                    if (_allMorningAmbiance.Contains(aS)) { aS.volume = _dynamicAmbMaxVolume - volume; }
-                    break;
-
-                case TimeOfDay.Day:
-                    if (_allDayAmbiance.Contains(aS)) { aS.volume = _dynamicAmbMaxVolume - volume; }
-                    break;
-
-                case TimeOfDay.Night:
-                    if (_allNightAmbiance.Contains(aS)) { aS.volume = _dynamicAmbMaxVolume - volume; }
-                    break;
-            }
+            if (_timeWeights[aS] <= 0f && _areaWeights[aS] <= 0 && aS.isPlaying) { aS.Stop(); }
         }
     }
 }
