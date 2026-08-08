@@ -119,7 +119,7 @@ public class PlayerManager : MonoBehaviour
         GameObject item = children[numElements - 1];
 
         // Return the item if it has the "Item" tag
-        if (item.CompareTag("Item"))
+        if (item.CompareTag(TagConstants.Item))
         {
             return item;
         }

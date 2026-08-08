@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -21,14 +22,29 @@ public class DynamicAmbianceController : MonoBehaviour
     [SerializeField] private List<Transform> _allAreaAmbiance;
 
     [SerializeField] private float _fadeDuration;
-    [SerializeField] private float _dynamicAmbMaxVolume = 0.25f;
-    private float _timer = 0;
+    [SerializeField] private float _dynamicAmbMaxVolume = 0.5f;
+    private float _fadeTimer = 0;
     private bool _fading = false;
     private List<AudioSource> _allMorningAmbiance = new();
     private List<AudioSource> _allDayAmbiance = new();
     private List<AudioSource> _allNightAmbiance = new();
     private List<AudioSource> _fadeIn;
     private List<AudioSource> _fadeOut;
+
+    private float _changeTimer = 0;
+    private List<AudioSource> _changingTo;
+    private List<AudioSource> _changingFrom;
+
+    public enum IndoorArea
+    {
+        None, // Outdoors
+        House
+    }
+    private IndoorArea _areaPlayerIsIn = IndoorArea.House;
+    private IndoorArea _areaAmbiancePlaying = IndoorArea.House;
+    private IndoorArea _areaTransitioningTo = IndoorArea.None;
+
+    private TimeOfDay _currentTimeOfDay = TimeOfDay.Day;
 
     private void Awake()
     {
@@ -45,23 +61,14 @@ public class DynamicAmbianceController : MonoBehaviour
     private void Start()
     {
         _fadeIn = _allDayAmbiance;
+        _changingTo = _allHouseAmbiance;
     }
 
     private void Update()
     {
         CalcCurrentStaticAmbVolume();
-
-        if (!_fading || _fadeIn == null || _fadeOut == null) { return; }
-        _timer -= Time.deltaTime;
-        if (_timer <= 0)
-        {
-            _fading = false;
-            StopFadedOut();
-            return;
-        }
-        float volume = _timer / _fadeDuration * _dynamicAmbMaxVolume;
-        foreach (AudioSource aS in _fadeOut) { aS.volume = volume; }
-        foreach (AudioSource aS in _fadeIn) { aS.volume = _dynamicAmbMaxVolume - volume; }
+        TryPerformFade();
+        TryPerformChange();
     }
 
     private void CalcCurrentStaticAmbVolume()
@@ -96,7 +103,7 @@ public class DynamicAmbianceController : MonoBehaviour
         if (aS.gameObject.name.Contains("Night")) { _allNightAmbiance.Add(aS); }
     }
 
-    public void OnTimeOfDayChanged(StaticAmbianceManager.TimeOfDay timeOfDay)
+    public void OnTimeOfDayChanged(TimeOfDay timeOfDay)
     {
         _fadeOut = _fadeIn;
         switch (timeOfDay)
@@ -105,9 +112,10 @@ public class DynamicAmbianceController : MonoBehaviour
             case TimeOfDay.Day: _fadeIn = _allDayAmbiance; break;
             case TimeOfDay.Night: _fadeIn = _allNightAmbiance; break;
         }
+        _currentTimeOfDay = timeOfDay;
         PlayFadingIn();
         _fading = true;
-        _timer = _fadeDuration;
+        _fadeTimer = _fadeDuration;
     }
 
     private void PlayFadingIn()
@@ -118,5 +126,96 @@ public class DynamicAmbianceController : MonoBehaviour
     private void StopFadedOut()
     {
         foreach (AudioSource aS in _fadeOut) { aS.Stop(); }
+    }
+
+    private void TryPerformFade()
+    {
+        if (!_fading || _fadeIn == null || _fadeOut == null) { return; }
+        _fadeTimer -= Time.deltaTime;
+        if (_fadeTimer <= 0)
+        {
+            _fading = false;
+            StopFadedOut();
+            return;
+        }
+        float volume = _fadeTimer / _fadeDuration * _dynamicAmbMaxVolume;
+        foreach (AudioSource aS in _fadeOut) { aS.volume = volume; }
+        foreach (AudioSource aS in _fadeIn) { aS.volume = _dynamicAmbMaxVolume - volume; }
+    }
+
+    public IEnumerator OnAreaChanged(IndoorArea newArea)
+    {
+        if (_areaPlayerIsIn == newArea) { yield break; }
+        _areaPlayerIsIn = newArea;
+        Debug.Log($"New area entered: {newArea.ToString()}");
+
+        if (_changeTimer > 0) 
+        {
+            Debug.Log($"Awaiting conclusion of current transition.");
+            yield return new WaitUntil(() => _changeTimer <= 0); 
+        }
+        if (_areaAmbiancePlaying == _areaPlayerIsIn) { yield break; }
+        _changeTimer = 1f;
+        _areaTransitioningTo = _areaPlayerIsIn;
+
+        Debug.Log("Beginning transition.");
+        _changingFrom = _changingTo;
+        switch (_areaTransitioningTo)
+        {
+            case IndoorArea.House: _changingTo = _allHouseAmbiance; break;
+            default: _changingTo = _allOutdoorAmbiance; break;
+        }
+        PlayChangingTo();
+    }
+
+    private void PlayChangingTo()
+    {
+        foreach (AudioSource aS in _changingTo) 
+        {
+            switch (_currentTimeOfDay)
+            {
+                case TimeOfDay.Morning: if (_allMorningAmbiance.Contains(aS)) { aS.Play(); }; break;
+                case TimeOfDay.Day: if (_allDayAmbiance.Contains(aS)) { aS.Play(); }; break;
+                case TimeOfDay.Night: if (_allNightAmbiance.Contains(aS)) { aS.Play(); }; break;
+            }
+        }
+    }
+
+    private void StopChangedFrom()
+    {
+        foreach (AudioSource aS in _changingFrom) { aS.Stop(); }
+    }
+
+    private void TryPerformChange()
+    {
+        if (_changeTimer <= 0) { return; }
+
+        _changeTimer -= Time.deltaTime;
+        if (_changeTimer <= 0)
+        {
+            _areaAmbiancePlaying = _areaTransitioningTo;
+            StopChangedFrom();
+            Debug.Log("Transition concluded.");
+        }
+
+        float volume = _changeTimer * _dynamicAmbMaxVolume;
+        foreach (AudioSource aS in _changingFrom) { aS.volume = volume; }
+        foreach (AudioSource aS in _changingTo) 
+        { 
+            switch (_currentTimeOfDay)
+            {
+                case TimeOfDay.Morning: 
+                    if (_allMorningAmbiance.Contains(aS)) { aS.volume = _dynamicAmbMaxVolume - volume; }
+                    break;
+
+                case TimeOfDay.Day:
+                    if (_allDayAmbiance.Contains(aS)) { aS.volume = _dynamicAmbMaxVolume - volume; }
+                    break;
+
+                case TimeOfDay.Night:
+                    if (_allNightAmbiance.Contains(aS)) { aS.volume = _dynamicAmbMaxVolume - volume; }
+                    break;
+            }
+        }
     }
 }

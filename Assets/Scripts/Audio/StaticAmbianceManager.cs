@@ -105,7 +105,7 @@ public class StaticAmbianceManager : MonoBehaviour
         PlayFadingIn();
         _fading = true;
         _fadeEndPoint = _time + _fadeDuration;
-        Debug.Log($"Switching to '{_currentTimeOfDay}' ambiance");
+        // Debug.Log($"Switching to '{_currentTimeOfDay}' ambiance");
     }
 
     private void PlayFadingIn()
