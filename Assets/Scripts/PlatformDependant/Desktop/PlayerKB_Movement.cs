@@ -125,7 +125,16 @@ public class PlayerKB_Movement : MonoBehaviour
 
     void HandleMovement()
     {
-        if (Globals.isMenuOpen || !Globals.handleMovement) return;
+        if (Globals.isMenuOpen || !Globals.handleMovement)
+        {
+            /*
+             * Temp fix for footstep sounds.
+             * When menu is opened or when handleMovement is false
+             * charaController retains velocity rather than becoming zero.
+             */
+            _characterController.Move(Vector3.zero); 
+            return;
+        }
 
         if (!isGrounded)
         {

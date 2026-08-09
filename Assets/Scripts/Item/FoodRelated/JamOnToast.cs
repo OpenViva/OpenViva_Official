@@ -5,10 +5,12 @@ public class JamOnToast : MonoBehaviour
     [SerializeField] private GameObject _jam;
     private bool _didOnce = false;
     private Meal _mealScript;
+    private AudioSource _audioSource;
 
     private void Awake()
     {
         _mealScript = GetComponent<Meal>();
+        _audioSource = GetComponentInChildren<AudioSource>();
     }
 
     public bool TrySpreadJam(FruitCutMinigame.Fruit fruit)
@@ -41,6 +43,7 @@ public class JamOnToast : MonoBehaviour
             }
             _jam.SetActive(true);
             _didOnce = true;
+            _audioSource.Play();
             return true;
         }
         return false;
