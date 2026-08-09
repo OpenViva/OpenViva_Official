@@ -100,7 +100,11 @@ public class Crop : PlayerKB_GrabObject
     {
         base.OnGrabbed();
         OnIsGrabbed?.Invoke();
-        if (_audioSource != null) { _audioSource.Play(); }
+        if (_audioSource != null && ShouldGrow) 
+        { 
+            _audioSource.Play();
+            ShouldGrow = false;
+        }
         else { Debug.Log($"An audio source component has not been given to the '{gameObject.name}' prefab"); }
     }
 

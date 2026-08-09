@@ -37,6 +37,10 @@ public class BowlLogic : MonoBehaviour
     private List<RectTransform> _waterDots = new();
     private List<RectTransform> _flourDots = new();
 
+    private AudioSource _audioSource;
+    private float _fillTimer = 0f;
+    private bool _isBeingFilled = false;
+
     private void Awake()
     {
         _player = FindFirstObjectByType<Player>();
@@ -45,11 +49,26 @@ public class BowlLogic : MonoBehaviour
 
         _waterDots = _waterIcon.GetComponentsInChildren<RectTransform>().ToList();
         _flourDots = _flourIcon.GetComponentsInChildren<RectTransform>().ToList();
+
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
     {
         AssignInputs();
+    }
+
+    private void Update()
+    {
+        if (_isBeingFilled)
+        {
+            _fillTimer -= Time.deltaTime;
+            if (_fillTimer <= 0) 
+            { 
+                _isBeingFilled = false;
+                _audioSource.Stop();
+            }
+        }
     }
 
     private void AssignInputs()
@@ -100,23 +119,11 @@ public class BowlLogic : MonoBehaviour
             _waterVolume += 14;
             SetWaterBlend();
             UpdateDisplay();
+
+            if (!_audioSource.isPlaying) { _audioSource.Play(); }
+            _fillTimer = 0.2f;
+            _isBeingFilled = true;
         }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        //if (other.TryGetComponent(out FruitPiece pieceScript))
-        //{
-        //    switch (pieceScript.Fruit)
-        //    {
-        //        case FruitCutMinigame.Fruit.Strawberry: _strawberryPieces += 1; break;
-        //        case FruitCutMinigame.Fruit.Peach: _peachPieces += 1; break;
-        //        case FruitCutMinigame.Fruit.Cantaloupe: _cantaloupePieces += 1; break;
-        //        default: Debug.LogWarning($"Fruit not recognized: {pieceScript.Fruit}"); return;
-        //    }
-
-        //    Destroy(pieceScript.gameObject);
-        //}
     }
 
     private void SetFlourBlend()

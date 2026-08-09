@@ -40,9 +40,14 @@ public class PotLogic : MonoBehaviour
     [SerializeField] private GameObject _jamBackground;
     [SerializeField] private TextMeshProUGUI _jamAmount;
 
+    private AudioSource _audioSource;
+    private float _fillTimer = 0f;
+    private bool _isBeingFilled = false;
+
     private void Awake()
     {
         _grabScript = GetComponent<PlayerKB_GrabObject>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -71,6 +76,16 @@ public class PotLogic : MonoBehaviour
             _temperature -= ((_multiplier * 0.8f) + 0.2f) * Time.deltaTime;
             UpdateDisplay();
         }
+
+        if (_isBeingFilled)
+        {
+            _fillTimer -= Time.deltaTime;
+            if (_fillTimer <= 0)
+            {
+                _isBeingFilled = false;
+                _audioSource.Stop();
+            }
+        }
     }
 
     private void OnParticleCollision(GameObject collider)
@@ -83,6 +98,10 @@ public class PotLogic : MonoBehaviour
             SetBlendShape();
             _multiplier = 1f - (_volume  / MAX_CAPACITY);
             UpdateDisplay();
+
+            if (!_audioSource.isPlaying) { _audioSource.Play(); }
+            _fillTimer = 0.2f;
+            _isBeingFilled = true;
         }
     }
 
