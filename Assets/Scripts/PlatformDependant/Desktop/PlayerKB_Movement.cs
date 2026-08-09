@@ -252,6 +252,8 @@ public class PlayerKB_Movement : MonoBehaviour
         }
     }
 
+    public bool GetIsGrouned() { return isGrounded; }
+
     #region Helper Methods
     void DetectAndPushFromEdge()
     {
