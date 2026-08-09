@@ -19,6 +19,13 @@ public class Crop : PlayerKB_GrabObject
 
     [SerializeField] public bool ShouldGrow = true;
 
+    private AudioSource _audioSource;
+
+    private void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -93,6 +100,8 @@ public class Crop : PlayerKB_GrabObject
     {
         base.OnGrabbed();
         OnIsGrabbed?.Invoke();
+        if (_audioSource != null) { _audioSource.Play(); }
+        else { Debug.Log($"An audio source component has not been given to the '{gameObject.name}' prefab"); }
     }
 
     protected override void GrabLeft()
