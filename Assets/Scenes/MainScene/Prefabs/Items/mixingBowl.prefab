@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 839054981336679966}
   - component: {fileID: 2718368139675499470}
   - component: {fileID: 3990560540826031027}
+  - component: {fileID: 4932009013094968303}
   m_Layer: 0
   m_Name: mixingBowl
   m_TagString: Item
@@ -434,6 +435,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4932009013094968303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1381515640498995264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe05866fd4e732246be6461a576ebcb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioAmbisonicSource
+  applyHRTF: 1
 --- !u!1 &1963484623418662023
 GameObject:
   m_ObjectHideFlags: 0

@@ -95,6 +95,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             transform.SetParent(_playerLeftHand.transform);
             transform.SetLocalPositionAndRotation(ObjectHoldPositions.Instance.GetObjectPositionLeft(_objectIndex), ObjectHoldPositions.Instance.GetObjectRotationLeft(_objectIndex));
             IsGrabbedLeft = true;
+            if (_outline != null) { _outline.enabled = false; }
             if (!_didOnce) { _didOnce = true; OnGrabbed(); }
             PlayerManager.Instance.LeftHandOccupied = true;
 
@@ -132,6 +133,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             transform.SetParent(_playerRightHand.transform);
             transform.SetLocalPositionAndRotation(ObjectHoldPositions.Instance.GetObjectPositionRight(_objectIndex), ObjectHoldPositions.Instance.GetObjectRotationRight(_objectIndex));
             IsGrabbedRight = true;
+            if (_outline != null) { _outline.enabled = false; }
             if (!_didOnce) { _didOnce = true; OnGrabbed(); }
             PlayerManager.Instance.RightHandOccupied = true;
 
@@ -166,7 +168,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         if (collider == _playerLeftCollider || collider == _playerRightCollider)
         {
             _playerInRange = true;
-            _outline.enabled = true;
+            if (_outline != null && GetIsGrabbed() == 0) { _outline.enabled = true; }
             if (!_hintIsShowing && !_isGrabbedInLeft && !_isGrabbedInRight)
             {
                 _hud.CreateHint(hint);
@@ -185,7 +187,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
         if (collider == _playerLeftCollider || collider == _playerRightCollider)
         {
             _playerInRange = false;
-            _outline.enabled = false;
+            if (_outline != null) { _outline.enabled = false; }
             _hud.ClearHint(hint);
             _hintIsShowing = false;
         }

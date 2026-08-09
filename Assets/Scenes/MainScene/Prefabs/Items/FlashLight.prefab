@@ -336,6 +336,7 @@ GameObject:
   - component: {fileID: 1757304696351040645}
   - component: {fileID: 1421685174827246018}
   - component: {fileID: 3072683048460468191}
+  - component: {fileID: 7125751388440593804}
   m_Layer: 0
   m_Name: FlashLight
   m_TagString: Item
@@ -785,3 +786,16 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7125751388440593804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5995071476856499394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe05866fd4e732246be6461a576ebcb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioAmbisonicSource
+  applyHRTF: 1

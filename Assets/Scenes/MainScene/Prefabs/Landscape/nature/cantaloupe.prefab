@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 6459452907088125167}
   - component: {fileID: 6961707635206682126}
   - component: {fileID: -1583247076358906382}
+  - component: {fileID: -2779806613490165189}
   m_Layer: 0
   m_Name: cantaloupe
   m_TagString: Item
@@ -477,6 +478,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-2779806613490165189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4022507327587062065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe05866fd4e732246be6461a576ebcb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioAmbisonicSource
+  applyHRTF: 1
 --- !u!1 &5003627362575896295
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,6 +9,13 @@ public class MortarSpill : PlayerKB_GrabObject
     [SerializeField] private Transform _worldUILeft;
     [SerializeField] private Transform _worldUIRight;
 
+    private AudioSource _flourSpilSFX;
+
+    private void Awake()
+    {
+        _flourSpilSFX = GetComponentInChildren<AudioSource>();
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -22,11 +29,13 @@ public class MortarSpill : PlayerKB_GrabObject
 
     private void Spill(bool useLeft)
     {
+        if (_logic.FlourQuantity < 50) { return; }
         if (useLeft && !_isGrabbedInLeft) { return; }
         else if (!useLeft && !_isGrabbedInRight) { return; }
 
         _flourParticle.Play();
         _logic.SpillWheat();
+        if (!_flourSpilSFX.isPlaying) { _flourSpilSFX.Play(); }
     }
 
     private void ShowRightHint(bool show)
