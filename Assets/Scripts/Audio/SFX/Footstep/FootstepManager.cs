@@ -14,6 +14,7 @@ public class FootstepManager : MonoBehaviour
         WetStone,
         Water
     }
+    private FloorTypes _standingOn = FloorTypes.Wood;
 
     [SerializeField] private List<AudioClip> _carpetClips;
     [SerializeField] private List<AudioClip> _dirtClips;
@@ -53,11 +54,9 @@ public class FootstepManager : MonoBehaviour
 
         if (foundFloors.Count > 0)
         {
-            foreach (FloorType fT in foundFloors) { Debug.Log($"Found floor: {fT.name}"); }
-        }
-        else
-        {
-            Debug.Log("No floors found.");
+            FloorType current = foundFloors[0];
+            foreach (FloorType fT in foundFloors) { if (fT.Priority < current.Priority) { current = fT; }}
+            _standingOn = current.Type;
         }
     }
 }
