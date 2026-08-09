@@ -2,5 +2,6 @@ using UnityEngine;
 
 public class FloorType : MonoBehaviour
 {
-    public FootstepManager.FloorType Type;
+    public FootstepManager.FloorTypes Type;
+    public int _priority;
 }

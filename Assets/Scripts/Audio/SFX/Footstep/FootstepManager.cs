@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class FootstepManager : MonoBehaviour
 {
-    public enum FloorType
+    public enum FloorTypes
     {
         None,
         Carpet,
@@ -29,7 +29,6 @@ public class FootstepManager : MonoBehaviour
     [SerializeField] private AudioSource _rightFoot;
 
     private CharacterController _playerCC;
-    private bool _playerIsRunning = false;
 
     private void Awake()
     {
@@ -42,10 +41,23 @@ public class FootstepManager : MonoBehaviour
         DetermineFloorType();
     }
 
-    private void SetPlayerIsRunning(bool set) { _playerIsRunning = set; }
-
     private void DetermineFloorType()
     {
-        Collider[] collidersInSphere = Physics.OverlapSphere(transform.position, 0.1f);
+        Collider[] collidersInSphere = Physics.OverlapSphere(transform.position, 0.1f, Physics.AllLayers, QueryTriggerInteraction.Collide);
+
+        List<FloorType> foundFloors = new();
+        foreach (Collider c in collidersInSphere)
+        {
+            if (c.TryGetComponent(out FloorType fT)) { foundFloors.Add(fT); }
+        }
+
+        if (foundFloors.Count > 0)
+        {
+            foreach (FloorType fT in foundFloors) { Debug.Log($"Found floor: {fT.name}"); }
+        }
+        else
+        {
+            Debug.Log("No floors found.");
+        }
     }
 }
