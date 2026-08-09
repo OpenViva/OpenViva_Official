@@ -50,7 +50,7 @@ public class BowlLogic : MonoBehaviour
         _waterDots = _waterIcon.GetComponentsInChildren<RectTransform>().ToList();
         _flourDots = _flourIcon.GetComponentsInChildren<RectTransform>().ToList();
 
-        _audioSource = GetComponent<AudioSource>();
+        _audioSource = GetComponentInChildren<AudioSource>();
     }
 
     private void Start()

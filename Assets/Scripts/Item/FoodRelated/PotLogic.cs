@@ -47,7 +47,7 @@ public class PotLogic : MonoBehaviour
     private void Awake()
     {
         _grabScript = GetComponent<PlayerKB_GrabObject>();
-        _audioSource = GetComponent<AudioSource>();
+        _audioSource = GetComponentInChildren<AudioSource>();
     }
 
     private void Start()

@@ -23,7 +23,7 @@ public class Crop : PlayerKB_GrabObject
 
     private void Awake()
     {
-        _audioSource = GetComponent<AudioSource>();
+        _audioSource = GetComponentInChildren<AudioSource>();
     }
 
     protected override void Start()

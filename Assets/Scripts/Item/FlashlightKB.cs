@@ -19,7 +19,7 @@ public class FlashlightKB : MonoBehaviour
 
     private void Awake()
     {
-        _audioSource = GetComponent<AudioSource>();
+        _audioSource = GetComponentInChildren<AudioSource>();
     }
 
     private void Start()
