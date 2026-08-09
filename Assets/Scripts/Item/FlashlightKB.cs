@@ -15,6 +15,12 @@ public class FlashlightKB : MonoBehaviour
     // --- Fields ---
     private Player _player;
     private PlayerControls _controls;
+    private AudioSource _audioSource;
+
+    private void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
 
     private void Start()
     {
@@ -62,6 +68,7 @@ public class FlashlightKB : MonoBehaviour
             _diode.SetActive(!_isOn);
             _vfx.SetActive(!_isOn);
             _isOn = !_isOn;
+            _audioSource?.Play();
         }
     }
 
@@ -72,6 +79,7 @@ public class FlashlightKB : MonoBehaviour
             _diode.SetActive(!_isOn);
             _vfx.SetActive(!_isOn);
             _isOn = !_isOn;
+            _audioSource?.Play();
         }
     }
 
