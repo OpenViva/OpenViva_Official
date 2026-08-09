@@ -50,8 +50,8 @@ public class PlayerManager : MonoBehaviour
         ChangeInputType(); // TODO: Needs fixing, doesn't change to desktop by default.
 
         // Set up change input type action
-        _changeInputType.action.Enable();
-        _changeInputType.action.performed += context => ChangeInputType();
+        // _changeInputType.action.Enable();
+        // _changeInputType.action.performed += context => ChangeInputType();
         // Lock the cursor to the center of the screen
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -79,8 +79,8 @@ public class PlayerManager : MonoBehaviour
     void OnDestroy()
     {
         // Clean up change input type action
-        _changeInputType.action.Disable();
-        _changeInputType.action.performed -= context => ChangeInputType();
+        // _changeInputType.action.Disable();
+        // _changeInputType.action.performed -= context => ChangeInputType();
     }
 
     private void ChangeInputType()

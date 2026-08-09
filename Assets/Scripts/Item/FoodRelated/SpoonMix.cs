@@ -6,10 +6,16 @@ public class SpoonMix : PlayerKB_GrabObject
     private bool _isMixing = false;
     private BowlLogic _currentBowl;
     private PotLogic _currentPot;
+    private AudioSource _audioSource;
 
     [SerializeField] private GameObject _filling;
     bool _fillingVisible = false;
     Fruit _fruitOnSpoon = Fruit.None;
+
+    private void Awake()
+    {
+        _audioSource = GetComponentInChildren<AudioSource>();
+    }
 
     protected override void Start()
     {
@@ -128,6 +134,7 @@ public class SpoonMix : PlayerKB_GrabObject
 
         _filling.SetActive(visible);
         _fillingVisible = visible;
+        _audioSource.Play();
         return true;
     }
 

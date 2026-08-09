@@ -67,7 +67,7 @@ public class FruitCutMinigame : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag(TagConstants.Player)) 
+        if (other.gameObject.CompareTag(TagConstants.MainPlayer)) 
         { 
             _playerInRange = true;
             _HUD.CreateHint(HintConstants.EnterCuttingMinigameHint);
@@ -76,7 +76,7 @@ public class FruitCutMinigame : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag(TagConstants.Player)) 
+        if (other.gameObject.CompareTag(TagConstants.MainPlayer)) 
         { 
             _playerInRange = false;
             _HUD.ClearHint(HintConstants.EnterCuttingMinigameHint);
