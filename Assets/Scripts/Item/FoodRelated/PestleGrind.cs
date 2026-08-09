@@ -4,6 +4,12 @@ public class PestleGrind : PlayerKB_GrabObject
 {
     private bool _isGrinding = false;
     private MortarLogic _currentMortar;
+    private AudioSource _audioSource;
+
+    private void Awake()
+    {
+        _audioSource = GetComponentInChildren<AudioSource>();
+    }
 
     protected override void Start()
     {
@@ -43,12 +49,14 @@ public class PestleGrind : PlayerKB_GrabObject
         {
             _isGrinding = true;
             _currentMortar = mortar;
+            if (!_audioSource.isPlaying) { _audioSource.Play(); }
         }
     }
 
     private void StopGrinding()
     {
         _isGrinding = false;
+        _audioSource.Stop();
     }
 
     private void ShowLeftHint(bool show)
