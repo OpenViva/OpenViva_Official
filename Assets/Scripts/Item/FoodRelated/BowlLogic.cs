@@ -240,7 +240,7 @@ public class BowlLogic : MonoBehaviour
         }
         else
         {
-            Debug.Log("A 'PlayerKB_GrabObject' script has not been added to the dough prefab.");
+            Debug.LogWarning("A 'PlayerKB_GrabObject' script has not been added to the dough prefab.");
         }
     }
 

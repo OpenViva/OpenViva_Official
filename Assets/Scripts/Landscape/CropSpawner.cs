@@ -27,6 +27,12 @@ public class CropSpawner : MonoBehaviour
     private void SpawnCrop()
     {
         _currentCrop = ObjectPool.instance.GetObject(_cropToSpawn);
+
+        if (UnityEngine.Random.value <= 0.02f && _cropToSpawn.name.Equals("peach"))
+        {
+            _currentCrop.AddComponent<CropColorChange>();
+        }
+
         AssignMethod(true);
         if (_currentCrop.TryGetComponent(out Rigidbody rb))
         {
