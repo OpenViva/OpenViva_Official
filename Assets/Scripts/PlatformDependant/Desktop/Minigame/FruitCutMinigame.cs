@@ -44,6 +44,7 @@ public class FruitCutMinigame : MonoBehaviour
     private AudioSource _audioSource;
     [SerializeField] private AudioClip _pickUpSFX;
     [SerializeField] private AudioClip _cutSFX;
+    [SerializeField] private AudioClip _achievementSFX;
 
     public enum Fruit
     {
@@ -216,13 +217,25 @@ public class FruitCutMinigame : MonoBehaviour
         CuttingBoard.Instance.EnableNextObject(_cutsMadeThisAttempt);
         CuttingMinigame.Instance.SetProgressBarSize((float)_cutsMadeThisAttempt / _totalCutsNeeded);
 
-        if (_audioSource.clip != _cutSFX) { _audioSource.clip = _cutSFX; }
-        _audioSource.Play();
-
         if (_cutsMadeThisAttempt == _totalCutsNeeded) 
         { 
             CuttingMinigame.Instance.DoneTextEnabled(true, _accuracy);
             CuttingMinigame.Instance.SetControlHints(true);
+            if(_audioSource.clip != _achievementSFX) 
+            { 
+                _audioSource.clip = _achievementSFX;
+                _audioSource.volume = 0.125f;
+            }
+            _audioSource.Play();
+        }
+        else
+        {
+            if (_audioSource.clip != _cutSFX) 
+            { 
+                _audioSource.clip = _cutSFX;
+                _audioSource.volume = 0.5f;
+            }
+            _audioSource.Play();
         }
 
         SetNewTarget();
