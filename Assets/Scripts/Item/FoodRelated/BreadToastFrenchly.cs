@@ -35,7 +35,11 @@ public class BreadToastFrenchly : Ingredient
             EggTimer -= Time.deltaTime;
         }
 
-        if (ToastTimer < 0 && EggTimer < 0) { SpawnConversion(); }
+        if (ToastTimer < 0 && EggTimer < 0) 
+        {
+            OvenSFXController.Instance.PlayBurnSFX();
+            SpawnConversion();
+        }
     }
 
     protected override void OnTriggerEnter(Collider other)

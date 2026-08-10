@@ -27,6 +27,7 @@ public class Meal : MonoBehaviour
         {
             GameObject newObject = Instantiate(_burnVariant, transform.position, transform.rotation);
             newObject.name = _burnVariant.name;
+            OvenSFXController.Instance.PlayBurnSFX();
             Destroy(gameObject);
         }
     }

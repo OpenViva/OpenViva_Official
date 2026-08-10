@@ -9,7 +9,11 @@ public class DoughBake : Ingredient
     {
         base.Update();
         if (_inOven) { _bakeTimer -= Time.deltaTime; }
-        if (_bakeTimer < 0) { SpawnConversion(); }
+        if (_bakeTimer < 0) 
+        {
+            OvenSFXController.Instance.PlayBurnSFX();
+            SpawnConversion(); 
+        }
     }
 
     protected override void OnTriggerEnter(Collider collider)
