@@ -8,12 +8,14 @@ public class Meal : MonoBehaviour
     private bool _inOven = false;
     private GameObject _burnVariant;
     private float _price;
+    private PlayerKB_GrabObject _grabScript;
 
     private void Awake()
     {
         BurnTimer = _mealData.BurnTimer;
         _burnVariant = _mealData.BurnVariant;
         _price = _mealData.Price;
+        _grabScript = GetComponent<PlayerKB_GrabObject>();
     }
 
     private void Update()
@@ -25,9 +27,15 @@ public class Meal : MonoBehaviour
 
         if (BurnTimer < 0)
         {
+            OvenSFXController.Instance.PlayBurnSFX();
+
+            if (_grabScript == null) { return; }
+            if (_grabScript.GetIsGrabbed() != 0) { return; }
+
             GameObject newObject = Instantiate(_burnVariant, transform.position, transform.rotation);
             newObject.name = _burnVariant.name;
-            OvenSFXController.Instance.PlayBurnSFX();
+
+            _grabScript.IsActive = false;
             Destroy(gameObject);
         }
     }

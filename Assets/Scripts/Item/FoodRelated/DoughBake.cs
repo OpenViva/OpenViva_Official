@@ -9,8 +9,8 @@ public class DoughBake : Ingredient
     {
         base.Update();
         if (_inOven) { _bakeTimer -= Time.deltaTime; }
-        if (_bakeTimer < 0) 
-        {
+        if (_bakeTimer < 0 && _inOven) 
+        { 
             OvenSFXController.Instance.PlayBurnSFX();
             SpawnConversion(); 
         }

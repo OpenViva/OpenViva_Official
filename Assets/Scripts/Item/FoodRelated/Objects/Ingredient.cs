@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class Ingredient : MonoBehaviour
 {
@@ -34,8 +33,7 @@ public class Ingredient : MonoBehaviour
             newItem.name = _conversionPrefab.name; // don't want it to be '{name}(clone)'
         }
 
-        PlayerKB_GrabObject grabScript = gameObject.GetComponent<PlayerKB_GrabObject>();
-        if (grabScript != null) { grabScript.IsActive = false; }
+        _grabScript.IsActive = false;
         Destroy(gameObject);
     }
 }
