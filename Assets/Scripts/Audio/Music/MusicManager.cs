@@ -16,10 +16,6 @@ public class MusicManager : MonoBehaviour
     private bool _fadedOut = false;
     private AudioClip _nextTrack = null;
 
-    [SerializeField] private float _delay = 30f;
-    private bool _playedOnce = false;
-    private float _temp;
-
     private bool _isDay = true;
     public bool IsDay 
     { 
@@ -38,9 +34,6 @@ public class MusicManager : MonoBehaviour
         else { Destroy(gameObject); }
 
         _audioSource = GetComponent<AudioSource>();
-
-        _temp = _transitionDuration;
-        _transitionDuration = _delay;
     }
 
     private void Start()
@@ -55,7 +48,6 @@ public class MusicManager : MonoBehaviour
         {
             _fadedOut = false;
             _audioSource.volume = _maxVolume;
-            _transitionDuration = _temp;
         }
 
         if (_transitionTimer <= 0) { return; }
@@ -79,17 +71,12 @@ public class MusicManager : MonoBehaviour
 
     public IEnumerator SwitchToTrack(AudioClip track, Collider triggerEntered)
     {
-        if (_audioSource.clip == track) { yield break; }
         _nextTrack = track;
+        if (_audioSource.clip == track) { yield break; }
 
         yield return new WaitForSeconds(_transitionTimer);
 
-        if (!_playedOnce) 
-        { 
-            _transitionTimer = _delay;
-            _playedOnce = true;
-        }
-        else { _transitionTimer = _transitionDuration; }
+        _transitionTimer = _transitionDuration; 
         TriggerLastEntered = triggerEntered;
     }
 
