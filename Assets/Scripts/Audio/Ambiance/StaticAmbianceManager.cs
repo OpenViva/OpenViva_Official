@@ -34,7 +34,6 @@ public class StaticAmbianceManager : MonoBehaviour
             if (value == _currentTimeOfDay) { return; }
             _currentTimeOfDay = value;
             OnTimeOfDayChanged();
-            DynamicAmbianceController.Instance.OnTimeOfDayChanged(_currentTimeOfDay);
         }
     }
     private TimeOfDay _currentTimeOfDay = TimeOfDay.Day;
@@ -105,6 +104,8 @@ public class StaticAmbianceManager : MonoBehaviour
         PlayFadingIn();
         _fading = true;
         _fadeEndPoint = _time + _fadeDuration;
+
+        DynamicAmbianceController.Instance.OnTimeOfDayChanged(_currentTimeOfDay);
         // Debug.Log($"Switching to '{_currentTimeOfDay}' ambiance");
     }
 

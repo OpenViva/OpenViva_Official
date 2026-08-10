@@ -305,6 +305,9 @@ public class DayNightCycle : MonoBehaviour
             case 3: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Morning; break;
             case 9: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Day; break;
             case 18: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Night; break;
+
+            case 6: MusicManager.Instance.IsDay = true; break;
+            case 21: MusicManager.Instance.IsDay = false; break;
         }
     }
 
