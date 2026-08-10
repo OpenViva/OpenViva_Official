@@ -41,6 +41,10 @@ public class FruitCutMinigame : MonoBehaviour
     [SerializeField] private GameObject _peachCrop;
     [SerializeField] private GameObject _cantaloupeCrop;
 
+    private AudioSource _audioSource;
+    [SerializeField] private AudioClip _pickUpSFX;
+    [SerializeField] private AudioClip _cutSFX;
+
     public enum Fruit
     {
         None = 0,
@@ -53,6 +57,7 @@ public class FruitCutMinigame : MonoBehaviour
     private void Awake()
     {
         _mainCamera = Camera.main;
+        _audioSource = GetComponentInChildren<AudioSource>();
     }
 
     private void Start()
@@ -166,6 +171,9 @@ public class FruitCutMinigame : MonoBehaviour
             if (_otherObjectGrabScriptR != null) { _otherObjectGrabScriptR.SetIsActive(false, 2); }
 
             CuttingMinigame.Instance.CuttingMinigameUIEnabled(true);
+
+            if (_audioSource.clip != _pickUpSFX) { _audioSource.clip = _pickUpSFX; }
+            _audioSource.Play();
         }
         else
         {
@@ -207,6 +215,9 @@ public class FruitCutMinigame : MonoBehaviour
         CuttingMinigame.Instance.SetAccuracy(cutAccuracy, _accuracy);
         CuttingBoard.Instance.EnableNextObject(_cutsMadeThisAttempt);
         CuttingMinigame.Instance.SetProgressBarSize((float)_cutsMadeThisAttempt / _totalCutsNeeded);
+
+        if (_audioSource.clip != _cutSFX) { _audioSource.clip = _cutSFX; }
+        _audioSource.Play();
 
         if (_cutsMadeThisAttempt == _totalCutsNeeded) 
         { 
