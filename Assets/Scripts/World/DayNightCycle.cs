@@ -49,19 +49,19 @@ public class DayNightCycle : MonoBehaviour
             // Transition to next skybox phase as the day progresses
             switch (minutes)
             {
-                case 180:
+                case 240:
                     cycle.StartCoroutine(NightToDawn());
                     break;
                 case 360:
                     cycle.StartCoroutine(DawnToMorning());
                     break;
-                case 540:
+                case 480:
                     cycle.StartCoroutine(MorningToDay());
                     break;
-                case 720:
+                case 660:
                     cycle.StartCoroutine(DayToAfternoon());
                     break;
-                case 900:
+                case 960:
                     cycle.StartCoroutine(AfternoonToDusk());
                     break;
                 case 1080:
@@ -304,10 +304,12 @@ public class DayNightCycle : MonoBehaviour
         {
             case 3: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Morning; break;
             case 9: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Day; break;
-            case 18: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Night; break;
+            case 18: 
+                StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Night;
+                MusicManager.Instance.IsDay = false;
+                break;
 
             case 6: MusicManager.Instance.IsDay = true; break;
-            case 21: MusicManager.Instance.IsDay = false; break;
         }
     }
 
