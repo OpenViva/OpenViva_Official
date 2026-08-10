@@ -103,10 +103,26 @@ public class PlayerKB_GrabObject : MonoBehaviour
             _hud.CreateHint(HintConstants.LeftReleaseHint);
 
             _animationIndexes.PlayAnimationLeft(_objectIndex);
+
+            AudioSource playerAudioSource = GetComponentInParent<AudioSource>();
+            AudioClip audioClip = GetComponentInParent<PlayerClipHolder>().GripClip;
+            if (playerAudioSource != null)
+            {
+                if (playerAudioSource.clip != audioClip) { playerAudioSource.clip = audioClip; }
+                playerAudioSource.Play();
+            }
         }
         // If the object is already grabbed in the left hand, release it
         else if (_isGrabbedInLeft)
         {
+            AudioSource playerAudioSource = GetComponentInParent<AudioSource>();
+            AudioClip audioClip = GetComponentInParent<PlayerClipHolder>().ReleaseClip;
+            if (playerAudioSource != null)
+            {
+                if (playerAudioSource.clip != audioClip) { playerAudioSource.clip = audioClip; }
+                playerAudioSource.Play();
+            }
+
             transform.SetParent(null);
             _grabbableObjectRB.isKinematic = false;
             _grabbableObjectRB.useGravity = true;
@@ -126,6 +142,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
         if (_isOpen || !gameObject.activeSelf) { return; }
 
+
         if (_playerInRange && !_isGrabbedInRight && !_isGrabbedInLeft && !PlayerManager.Instance.RightHandOccupied && _grabbableObjectRB != null)
         {
             _grabbableObjectRB.useGravity = false;
@@ -141,10 +158,26 @@ public class PlayerKB_GrabObject : MonoBehaviour
             _hud.CreateHint(HintConstants.RightReleaseHint);
 
             _animationIndexes.PlayAnimationRight(_objectIndex);
+
+            AudioSource playerAudioSource = GetComponentInParent<AudioSource>();
+            AudioClip audioClip = GetComponentInParent<PlayerClipHolder>().GripClip;
+            if (playerAudioSource != null)
+            {
+                if (playerAudioSource.clip != audioClip) { playerAudioSource.clip = audioClip; }
+                playerAudioSource.Play();
+            }
         }
         // If the object is already grabbed in the right hand, release it
         else if (_isGrabbedInRight)
         {
+            AudioSource playerAudioSource = GetComponentInParent<AudioSource>();
+            AudioClip audioClip = GetComponentInParent<PlayerClipHolder>().ReleaseClip;
+            if (playerAudioSource != null)
+            {
+                if (playerAudioSource.clip != audioClip) { playerAudioSource.clip = audioClip; }
+                playerAudioSource.Play();
+            }
+
             transform.SetParent(null);
             _grabbableObjectRB.isKinematic = false;
             _grabbableObjectRB.useGravity = true;

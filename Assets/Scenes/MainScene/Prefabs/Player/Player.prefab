@@ -8214,6 +8214,7 @@ GameObject:
   - component: {fileID: 3468353186216344353}
   - component: {fileID: 567149945703427677}
   - component: {fileID: 5986306757638334485}
+  - component: {fileID: 2336473538759890400}
   - component: {fileID: 7069984330807103637}
   m_Layer: 0
   m_Name: PlayerKB
@@ -8329,6 +8330,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8dfdafab9dfaa478aae683536c9471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectHoldPositions
+--- !u!114 &2336473538759890400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6035623113748730353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6d942491551220468b2c77ead01afaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerClipHolder
+  GripClip: {fileID: 8300000, guid: 5a05af50366fc784b919d4fd6597f0f0, type: 3}
+  ReleaseClip: {fileID: 8300000, guid: a5dd57f38768e8d4bb4ae4e8fb85ab23, type: 3}
 --- !u!136 &7069984330807103637
 CapsuleCollider:
   m_ObjectHideFlags: 0
