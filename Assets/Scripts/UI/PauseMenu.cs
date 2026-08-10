@@ -38,6 +38,8 @@ public class PauseMenu : MonoBehaviour
     private Vector3 targetPosition;
     private Quaternion targetRotation;
 
+    [SerializeField] private BookSFXController _audioController;
+
     private void Start()
     {
         _player = GetComponentInParent<Player>();
@@ -129,8 +131,9 @@ public class PauseMenu : MonoBehaviour
         if (bookMesh != null) bookMesh.SetActive(true);
         else Debug.LogWarning("bookMesh reference is null!", this);
 
-        // 2. Play the open animation
+        // 2. Play the open animation and audio
         PlayBookAnimation(openAnimationStateName);
+        _audioController.BookOpened();
 
         // 3. Wait for it
         yield return new WaitForSeconds(_openClipLength + extraWaitSeconds);
@@ -159,8 +162,9 @@ public class PauseMenu : MonoBehaviour
         }
         else Debug.LogWarning("rootPage reference is null!", this);
 
-        // 2. Play close animation
+        // 2. Play close animation and audio
         PlayBookAnimation(closeAnimationStateName);
+        _audioController.BookClosed();
 
         // 3. Wait for it
         yield return new WaitForSeconds(_closeClipLength + extraWaitSeconds);
