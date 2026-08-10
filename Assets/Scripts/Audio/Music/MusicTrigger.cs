@@ -34,6 +34,7 @@ public class MusicTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!other.CompareTag(TagConstants.MainPlayer)) { return; }
         StopCoroutine(MusicManager.Instance.SwitchToTrack(_track, _thisCollider));
         StartCoroutine(MusicManager.Instance.SwitchToTrack(_track, _thisCollider));
     }
