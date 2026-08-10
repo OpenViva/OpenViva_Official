@@ -79,8 +79,8 @@ public class MusicManager : MonoBehaviour
 
     public IEnumerator SwitchToTrack(AudioClip track, Collider triggerEntered)
     {
-        _nextTrack = track;
         if (_audioSource.clip == track) { yield break; }
+        _nextTrack = track;
 
         yield return new WaitForSeconds(_transitionTimer);
 
@@ -107,16 +107,15 @@ public class MusicManager : MonoBehaviour
         // After fade out, switch tracks and wait for 20% of transition duration
         if (!_fadedOut && _transitionTimer < _transitionDuration * 0.6)
         {
-            _fadedOut = true;
-            _audioSource.volume = 0f;
-            _audioSource.Stop();
             if (_nextTrack == null)
             {
                 Debug.Log("Next music track was not loaded correctly.");
                 return;
             }
+            _fadedOut = true;
+            _audioSource.volume = 0f;
+            _audioSource.Stop();
             _audioSource.clip = _nextTrack;
-            _nextTrack = null;
         }
 
         // Fade in for 40% of transition duration.
