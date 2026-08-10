@@ -5,6 +5,7 @@ public class MusicTrigger : MonoBehaviour
     [SerializeField] private AudioClip _track;
     private Collider _thisCollider;
     [SerializeField] private Collider _siblingCollider;
+    private bool _started = false;
 
     private void Awake()
     {
@@ -12,6 +13,17 @@ public class MusicTrigger : MonoBehaviour
     }
 
     private void OnEnable()
+    {
+        if (_started) { OnStartOrEnable(); }
+    }
+
+    private void Start()
+    {
+        _started = true;
+        OnStartOrEnable();
+    }
+
+    private void OnStartOrEnable()
     {
         if (MusicManager.Instance.TriggerLastEntered == _siblingCollider)
         {
