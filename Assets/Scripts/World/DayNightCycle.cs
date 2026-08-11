@@ -84,6 +84,7 @@ public class DayNightCycle : MonoBehaviour
                 _nightToDawn.SetFloat("_Blend", i / _transitionSpeed);
                 yield return null;
             }
+            _dawnToMorning.SetFloat("_Blend", 0);
             RenderSettings.skybox = _dawnToMorning;
             _nightToDawn.SetFloat("_Blend", 0);
         }
@@ -96,6 +97,7 @@ public class DayNightCycle : MonoBehaviour
                 _dawnToMorning.SetFloat("_Blend", i / _transitionSpeed);
                 yield return null;
             }
+            _morningToDay.SetFloat("_Blend", 0);
             RenderSettings.skybox = _morningToDay;
             _dawnToMorning.SetFloat("_Blend", 0);
         }
@@ -108,6 +110,7 @@ public class DayNightCycle : MonoBehaviour
                 _morningToDay.SetFloat("_Blend", i / _transitionSpeed);
                 yield return null;
             }
+            _dayToAfternoon.SetFloat("_Blend", 0);
             RenderSettings.skybox = _dayToAfternoon;
             _morningToDay.SetFloat("_Blend", 0);
         }
@@ -120,6 +123,7 @@ public class DayNightCycle : MonoBehaviour
                 _dayToAfternoon.SetFloat("_Blend", i / _transitionSpeed);
                 yield return null;
             }
+            _afternoonToDusk.SetFloat("_Blend", 0);
             RenderSettings.skybox = _afternoonToDusk;
             _dayToAfternoon.SetFloat("_Blend", 0);
         }
@@ -132,6 +136,7 @@ public class DayNightCycle : MonoBehaviour
                 _afternoonToDusk.SetFloat("_Blend", i / _transitionSpeed);
                 yield return null;
             }
+            _duskToNight.SetFloat("_Blend", 0);
             RenderSettings.skybox = _duskToNight;
             _afternoonToDusk.SetFloat("_Blend", 0);
         }
@@ -144,6 +149,7 @@ public class DayNightCycle : MonoBehaviour
                 _duskToNight.SetFloat("_Blend", i / _transitionSpeed);
                 yield return null;
             }
+            _nightToDawn.SetFloat("_Blend", 0);
             RenderSettings.skybox = _nightToDawn;
             _duskToNight.SetFloat("_Blend", 0);
         }
@@ -219,7 +225,7 @@ public class DayNightCycle : MonoBehaviour
     {
         // Update the day night cycle
         UpdateCycle();
-
+        Debug.Log($"Current Skybox: {RenderSettings.skybox.name}");
     }
 
     private void UpdateCycle()
@@ -328,7 +334,7 @@ public class DayNightCycle : MonoBehaviour
 
         if (value >= 300 && value <= 500)
         {
-            intensity = ((value - 300) / 200f) * 1.5f;
+            intensity = (value - 300) / 200f * 1.5f;
             sun.intensity = intensity;
         }
 
