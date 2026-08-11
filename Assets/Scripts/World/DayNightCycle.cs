@@ -224,7 +224,6 @@ public class DayNightCycle : MonoBehaviour
     {
         // Update the day night cycle
         UpdateCycle();
-        Debug.Log($"Current Skybox: {RenderSettings.skybox.name}");
     }
 
     private void UpdateCycle()
