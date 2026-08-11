@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: ba068140fff8cc44b8abd5b0996076e7
 ModelImporter:
-  serializedVersion: 22200
+  serializedVersion: 24200
   internalIDToNameTable: []
   externalObjects:
   - first:
@@ -56,7 +56,7 @@ ModelImporter:
     extraUserProperties:
     - '#BAKERY{"meshName":["kitchen_interior.005","kitchen_interior.004","kitchen_interior.003","kitchen_interior.001","kitchen_interior","kitchen_exterior.001","kitchen_exterior","cupula","kitchen_interior.002"],"padding":[38,49,68,36,43,35,19,33,59],"unwrapper":[0,0,0,0,0,0,0,0,0]}'
     clipAnimations: []
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
@@ -82,6 +82,9 @@ ModelImporter:
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
     optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8

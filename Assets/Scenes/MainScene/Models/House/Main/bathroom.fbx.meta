@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 23e26e230a4f044bba28ee792939029b
 ModelImporter:
-  serializedVersion: 22200
+  serializedVersion: 24200
   internalIDToNameTable:
   - first:
       1: 100000
@@ -146,7 +146,7 @@ ModelImporter:
     extraUserProperties:
     - '#BAKERY{"meshName":["B_bathroom1.000"],"padding":[25],"unwrapper":[0]}'
     clipAnimations: []
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
@@ -172,6 +172,9 @@ ModelImporter:
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
     optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
