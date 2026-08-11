@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public enum CycleSpeed 
 { 
@@ -186,6 +188,8 @@ public class DayNightCycle : MonoBehaviour
     private int days;                                                                                   // Total days passed in the game.
     private int _days { get { return days; } set { days = value; } }
 
+    private List<DaylightSensor> _daylightSensors;
+
     private void OnValidate()
     {
         //Update the rotation speed when inspector values get changed.
@@ -207,6 +211,8 @@ public class DayNightCycle : MonoBehaviour
 
         // Determine rotationSpeed and skybox transition speed based on selected cycle speed
         SetCycleSpeed(currentCycleSpeed);
+
+        _daylightSensors = FindObjectsByType<DaylightSensor>(FindObjectsSortMode.None).ToList();
     }
 
     void Update()
@@ -303,13 +309,15 @@ public class DayNightCycle : MonoBehaviour
         switch (value)
         {
             case 3: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Morning; break;
+            case 5: foreach (DaylightSensor sensor in _daylightSensors) { sensor.TurnLightsOff(); } break;
+            case 6: MusicManager.Instance.IsDay = true; break;
             case 9: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Day; break;
+            case 17: foreach (DaylightSensor sensor in _daylightSensors) { sensor.TurnLightsOn(); } break;
             case 18: 
                 StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Night;
                 MusicManager.Instance.IsDay = false;
                 break;
 
-            case 6: MusicManager.Instance.IsDay = true; break;
         }
     }
 
