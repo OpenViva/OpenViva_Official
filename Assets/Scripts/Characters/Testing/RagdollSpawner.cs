@@ -126,7 +126,7 @@ public class RagdollSpawner : MonoBehaviour
         ragdoll.User_SwitchFallState(RagdollHandler.EAnimatingMode.Standing);
 
         // 7. Set up cloth physics
-        if (rootBoneObjects.Count != 0)
+        if (physicsBoneDataList.Count != 0)
         {
             // TODO: Use PhysicsBone parameters instead of default values here
             _physicsAttacher.CreateBoneCloth(newChar, physicsBoneDataList);
