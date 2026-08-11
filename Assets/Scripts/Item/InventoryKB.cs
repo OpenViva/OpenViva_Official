@@ -78,6 +78,8 @@ public class InventoryKB : MonoBehaviour
 
     private void ToggleBag(InputAction.CallbackContext context)
     {
+        if (_grabScript.GetIsGrabbed() == 0) { return; }
+
         if (_isOpen)
         {
             _animator.Play("Close");
