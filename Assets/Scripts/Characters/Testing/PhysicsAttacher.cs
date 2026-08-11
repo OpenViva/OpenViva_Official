@@ -94,7 +94,11 @@ public class PhysicsAttacher : MonoBehaviour
         int startIndex = 0;
         if (pathParts.Length > 1 || pathParts[0] == root.name) startIndex = 1;
 
+<<<<<<< HEAD
         // If path only contains the root name then give that instead
+=======
+        // If path only contains the root name then give that instead.
+>>>>>>> V0.1Testing
         if (pathParts.Length == 1)
         {
             return root;
@@ -112,7 +116,11 @@ public class PhysicsAttacher : MonoBehaviour
 
             if (found == null)
             {
+<<<<<<< HEAD
                 Debug.LogWarning($"[Chara Loader] Failed to find {part} in path: {part}");
+=======
+                Debug.LogWarning($"[Chara Loader] Failed to find {part} in path: {path}");
+>>>>>>> V0.1Testing
                 return null;
             }
 

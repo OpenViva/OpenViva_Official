@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 2b986c5e6e5624e4992e89908d0b12c6
 ModelImporter:
-  serializedVersion: 22200
+  serializedVersion: 24200
   internalIDToNameTable:
   - first:
       1: 100000
@@ -62,7 +62,7 @@ ModelImporter:
     extraUserProperties:
     - '#BAKERY{"meshName":["A_frame"],"padding":[177],"unwrapper":[0]}'
     clipAnimations: []
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
@@ -88,6 +88,9 @@ ModelImporter:
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
     optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8

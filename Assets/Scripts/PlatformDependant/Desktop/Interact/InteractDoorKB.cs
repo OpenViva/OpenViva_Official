@@ -18,11 +18,15 @@ public class InteractDoorKB : MonoBehaviour
     [SerializeField] protected HintManager _canvas;
     private bool _doOnce = true;
 
+    private AudioSource _audioSource;
+
     protected virtual void Start()
     {
         _player = FindFirstObjectByType<Player>();
         _outline = GetComponent<Outline>();
         AssignInputs();
+
+        _audioSource = GetComponentInChildren<AudioSource>();
     }
 
     protected virtual void AssignInputs()
@@ -46,6 +50,7 @@ public class InteractDoorKB : MonoBehaviour
             }
 
             StartCoroutine(SetIsMoving());
+            if (!_audioSource.isPlaying) { _audioSource.Play(); }
             _isOpen = !_isOpen;
         }
     }

@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public enum CycleSpeed 
 { 
-    FiveMinutes, 
-    TwentyMinutes, 
-    OneHour,
-    ThreeHours,
+    TwelveMinutes, 
+    FourtyEightMinutes, 
+    TwoHours,
     SixHours,
     TwelveHours,
     OneDay
@@ -82,6 +83,7 @@ public class DayNightCycle : MonoBehaviour
                 _nightToDawn.SetFloat("_Blend", i / _transitionSpeed);
                 yield return null;
             }
+            _dawnToMorning.SetFloat("_Blend", 0);
             RenderSettings.skybox = _dawnToMorning;
             _nightToDawn.SetFloat("_Blend", 0);
         }
@@ -94,6 +96,7 @@ public class DayNightCycle : MonoBehaviour
                 _dawnToMorning.SetFloat("_Blend", i / _transitionSpeed);
                 yield return null;
             }
+            _morningToDay.SetFloat("_Blend", 0);
             RenderSettings.skybox = _morningToDay;
             _dawnToMorning.SetFloat("_Blend", 0);
         }
@@ -106,6 +109,7 @@ public class DayNightCycle : MonoBehaviour
                 _morningToDay.SetFloat("_Blend", i / _transitionSpeed);
                 yield return null;
             }
+            _dayToAfternoon.SetFloat("_Blend", 0);
             RenderSettings.skybox = _dayToAfternoon;
             _morningToDay.SetFloat("_Blend", 0);
         }
@@ -118,6 +122,7 @@ public class DayNightCycle : MonoBehaviour
                 _dayToAfternoon.SetFloat("_Blend", i / _transitionSpeed);
                 yield return null;
             }
+            _afternoonToDusk.SetFloat("_Blend", 0);
             RenderSettings.skybox = _afternoonToDusk;
             _dayToAfternoon.SetFloat("_Blend", 0);
         }
@@ -130,6 +135,7 @@ public class DayNightCycle : MonoBehaviour
                 _afternoonToDusk.SetFloat("_Blend", i / _transitionSpeed);
                 yield return null;
             }
+            _duskToNight.SetFloat("_Blend", 0);
             RenderSettings.skybox = _duskToNight;
             _afternoonToDusk.SetFloat("_Blend", 0);
         }
@@ -142,6 +148,7 @@ public class DayNightCycle : MonoBehaviour
                 _duskToNight.SetFloat("_Blend", i / _transitionSpeed);
                 yield return null;
             }
+            _nightToDawn.SetFloat("_Blend", 0);
             RenderSettings.skybox = _nightToDawn;
             _duskToNight.SetFloat("_Blend", 0);
         }
@@ -186,6 +193,8 @@ public class DayNightCycle : MonoBehaviour
     private int days;                                                                                   // Total days passed in the game.
     private int _days { get { return days; } set { days = value; } }
 
+    private List<DaylightSensor> _daylightSensors;
+
     private void OnValidate()
     {
         //Update the rotation speed when inspector values get changed.
@@ -207,13 +216,14 @@ public class DayNightCycle : MonoBehaviour
 
         // Determine rotationSpeed and skybox transition speed based on selected cycle speed
         SetCycleSpeed(currentCycleSpeed);
+
+        _daylightSensors = FindObjectsByType<DaylightSensor>(FindObjectsSortMode.None).ToList();
     }
 
     void Update()
     {
         // Update the day night cycle
         UpdateCycle();
-
     }
 
     private void UpdateCycle()
@@ -248,10 +258,9 @@ public class DayNightCycle : MonoBehaviour
     {
         rotateSpeed = currentCycleSpeed switch
         {
-            CycleSpeed.FiveMinutes => 360f / (5 * 60),
-            CycleSpeed.TwentyMinutes => 360f / (20 * 60),
-            CycleSpeed.OneHour => 360f / (1 * 60 * 60),
-            CycleSpeed.ThreeHours => 360f / (3 * 60 * 60),
+            CycleSpeed.TwelveMinutes => 360f / (12 * 60),
+            CycleSpeed.FourtyEightMinutes => 360f / (48 * 60),
+            CycleSpeed.TwoHours => 360f / (2 * 60 * 60),
             CycleSpeed.SixHours => 360f / (6 * 60 * 60),
             CycleSpeed.TwelveHours => 360f / (12 * 60 * 60),
             CycleSpeed.OneDay => 360f / (24 * 60 * 60),
@@ -260,10 +269,9 @@ public class DayNightCycle : MonoBehaviour
         
         var transitionSpeed = currentCycleSpeed switch
         {
-            CycleSpeed.FiveMinutes => 25f,
-            CycleSpeed.TwentyMinutes => 100f,
-            CycleSpeed.OneHour => 300f,
-            CycleSpeed.ThreeHours => 900f,
+            CycleSpeed.TwelveMinutes => 60f,
+            CycleSpeed.FourtyEightMinutes => 240f,
+            CycleSpeed.TwoHours => 600f,
             CycleSpeed.SixHours => 1800f,
             CycleSpeed.TwelveHours => 3600f,
             CycleSpeed.OneDay => 7200f,
@@ -303,13 +311,15 @@ public class DayNightCycle : MonoBehaviour
         switch (value)
         {
             case 3: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Morning; break;
+            case 5: foreach (DaylightSensor sensor in _daylightSensors) { sensor.TurnLightsOff(); } break;
+            case 6: MusicManager.Instance.IsDay = true; break;
             case 9: StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Day; break;
+            case 17: foreach (DaylightSensor sensor in _daylightSensors) { sensor.TurnLightsOn(); } break;
             case 18: 
                 StaticAmbianceManager.Instance.CurrentTimeOfDay = StaticAmbianceManager.TimeOfDay.Night;
                 MusicManager.Instance.IsDay = false;
                 break;
 
-            case 6: MusicManager.Instance.IsDay = true; break;
         }
     }
 
@@ -320,7 +330,7 @@ public class DayNightCycle : MonoBehaviour
 
         if (value >= 300 && value <= 500)
         {
-            intensity = ((value - 300) / 200f) * 1.5f;
+            intensity = (value - 300) / 200f * 1.5f;
             sun.intensity = intensity;
         }
 

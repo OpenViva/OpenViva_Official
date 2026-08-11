@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 9a8cfe92827723a4f9eef9032639eac9
 ModelImporter:
-  serializedVersion: 22200
+  serializedVersion: 24200
   internalIDToNameTable: []
   externalObjects:
   - first:
@@ -211,7 +211,7 @@ ModelImporter:
     extraUserProperties:
     - '#BAKERY{"meshName":["zenkei_onsen_pool_platform2","zenkei_onsen1_exterior.003","zenkei_onsen1_exterior.004","zenkei_onsen1_exterior.005","zenkei_onsen1_exterior.006","zenkei_onsen1_exterior_0.006","zenkei_onsen1_hallway","zenkei_onsen1_hallway.001","zenkei_onsen1_hallway.002","zenkei_onsen1_exterior.002","zenkei_onsen1_hallway.003","zenkei_onsen1_hallway.004","zenkei_onsen1_exterior.001","zenkei_onsen1_exterior","onsenFoundation.001","onsenPool_floor","onsenRocks2_lo","onsenRocks_lo","zenkei_onsen1_interior.001","zenkei_onsen_pool_wood","zenkei_onsen1_interior","zenkei_onsen_pool_platform1","zenkei_onsen1_interior.002","zenkei_onsen1_interior.003","zenkei_onsen1_interior.004","zenkei_onsen1_interior.005","zenkei_onsen1_interior.006","zenkei_onsen2_porch0.001","zenkei_onsen2_changingRoom.001","zenkei_onsen2_exit1","zenkei_onsen2_exit2","zenkei_onsen2_pillars","zenkei_onsen2_pillars.001","zenkei_onsen2_porch0","zenkei_onsen2_changingRoom"],"padding":[37,47,28,77,62,103,33,34,33,50,41,37,41,66,32,20,50,17,26,60,40,27,23,21,27,38,93,34,21,49,49,33,106,34,21],"unwrapper":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}'
     clipAnimations: []
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
@@ -237,6 +237,9 @@ ModelImporter:
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
     optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8

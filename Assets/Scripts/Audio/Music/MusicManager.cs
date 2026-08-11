@@ -69,7 +69,7 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    public IEnumerator SwitchToTrack(AudioClip track, Collider triggerEntered)
+    public IEnumerator SwitchToTrack(AudioClip track, Collider triggerEntered, float maxVolume)
     {
         _nextTrack = track;
         if (_audioSource.clip == track) { yield break; }
@@ -78,6 +78,7 @@ public class MusicManager : MonoBehaviour
 
         _transitionTimer = _transitionDuration; 
         TriggerLastEntered = triggerEntered;
+        _maxVolume = maxVolume;
     }
 
     private void PerformFade()
@@ -88,6 +89,7 @@ public class MusicManager : MonoBehaviour
         if (!_fadedOut && _transitionTimer >= _transitionDuration * 0.6f)
         {
             float volume = _maxVolume - ((_transitionDuration - _transitionTimer) / (_transitionDuration - (_transitionDuration - (_transitionDuration * 0.4f))) * _maxVolume);
+            if (volume > _audioSource.volume) { return; }
             _audioSource.volume = volume;
         }
 

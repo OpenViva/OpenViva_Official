@@ -6,6 +6,7 @@ public class MusicTrigger : MonoBehaviour
     private Collider _thisCollider;
     [SerializeField] private Collider _siblingCollider;
     private bool _started = false;
+    [SerializeField] private float _maxVolume;
 
     private void Awake()
     {
@@ -27,14 +28,15 @@ public class MusicTrigger : MonoBehaviour
     {
         if (MusicManager.Instance.TriggerLastEntered == _siblingCollider)
         {
-            StopCoroutine(MusicManager.Instance.SwitchToTrack(_track, _thisCollider));
-            StartCoroutine(MusicManager.Instance.SwitchToTrack(_track, _thisCollider));
+            StopCoroutine(MusicManager.Instance.SwitchToTrack(_track, _thisCollider, _maxVolume));
+            StartCoroutine(MusicManager.Instance.SwitchToTrack(_track, _thisCollider, _maxVolume));
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        StopCoroutine(MusicManager.Instance.SwitchToTrack(_track, _thisCollider));
-        StartCoroutine(MusicManager.Instance.SwitchToTrack(_track, _thisCollider));
+        if (!other.CompareTag(TagConstants.MainPlayer)) { return; }
+        StopCoroutine(MusicManager.Instance.SwitchToTrack(_track, _thisCollider, _maxVolume));
+        StartCoroutine(MusicManager.Instance.SwitchToTrack(_track, _thisCollider, _maxVolume));
     }
 }

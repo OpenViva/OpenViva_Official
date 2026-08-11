@@ -28,7 +28,7 @@ public class CharacterAssembler : MonoBehaviour
         {
             charactersFolder = Directory.GetParent(Application.dataPath).FullName;
             charactersFolder = Path.Combine(charactersFolder, "Characters");
-            Debug.LogError($"[Chara Loader] Found Characters path at {charactersFolder}");
+            Debug.Log($"[Chara Loader] Found Characters path at {charactersFolder}");
         }
 #else
         if (Application.platform == RuntimePlatform.WindowsPlayer)

@@ -15,6 +15,11 @@ public class PlayerKB_HUD : MonoBehaviour
         // Update the GPS position based on the player's position
         float posX = player.transform.position.x;
         float posZ = player.transform.position.z;
-        gps.GetComponent<RectTransform>().localPosition = new Vector3(posX/(873.1f/102.8f) + 12.90f, posZ/(584.7f/65.2f) - 7.78f, 0); // Used maths for this. Based on map scale.
+        /*
+         * Got these values using trail and error.
+         * DO NOT CHANGE FOR THE LOVE OF ALL THAT IS HOLY
+         * 0.171f; 17.78; 0.16; -11.44
+         */
+        gps.GetComponent<RectTransform>().localPosition = new Vector3((posX * 0.171f) + 17.78f, (posZ * 0.16f) + -11.44f, 0);
     }
 }
