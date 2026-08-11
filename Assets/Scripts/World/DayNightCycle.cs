@@ -6,10 +6,9 @@ using System.Linq;
 
 public enum CycleSpeed 
 { 
-    FiveMinutes, 
-    TwentyMinutes, 
-    OneHour,
-    ThreeHours,
+    TwelveMinutes, 
+    FourtyEightMinutes, 
+    TwoHours,
     SixHours,
     TwelveHours,
     OneDay
@@ -260,10 +259,9 @@ public class DayNightCycle : MonoBehaviour
     {
         rotateSpeed = currentCycleSpeed switch
         {
-            CycleSpeed.FiveMinutes => 360f / (5 * 60),
-            CycleSpeed.TwentyMinutes => 360f / (20 * 60),
-            CycleSpeed.OneHour => 360f / (1 * 60 * 60),
-            CycleSpeed.ThreeHours => 360f / (3 * 60 * 60),
+            CycleSpeed.TwelveMinutes => 360f / (12 * 60),
+            CycleSpeed.FourtyEightMinutes => 360f / (48 * 60),
+            CycleSpeed.TwoHours => 360f / (2 * 60 * 60),
             CycleSpeed.SixHours => 360f / (6 * 60 * 60),
             CycleSpeed.TwelveHours => 360f / (12 * 60 * 60),
             CycleSpeed.OneDay => 360f / (24 * 60 * 60),
@@ -272,10 +270,9 @@ public class DayNightCycle : MonoBehaviour
         
         var transitionSpeed = currentCycleSpeed switch
         {
-            CycleSpeed.FiveMinutes => 25f,
-            CycleSpeed.TwentyMinutes => 100f,
-            CycleSpeed.OneHour => 300f,
-            CycleSpeed.ThreeHours => 900f,
+            CycleSpeed.TwelveMinutes => 60f,
+            CycleSpeed.FourtyEightMinutes => 240f,
+            CycleSpeed.TwoHours => 600f,
             CycleSpeed.SixHours => 1800f,
             CycleSpeed.TwelveHours => 3600f,
             CycleSpeed.OneDay => 7200f,
