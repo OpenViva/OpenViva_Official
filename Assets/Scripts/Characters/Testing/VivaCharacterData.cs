@@ -21,6 +21,7 @@ public class CharacterInfo
     public string Name = "Fox Girl #9000";
     public string AuthorName = "Unknown";
     public int Version = 1;
+    public string HeadBonePath;
     public int PersonalityType = 0;
     public VoicePack VoicePack;
     public string Description = "Return to hot spring when found.";

@@ -9,6 +9,7 @@ public enum VoicePack
 [ExecuteInEditMode]
 public class VivaDescriptor : MonoBehaviour
 {
+    // Chara info
     [Header("Character Information")]
     [Tooltip("Name of the model")]
     public string Name = "Fox Girl 9000";
@@ -19,12 +20,19 @@ public class VivaDescriptor : MonoBehaviour
     [Tooltip("Version, usually the amount of times you build the character")]
     public int Version = 1;
 
+    // Expression setup
+    [Header("Expressiveness")]
+    [Tooltip("Drag your \"Head\" bone here. Often named the same way")]
+    public Transform HeadBone;
+
+    // Personality
     [Header("Personality")]
     [Tooltip("The personality type in a number (0 = default)")]
     public int PersonalityType = 0;
 
     public VoicePack VoicePack;
 
+    // Optional Info
     [Header("Optional Info")]
     [Tooltip("Optional description")]
     public string Description = "";
@@ -35,6 +43,7 @@ public class VivaDescriptor : MonoBehaviour
     [Tooltip("Custom color for UI highlighting")]
     public Color CustomColor = Color.orange;
 
+    // Aux
     [Header("Unused Values")]
     public int Aux1;
     public int Aux2;

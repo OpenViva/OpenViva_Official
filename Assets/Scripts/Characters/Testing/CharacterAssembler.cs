@@ -117,82 +117,80 @@ public class CharacterAssembler : MonoBehaviour
 
         try
         {
-            using (FileStream fs = new FileStream(characterPath, FileMode.Open, FileAccess.Read))
-            using (BinaryReader reader = new BinaryReader(fs))
+            using FileStream fs = new(characterPath, FileMode.Open, FileAccess.Read);
+            using BinaryReader reader = new(fs);
+            var header = VivaFormat.ReadHeader(reader);
+
+            // Check format key
+            if (header.VivaKey != VivaFormat.VivaBytes)
             {
-                var header = VivaFormat.ReadHeader(reader);
-
-                // Check format key
-                if (header.VivaKey != VivaFormat.VivaBytes)
-                {
-                    Debug.LogError($"[Chara Loader] Invalid package file format: {characterPath} (Key: {header.VivaKey})");
-                    return;
-                }
-
-                // Check format version against the current version
-                if (header.Version > VivaFormat.CurrentVersion)
-                {
-                    Debug.LogError($"[Chara Loader] Unsupported version: {header.Version}. Max supported: {VivaFormat.CurrentVersion}.");
-                    return;
-                }
-
-                byte[] characterDataBytes = reader.ReadBytes(header.CharacterDataSize);
-                byte[] bundleData = reader.ReadBytes(header.BundleSize);
-
-                // Load Character data
-                VivaCharacterData charData = JsonUtility.FromJson<VivaCharacterData>(
-                System.Text.Encoding.UTF8.GetString(characterDataBytes));
-
-                // Load AssetBundle from memory
-                var assetBundle = AssetBundle.LoadFromMemory(bundleData);
-                if (assetBundle == null)
-                {
-                    Debug.LogError("[Chara Loader] Failed to load AssetBundle from memory.");
-                    return;
-                }
-
-                GameObject prefab = null;
-
-                if (!string.IsNullOrEmpty(charData.PrefabName))
-                {
-                    prefab = assetBundle.LoadAsset<GameObject>(charData.PrefabName);
-                }
-
-                // Fallback, load all assets and read first one
-                if (prefab == null)
-                {
-                    var allAssets = assetBundle.LoadAllAssets<GameObject>();
-                    if (allAssets.Length > 0)
-                    {
-                        prefab = allAssets[0];
-                        Debug.LogWarning("[Chara Loader] Prefab name not found, using first asset.");
-                    }
-                }
-
-                if (prefab == null)
-                {
-                    Debug.LogError("[Chara Loader] Failed to load prefab from AssetBundle.");
-                    assetBundle.Unload(false);
-                    return;
-                }
-
-                VivaCharacter newData = prefab.AddComponent<VivaCharacter>();
-                newData.characterData = charData;
-
-                CharacterModel newCharacterModel = new()
-                {
-                    bundleName = bundleName,
-                    prefab = prefab,
-                    vivaCharacterData = charData
-                };
-
-                // Add character to the list
-                loadedCharacters.Add(newCharacterModel);
-
-                // Cleanup AssetBundle
-                assetBundle.Unload(false);
-                Debug.Log($"[Chara Loader] Character loaded with prefab name: {prefab.name}");
+                Debug.LogError($"[Chara Loader] Invalid package file format: {characterPath} (Key: {header.VivaKey})");
+                return;
             }
+
+            // Check format version against the current version
+            if (header.Version > VivaFormat.CurrentVersion)
+            {
+                Debug.LogError($"[Chara Loader] Unsupported version: {header.Version}. Max supported: {VivaFormat.CurrentVersion}.");
+                return;
+            }
+
+            byte[] characterDataBytes = reader.ReadBytes(header.CharacterDataSize);
+            byte[] bundleData = reader.ReadBytes(header.BundleSize);
+
+            // Load Character data
+            VivaCharacterData charData = JsonUtility.FromJson<VivaCharacterData>(
+            System.Text.Encoding.UTF8.GetString(characterDataBytes));
+
+            // Load AssetBundle from memory
+            var assetBundle = AssetBundle.LoadFromMemory(bundleData);
+            if (assetBundle == null)
+            {
+                Debug.LogError("[Chara Loader] Failed to load AssetBundle from memory.");
+                return;
+            }
+
+            GameObject prefab = null;
+
+            if (!string.IsNullOrEmpty(charData.PrefabName))
+            {
+                prefab = assetBundle.LoadAsset<GameObject>(charData.PrefabName);
+            }
+
+            // Fallback, load all assets and read first one
+            if (prefab == null)
+            {
+                var allAssets = assetBundle.LoadAllAssets<GameObject>();
+                if (allAssets.Length > 0)
+                {
+                    prefab = allAssets[0];
+                    Debug.LogWarning("[Chara Loader] Prefab name not found, using first asset.");
+                }
+            }
+
+            if (prefab == null)
+            {
+                Debug.LogError("[Chara Loader] Failed to load prefab from AssetBundle.");
+                assetBundle.Unload(false);
+                return;
+            }
+
+            VivaCharacter newData = prefab.AddComponent<VivaCharacter>();
+            newData.characterData = charData;
+
+            CharacterModel newCharacterModel = new()
+            {
+                bundleName = bundleName,
+                prefab = prefab,
+                vivaCharacterData = charData
+            };
+
+            // Add character to the list
+            loadedCharacters.Add(newCharacterModel);
+
+            // Cleanup AssetBundle
+            assetBundle.Unload(false);
+            Debug.Log($"[Chara Loader] Character loaded with prefab name: {prefab.name}");
         }
         catch (System.Exception ex)
         {
