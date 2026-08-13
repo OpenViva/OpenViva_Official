@@ -26,6 +26,7 @@ public class RagdollSpawner : MonoBehaviour
     [SerializeField] private PhysicsAttacher _physicsAttacher;
     [SerializeField] private CharacterAssembler _characterReader;
     public List<GameObject> loadedCharacters;
+    public RagdollAnimatorFeatureHelper kinematicFeetSwitcher;
 
     private Vector3 _startingCoords;
     List<GameObject> rootBoneObjects; // DEPRECATED
@@ -61,7 +62,7 @@ public class RagdollSpawner : MonoBehaviour
     }
 
     [Button("Spawn & Setup Ragdoll", EButtonEnableMode.Playmode)]
-    public void SpawnAndSetupRagdoll(bool spawnPrefab = true)
+    public void SpawnAndSetupRagdoll()
     {
         if (characterPrefab == null) return;
 
@@ -122,6 +123,9 @@ public class RagdollSpawner : MonoBehaviour
 
         // 6. Enable and set initial state
         ragdoll.enabled = true;
+
+        AddKinematicFeetAtRuntime(ragdoll);
+
         ragdoll.Settings.Initialize(ragdoll, newChar); // Prevents some runtime exceptions
         ragdoll.User_SwitchFallState(RagdollHandler.EAnimatingMode.Standing);
 
@@ -137,6 +141,18 @@ public class RagdollSpawner : MonoBehaviour
         }
 
         Debug.Log($"Ragdoll fully auto-setup on {newChar.name}");
+    }
+
+    public void AddKinematicFeetAtRuntime(RagdollAnimator2 animator)
+    {
+        if (animator != null)
+        {
+            animator.Handler.ExtraFeatures.Add(kinematicFeetSwitcher);
+
+            RagdollAnimatorFeatureHelper kinematicFeature = animator.Handler.ExtraFeatures.Find(x => x == kinematicFeetSwitcher);
+
+            kinematicFeature.Enabled = true;
+        }
     }
 
     private void AssignAnimatorController(GameObject characterRoot, RuntimeAnimatorController animatorController)
