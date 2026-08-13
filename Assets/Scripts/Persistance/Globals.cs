@@ -10,4 +10,8 @@ public static class Globals
 
     // --- Toggles ---
     public static bool isDesktopMode = true;
+
+    public static event System.Action OnBookOpened;
+
+    public static void RaiseBookOpened() => OnBookOpened?.Invoke();
 }
