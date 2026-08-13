@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1419522077923798630}
   - component: {fileID: 5622464079187500490}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 7735152886223150541}
   - component: {fileID: 2573884480855329091}
   - component: {fileID: 8355477321983701148}
+  - component: {fileID: 7745267955267950242}
   m_Layer: 5
   m_Name: Char_Item
   m_TagString: Untagged
@@ -153,6 +154,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7745267955267950242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 954070384135345011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69bb85a6fb402c643a7797e23557b63b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterListItem
+  nameText: {fileID: 5526149791296226172}
+  button: {fileID: 7283846391793148501}
 --- !u!1 &2182029218285246096
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,7 +450,7 @@ GameObject:
   - component: {fileID: 6928063669070947406}
   - component: {fileID: 5526149791296226172}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
