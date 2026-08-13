@@ -14,6 +14,9 @@ public class RagdollSpawner : MonoBehaviour
     [Header("Animation Settings")]
     public RuntimeAnimatorController animationControllerName;
 
+    [Header("Ragdoll Extra Features")]
+    public List<RagdollAnimatorFeatureBase> extraFeaturesList;
+
     [Header("NavMeshAgent Settings")]
     public float agentSpeed = 1.5f;
     public float agentRadius = 0.3f;
@@ -26,7 +29,7 @@ public class RagdollSpawner : MonoBehaviour
     [SerializeField] private PhysicsAttacher _physicsAttacher;
     [SerializeField] private CharacterAssembler _characterReader;
     public List<GameObject> loadedCharacters;
-    public RagdollAnimatorFeatureHelper kinematicFeetSwitcher;
+    
 
     private Vector3 _startingCoords;
     List<GameObject> rootBoneObjects; // DEPRECATED
@@ -124,10 +127,14 @@ public class RagdollSpawner : MonoBehaviour
         // 6. Enable and set initial state
         ragdoll.enabled = true;
 
-        AddKinematicFeetAtRuntime(ragdoll);
+        // Fill in all the selected Extra features
+        AddRagdollFeatures(ragdoll);
 
         ragdoll.Settings.Initialize(ragdoll, newChar); // Prevents some runtime exceptions
         ragdoll.User_SwitchFallState(RagdollHandler.EAnimatingMode.Standing);
+
+        // Preemtively lower the thickness of the automatically created colliders
+        ReduceAndUpdateThickness(ragdoll);
 
         // 7. Set up cloth physics
         if (physicsBoneDataList.Count != 0)
@@ -143,15 +150,32 @@ public class RagdollSpawner : MonoBehaviour
         Debug.Log($"Ragdoll fully auto-setup on {newChar.name}");
     }
 
-    public void AddKinematicFeetAtRuntime(RagdollAnimator2 animator)
+    public void ReduceAndUpdateThickness(RagdollAnimator2 ragdoll)
     {
-        if (animator != null)
+        ragdoll.Handler.Chains[0].ChainThicknessMultiplier = 0.6f;
+        ragdoll.Handler.Chains[1].ChainThicknessMultiplier = 0.6f;
+        ragdoll.Handler.Chains[2].ChainThicknessMultiplier = 0.6f;
+
+        if (ragdoll.Handler.Chains.Count > 3)
         {
-            animator.Handler.ExtraFeatures.Add(kinematicFeetSwitcher);
+            ragdoll.Handler.Chains[3].ChainThicknessMultiplier = 0.6f;
+        }
+        if (ragdoll.Handler.Chains.Count > 4)
+        {
+            ragdoll.Handler.Chains[4].ChainThicknessMultiplier = 0.6f;
+        }
 
-            RagdollAnimatorFeatureHelper kinematicFeature = animator.Handler.ExtraFeatures.Find(x => x == kinematicFeetSwitcher);
+        ragdoll.Settings.User_UpdateAllBonesParametersAfterManualChanges();
+    }
 
-            kinematicFeature.Enabled = true;
+    public void AddRagdollFeatures(RagdollAnimator2 ragdoll)
+    {
+        if (ragdoll != null && extraFeaturesList.Count > 0)
+        {
+            foreach (var extraFeature in extraFeaturesList)
+            {
+                ragdoll.Handler.AddRagdollFeature(extraFeature);
+            }
         }
     }
 
