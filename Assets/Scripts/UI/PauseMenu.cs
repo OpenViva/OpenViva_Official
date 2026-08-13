@@ -145,8 +145,18 @@ public class PauseMenu : MonoBehaviour
             RightPage.SetActive(true);
 
             rootPage.SetActive(true);
+
+            // TODO: REMOVE THIS TEMPORARY FIX
+            Transform firstChild = RightPage.transform.GetChild(0);
+            if (firstChild != null)
+            {
+                firstChild.gameObject.SetActive(true);
+            }
         }
         else Debug.LogWarning("rootPage reference is null!", this);
+
+        // 5. Tell everyone the book has been opened
+        Globals.RaiseBookOpened();
     }
 
     private IEnumerator CloseSequenceRoutine()
