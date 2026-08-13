@@ -1,6 +1,7 @@
 using FIMSpace.FProceduralAnimation;
 using NaughtyAttributes;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,6 +17,10 @@ public class RagdollSpawner : MonoBehaviour
 
     [Header("Ragdoll Extra Features")]
     public List<RagdollAnimatorFeatureBase> extraFeaturesList;
+
+    [Header("UI Reference")]
+    public GameObject listContentObject;
+    public GameObject characterItemPrefab;
 
     [Header("NavMeshAgent Settings")]
     public float agentSpeed = 1.5f;
@@ -56,6 +61,36 @@ public class RagdollSpawner : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        Globals.OnBookOpened += FillBookCharacters;
+    }
+
+    private void OnDestroy()
+    {
+        Globals.OnBookOpened -= FillBookCharacters;
+    }
+
+    void FillBookCharacters()
+    {
+        foreach (Transform child in listContentObject.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        List<CharacterAssembler.CharacterModel> allModels = _characterReader.GetAllModels();
+
+        
+        foreach (var model in allModels)
+        {
+            GameObject newEntry = Instantiate(characterItemPrefab, listContentObject.transform);
+
+            var item = newEntry.GetComponent<CharacterListItem>();
+
+            item.SetupButton(model.bundleName, SpawnAndSetupRagdoll);
+        }
+    }
+
     GameObject SpawnCharacter(GameObject prefabToSpawn)
     {
         GameObject instance = Instantiate(prefabToSpawn, _startingCoords, transform.rotation.normalized);
@@ -65,11 +100,11 @@ public class RagdollSpawner : MonoBehaviour
     }
 
     [Button("Spawn & Setup Ragdoll", EButtonEnableMode.Playmode)]
-    public void SpawnAndSetupRagdoll()
+    public void SpawnAndSetupRagdoll(string bundleName)
     {
         if (characterPrefab == null) return;
 
-        CharacterAssembler.CharacterModel importedModel = _characterReader.GetFirstModel();
+        CharacterAssembler.CharacterModel importedModel = _characterReader.GetModelByName(bundleName);
         characterPrefab = importedModel.prefab;
         loadedCharacters.Add(importedModel.prefab);
 
