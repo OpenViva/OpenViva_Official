@@ -183,15 +183,12 @@ public class BowlLogic : MonoBehaviour
         if (wheatWhole >= 10) { return; }
         _flourDots[wheatWhole + 1].localScale = new(wheatRemainder * 0.5f, wheatRemainder * 0.5f, wheatRemainder * 0.5f);
 
-        float width = _batterVolume / _maxBatterVolume * 600;
-        _displayBackground.sizeDelta = new(width, _displayBackground.sizeDelta.y);
-        float posX = -111 + (111 * (_batterVolume / _maxBatterVolume));
-        _displayBackground.anchoredPosition = new(posX, _displayBackground.anchoredPosition.y);
+        float posX = -225 + (_batterVolume / _maxBatterVolume * 225);
+        _displayBackground.localPosition = new(posX, 0, 0);
 
         int batterWhole = (int)(_batterVolume / 350);
-        _displayForeground.sizeDelta = new(batterWhole * 60, _displayForeground.sizeDelta.y);
-        posX = -111 + (111 * (batterWhole * 350 / _maxBatterVolume));
-        _displayForeground.anchoredPosition = new(posX, _displayForeground.anchoredPosition.y);
+        posX = -225 + (batterWhole * 350 / _maxBatterVolume * 225);
+        _displayForeground.localPosition = new(posX, 0, 0);
     }
 
     private void SetAllBlends()

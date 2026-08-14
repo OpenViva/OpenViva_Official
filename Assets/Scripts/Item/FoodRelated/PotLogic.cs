@@ -37,7 +37,7 @@ public class PotLogic : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _peachText;
     [SerializeField] private TextMeshProUGUI _cantaloupeText;
     [SerializeField] private RectTransform _temperatureBackground;
-    [SerializeField] private GameObject _jamBackground;
+    [SerializeField] private RectTransform _jamBackground;
     [SerializeField] private TextMeshProUGUI _jamAmount;
 
     private AudioSource _audioSource;
@@ -146,16 +146,11 @@ public class PotLogic : MonoBehaviour
         _peachText.SetText($"{_peachPieces:0.0}");
         _cantaloupeText.SetText($"{_cantaloupePieces:0.0}");
 
-        float width = _temperature / 85 * 950;
-        _temperatureBackground.sizeDelta = new(width, _temperatureBackground.sizeDelta.y);
-        float posX = -248.5f + (208.5f * (_temperature / 85));
-        _temperatureBackground.anchoredPosition = new(posX, _temperatureBackground.anchoredPosition.y);
+        float posX = -360 + (_temperature / 85 * 360);
+        _temperatureBackground.localPosition = new(posX, 0, 0);
 
-        width = GetSumOfJam() / JAM_CAPACITY * 900;
-        RectTransform rectTransform = _jamBackground.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = new(width, rectTransform.sizeDelta.y);
-        posX = -233.7f + (165.2f * (GetSumOfJam() / JAM_CAPACITY));
-        rectTransform.anchoredPosition = new(posX, rectTransform.anchoredPosition.y);
+        posX = -330 + (GetSumOfJam() / JAM_CAPACITY * 330);
+        _jamBackground.localPosition = new(posX, 0, 0);
 
         _jamAmount.SetText(((int)GetSumOfJam()).ToString());
 
