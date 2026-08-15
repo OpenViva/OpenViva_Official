@@ -27,9 +27,9 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 5941a02f0fd0a874c8c69f3df442a9d2, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 2800000, guid: ebc047ed6a4cc07429eee2b5f5c49dd1, type: 3}
+        m_Scale: {x: 1.14, y: 1.14}
+        m_Offset: {x: 0.06, y: -0.12}
     - _BumpMap:
         m_Texture: {fileID: 2800000, guid: 5eb11ebc7cec929419d90c3c5b1e8807, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -51,9 +51,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 5941a02f0fd0a874c8c69f3df442a9d2, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 2800000, guid: ebc047ed6a4cc07429eee2b5f5c49dd1, type: 3}
+        m_Scale: {x: 1.14, y: 1.14}
+        m_Offset: {x: 0.06, y: -0.12}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -84,6 +84,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
@@ -115,6 +116,7 @@ Material:
     - _Surface: 0
     - _UVSec: 0
     - _WorkflowMode: 1
+    - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
