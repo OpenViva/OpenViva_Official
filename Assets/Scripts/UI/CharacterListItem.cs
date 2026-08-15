@@ -7,9 +7,9 @@ public class CharacterListItem : MonoBehaviour
     public TextMeshProUGUI nameText;
     public Button button;
 
-    public void SetupButton(string bundleName, System.Action<string> onClicked)
+    public void SetupButton(string bundleName, string charName, System.Action<string> onClicked)
     {
-        nameText.text = bundleName;
+        nameText.text = charName;
 
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() => onClicked(bundleName));
