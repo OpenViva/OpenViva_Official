@@ -1,5 +1,4 @@
 using FIMSpace.FProceduralAnimation;
-using NaughtyAttributes;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,6 +9,7 @@ public class RagdollSpawner : MonoBehaviour
 {
     [Header("Prefab to Spawn")]
     public GameObject characterPrefab;
+    public string tagToGive = "Character";
 
     [Header("Animation Settings")]
     public RuntimeAnimatorController animationControllerName;
