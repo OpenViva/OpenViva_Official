@@ -1,7 +1,6 @@
 using FIMSpace.FProceduralAnimation;
 using NaughtyAttributes;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -37,7 +36,6 @@ public class RagdollSpawner : MonoBehaviour
     
 
     private Vector3 _startingCoords;
-    List<GameObject> rootBoneObjects; // DEPRECATED
     List<PhysicsBoneData> physicsBoneDataList;
 
     private void Start()
@@ -99,7 +97,6 @@ public class RagdollSpawner : MonoBehaviour
         return instance;
     }
 
-    [Button("Spawn & Setup Ragdoll", EButtonEnableMode.Playmode)]
     public void SpawnAndSetupRagdoll(string bundleName)
     {
         if (characterPrefab == null) return;
