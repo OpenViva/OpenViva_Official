@@ -85,7 +85,7 @@ public class RagdollSpawner : MonoBehaviour
 
             var item = newEntry.GetComponent<CharacterListItem>();
 
-            item.SetupButton(model.bundleName, SpawnAndSetupRagdoll);
+            item.SetupButton(model.vivaCharacterData.Info.Name, SpawnAndSetupRagdoll);
         }
     }
 
