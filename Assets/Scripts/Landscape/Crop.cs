@@ -77,19 +77,19 @@ public class Crop : PlayerKB_GrabObject
             {
                 case float n when (n >= 0 && n < 0.5):
                     if (_currentColor == _phase1Color) { return; }
-                    r.material.color = _phase1Color;
+                    r.sharedMaterial.color = _phase1Color;
                     _currentColor = _phase1Color;
                     break;
 
                 case float n when (n >= 0.5f && n < 0.99):
                     if (_currentColor == _phase2Color) { return; }
-                    r.material.color = _phase2Color;
+                    r.sharedMaterial.color = _phase2Color;
                     _currentColor = _phase2Color;
                     break;
 
                 default:
                     if (_currentColor == _finalColor) { return; }
-                    r.material.color = _finalColor;
+                    r.sharedMaterial.color = _finalColor;
                     _currentColor = _finalColor;
                     break;
             }
