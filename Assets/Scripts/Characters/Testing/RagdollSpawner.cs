@@ -136,7 +136,7 @@ public class RagdollSpawner : MonoBehaviour
         agent.baseOffset = 0f;
         agent.angularSpeed = 3600f;
         agent.acceleration = 8f;
-        agent.stoppingDistance = 0.5f;
+        agent.stoppingDistance = 0.7f;
 
         // Important for ragdoll compatibility
         // When ragdoll is active (Falling mode), disable NavMeshAgent movement
