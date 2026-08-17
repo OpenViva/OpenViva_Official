@@ -24,6 +24,7 @@ public class NavAgentController : MonoBehaviour
 
     private NavMeshAgent _agent;
     private Animator _animator;
+    private Vector3[] _cornerBuffer = new Vector3[64];
 
     void Awake()
     {
@@ -110,16 +111,23 @@ public class NavAgentController : MonoBehaviour
     {
         NavMeshPath path = _agent.path;
 
-        if (path.corners.Length < 2)
+        int cornerCount = path.GetCornersNonAlloc(_cornerBuffer);
+
+        if (cornerCount < 2)
         {
             return _agent.destination;
         }
 
-        for (int i = 0; i < path.corners.Length; i++)
+        for (int i = 0; i < cornerCount; i++)
         {
-            if (Vector3.Distance(_agent.transform.position, path.corners[i]) < 1)
+            if (Vector3.Distance(_agent.transform.position, _cornerBuffer[i]) < 1)
             {
-                return path.corners[i + 1];
+                if (i + 1 < cornerCount)
+                {
+                    return _cornerBuffer[i + 1];
+                }
+
+                break;
             }
         }
 
