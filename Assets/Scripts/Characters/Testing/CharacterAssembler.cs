@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class CharacterAssembler : MonoBehaviour
@@ -10,9 +12,6 @@ public class CharacterAssembler : MonoBehaviour
     private bool isLoading = false;
 
     private string charactersFolder = null;
-
-    // Cached invocations
-    private static readonly WaitForSecondsRealtime _waitForSecondsRealtime3 = new(3f);
     #endregion
 
     private void Start()
@@ -22,7 +21,6 @@ public class CharacterAssembler : MonoBehaviour
 
     private void GetCharactersFolder()
     {
-
 #if UNITY_EDITOR
         if (Application.isEditor)
         {
@@ -31,7 +29,7 @@ public class CharacterAssembler : MonoBehaviour
             Debug.Log($"[Chara Loader] Found Characters path at {charactersFolder}");
         }
 #else
-        if (Application.platform == RuntimePlatform.WindowsPlayer)
+        if (Application.platform == RuntimePlatform.WindowsPlatform)
         {
             string buildFolder = Directory.GetParent(Application.dataPath).FullName;
             charactersFolder = Path.Combine(buildFolder, "Characters");
@@ -93,77 +91,53 @@ public class CharacterAssembler : MonoBehaviour
 
     private IEnumerator ReadCharactersAsync(string[] vivaFiles)
     {
-        yield return _waitForSecondsRealtime3;
-
         foreach (string vivaFile in vivaFiles)
         {
-            yield return null;
-
             string bundleName = Path.GetFileNameWithoutExtension(vivaFile);
-            ReadSingleCharacter(vivaFile, bundleName);
-        }
 
-        Debug.Log($"[Chara Loader] Loaded {loadedCharacters.Count} characters.");
-        isLoading = false;
-    }
-
-    private void ReadSingleCharacter(string characterPath, string bundleName)
-    {
-        if (!File.Exists(characterPath))
-        {
-            Debug.LogError($"[Chara Loader] Package not found: {characterPath}");
-            return;
-        }
-
-        try
-        {
-            using FileStream fs = new(characterPath, FileMode.Open, FileAccess.Read);
-            using BinaryReader reader = new(fs);
-            var header = VivaFormat.ReadHeader(reader);
-
-            // Check format key
-            if (header.VivaKey != VivaFormat.VivaBytes)
+            // 1. Offload file reading and JSON parsing to a background thread
+            Task<ParsedFileData> parseTask = Task.Run(() => ReadFileOnBackgroundThread(vivaFile));
+            while (!parseTask.IsCompleted)
             {
-                Debug.LogError($"[Chara Loader] Invalid package file format: {characterPath} (Key: {header.VivaKey})");
-                return;
+                yield return null; // Wait for thread without blocking main frame
             }
 
-            // Check format version against the current version
-            if (header.Version > VivaFormat.CurrentVersion)
+            ParsedFileData fileData = parseTask.Result;
+            if (fileData.HasError)
             {
-                Debug.LogError($"[Chara Loader] Unsupported version: {header.Version}. Max supported: {VivaFormat.CurrentVersion}.");
-                return;
+                Debug.LogError($"[Chara Loader] {fileData.ErrorMessage}");
+                continue;
             }
 
-            byte[] characterDataBytes = reader.ReadBytes(header.CharacterDataSize);
-            byte[] bundleData = reader.ReadBytes(header.BundleSize);
+            // 2. Load AssetBundle asynchronously on the Main Thread
+            AssetBundleCreateRequest bundleRequest = AssetBundle.LoadFromMemoryAsync(fileData.BundleData);
+            yield return bundleRequest;
 
-            // Load Character data
-            VivaCharacterData charData = JsonUtility.FromJson<VivaCharacterData>(
-            System.Text.Encoding.UTF8.GetString(characterDataBytes));
-
-            // Load AssetBundle from memory
-            var assetBundle = AssetBundle.LoadFromMemory(bundleData);
+            AssetBundle assetBundle = bundleRequest.assetBundle;
             if (assetBundle == null)
             {
                 Debug.LogError("[Chara Loader] Failed to load AssetBundle from memory.");
-                return;
+                continue;
             }
 
+            // 3. Load Prefab asynchronously on the Main Thread
             GameObject prefab = null;
-
-            if (!string.IsNullOrEmpty(charData.PrefabName))
+            if (!string.IsNullOrEmpty(fileData.CharData.PrefabName))
             {
-                prefab = assetBundle.LoadAsset<GameObject>(charData.PrefabName);
+                AssetBundleRequest assetRequest = assetBundle.LoadAssetAsync<GameObject>(fileData.CharData.PrefabName);
+                yield return assetRequest;
+                prefab = assetRequest.asset as GameObject;
             }
 
-            // Fallback, load all assets and read first one
+            // Load the first asset if prefab is empty for some reason
             if (prefab == null)
             {
-                var allAssets = assetBundle.LoadAllAssets<GameObject>();
-                if (allAssets.Length > 0)
+                AssetBundleRequest allAssetsRequest = assetBundle.LoadAllAssetsAsync<GameObject>();
+                yield return allAssetsRequest;
+
+                if (allAssetsRequest.allAssets.Length > 0)
                 {
-                    prefab = allAssets[0];
+                    prefab = allAssetsRequest.allAssets[0] as GameObject;
                     Debug.LogWarning("[Chara Loader] Prefab name not found, using first asset.");
                 }
             }
@@ -172,79 +146,84 @@ public class CharacterAssembler : MonoBehaviour
             {
                 Debug.LogError("[Chara Loader] Failed to load prefab from AssetBundle.");
                 assetBundle.Unload(false);
-                return;
+                continue;
             }
 
+            // 4. Final setup on Main Thread
             VivaCharacter newData = prefab.AddComponent<VivaCharacter>();
-            newData.characterData = charData;
+            newData.characterData = fileData.CharData;
 
             CharacterModel newCharacterModel = new()
             {
                 bundleName = bundleName,
                 prefab = prefab,
-                vivaCharacterData = charData
+                vivaCharacterData = fileData.CharData
             };
 
-            // Add character to the list
             loadedCharacters.Add(newCharacterModel);
 
             // Cleanup AssetBundle
             assetBundle.Unload(false);
             Debug.Log($"[Chara Loader] Character loaded with prefab name: {prefab.name}");
         }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"[Chara Loader] Failed to load character: {ex.Message}\n{ex.StackTrace}");
-        }
+
+        Debug.Log($"[Chara Loader] Loaded {loadedCharacters.Count} characters.");
+        isLoading = false;
     }
 
-    private GameObject FindGameObjectByPath(GameObject root, string path)
+    /// <summary>
+    /// Thread-safe helper method to read binary and JSON off the main thread.
+    /// </summary>
+    private ParsedFileData ReadFileOnBackgroundThread(string characterPath)
     {
-        if (root == null)
+        if (!File.Exists(characterPath))
         {
-            Debug.LogError("[Chara Loader] Root GameObject is null!");
-            return null;
+            return new ParsedFileData { ErrorMessage = $"Package not found: {characterPath}" };
         }
 
-        if (string.IsNullOrEmpty(path))
+        try
         {
-            return root;
-        }
+            using FileStream fs = new(characterPath, FileMode.Open, FileAccess.Read);
+            using BinaryReader reader = new(fs);
+            var header = VivaFormat.ReadHeader(reader);
 
-        string[] pathParts = path.Split('/');
-
-        int startIndex = 0;
-        if (pathParts.Length > 1 || pathParts[0] == root.name) startIndex = 1;
-
-        // If path only contains the root name then give that instead
-        if (pathParts.Length == 1)
-        {
-            return root;
-        }
-
-        Transform current = root.transform;
-
-        for (int i = startIndex; i < pathParts.Length; i++)
-        {
-            string part = pathParts[i].Trim();
-
-            if (string.IsNullOrEmpty(part)) continue;
-
-            Transform found = current.Find(part);
-
-            if (found == null)
+            if (header.VivaKey != VivaFormat.VivaBytes)
             {
-                Debug.LogWarning($"[Chara Loader] Failed to find {part} in path: {part}");
-                return null;
+                return new ParsedFileData { ErrorMessage = $"Invalid package file format: {characterPath} (Key: {header.VivaKey})" };
             }
 
-            current = found;
-        }
+            if (header.Version > VivaFormat.CurrentVersion)
+            {
+                return new ParsedFileData { ErrorMessage = $"Unsupported version: {header.Version}. Max supported: {VivaFormat.CurrentVersion}." };
+            }
 
-        return current.gameObject;
+            byte[] characterDataBytes = reader.ReadBytes(header.CharacterDataSize);
+            byte[] bundleData = reader.ReadBytes(header.BundleSize);
+
+            VivaCharacterData charData = JsonUtility.FromJson<VivaCharacterData>(
+                System.Text.Encoding.UTF8.GetString(characterDataBytes));
+
+            return new ParsedFileData
+            {
+                CharData = charData,
+                BundleData = bundleData
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ParsedFileData { ErrorMessage = $"Failed to load character: {ex.Message}" };
+        }
     }
 
-    #region Data Classes
+    #region Helper Classes
+    private class ParsedFileData
+    {
+        public VivaCharacterData CharData;
+        public byte[] BundleData;
+        public string ErrorMessage;
+        public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
+    }
+
     public class CharacterModel
     {
         public string bundleName;
