@@ -136,17 +136,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 002468b4704502f48b44973cbe4db51b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transition:
-    _dawnToMorning: {fileID: 2100000, guid: d2165b8da4c9a5e41af19186bb30de31, type: 2}
-    _morningToDay: {fileID: 2100000, guid: 00a0c1c1432ec114fbfaccbd46093fa8, type: 2}
-    _dayToAfternoon: {fileID: 2100000, guid: eec36d979a3f7c0439b983aa4fd8b85e, type: 2}
-    _afternoonToDusk: {fileID: 2100000, guid: 2acfc1eda53ee8f44b8f44d2ed5ce74d, type: 2}
-    _duskToNight: {fileID: 2100000, guid: 524927a1f4b03384abfcf2a42595445e, type: 2}
-    _nightToDawn: {fileID: 2100000, guid: 2b57442654bfa1941934338450ef93d5, type: 2}
-  <currentCycleSpeed>k__BackingField: 1
-  revolutionPoint: {fileID: 4313976418349636093}
-  sun: {fileID: 1686450943902568182}
-  hours: 8
+  _transition:
+    _dawnToMorning: {fileID: 0}
+    _morningToDay: {fileID: 0}
+    _dayToAfternoon: {fileID: 0}
+    _afternoonToDusk: {fileID: 0}
+    _duskToNight: {fileID: 0}
+    _nightToDawn: {fileID: 0}
+  <CurrentCycleSpeed>k__BackingField: 0
+  _revolutionPoint: {fileID: 4313976418349636093}
+  _sun: {fileID: 1686450943902568182}
+  _isPaused: 0
+  _transitionSmoothness: 0.1
 --- !u!1 &5886995189330840313
 GameObject:
   m_ObjectHideFlags: 0
