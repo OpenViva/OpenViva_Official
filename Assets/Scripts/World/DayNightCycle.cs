@@ -1,8 +1,11 @@
+using IngameDebugConsole;
+using NaughtyAttributes;
 using System;
 using System.Collections;
-using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Android.Gradle.Manifest;
+using UnityEngine;
 
 public enum CycleSpeed 
 { 
@@ -218,6 +221,8 @@ public class DayNightCycle : MonoBehaviour
         SetCycleSpeed(currentCycleSpeed);
 
         _daylightSensors = FindObjectsByType<DaylightSensor>(FindObjectsSortMode.None).ToList();
+
+        DebugLogConsole.AddCommandInstance("SetTime", "Change the time, a value between 0 and 1 (as percentage of hours between 0 and 24)", nameof(SetTime), this);
     }
 
     void Update()
@@ -362,4 +367,42 @@ public class DayNightCycle : MonoBehaviour
         return currentCycleSpeed;
     }
 
+    #region Public Methods
+
+    [Button("Set Day", EButtonEnableMode.Playmode)]
+    public void SetDay()
+    {
+        SetTimeOfDay(0.4f);
+    }
+
+    [Button("Set Night", EButtonEnableMode.Playmode)]
+    public void SetNight()
+    {
+        SetTimeOfDay(0.8f);
+    }
+
+    public void SetTime(float newTime)
+    {
+        SetTimeOfDay(Mathf.Clamp(newTime, 0, 1));
+
+        Debug.Log("Changed time of day to: " + newTime);
+    }
+
+    public void SetTimeOfDay(float timeOfDay)
+    {
+        timeOfDay = Mathf.Clamp01(timeOfDay);
+
+        int targetMinutes = (int)(timeOfDay * 1440f);
+
+        minutesAccumulated = 0;
+
+        _minutes = targetMinutes;
+
+        float sunAngle = targetMinutes / 1440f * 360f;
+        revolutionPoint.transform.rotation = Quaternion.Euler(sunAngle, 0, 0);
+
+        transition.UpdateTransition();
+    }
+
+    #endregion
 }
