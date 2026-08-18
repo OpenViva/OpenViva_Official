@@ -26,23 +26,26 @@ public class LanternKB : MonoBehaviour
         _controls.Viva.InteractRight.performed += ToggleLanternRight;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         _isGrabbed = _grabScript.GetIsGrabbed();
 
         if (_doOnce)
         {
-            if (_isGrabbed == 1)
+            if (_isGrabbed == 1 && _doOnce)
             {
                 _hud.CreateHint(HintConstants.LeftLanternHint);
                 _doOnce = false;
             }
-            else if (_isGrabbed == 2)
+            else if (_isGrabbed == 2 && _doOnce)
             {
                 _hud.CreateHint(HintConstants.RightLanternHint);
                 _doOnce = false;
             }
-            else
+        }
+        else
+        {
+            if (_isGrabbed == 0)
             {
                 _hud.ClearHint(HintConstants.LeftLanternHint);
                 _hud.ClearHint(HintConstants.RightLanternHint);

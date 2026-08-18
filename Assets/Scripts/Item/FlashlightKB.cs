@@ -33,7 +33,7 @@ public class FlashlightKB : MonoBehaviour
         _controls.Viva.InteractRight.performed += ToggleFlashlightRight;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         _isGrabbed = _grabScript.GetIsGrabbed();
 

@@ -42,7 +42,7 @@ public class InventoryKB : MonoBehaviour
         _player.Controls.Viva.ScrollUp.performed += ScrollUp;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         int fromScript = _grabScript.GetIsGrabbed();
         if (_grabbedIn != fromScript)
