@@ -29,7 +29,7 @@ public class CharacterAssembler : MonoBehaviour
             Debug.Log($"[Chara Loader] Found Characters path at {charactersFolder}");
         }
 #else
-        if (Application.platform == RuntimePlatform.WindowsPlatform)
+        if (Application.platform == RuntimePlatform.WindowsPlayer)
         {
             string buildFolder = Directory.GetParent(Application.dataPath).FullName;
             charactersFolder = Path.Combine(buildFolder, "Characters");
