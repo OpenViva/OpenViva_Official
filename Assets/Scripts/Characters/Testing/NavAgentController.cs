@@ -40,7 +40,7 @@ public class NavAgentController : MonoBehaviour
             Debug.LogError("No Main Camera found! Make sure your camera is tagged as 'MainCamera'.");
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // Update the "VelocityX" animator parameter while moving
         if (_animator != null && _agent != null)

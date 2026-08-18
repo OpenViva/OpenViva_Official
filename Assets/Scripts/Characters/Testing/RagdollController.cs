@@ -45,16 +45,6 @@ public class RagdollController : MonoBehaviour
         Debug.Log("Reset to Standing - animated pose + full muscle strength");
     }
 
-    [Button("Fully Disable Ragdoll System", EButtonEnableMode.Playmode)]
-    public void DisableRagdollSystem()
-    {
-        if (_ragdoll == null) return;
-
-        _ragdoll.enabled = false;
-
-        Debug.Log("Ragdoll system completely disabled");
-    }
-
     [Header("Live Blend Testing")]
     [Range(0f, 1f)]
     public float liveBlend = 1f;
