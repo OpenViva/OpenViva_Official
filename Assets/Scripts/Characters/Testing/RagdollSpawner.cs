@@ -10,6 +10,7 @@ public class RagdollSpawner : MonoBehaviour
     [Header("Prefab to Spawn")]
     public GameObject characterPrefab;
     public string tagToGive = "Character";
+    public Transform spawnLocation;
 
     [Header("Animation Settings")]
     public RuntimeAnimatorController animationControllerName;
@@ -91,7 +92,7 @@ public class RagdollSpawner : MonoBehaviour
 
     GameObject SpawnCharacter(GameObject prefabToSpawn)
     {
-        GameObject instance = Instantiate(prefabToSpawn, _startingCoords, transform.rotation.normalized);
+        GameObject instance = Instantiate(prefabToSpawn, spawnLocation.position, spawnLocation.rotation.normalized);
         instance.name = "RagdollCharacter_" + Time.frameCount;
 
         return instance;
