@@ -287,27 +287,27 @@ public class SettingsManager : MonoBehaviour
                 urpAsset.shadowDistance = 20f;
                 break;
 
-            case 1: // Low (hard shadows, low res)
+            case 1:
                 _mainDirLight.shadows = LightShadows.Soft;
                 urpAsset.shadowDistance = 40f;
                 urpAsset.mainLightShadowmapResolution = 256;
                 urpAsset.additionalLightsShadowmapResolution = 256;
-                urpAsset.shadowCascadeCount = 1;
+                urpAsset.shadowCascadeCount = 2;
                 break;
 
-            case 2: // Medium (soft shadows, medium res)
+            case 2:
                 _mainDirLight.shadows = LightShadows.Soft;
                 urpAsset.shadowDistance = 60f;
                 urpAsset.mainLightShadowmapResolution = 1024;
                 urpAsset.additionalLightsShadowmapResolution = 1024;
-                urpAsset.shadowCascadeCount = 2;
+                urpAsset.shadowCascadeCount = 3;
                 break;
 
-            case 3: // High (soft shadows, high res)
+            case 3:
                 _mainDirLight.shadows = LightShadows.Soft;
                 urpAsset.shadowDistance = 120f;
-                urpAsset.mainLightShadowmapResolution = 4096;
-                urpAsset.additionalLightsShadowmapResolution = 4096;
+                urpAsset.mainLightShadowmapResolution = 2048;
+                urpAsset.additionalLightsShadowmapResolution = 2048;
                 urpAsset.shadowCascadeCount = 4;
                 break;
 
