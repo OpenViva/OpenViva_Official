@@ -176,6 +176,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ExpressionFollow",
+                    "type": "Button",
+                    "id": "b5e550a5-2193-477a-acfd-56d146440bff",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -649,6 +658,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "UniversalInteractHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "12db899a-554c-4aac-8ac9-4780d359c1d1",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "ExpressionFollow",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

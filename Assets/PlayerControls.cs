@@ -262,6 +262,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ExpressionFollow"",
+                    ""type"": ""Button"",
+                    ""id"": ""b5e550a5-2193-477a-acfd-56d146440bff"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -737,6 +746,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""UniversalInteractHold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""12db899a-554c-4aac-8ac9-4780d359c1d1"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ExpressionFollow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -814,6 +834,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Viva_UniversalInteract = m_Viva.FindAction("UniversalInteract", throwIfNotFound: true);
         m_Viva_UniversalInteractHold = m_Viva.FindAction("UniversalInteractHold", throwIfNotFound: true);
         m_Viva_Cancel = m_Viva.FindAction("Cancel", throwIfNotFound: true);
+        m_Viva_ExpressionFollow = m_Viva.FindAction("ExpressionFollow", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -913,6 +934,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Viva_UniversalInteract;
     private readonly InputAction m_Viva_UniversalInteractHold;
     private readonly InputAction m_Viva_Cancel;
+    private readonly InputAction m_Viva_ExpressionFollow;
     /// <summary>
     /// Provides access to input actions defined in input action map "Viva".
     /// </summary>
@@ -1001,6 +1023,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Cancel => m_Wrapper.m_Viva_Cancel;
         /// <summary>
+        /// Provides access to the underlying input action "Viva/ExpressionFollow".
+        /// </summary>
+        public InputAction @ExpressionFollow => m_Wrapper.m_Viva_ExpressionFollow;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Viva; }
@@ -1083,6 +1109,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Cancel.started += instance.OnCancel;
             @Cancel.performed += instance.OnCancel;
             @Cancel.canceled += instance.OnCancel;
+            @ExpressionFollow.started += instance.OnExpressionFollow;
+            @ExpressionFollow.performed += instance.OnExpressionFollow;
+            @ExpressionFollow.canceled += instance.OnExpressionFollow;
         }
 
         /// <summary>
@@ -1151,6 +1180,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Cancel.started -= instance.OnCancel;
             @Cancel.performed -= instance.OnCancel;
             @Cancel.canceled -= instance.OnCancel;
+            @ExpressionFollow.started -= instance.OnExpressionFollow;
+            @ExpressionFollow.performed -= instance.OnExpressionFollow;
+            @ExpressionFollow.canceled -= instance.OnExpressionFollow;
         }
 
         /// <summary>
@@ -1376,5 +1408,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCancel(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ExpressionFollow" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnExpressionFollow(InputAction.CallbackContext context);
     }
 }
