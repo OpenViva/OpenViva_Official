@@ -224,7 +224,7 @@ public class DayNightCycle : MonoBehaviour
         DebugLogConsole.AddCommandInstance("SetTime", "Change the time, a value between 0 and 1 (as percentage of hours between 0 and 24)", nameof(SetTime), this);
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // Update the day night cycle
         UpdateCycle();
