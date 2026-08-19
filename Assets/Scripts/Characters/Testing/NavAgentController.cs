@@ -4,10 +4,21 @@ using UnityEngine.AI;
 
 public class NavAgentController : MonoBehaviour
 {
+    private static readonly int VelocityXHash = Animator.StringToHash("VelocityX");
     [Header("Settings")]
     [Tooltip("The distance to move in each direction")]
     public Vector3 offsetCoords; // TODO: Change this to move to mouse look position
     public float turnSpeed = 5;
+
+    [Header("Follow Settings")]
+    [Tooltip("The Transform this agent should follow")]
+    public Transform target;
+    [Tooltip("When true, follow the target. When false, idle")]
+    public bool isFollowing = false;
+    [Tooltip("How often (in seconds) the agent checks the target's position")]
+    public float updateInterval = 0.2f;
+    [Tooltip("How far the target must move before a new path is calculated")]
+    public float movementThreshold = 0.5f;
 
     [Header("Raycast Settings")]
     public float maxRayDistance = 1000f;
@@ -46,9 +57,12 @@ public class NavAgentController : MonoBehaviour
         if (_animator != null && _agent != null)
         {
             float velocityX = _agent.velocity.magnitude > 0.1f ? 1f : 0f;
-            _animator.SetFloat("VelocityX", velocityX);
+            _animator.SetFloat(VelocityXHash, velocityX);
 
-            FaceTarget(GetNextPathpoint());
+            if (velocityX > 0.1)
+            {
+                FaceTarget(GetNextPathpoint());
+            }
         }
     }
 
