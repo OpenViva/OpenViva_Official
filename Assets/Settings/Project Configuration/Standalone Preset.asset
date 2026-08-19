@@ -69,12 +69,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.ScreenSpaceAmbientOcclusion
   m_Active: 1
   m_Settings:
-    AOMethod: 1
+    AOMethod: 0
     Downsample: 1
     AfterOpaque: 0
     Source: 1
     NormalSamples: 1
-    Intensity: 0.26
+    Intensity: 0.4
     DirectLightingStrength: 0.25
     Radius: 0.3
     Samples: 1
