@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -37,6 +38,9 @@ public class NavAgentController : MonoBehaviour
     private Animator _animator;
     private Vector3[] _cornerBuffer = new Vector3[64];
 
+    private Vector3 _lastTargetPosition;
+    private Coroutine _behaviorCoroutine;
+
     void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -69,27 +73,103 @@ public class NavAgentController : MonoBehaviour
     private void OnEnable()
     {
         PlayerManager.OnMoveCharaToCamera += MoveAgentToCameraLookPoint;
+
+        _behaviorCoroutine = StartCoroutine(AgentBehaviorRoutine());
+
+        Globals.OnFollowCalled += ToggleFollowing;
     }
 
     private void OnDestroy()
     {
         PlayerManager.OnMoveCharaToCamera -= MoveAgentToCameraLookPoint;
+
+        if (_behaviorCoroutine != null)
+        {
+            StopCoroutine(_behaviorCoroutine);
+        }
+
+        Globals.OnFollowCalled -= ToggleFollowing;
+    }
+
+    private IEnumerator AgentBehaviorRoutine()
+    {
+        WaitForSeconds wait = new(updateInterval);
+        float sqrThreshold = movementThreshold * movementThreshold;
+
+        while (true)
+        {
+            if (isFollowing && target != null)
+            {
+                // Unpause if the agent was previously explicitly stopped
+                if (_agent.isStopped && _agent.isOnNavMesh)
+                {
+                    _agent.isStopped = false;
+                }
+
+                // Only recalculate path if target has moved significantly
+                if ((target.position - _lastTargetPosition).sqrMagnitude > sqrThreshold)
+                {
+                    if (_agent.isOnNavMesh)
+                    {
+                        _agent.SetDestination(target.position);
+                        _lastTargetPosition = target.position;
+
+                        Debug.Log($"--- FOLLOWING {target.gameObject.name} with position {target.position}");
+                    }
+                }
+            }
+
+            yield return wait;
+        }
+    }
+
+    [Button("Toggle Follow Target", EButtonEnableMode.Playmode)]
+    public void ToggleFollowing()
+    {
+        isFollowing = !isFollowing;
+        if (!isFollowing)
+        {
+            IdleInPlace();
+        }
+    }
+
+    [Button("Idle In Place", EButtonEnableMode.Playmode)]
+    public void IdleInPlace()
+    {
+        isFollowing = false;
+
+        if (_agent.isOnNavMesh)
+        {
+            _agent.ResetPath();
+            _agent.velocity = Vector3.zero;
+        }
     }
 
     [Button("Move To Start Position", EButtonEnableMode.Playmode)]
     public void MoveToStart()
     {
-        _agent.SetDestination(startingCoords);
+        isFollowing = false;
+
+        if (_agent.isOnNavMesh)
+        {
+            _agent.SetDestination(startingCoords);
+        }
     }
 
     [Button("Move To Distance", EButtonEnableMode.Playmode)]
     public void MoveToCoords()
     {
-        _agent.SetDestination(startingCoords + offsetCoords);
+        isFollowing = false;
+        if (_agent.isOnNavMesh)
+        {
+            _agent.SetDestination(startingCoords + offsetCoords);
+        }
     }
 
     private void MoveAgentToCameraLookPoint()
     {
+        isFollowing = false;
+
         _cam = GetActiveMainCamera();
 
         if (_cam == null) return;
@@ -104,7 +184,10 @@ public class NavAgentController : MonoBehaviour
             // Find the nearest valid point on the NavMesh
             if (NavMesh.SamplePosition(targetPoint, out NavMeshHit navHit, maxSampleDistance, navMeshAreaMask))
             {
-                _agent.SetDestination(navHit.position);
+                if (_agent.isOnNavMesh)
+                {
+                    _agent.SetDestination(navHit.position);
+                }
                 Debug.DrawLine(targetPoint, navHit.position, Color.green, 2f); // Visual feedback
             }
             else
@@ -112,7 +195,10 @@ public class NavAgentController : MonoBehaviour
                 Debug.LogWarning("No NavMesh point found near the raycast hit. Increase maxSampleDistance or check your NavMesh bake!");
 
                 // Try the raw hit point anyway
-                _agent.SetDestination(targetPoint);
+                if (_agent.isOnNavMesh)
+                {
+                    _agent.SetDestination(targetPoint);
+                }
             }
         }
         else
