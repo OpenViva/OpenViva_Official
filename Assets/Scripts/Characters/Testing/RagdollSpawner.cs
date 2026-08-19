@@ -10,6 +10,8 @@ public class RagdollSpawner : MonoBehaviour
     [Header("Prefab to Spawn")]
     public GameObject characterPrefab;
     public string tagToGive = "Character";
+    [Tooltip("Drag the object named Player that will move")]
+    public Transform bookObject;
     public Transform spawnLocation;
 
     [Header("Animation Settings")]
@@ -26,6 +28,7 @@ public class RagdollSpawner : MonoBehaviour
     public float agentSpeed = 1.5f;
     public float agentRadius = 0.3f;
     public float agentHeight = 1.4f;
+    public float stoppingDistance = 1f;
 
     [Header("Nav Controller Settings")]
     public Vector3 moveCoords = new(0, 0, -3); // TODO: Do NOT initialize coords but get them from the spawner object (ex: mirror)
@@ -134,10 +137,10 @@ public class RagdollSpawner : MonoBehaviour
         agent.speed = agentSpeed;
         agent.radius = agentRadius;
         agent.height = agentHeight;
-        agent.baseOffset = 0f;
+        agent.baseOffset = -0.03f;
         agent.angularSpeed = 3600f;
         agent.acceleration = 8f;
-        agent.stoppingDistance = 0.7f;
+        agent.stoppingDistance = stoppingDistance;
 
         // Important for ragdoll compatibility
         // When ragdoll is active (Falling mode), disable NavMeshAgent movement
@@ -156,6 +159,7 @@ public class RagdollSpawner : MonoBehaviour
         }
         navAgentController.offsetCoords = moveCoords;
         navAgentController.startingCoords = _startingCoords;
+        navAgentController.target = bookObject;
 
         // 6. Enable and set initial state
         ragdoll.enabled = true;
