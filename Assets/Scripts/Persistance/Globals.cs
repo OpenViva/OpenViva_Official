@@ -12,6 +12,8 @@ public static class Globals
     public static bool isDesktopMode = true;
 
     public static event System.Action OnBookOpened;
+    public static event System.Action OnFollowCalled;
 
     public static void RaiseBookOpened() => OnBookOpened?.Invoke();
+    public static void RaiseFollowCalled() => OnFollowCalled?.Invoke();
 }
