@@ -209,9 +209,15 @@ public class PlayerManager : MonoBehaviour
         OnMoveCharaToCamera?.Invoke();
     }
 
+    void RaiseFollowPlayer()
+    {
+        Globals.RaiseFollowCalled();
+    }
+
     void InitializeInputEvents()
     {
         _player.Controls.Viva.UniversalInteract.performed += context => RaiseMoveCharaToCamera();
+        _player.Controls.Viva.ExpressionFollow.performed += context => RaiseFollowPlayer();
     }
 
     public void HideHands(bool input)
