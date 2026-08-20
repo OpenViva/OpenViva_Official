@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class FootstepManager : MonoBehaviour
 {
+    #region Class Data
     public enum FloorTypes
     {
         None,
@@ -27,12 +28,14 @@ public class FootstepManager : MonoBehaviour
     private AudioClip _lastPlayedClip = null;
     private float _timeSinceLastStep = 0f;
     private bool _leftFootForward = true;
+    private bool _wasGrounded = true;
 
     [SerializeField] private AudioSource _leftFoot;
     [SerializeField] private AudioSource _rightFoot;
 
     private CharacterController _playerCC;
     private PlayerKB_Movement _playerMovement;
+    #endregion
 
     private void Awake()
     {
@@ -42,13 +45,62 @@ public class FootstepManager : MonoBehaviour
 
     private void Update()
     {
-        if (_playerCC.velocity.magnitude < 0.5f || !_playerMovement.GetIsGrouned()) { return; }
+        bool isGrounded = _playerMovement.GetPlayerGrounded();
 
-        DetermineFloorType();
+        if (isGrounded && !_wasGrounded)
+        {
+            HandleLanding();
+        }
+
+        _wasGrounded = isGrounded;
+
+        if (_playerCC.velocity.magnitude < 0.5f || !_playerMovement.GetIsGrouned())
+        {
+            return;
+        }
+
         _timeSinceLastStep += Time.deltaTime;
-        TryStep();
+
+        float playerSpeed = _playerCC.velocity.magnitude;
+        float stepFrequency = Mathf.Pow(Mathf.Sin(60 * Mathf.Deg2Rad), playerSpeed);
+
+        if (_timeSinceLastStep >= stepFrequency)
+        {
+            TryStep();
+        }
     }
 
+    private void HandleLanding()
+    {
+        DetermineFloorType();
+
+        _leftFoot.pitch = Random.Range(0.9f, 1.1f);
+        _rightFoot.pitch = Random.Range(0.9f, 1.1f);
+
+        _leftFoot.clip = SelectTrack();
+        _rightFoot.clip = SelectTrack();
+
+        _leftFoot.Play();
+        _rightFoot.Play();
+
+        _timeSinceLastStep = 0;
+    }
+
+    private void TryStep()
+    {
+        DetermineFloorType();
+
+        AudioSource activeFoot = _leftFootForward ? _leftFoot : _rightFoot;
+
+        activeFoot.pitch = Random.Range(0.95f, 1.05f);
+        activeFoot.clip = SelectTrack();
+        activeFoot.Play();
+
+        _leftFootForward = !_leftFootForward;
+        _timeSinceLastStep = 0;
+    }
+
+    #region Helper Methods
     private void DetermineFloorType()
     {
         Collider[] collidersInSphere = Physics.OverlapSphere(transform.position, 0.1f, Physics.AllLayers, QueryTriggerInteraction.Collide);
@@ -62,135 +114,48 @@ public class FootstepManager : MonoBehaviour
         if (foundFloors.Count > 0)
         {
             FloorType current = foundFloors[0];
-            foreach (FloorType fT in foundFloors) { if (fT.Priority < current.Priority) { current = fT; }}
+            foreach (FloorType fT in foundFloors)
+            {
+                if (fT.Priority < current.Priority) { current = fT; }
+            }
             _standingOn = current.Type;
         }
     }
 
-    private void TryStep()
+    private AudioClip SelectTrack()
     {
-        _timeSinceLastStep += Time.deltaTime;
-        float playerSpeed = _playerCC.velocity.magnitude;
-        float stepFrequency = Mathf.Pow(Mathf.Sin(60 * Mathf.Deg2Rad), playerSpeed) * 2;
-        if (_timeSinceLastStep < stepFrequency) { return; }
-
-        if (_leftFootForward)
+        List<AudioClip> currentPool = _standingOn switch
         {
-            _leftFoot.clip = SelectTrack();
-            _leftFoot.Play();
-            _leftFootForward = false;
+            FloorTypes.Carpet => _carpetClips,
+            FloorTypes.Dirt => _dirtClips,
+            FloorTypes.Tile => _tileClips,
+            FloorTypes.Wood => _woodClips,
+            FloorTypes.Stone => _stoneClips,
+            FloorTypes.WetStone => _wetStoneClips,
+            FloorTypes.Water => _waterClips,
+            _ => null
+        };
+
+        if (currentPool == null || currentPool.Count == 0)
+        {
+            return null;
         }
-        else
+
+        AudioClip selected = currentPool[Random.Range(0, currentPool.Count)];
+
+        // Prevent the same clip from playing twice
+        if (currentPool.Count > 1)
         {
-            _rightFoot.clip = SelectTrack();
-            _rightFoot.Play();
-            _leftFootForward = true;
-        }
-
-        _timeSinceLastStep = 0f;
-
-        AudioClip SelectTrack()
-        {
-            AudioClip selected = null;
-            int triesLeft = 100;
-
-            switch (_standingOn)
+            int triesLeft = 10;
+            while (selected == _lastPlayedClip && triesLeft > 0)
             {
-                case FloorTypes.Carpet:
-
-                    while (selected == null && triesLeft > 0)
-                    {
-                        int randomNumber = Random.Range(0, _carpetClips.Count);
-                        if (_carpetClips[randomNumber] != _lastPlayedClip)
-                        {
-                            selected = _carpetClips[randomNumber];
-                        }
-                        triesLeft--;
-                    }
-                    break;
-
-                case FloorTypes.Dirt:
-
-                    while (selected == null && triesLeft > 0)
-                    {
-                        int randomNumber = Random.Range(0, _dirtClips.Count);
-                        if (_dirtClips[randomNumber] != _lastPlayedClip)
-                        {
-                            selected = _dirtClips[randomNumber];
-                        }
-                        triesLeft--;
-                    }
-                    break;
-
-                case FloorTypes.Tile:
-
-                    while (selected == null && triesLeft > 0)
-                    {
-                        int randomNumber = Random.Range(0, _tileClips.Count);
-                        if (_tileClips[randomNumber] != _lastPlayedClip)
-                        {
-                            selected = _tileClips[randomNumber];
-                        }
-                        triesLeft--;
-                    }
-                    break;
-
-                case FloorTypes.Wood:
-
-                    while (selected == null && triesLeft > 0)
-                    {
-                        int randomNumber = Random.Range(0, _woodClips.Count);
-                        if (_woodClips[randomNumber] != _lastPlayedClip)
-                        {
-                            selected = _woodClips[randomNumber];
-                        }
-                        triesLeft--;
-                    }
-                    break;
-
-                case FloorTypes.Stone:
-
-                    while (selected == null && triesLeft > 0)
-                    {
-                        int randomNumber = Random.Range(0, _stoneClips.Count);
-                        if (_stoneClips[randomNumber] != _lastPlayedClip)
-                        {
-                            selected = _stoneClips[randomNumber];
-                        }
-                        triesLeft--;
-                    }
-                    break;
-
-                case FloorTypes.WetStone:
-
-                    while (selected == null && triesLeft > 0)
-                    {
-                        int randomNumber = Random.Range(0, _wetStoneClips.Count);
-                        if (_wetStoneClips[randomNumber] != _lastPlayedClip)
-                        {
-                            selected = _wetStoneClips[randomNumber];
-                        }
-                        triesLeft--;
-                    }
-                    break;
-
-                case FloorTypes.Water:
-
-                    while (selected == null && triesLeft > 0)
-                    {
-                        int randomNumber = Random.Range(0, _waterClips.Count);
-                        if (_waterClips[randomNumber] != _lastPlayedClip)
-                        {
-                            selected = _waterClips[randomNumber];
-                        }
-                        triesLeft--;
-                    }
-                    break;
+                selected = currentPool[Random.Range(0, currentPool.Count)];
+                triesLeft--;
             }
-
-            _lastPlayedClip = selected;
-            return selected;
         }
-    }
 
+        _lastPlayedClip = selected;
+        return selected;
+    }
+    #endregion
 }
