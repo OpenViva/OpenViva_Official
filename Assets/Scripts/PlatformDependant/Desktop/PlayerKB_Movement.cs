@@ -123,6 +123,11 @@ public class PlayerKB_Movement : MonoBehaviour
         _camera.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
     }
 
+    public void HandleRun(bool running)
+    {
+        _isRunning = running;
+    }
+
     void HandleMovement()
     {
         if (Globals.isMenuOpen || !Globals.handleMovement)
@@ -223,11 +228,6 @@ public class PlayerKB_Movement : MonoBehaviour
     }
     #endregion
 
-    public void HandleRun(bool running)
-    {
-        _isRunning = running;
-    }
-
     void HandleGravity()
     {
         // Fix for instantly snapping to the ground off edges
@@ -242,6 +242,12 @@ public class PlayerKB_Movement : MonoBehaviour
     float GetCurrentSpeed()
     {
         return _isRunning ? MovementSpeed * _runMultiplier : MovementSpeed;
+    }
+
+    #region Public Methods
+    public bool GetPlayerGrounded()
+    {
+        return isGrounded;
     }
 
     public void SetMovementSpeed(float newSpeed)
@@ -262,6 +268,7 @@ public class PlayerKB_Movement : MonoBehaviour
     }
 
     public bool GetIsGrouned() { return isGrounded; }
+    #endregion
 
     #region Helper Methods
     void DetectAndPushFromEdge()
@@ -346,6 +353,7 @@ public class PlayerKB_Movement : MonoBehaviour
         _player.Controls.Viva.Jump.performed += ctx => HandleJump();
     }
 
+    #region Debug Commands
     public void ChangePlayerSpeed(float newSpeed)
     {
         MovementSpeed = Mathf.Clamp(newSpeed, 1f, 200f);
@@ -366,6 +374,7 @@ public class PlayerKB_Movement : MonoBehaviour
 
         Debug.Log("[Default: -9.81] Changed player gravity to: " + newGravity);
     }
+    #endregion
 }
 
 #endif
