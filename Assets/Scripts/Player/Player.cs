@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    // PS Viva player controls
     public PlayerControls Controls {  get; private set; }
 
     private void Awake()

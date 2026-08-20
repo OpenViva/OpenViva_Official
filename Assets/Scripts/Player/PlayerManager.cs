@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Player))]
-
 // Class that manages the player
-
+[RequireComponent(typeof(Player))]
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
@@ -46,12 +44,8 @@ public class PlayerManager : MonoBehaviour
 
     void Start()
     {
-        Globals.isDesktopMode = false;
-        ChangeInputType(); // TODO: Needs fixing, doesn't change to desktop by default.
+        Globals.isDesktopMode = true;
 
-        // Set up change input type action
-        // _changeInputType.action.Enable();
-        // _changeInputType.action.performed += context => ChangeInputType();
         // Lock the cursor to the center of the screen
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -65,6 +59,11 @@ public class PlayerManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //UpdateBothPlayersLocation();
+    }
+
+    private void UpdateBothPlayersLocation()
+    {
         // Sync positions between the KBM and VR player objects
         if (Globals.isDesktopMode)
         {
@@ -76,13 +75,6 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    void OnDestroy()
-    {
-        // Clean up change input type action
-        // _changeInputType.action.Disable();
-        // _changeInputType.action.performed -= context => ChangeInputType();
-    }
-
     private void ChangeInputType()
     {
         // ToggleLanternLeft between Keyboard/Mouse and VR input types
@@ -91,14 +83,14 @@ public class PlayerManager : MonoBehaviour
             Globals.isDesktopMode = false;
             _playerKB.SetActive(false);
             _playerVR.SetActive(true);
-            Debug.Log("Input type changed to VR");
+            Debug.Log("[Player Manager] Input type changed to VR");
         }
         else
         {
             Globals.isDesktopMode = true;
             _playerVR.SetActive(false);
             _playerKB.SetActive(true);
-            Debug.Log("Input type changed to KBM");
+            Debug.Log("[Player Manager] Input type changed to KBM");
         }
     }
     
@@ -218,6 +210,9 @@ public class PlayerManager : MonoBehaviour
     {
         _player.Controls.Viva.UniversalInteract.performed += context => RaiseMoveCharaToCamera();
         _player.Controls.Viva.ExpressionFollow.performed += context => RaiseFollowPlayer();
+
+        // TODO: Uncomment this when implementing VR
+        //_player.Controls.Viva.ChangeInputType.performed += context => ChangeInputType();
     }
 
     public void HideHands(bool input)
