@@ -19,9 +19,9 @@ public class GameSettingsData
     public int antiAliasing = 1;
     public int shadowLevel = 3;
     public int targetFramerate = 90;
-    public int[] allowedFpsValues = new int[] { 30, 60, 90, 120, 144, 240, -1 };
+    public int[] allowedFpsValues = new int[] { 30, 60, 75, 90, 120, 144, 165, 180, 240, -1 };
     public bool fullscreen = true;
-    public bool vSync = true;
+    public bool vSync = false;
 
     // Post Processing
     public float brightness;
