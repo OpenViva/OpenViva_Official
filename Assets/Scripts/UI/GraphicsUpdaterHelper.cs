@@ -12,6 +12,13 @@ public class GraphicsUpdaterHelper : MonoBehaviour
     public enum SettingType { FpsLimit, ReflectionDistance, ResolutionScale, LodDistance }
     public SettingType setting;
 
+    private GameSettingsData _gameSettingsData;
+
+    private void Start()
+    {
+        _gameSettingsData = SettingsManager.Instance.Current;
+    }
+
     private void OnEnable()
     {
         minusButton.onClick.AddListener(OnMinus);
@@ -51,20 +58,19 @@ public class GraphicsUpdaterHelper : MonoBehaviour
 
     void UpdateDisplay()
     {
-        var s = SettingsManager.Instance.Current;
         switch (setting)
         {
             case SettingType.FpsLimit:
-                valueText.text = s.targetFramerate == -1 ? "Unlimited" : s.targetFramerate.ToString();
+                valueText.text = _gameSettingsData.targetFramerate == -1 ? "Unlimited" : _gameSettingsData.targetFramerate.ToString();
                 break;
             case SettingType.ReflectionDistance:
-                valueText.text = s.reflectionDistance.ToString("F0") + " m";
+                valueText.text = _gameSettingsData.reflectionDistance.ToString("F0") + " m";
                 break;
             case SettingType.ResolutionScale:
-                valueText.text = s.resolutionScale + "%";
+                valueText.text = _gameSettingsData.resolutionScale + "%";
                 break;
             case SettingType.LodDistance:
-                valueText.text = s.lodDistance.ToString("F0") + " m";
+                valueText.text = _gameSettingsData.lodDistance.ToString("F0") + " m";
                 break;
         }
     }
