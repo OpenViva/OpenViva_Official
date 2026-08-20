@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Events;
 
 public class SettingsManager : MonoBehaviour
@@ -9,6 +10,9 @@ public class SettingsManager : MonoBehaviour
 
     [SerializeField] private GameSettingsData currentSettings = new();
     private string savePath;
+
+    [Header("Audio Settings")]
+    [SerializeField] private AudioMixer _audioMixer;
 
     // Getter helpers
     public GameSettingsData Current => currentSettings;
@@ -36,7 +40,7 @@ public class SettingsManager : MonoBehaviour
         else
             Destroy(gameObject);
 
-        savePath = Path.Combine(Application.persistentDataPath, "gamesettings.json");
+        savePath = Path.Combine(Application.persistentDataPath, "gameSettings.json");
 
         // Find the main Light
         var mainLight = GameObject.FindWithTag(mainLightTag);
@@ -91,7 +95,6 @@ public class SettingsManager : MonoBehaviour
         level = Mathf.Clamp(level, 0, QualitySettings.names.Length - 1);
         currentSettings.qualityLevel = level;
         ApplyGraphicsSettings();
-        SaveSettings();
     }
 
     //public void SetResolution(int resolutionIndex)
@@ -100,7 +103,6 @@ public class SettingsManager : MonoBehaviour
     //    resolutionIndex = Mathf.Clamp(resolutionIndex, 0, resolutions.Length - 1);
     //    currentSettings.resolutionIndex = resolutionIndex;
     //    ApplyGraphicsSettings();
-    //    SaveSettings();
     //}
 
     public void SetFullscreen(bool isFullscreen)
@@ -108,7 +110,6 @@ public class SettingsManager : MonoBehaviour
         currentSettings.fullscreen = isFullscreen;
         ApplyGraphicsSettings();
         OnSettingsChanged.Invoke();
-        SaveSettings();
     }
 
     public void SetVSync(bool enabled)
@@ -116,7 +117,6 @@ public class SettingsManager : MonoBehaviour
         currentSettings.vSync = enabled;
         ApplyGraphicsSettings();
         OnSettingsChanged.Invoke();
-        SaveSettings();
     }
 
     public void SetAntiAliasing(int index)
@@ -128,7 +128,6 @@ public class SettingsManager : MonoBehaviour
 
         ApplyGraphicsSettings();
         OnSettingsChanged.Invoke();
-        SaveSettings();
     }
 
     public void SetShadowQuality(int index)
@@ -137,7 +136,6 @@ public class SettingsManager : MonoBehaviour
         currentSettings.shadowLevel = index;
         ApplyGraphicsSettings();
         OnSettingsChanged.Invoke();
-        SaveSettings();
     }
 
     private void SetReflectionDistance(float delta)
@@ -160,7 +158,6 @@ public class SettingsManager : MonoBehaviour
         currentSettings.masterVolume = Mathf.Clamp01(volume);
         ApplyAudioSettings();
         OnSettingsChanged.Invoke();
-        SaveSettings();
     }
 
     public void SetMusicVolume(float volume)
@@ -168,7 +165,6 @@ public class SettingsManager : MonoBehaviour
         currentSettings.musicVolume = Mathf.Clamp01(volume);
         ApplyAudioSettings();
         OnSettingsChanged.Invoke();
-        SaveSettings();
     }
 
     public void SetSfxVolume(float volume)
@@ -176,7 +172,6 @@ public class SettingsManager : MonoBehaviour
         currentSettings.sfxVolume = Mathf.Clamp01(volume);
         ApplyAudioSettings();
         OnSettingsChanged.Invoke();
-        SaveSettings();
     }
 
     public void SetVoiceVolume(float volume)
@@ -184,7 +179,6 @@ public class SettingsManager : MonoBehaviour
         currentSettings.voiceVolume = Mathf.Clamp01(volume);
         ApplyAudioSettings();
         OnSettingsChanged.Invoke();
-        SaveSettings();
     }
 
     public void SetBrightness(float value)
@@ -192,7 +186,6 @@ public class SettingsManager : MonoBehaviour
         currentSettings.brightness = Mathf.Clamp01(value);
         ApplyGraphicsSettings();
         OnSettingsChanged.Invoke();
-        SaveSettings();
     }
 
     public void SetMouseSensitivity(float value)
@@ -206,7 +199,6 @@ public class SettingsManager : MonoBehaviour
     {
         currentSettings.language = languageCode;
         ApplyLanguage();
-        SaveSettings();
         // TODO: Update UI text
     }
 
@@ -217,7 +209,6 @@ public class SettingsManager : MonoBehaviour
             int value = currentSettings.allowedFpsValues[index];
             currentSettings.targetFramerate = value;
             ApplyGraphicsSettings();
-            SaveSettings();
         }
     }
 
@@ -238,14 +229,12 @@ public class SettingsManager : MonoBehaviour
     {
         field = Mathf.Clamp(field + delta, min, max);
         ApplyGraphicsSettings();
-        SaveSettings();
     }
 
     private void ChangeIntSetting(ref int field, int delta, int min, int max)
     {
         field = Mathf.Clamp(field + delta, min, max);
         ApplyGraphicsSettings();
-        SaveSettings();
     }
     #endregion
 
@@ -334,22 +323,34 @@ public class SettingsManager : MonoBehaviour
             $"MainRes: {(ShadowResolution)urpAsset.mainLightShadowmapResolution} | " +
             $"AddRes: {(ShadowResolution)urpAsset.additionalLightsShadowmapResolution} | " +
             $"LightMode: {_mainDirLight.shadows}");
+
+        SaveSettings();
     }
 
     private void ApplyAudioSettings()
     {
-        AudioListener.volume = currentSettings.masterVolume;
-
         // TODO: Audio mixer setup
-        // audioMixer.SetFloat("MasterVolume", Mathf.Log10(currentSettings.masterVolume) * 20);
-        // audioMixer.SetFloat("MusicVolume", Mathf.Log10(currentSettings.musicVolume) * 20);
-        // audioMixer.SetFloat("SfxVolume",   Mathf.Log10(currentSettings.sfxVolume) * 20);
+        if (_audioMixer != null)
+        {
+            _audioMixer.SetFloat("MasterVolume", Mathf.Log10(currentSettings.masterVolume) * 20);
+            _audioMixer.SetFloat("MusicVolume", Mathf.Log10(currentSettings.musicVolume) * 20);
+            _audioMixer.SetFloat("SFXVolume", Mathf.Log10(currentSettings.sfxVolume) * 20);
+            _audioMixer.SetFloat("VoiceVolume", Mathf.Log10(currentSettings.voiceVolume) * 20);
+        }
+        else
+        {
+            Debug.LogError("[Settings Manager] Audio Mixer reference missing!");
+        }
+
+        SaveSettings();
     }
 
     private void ApplyLanguage()
     {
         // TODO: Add Localization system here
         // LocalizationSettings.SelectedLocale = Locale.CreateLocale(currentSettings.language);
+
+        SaveSettings();
     }
 
     public void LoadSettings()
@@ -386,26 +387,12 @@ public class SettingsManager : MonoBehaviour
         }
     }
 
-    private void SetDefaultSettings()
+    public void SetDefaultSettings()
     {
-        currentSettings = new GameSettingsData
-        {
-            qualityLevel = QualitySettings.names.Length - 2, // "High" by default
-            shadowLevel = 3,
-            lodDistance = 200f,
-            resolutionScale = 100,
-            antiAliasing = 1,
-            fullscreen = true,
-            vSync = true,
-            targetFramerate = 90,
-            masterVolume = 1f,
-            musicVolume = 0.6f,
-            sfxVolume = 1f,
-            voiceVolume = 0.6f,
-            brightness = 1f,
-            mouseSensitivity = 2f,
-            language = "en"
-        };
+        currentSettings = new GameSettingsData();
+
+        SaveSettings();
+        OnSettingsChanged.Invoke();
     }
 
     private int GetCurrentResolutionIndex()
