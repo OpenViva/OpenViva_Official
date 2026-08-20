@@ -66,7 +66,7 @@ public class SettingsManager : MonoBehaviour
     }
     #endregion
 
-    #region Cycles
+    #region Cycle Settings
     private void CycleFpsLimit(int direction)
     {
         int currentIndex = Array.IndexOf(currentSettings.allowedFpsValues, currentSettings.targetFramerate);
