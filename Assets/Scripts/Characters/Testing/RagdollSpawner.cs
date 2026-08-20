@@ -145,7 +145,9 @@ public class RagdollSpawner : MonoBehaviour
         // Important for ragdoll compatibility
         // When ragdoll is active (Falling mode), disable NavMeshAgent movement
         agent.updatePosition = true;
-        agent.updateRotation = true;
+        agent.updateRotation = false;
+        agent.autoBraking = false;
+        agent.obstacleAvoidanceType = ObstacleAvoidanceType.GoodQualityObstacleAvoidance;
 
         // 5. Add additional scripts
         if (!newChar.TryGetComponent(out RagdollController _))

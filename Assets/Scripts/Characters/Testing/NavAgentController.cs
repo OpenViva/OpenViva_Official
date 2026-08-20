@@ -63,7 +63,7 @@ public class NavAgentController : MonoBehaviour
             float velocityX = _agent.velocity.magnitude > 0.1f ? 1f : 0f;
             _animator.SetFloat(VelocityXHash, velocityX);
 
-            if (velocityX > 0.1)
+            if (velocityX > 0.1 && !_agent.pathPending)
             {
                 FaceTarget(GetNextPathpoint());
             }
