@@ -17,7 +17,7 @@ public class NavAgentController : MonoBehaviour
     [Tooltip("When true, follow the target. When false, idle")]
     public bool isFollowing = false;
     [Tooltip("How often (in seconds) the agent checks the target's position")]
-    public float updateInterval = 0.2f;
+    public float updateInterval = 0.3f;
     [Tooltip("How far the target must move before a new path is calculated")]
     public float movementThreshold = 0.5f;
 
