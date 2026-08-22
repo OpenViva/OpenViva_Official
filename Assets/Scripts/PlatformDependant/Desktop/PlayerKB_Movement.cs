@@ -28,9 +28,10 @@ public class PlayerKB_Movement : MonoBehaviour
 
     // --- Look ---
     [Header("Look")]
-    [Range(0.1f, 10f)]
+    [Range(0.1f, 20f)]
     [Tooltip("speed of the camera movement")]
     [SerializeField] private float _mouseSensitivity = 2;
+    [SerializeField] private bool _updateTimeDelta = true;
 
     [Tooltip("Mouse Smoothing (Optional)")]
     [Range(0f, 0.5f)]
@@ -164,8 +165,18 @@ public class PlayerKB_Movement : MonoBehaviour
                                        lookSmoothing, Mathf.Infinity, Time.unscaledDeltaTime);
         }
 
-        _yRotation += input.x * _mouseSensitivity;
-        _xRotation -= input.y * _mouseSensitivity;
+        if (_updateTimeDelta)
+        {
+            float updatedSensitivity = _mouseSensitivity * 20f;
+
+            _yRotation += input.x * updatedSensitivity * Time.deltaTime;
+            _xRotation -= input.y * updatedSensitivity * Time.deltaTime;
+        }
+        else
+        {
+            _yRotation += input.x * _mouseSensitivity;
+            _xRotation -= input.y * _mouseSensitivity;
+        }
 
         // Rotate camera up/down with clamp
         _xRotation = Mathf.Clamp(_xRotation, -90, 90);
