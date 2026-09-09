@@ -11,7 +11,7 @@ public class RagdollSpawner : MonoBehaviour
     public GameObject characterPrefab;
     public string tagToGive = "Character";
     [Tooltip("Drag the object named Player that will move")]
-    public Transform bookObject;
+    public Transform playerFollowObject;
     public Transform spawnLocation;
 
     [Header("Animation Settings")]
@@ -161,7 +161,7 @@ public class RagdollSpawner : MonoBehaviour
         }
         navAgentController.offsetCoords = moveCoords;
         navAgentController.startingCoords = _startingCoords;
-        navAgentController.target = bookObject;
+        navAgentController.target = playerFollowObject;
 
         // 6. Enable and set initial state
         ragdoll.enabled = true;
