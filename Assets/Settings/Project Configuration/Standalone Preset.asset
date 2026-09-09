@@ -48,13 +48,34 @@ MonoBehaviour:
     failOperation: 0
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
-  m_RenderingMode: 0
+  m_RenderingMode: 2
   m_DepthPrimingMode: 0
   m_CopyDepthMode: 0
   m_DepthAttachmentFormat: 0
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 0
+--- !u!114 &2750862374615797901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5028f2f00df2eb2418e473937e9ae556, type: 3}
+  m_Name: ReflectRenderPass
+  m_EditorClassIdentifier: Assembly-CSharp::ReflectRenderPass
+  m_Active: 1
+  passMaterial: {fileID: 2100000, guid: cb154e170430533458993c4bab7c583c, type: 2}
+  compositeMaterial: {fileID: 2100000, guid: 3012e5f390cd04342a56e7a70f012281, type: 2}
+  renderPass: 550
+  requirements: 4
+  passIndex: 0
+  requiresColor: 1
+  injectedBeforeTransparents: 0
+  isEnabled: 0
 --- !u!114 &8870933814146663674
 MonoBehaviour:
   m_ObjectHideFlags: 0
