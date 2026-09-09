@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 8655806720142585673}
   - component: {fileID: 3803514446274371157}
   - component: {fileID: 7205301993109263679}
+  - component: {fileID: -5376774761347143875}
   m_Layer: 0
   m_Name: doorProp1
   m_TagString: Untagged
@@ -169,6 +170,49 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.991753, y: 2.5497384, z: 0.16518466}
   m_Center: {x: -1.2643359, y: 1.3276174, z: 0.11136473}
+--- !u!114 &-5376774761347143875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347356329802584393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78a6dd395de6fee4da5a5dfff7c50518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BRGInstancedRenderer::BRGInstancedRenderer.BRGPrototypeExtraData
+  prototypeGroup: {fileID: 0}
+  forceDisableShadows: 0
+  maxShadowCascade: 4
+  minShadowLOD: 0
+  overrideMaxShadowCrossfadeCascade: 0
+  maxShadowCrossfadeCascade: 4
+  enableDistanceDensity: 0
+  densityMinFraction: 0
+  densityFadeWidth: 0.05
+  distanceDensityMode: 0
+  densityStartScreenSize: 2
+  densityStartDistance: 50
+  densityEndDistance: 150
+  overrideLodFadeDuration: 0
+  lodFadeDuration: 0.3
+  minScreenSize: 0
+  minScreenSizeFadeMode: 0
+  minScreenSizeFadeWidth: 0
+  prefitCullBounds:
+  - centre:
+      x: -1.2497513
+      y: 1.2968191
+      z: 0.112500004
+    radius: 1.9858625
+    cylRadius: 1.5301979
+  - centre:
+      x: -1.2502007
+      y: 1.2870079
+      z: 0.11467584
+    radius: 2.003465
+    cylRadius: 1.5354093
 --- !u!1 &3826708950717381025
 GameObject:
   m_ObjectHideFlags: 0

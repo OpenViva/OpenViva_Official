@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 402478027916097955}
   - component: {fileID: 2709826546576248731}
   - component: {fileID: 1226802286760594284}
+  - component: {fileID: 3425513795841162322}
   m_Layer: 0
   m_Name: windowProp3
   m_TagString: Untagged
@@ -134,3 +135,40 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.3021138, y: 0.30518246, z: 0.3141421}
   m_Center: {x: -0.37525117, y: -0.15122604, z: 0.15707105}
+--- !u!114 &3425513795841162322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6001248610269578394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78a6dd395de6fee4da5a5dfff7c50518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BRGInstancedRenderer::BRGInstancedRenderer.BRGPrototypeExtraData
+  prototypeGroup: {fileID: 0}
+  forceDisableShadows: 0
+  maxShadowCascade: 4
+  minShadowLOD: 0
+  overrideMaxShadowCrossfadeCascade: 0
+  maxShadowCrossfadeCascade: 4
+  enableDistanceDensity: 0
+  densityMinFraction: 0
+  densityFadeWidth: 0.05
+  distanceDensityMode: 0
+  densityStartScreenSize: 2
+  densityStartDistance: 50
+  densityEndDistance: 150
+  overrideLodFadeDuration: 0
+  lodFadeDuration: 0.3
+  minScreenSize: 0
+  minScreenSizeFadeMode: 0
+  minScreenSizeFadeWidth: 0
+  prefitCullBounds:
+  - centre:
+      x: -0.37525117
+      y: 0.79681927
+      z: 0.15707105
+    radius: 1.4436234
+    cylRadius: 0.669736

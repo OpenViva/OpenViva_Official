@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 4449678200588655099}
   - component: {fileID: 4863813654287393394}
   - component: {fileID: 8248023500287411218}
+  - component: {fileID: 4569873774012568684}
   m_Layer: 0
   m_Name: streetlight
   m_TagString: Untagged
@@ -184,6 +185,55 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.81706387, y: 0.70808125, z: 0.36556342}
   m_Center: {x: 0.40090188, y: -0.35614085, z: -0.0038921982}
+--- !u!114 &4569873774012568684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4507555827622390205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78a6dd395de6fee4da5a5dfff7c50518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BRGInstancedRenderer::BRGInstancedRenderer.BRGPrototypeExtraData
+  prototypeGroup: {fileID: 0}
+  forceDisableShadows: 0
+  maxShadowCascade: 4
+  minShadowLOD: 0
+  overrideMaxShadowCrossfadeCascade: 0
+  maxShadowCrossfadeCascade: 4
+  enableDistanceDensity: 0
+  densityMinFraction: 0
+  densityFadeWidth: 0.05
+  distanceDensityMode: 0
+  densityStartScreenSize: 2
+  densityStartDistance: 50
+  densityEndDistance: 150
+  overrideLodFadeDuration: 0
+  lodFadeDuration: 0.3
+  minScreenSize: 0
+  minScreenSizeFadeMode: 0
+  minScreenSizeFadeWidth: 0
+  prefitCullBounds:
+  - centre:
+      x: 0.4096876
+      y: -0.35261887
+      z: 0
+    radius: 0.5522083
+    cylRadius: 0.42060006
+  - centre:
+      x: 0.4096876
+      y: -0.3533541
+      z: 0
+    radius: 0.5526667
+    cylRadius: 0.42060006
+  - centre:
+      x: 0.4039519
+      y: -0.35479596
+      z: -0.000148803
+    radius: 0.54681313
+    cylRadius: 0.41348612
 --- !u!1 &6166670325622848527
 GameObject:
   m_ObjectHideFlags: 0
