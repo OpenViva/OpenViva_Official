@@ -514,6 +514,7 @@ MonoBehaviour:
   - {fileID: -7292467536146828665}
   - {fileID: -6865431722157300660}
   - {fileID: -3335245236709145906}
+  - {fileID: 7871422866616982388}
 --- !u!114 &1359165967404191730
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -768,6 +769,40 @@ MonoBehaviour:
   texture:
     m_OverrideState: 1
     m_Value: {fileID: 0}
+--- !u!114 &7871422866616982388
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3df4e1e32f0469e42859a646219b6408, type: 3}
+  m_Name: ScreenSpaceReflections
+  m_EditorClassIdentifier: Assembly-CSharp::UnityEngine.Rendering.Universal.ScreenSpaceReflections
+  active: 1
+  enabled:
+    m_OverrideState: 1
+    m_Value: 0
+  downsample:
+    m_OverrideState: 1
+    m_Value: 2
+  samples:
+    m_OverrideState: 1
+    m_Value: 8
+  steps:
+    m_OverrideState: 1
+    m_Value: 125
+  stepSize:
+    m_OverrideState: 1
+    m_Value: 0.1
+  thickness:
+    m_OverrideState: 1
+    m_Value: 0.1
+  minSmoothness:
+    m_OverrideState: 1
+    m_Value: 0.1
 --- !u!114 &8339455231178082067
 MonoBehaviour:
   m_ObjectHideFlags: 3
