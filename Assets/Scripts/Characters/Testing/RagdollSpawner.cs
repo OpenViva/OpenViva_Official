@@ -134,6 +134,8 @@ public class RagdollSpawner : MonoBehaviour
             agent = newChar.AddComponent<NavMeshAgent>();
         }
 
+        // TODO: Either change this to a name or dropdown based variable or make sure "Humanoid" is always the first type
+        agent.agentTypeID = 0;
         agent.speed = agentSpeed;
         agent.radius = agentRadius;
         agent.height = agentHeight;
