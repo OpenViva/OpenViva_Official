@@ -109,6 +109,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6491714333348156685}
     m_Modifications:
+    - target: {fileID: 273176718416991193, guid: bcbad7af1893107419ae6ee38315e018, type: 3}
+      propertyPath: far clip plane
+      value: 4000
+      objectReference: {fileID: 0}
+    - target: {fileID: 273176718416991193, guid: bcbad7af1893107419ae6ee38315e018, type: 3}
+      propertyPath: near clip plane
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 1620737986024169210, guid: bcbad7af1893107419ae6ee38315e018, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -119,7 +127,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1682772078794920231, guid: bcbad7af1893107419ae6ee38315e018, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0071105957
+      value: 0.032546997
       objectReference: {fileID: 0}
     - target: {fileID: 2726239286988577099, guid: bcbad7af1893107419ae6ee38315e018, type: 3}
       propertyPath: m_LocalPosition.x
@@ -132,6 +140,18 @@ PrefabInstance:
     - target: {fileID: 4344933157707485848, guid: bcbad7af1893107419ae6ee38315e018, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5769781198626430020, guid: bcbad7af1893107419ae6ee38315e018, type: 3}
+      propertyPath: lookSmoothing
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 5769781198626430020, guid: bcbad7af1893107419ae6ee38315e018, type: 3}
+      propertyPath: _mouseSensitivity
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5769781198626430020, guid: bcbad7af1893107419ae6ee38315e018, type: 3}
+      propertyPath: <JumpHeight>k__BackingField
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 6463992099818776534, guid: bcbad7af1893107419ae6ee38315e018, type: 3}
       propertyPath: m_LocalPosition.x
