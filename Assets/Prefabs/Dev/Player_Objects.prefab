@@ -61,8 +61,15 @@ MonoBehaviour:
     allowedFpsValues: 1e0000003c0000004b0000005a0000007800000090000000a5000000b4000000f0000000ffffffff
     fullscreen: 1
     vSync: 1
-    brightness: 0
+    brightness: 1
     language: en
+  presetAssets:
+  - {fileID: 11400000, guid: fd42a132493b1f143a4963adcd530ef1, type: 2}
+  - {fileID: 11400000, guid: cf6a652e94858004a93399f0a3dac507, type: 2}
+  - {fileID: 11400000, guid: d0b28e56dc7335e4387b2b1e81cb8354, type: 2}
+  - {fileID: 11400000, guid: 9fa850a7c16e86f4e9120adecb80c482, type: 2}
+  - {fileID: 11400000, guid: 32057d9a59cc4064a9d60c5f74606254, type: 2}
+  customAssetTemplate: {fileID: 11400000, guid: a826ec4f74c48444ab77fdc5ed6d7b1e, type: 2}
   _audioMixer: {fileID: 24100000, guid: b0fb938c0102c7f45858aa76cf10e36e, type: 2}
   OnSettingsChanged:
     m_PersistentCalls:
@@ -127,7 +134,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1682772078794920231, guid: bcbad7af1893107419ae6ee38315e018, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.032546997
+      value: 0.03263855
       objectReference: {fileID: 0}
     - target: {fileID: 2726239286988577099, guid: bcbad7af1893107419ae6ee38315e018, type: 3}
       propertyPath: m_LocalPosition.x

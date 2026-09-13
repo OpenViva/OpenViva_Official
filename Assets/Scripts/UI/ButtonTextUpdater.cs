@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class ButtonTextUpdater : MonoBehaviour
 {
     [Header("What setting does this button control?")]
-    public SettingsManager.SettingType setting;
+    public SettingsManagerOld.SettingType setting;
 
     [Header("Button Behavior")]
     public ButtonMode mode = ButtonMode.Toggle; // Toggle = ON/OFF, Cycle = next state, Plus/Minus = numeric
@@ -29,24 +29,24 @@ public class ButtonTextUpdater : MonoBehaviour
     private void OnEnable()
     {
         button.onClick.AddListener(OnClick);
-        SettingsManager.Instance.OnSettingsChanged.AddListener(UpdateDisplay);
+        SettingsManagerOld.Instance.OnSettingsChanged.AddListener(UpdateDisplay);
         UpdateDisplay();
     }
 
     private void OnDisable()
     {
         button.onClick.RemoveListener(OnClick);
-        SettingsManager.Instance.OnSettingsChanged.RemoveListener(UpdateDisplay);
+        SettingsManagerOld.Instance.OnSettingsChanged.RemoveListener(UpdateDisplay);
     }
 
     void OnClick()
     {
-        SettingsManager.Instance.ChangeSetting(setting, mode);
+        SettingsManagerOld.Instance.ChangeSetting(setting, mode);
     }
 
     void UpdateDisplay()
     {
-        string text = SettingsManager.Instance.GetDisplayText(setting, cycleTexts);
+        string text = SettingsManagerOld.Instance.GetDisplayText(setting, cycleTexts);
         if (displayText != null)
             displayText.text = text + suffix;
     }

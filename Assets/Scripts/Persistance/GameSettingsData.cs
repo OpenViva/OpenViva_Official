@@ -12,6 +12,7 @@ public class GameSettingsData
 
     // Graphics
     public int qualityLevel = 3;
+
     public int resolutionScale = 100;
     public int resolutionIndex = 100;
     public float reflectionDistance = 100f;
