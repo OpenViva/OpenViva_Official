@@ -29,10 +29,10 @@ public class GraphicsUpdaterHelper : MonoBehaviour
     {
         switch (setting)
         {
-            case SettingType.FpsLimit: SettingsManagerOld.Instance.DecreaseFpsLimit(); break;
-            case SettingType.ReflectionDistance: SettingsManagerOld.Instance.DecreaseReflectionDistance(); break;
-            case SettingType.ResolutionScale: SettingsManagerOld.Instance.DecreaseResolutionScale(); break;
-            case SettingType.LodDistance: SettingsManagerOld.Instance.DecreaseLodDistance(); break;
+            case SettingType.FpsLimit: SettingsManager.Instance.DecreaseFpsLimit(); break;
+            case SettingType.ReflectionDistance: SettingsManager.Instance.DecreaseReflectionDistance(); break;
+            case SettingType.ResolutionScale: SettingsManager.Instance.DecreaseResolutionScale(); break;
+            case SettingType.LodDistance: SettingsManager.Instance.DecreaseLodDistance(); break;
         }
         UpdateDisplay();
     }
@@ -41,17 +41,17 @@ public class GraphicsUpdaterHelper : MonoBehaviour
     {
         switch (setting)
         {
-            case SettingType.FpsLimit: SettingsManagerOld.Instance.IncreaseFpsLimit(); break;
-            case SettingType.ReflectionDistance: SettingsManagerOld.Instance.IncreaseReflectionDistance(); break;
-            case SettingType.ResolutionScale: SettingsManagerOld.Instance.IncreaseResolutionScale(); break;
-            case SettingType.LodDistance: SettingsManagerOld.Instance.IncreaseLodDistance(); break;
+            case SettingType.FpsLimit: SettingsManager.Instance.IncreaseFpsLimit(); break;
+            case SettingType.ReflectionDistance: SettingsManager.Instance.IncreaseReflectionDistance(); break;
+            case SettingType.ResolutionScale: SettingsManager.Instance.IncreaseResolutionScale(); break;
+            case SettingType.LodDistance: SettingsManager.Instance.IncreaseLodDistance(); break;
         }
         UpdateDisplay();
     }
 
     void UpdateDisplay()
     {
-        GameSettingsData gameSettingsData = SettingsManagerOld.Instance.Current;
+        GameSettingsData gameSettingsData = SettingsManager.Instance.Current;
         switch (setting)
         {
             case SettingType.FpsLimit:
