@@ -191,9 +191,7 @@ public class SettingsManager : MonoBehaviour
     private void SetReflectionDistance(float delta)
     {
         EnsureCustomPreset();
-        ChangeFloatSetting(ref currentSettings.reflectionDistance,
-                 currentSettings.reflectionDistance + delta,
-                 min: 0f, max: 2000f);
+        ChangeFloatSetting(ref currentSettings.reflectionDistance, delta, 100, 2000);
 
         ApplyGraphicsSettings();
     }
@@ -320,13 +318,16 @@ public class SettingsManager : MonoBehaviour
     private void ApplyGraphicsSettings()
     {
         // Determine which URP Asset to use (Preset vs Custom)
-        bool isCustom = currentSettings.qualityLevel >= presetAssets.Length;
+        bool isCustom = currentSettings.qualityLevel >= (presetAssets != null ? presetAssets.Length : 0);
         UniversalRenderPipelineAsset activeAsset = isCustom ? runtimeCustomAsset : presetAssets[currentSettings.qualityLevel];
 
         if (activeAsset != null)
         {
-            // Set URP Asset
-            GraphicsSettings.defaultRenderPipeline = activeAsset;
+            // Apply custom overrides to the custom asset
+            if (isCustom)
+            {
+                ApplyCustomURPOverrides(activeAsset);
+            }
 
             // Sync the Unity graphics level if using preset
             if (!isCustom)
@@ -334,11 +335,9 @@ public class SettingsManager : MonoBehaviour
                 QualitySettings.SetQualityLevel(currentSettings.qualityLevel, true);
             }
 
-            // Apply custom overrides to the custom asset
-            if (isCustom)
-            {
-                ApplyCustomURPOverrides(activeAsset);
-            }
+            // Set URP Asset
+            QualitySettings.renderPipeline = activeAsset;
+            GraphicsSettings.defaultRenderPipeline = activeAsset;
         }
 
         // Apply global settings that do not concern the URP Asset
@@ -357,47 +356,45 @@ public class SettingsManager : MonoBehaviour
         urpAsset.renderScale = currentSettings.resolutionScale / 100f;
 
         // Anti Aliasing
-        int msaaSamples = aaValues[currentSettings.resolutionScale % aaValues.Length];
+        int msaaSamples = aaValues[currentSettings.antiAliasing % aaValues.Length];
         urpAsset.msaaSampleCount = msaaSamples <= 0 ? 1 : msaaSamples;
 
-        if(_mainDirLight != null)
+        switch (currentSettings.shadowLevel)
         {
-            switch (currentSettings.shadowLevel)
-            {
-                case 0:
-                    _mainDirLight.shadows = LightShadows.None;
-                    urpAsset.shadowCascadeCount = 1;
-                    urpAsset.shadowDistance = 64f;
-                    break;
-                case 1:
-                    _mainDirLight.shadows = LightShadows.Soft;
-                    urpAsset.shadowDistance = 128f;
-                    urpAsset.mainLightShadowmapResolution = 512;
-                    urpAsset.additionalLightsShadowmapResolution = 512;
-                    urpAsset.shadowCascadeCount = 2;
-                    break;
-                case 2:
-                    _mainDirLight.shadows = LightShadows.Soft;
-                    urpAsset.shadowDistance = 256f;
-                    urpAsset.mainLightShadowmapResolution = 1024;
-                    urpAsset.additionalLightsShadowmapResolution = 1024;
-                    urpAsset.shadowCascadeCount = 3;
-                    break;
-                case 3:
-                    _mainDirLight.shadows = LightShadows.Soft;
-                    urpAsset.shadowDistance = 512f;
-                    urpAsset.mainLightShadowmapResolution = 2048;
-                    urpAsset.additionalLightsShadowmapResolution = 2048;
-                    urpAsset.shadowCascadeCount = 4;
-                    break;
-                default:
-                    _mainDirLight.shadows = LightShadows.Soft;
-                    urpAsset.shadowDistance = 128f;
-                    urpAsset.mainLightShadowmapResolution = 1024;
-                    urpAsset.additionalLightsShadowmapResolution = 1024;
-                    urpAsset.shadowCascadeCount = 3;
-                    break;
-            }
+            case 0:
+                urpAsset.shadowCascadeCount = 1;
+                urpAsset.shadowDistance = 64f;
+                break;
+            case 1:
+                urpAsset.shadowDistance = 128f;
+                urpAsset.mainLightShadowmapResolution = 512;
+                urpAsset.additionalLightsShadowmapResolution = 512;
+                urpAsset.shadowCascadeCount = 2;
+                break;
+            case 2:
+                urpAsset.shadowDistance = 256f;
+                urpAsset.mainLightShadowmapResolution = 1024;
+                urpAsset.additionalLightsShadowmapResolution = 1024;
+                urpAsset.shadowCascadeCount = 3;
+                break;
+            case 3:
+                urpAsset.shadowDistance = 512f;
+                urpAsset.mainLightShadowmapResolution = 2048;
+                urpAsset.additionalLightsShadowmapResolution = 2048;
+                urpAsset.shadowCascadeCount = 4;
+                break;
+            default:
+                urpAsset.shadowDistance = 128f;
+                urpAsset.mainLightShadowmapResolution = 1024;
+                urpAsset.additionalLightsShadowmapResolution = 1024;
+                urpAsset.shadowCascadeCount = 3;
+                break;
+        }
+
+        // Change Light shadows separately if it's not missing
+        if (_mainDirLight != null)
+        {
+            _mainDirLight.shadows = currentSettings.shadowLevel == 0 ? LightShadows.None : LightShadows.Soft;
         }
     }
 
