@@ -483,7 +483,7 @@ public class SettingsManager : MonoBehaviour
             case 3: return "High";
             case 4: return "Ultra";
             case 5: return "Custom";
-            default: return "";
+            default: return "meow";
         }
     }
 
@@ -495,7 +495,7 @@ public class SettingsManager : MonoBehaviour
             case 1: return "Low";
             case 2: return "Medium";
             case 3: return "High";
-            default: return "";
+            default: return "meow";
         }
     }
 
@@ -507,7 +507,7 @@ public class SettingsManager : MonoBehaviour
             case 1: return "2X";
             case 2: return "4X";
             case 3: return "8X";
-            default: return "";
+            default: return "meow";
         }
     }
     #endregion
