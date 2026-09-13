@@ -18,7 +18,7 @@ public class SettingsManager : MonoBehaviour
 
     [SerializeField] private UniversalRenderPipelineAsset customAssetTemplate;
 
-    private UniversalRenderPipelineAsset runtimeCustomAsset;
+    [SerializeField] private UniversalRenderPipelineAsset runtimeCustomAsset;
 
     [Header("Audio Settings")]
     [SerializeField] private AudioMixer _audioMixer;
@@ -58,7 +58,7 @@ public class SettingsManager : MonoBehaviour
 
         savePath = Path.Combine(Application.persistentDataPath, "gameSettings.json");
 
-        if (customAssetTemplate == null)
+        if (customAssetTemplate != null)
         {
             runtimeCustomAsset = Instantiate(customAssetTemplate);
             runtimeCustomAsset.name = "Runtime Custom URP Asset";
@@ -143,6 +143,13 @@ public class SettingsManager : MonoBehaviour
 
         ApplyGraphicsSettings();
         OnSettingsChanged.Invoke();
+    }
+
+    public void SetQualityPresetFromSlider(float sliderValue)
+    {
+        int presetIndex = Mathf.RoundToInt(sliderValue);
+
+        SetQualityPreset(presetIndex);
     }
 
     public void SetFullscreen(bool isFullscreen)
@@ -278,6 +285,30 @@ public class SettingsManager : MonoBehaviour
 
         ApplyGraphicsSettings();
     }
+
+    public void ChangeSetting(SettingType type, ButtonTextUpdater.ButtonMode mode)
+    {
+        var s = currentSettings;
+
+        switch (type)
+        {
+            // ── Toggles ─────────────────────────────────────
+            case SettingType.Fullscreen: SetFullscreen(mode == ButtonTextUpdater.ButtonMode.Toggle ? !s.fullscreen : s.fullscreen); break;
+            case SettingType.VSync: SetVSync(!s.vSync); break;
+
+            // ── Cycle (multiple states) ───────────────────────
+            case SettingType.AntiAliasing: CycleAntiAliasing(); break;
+            case SettingType.ShadowQuality: CycleShadowQuality(); break;
+
+            // ── Numeric + / – ─────────────────────────────────
+            case SettingType.FPSLimit: if (mode == ButtonTextUpdater.ButtonMode.Plus) IncreaseFpsLimit(); else DecreaseFpsLimit(); break;
+            case SettingType.ReflectionDistance: if (mode == ButtonTextUpdater.ButtonMode.Plus) IncreaseReflectionDistance(); else DecreaseReflectionDistance(); break;
+            case SettingType.ResolutionScale: if (mode == ButtonTextUpdater.ButtonMode.Plus) IncreaseResolutionScale(); else DecreaseResolutionScale(); break;
+            case SettingType.LODDistance: if (mode == ButtonTextUpdater.ButtonMode.Plus) IncreaseLodDistance(); else DecreaseLodDistance(); break;
+        }
+
+        OnSettingsChanged.Invoke(); // Always refresh UI
+    }
     #endregion
 
     private void ApplyAllSettings()
@@ -315,7 +346,7 @@ public class SettingsManager : MonoBehaviour
         Screen.fullScreen = currentSettings.fullscreen;
         Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
         QualitySettings.vSyncCount = currentSettings.vSync ? 1 : 0;
-        QualitySettings.lodBias = currentSettings.lodDistance / 100f;
+        QualitySettings.lodBias = currentSettings.lodDistance / 1000f;
 
         SaveSettings();
     }
@@ -431,8 +462,7 @@ public class SettingsManager : MonoBehaviour
         var s = currentSettings;
         switch (type)
         {
-            case SettingType.QualityPreset:
-                return s.qualityLevel < (presetAssets != null ? presetAssets.Length : 0) ? $"Preset {s.qualityLevel}" : "Custom";
+            case SettingType.QualityPreset: return ReturnQualityLevel();
             case SettingType.Fullscreen: return s.fullscreen ? "Fullscreen" : "Windowed";
             case SettingType.VSync: return s.vSync ? "Enabled" : "Disabled";
             case SettingType.ShadowQuality: return ReturnShadowLevel();
@@ -440,6 +470,20 @@ public class SettingsManager : MonoBehaviour
             case SettingType.FPSLimit: return s.targetFramerate == -1 ? "Unlimited" : s.targetFramerate.ToString();
             case SettingType.ResolutionScale: return s.resolutionScale.ToString();
             default: return "meow";
+        }
+    }
+
+    string ReturnQualityLevel()
+    {
+        switch (currentSettings.qualityLevel)
+        {
+            case 0: return "Potato";
+            case 1: return "Low";
+            case 2: return "Medium";
+            case 3: return "High";
+            case 4: return "Ultra";
+            case 5: return "Custom";
+            default: return "";
         }
     }
 
