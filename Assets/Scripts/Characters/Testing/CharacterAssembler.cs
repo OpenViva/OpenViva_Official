@@ -56,9 +56,14 @@ public class CharacterAssembler : MonoBehaviour
     /// Returns the first loaded character model (if any exists).
     /// </summary>
     public CharacterModel GetFirstModel() => loadedCharacters.Count > 0 ? loadedCharacters[0] : null;
+
+    /// <summary>
+    /// As the name suggests.
+    /// </summary>
+    public void ReloadAllCharacters() => ReadAllCharacters();
     #endregion
 
-    public void ReadAllCharacters()
+    private void ReadAllCharacters()
     {
         if (isLoading)
         {
