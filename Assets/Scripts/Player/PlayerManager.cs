@@ -59,7 +59,7 @@ public class PlayerManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        UpdateBothPlayersLocation();
+        //UpdateBothPlayersLocation();
     }
 
     private void UpdateBothPlayersLocation()
@@ -212,7 +212,7 @@ public class PlayerManager : MonoBehaviour
         _player.Controls.Viva.ExpressionFollow.performed += context => RaiseFollowPlayer();
 
         // TODO: Uncomment this when implementing VR
-        _player.Controls.Viva.ChangeInputType.performed += context => ChangeInputType();
+        //_player.Controls.Viva.ChangeInputType.performed += context => ChangeInputType();
     }
 
     public void HideHands(bool input)
