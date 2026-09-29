@@ -30,9 +30,6 @@ public class RagdollSpawner : MonoBehaviour
     public float agentHeight = 1.4f;
     public float stoppingDistance = 1f;
 
-    [Header("Nav Controller Settings")]
-    public Vector3 moveCoords = new(0, 0, -3); // TODO: Do NOT initialize coords but get them from the spawner object (ex: mirror)
-
     [Header("Debug")]
     [SerializeField] private PhysicsAttacher _physicsAttacher;
     [SerializeField] private CharacterAssembler _characterReader;
@@ -161,7 +158,6 @@ public class RagdollSpawner : MonoBehaviour
         {
             navAgentController = newChar.AddComponent<NavAgentController>();
         }
-        navAgentController.offsetCoords = moveCoords;
         navAgentController.startingCoords = _startingCoords;
         navAgentController.target = playerFollowObject;
 

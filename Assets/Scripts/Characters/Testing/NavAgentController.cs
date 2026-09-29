@@ -7,8 +7,6 @@ public class NavAgentController : MonoBehaviour
 {
     private static readonly int VelocityXHash = Animator.StringToHash("VelocityX");
     [Header("Settings")]
-    [Tooltip("The distance to move in each direction")]
-    public Vector3 offsetCoords; // TODO: Change this to move to mouse look position
     public float turnSpeed = 5;
 
     [Header("Follow Settings")]
@@ -153,16 +151,6 @@ public class NavAgentController : MonoBehaviour
         if (_agent.isOnNavMesh)
         {
             _agent.SetDestination(startingCoords);
-        }
-    }
-
-    [Button("Move To Distance", EButtonEnableMode.Playmode)]
-    public void MoveToCoords()
-    {
-        isFollowing = false;
-        if (_agent.isOnNavMesh)
-        {
-            _agent.SetDestination(startingCoords + offsetCoords);
         }
     }
 
