@@ -60,15 +60,15 @@ public class CharacterAssembler : MonoBehaviour
     /// <summary>
     /// As the name suggests.
     /// </summary>
-    public void ReloadAllCharacters() => ReadAllCharacters();
+    public IEnumerator ReloadAllCharacters() => ReadAllCharacters();
     #endregion
 
-    private void ReadAllCharacters()
+    private IEnumerator ReadAllCharacters()
     {
         if (isLoading)
         {
             Debug.LogError("[Chara Loader] Already reading characters. Please wait.");
-            return;
+            yield break;
         }
 
         isLoading = true;
@@ -77,7 +77,7 @@ public class CharacterAssembler : MonoBehaviour
         {
             Debug.LogError("[Chara Loader] Characters folder not found: " + charactersFolder);
             isLoading = false;
-            return;
+            yield break;
         }
 
         string[] vivaFiles = Directory.GetFiles(charactersFolder, "*.viva");
@@ -86,12 +86,17 @@ public class CharacterAssembler : MonoBehaviour
         {
             Debug.LogError("[Chara Loader] No .viva files have been found in Characters folder!");
             isLoading = false;
-            return;
+            yield break;
         }
 
         Debug.Log($"[Chara Loader] Found {vivaFiles.Length} characters to read.");
 
-        StartCoroutine(ReadCharactersAsync(vivaFiles));
+        // Clear the loaded characters before reading again
+        loadedCharacters.Clear();
+
+        yield return StartCoroutine(ReadCharactersAsync(vivaFiles));
+
+        isLoading = false;
     }
 
     private IEnumerator ReadCharactersAsync(string[] vivaFiles)

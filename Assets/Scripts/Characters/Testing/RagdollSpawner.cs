@@ -1,4 +1,5 @@
 using FIMSpace.FProceduralAnimation;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -39,6 +40,7 @@ public class RagdollSpawner : MonoBehaviour
     private Vector3 _startingCoords;
     List<PhysicsBoneData> physicsBoneDataList;
 
+    #region Unity Methods
     private void Start()
     {
         _startingCoords = transform.position;
@@ -49,15 +51,10 @@ public class RagdollSpawner : MonoBehaviour
 
         if (_characterReader != null)
         {
-            _characterReader.ReadAllCharacters();
+            _characterReader.ReloadAllCharacters(); // Initial reload
         }
 
-        List<CharacterAssembler.CharacterModel> loadedModels = _characterReader.GetAllModels();
-
-        foreach (var model in loadedModels)
-        {
-            loadedCharacters.Add(model.prefab);
-        }
+        StartCoroutine(ReloadRoutine());
     }
 
     private void OnEnable()
@@ -69,8 +66,32 @@ public class RagdollSpawner : MonoBehaviour
     {
         Globals.OnBookOpened -= FillBookCharacters;
     }
+    #endregion
 
-    void FillBookCharacters()
+    #region Public Access
+    public void ReloadAllCharacters()
+    {
+        StartCoroutine(ReloadRoutine());
+    }
+    #endregion
+
+    private IEnumerator ReloadRoutine()
+    {
+        yield return StartCoroutine(_characterReader.ReloadAllCharacters());
+
+        List<CharacterAssembler.CharacterModel> loadedModels = _characterReader.GetAllModels();
+
+        loadedCharacters.Clear();
+        foreach (var model in loadedModels)
+        {
+            loadedCharacters.Add(model.prefab);
+        }
+
+        FillBookCharacters();
+        yield return null;
+    }
+    
+    private void FillBookCharacters()
     {
         foreach (Transform child in listContentObject.transform)
         {
@@ -78,7 +99,6 @@ public class RagdollSpawner : MonoBehaviour
         }
 
         List<CharacterAssembler.CharacterModel> allModels = _characterReader.GetAllModels();
-
         
         foreach (var model in allModels)
         {
@@ -90,7 +110,7 @@ public class RagdollSpawner : MonoBehaviour
         }
     }
 
-    GameObject SpawnCharacter(GameObject prefabToSpawn)
+    private GameObject SpawnCharacter(GameObject prefabToSpawn)
     {
         GameObject instance = Instantiate(prefabToSpawn, spawnLocation.position, spawnLocation.rotation.normalized);
         instance.name = "RagdollCharacter_" + Time.frameCount;
@@ -98,7 +118,7 @@ public class RagdollSpawner : MonoBehaviour
         return instance;
     }
 
-    public void SpawnAndSetupRagdoll(string bundleName)
+    private void SpawnAndSetupRagdoll(string bundleName)
     {
         if (characterPrefab == null) return;
 
@@ -187,7 +207,7 @@ public class RagdollSpawner : MonoBehaviour
         Debug.Log($"Ragdoll fully auto-setup on {newChar.name}");
     }
 
-    public void ReduceAndUpdateThickness(RagdollAnimator2 ragdoll)
+    private void ReduceAndUpdateThickness(RagdollAnimator2 ragdoll)
     {
         ragdoll.Handler.Chains[0].ChainThicknessMultiplier = 0.6f;
         ragdoll.Handler.Chains[1].ChainThicknessMultiplier = 0.6f;
@@ -205,7 +225,7 @@ public class RagdollSpawner : MonoBehaviour
         ragdoll.Settings.User_UpdateAllBonesParametersAfterManualChanges();
     }
 
-    public void AddRagdollFeatures(RagdollAnimator2 ragdoll)
+    private void AddRagdollFeatures(RagdollAnimator2 ragdoll)
     {
         if (ragdoll != null && extraFeaturesList.Count > 0)
         {
