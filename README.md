@@ -37,7 +37,7 @@ We currently have translations for:
 # Prerequisites for Development
 
 Required:
-- Unity 6000.3.6f1
+- Unity 6000.3.22f1
 
 Recommended:
 - Visual Studio (2022 or 2026) or any other C# IDE (Programming)
