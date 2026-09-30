@@ -3,7 +3,7 @@
 using IngameDebugConsole;
 using UnityEngine;
 
-public class PlayerKB_Movement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     // This class is responsible for the movement of the player using keyboard.
     // Code by Edenity on Unity Asset Store

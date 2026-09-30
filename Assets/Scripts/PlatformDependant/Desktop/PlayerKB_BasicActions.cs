@@ -11,7 +11,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
 
     // --- References ---
     [Header("References")]
-    [SerializeField] private PlayerKB_Movement _playerMovement;
+    [SerializeField] private PlayerController _playerMovement;
     [SerializeField] private CharacterController _characterController;
 
     [Tooltip("The object that holds the player hands/view model")]
@@ -48,7 +48,7 @@ public class PlayerKB_BasicActions : MonoBehaviour
         }
         else Debug.LogWarning($"Character Controller of {this} cannot be found!");
 
-        if (TryGetComponent(out PlayerKB_Movement foundMovement))
+        if (TryGetComponent(out PlayerController foundMovement))
         {
             _playerMovement = foundMovement;
         }

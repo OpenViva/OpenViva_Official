@@ -34,13 +34,13 @@ public class FootstepManager : MonoBehaviour
     [SerializeField] private AudioSource _rightFoot;
 
     private CharacterController _playerCC;
-    private PlayerKB_Movement _playerMovement;
+    private PlayerController _playerMovement;
     #endregion
 
     private void Awake()
     {
         _playerCC = GetComponentInParent<CharacterController>();
-        _playerMovement = GetComponentInParent<PlayerKB_Movement>();
+        _playerMovement = GetComponentInParent<PlayerController>();
     }
 
     private void Update()
