@@ -27,7 +27,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
     protected HintManager _hud;
     protected bool _hintIsShowing = false;
 
-    private AnimationIndexes _animationIndexes;
+    // private AnimationIndexes // _animationIndexes;
 
     public event Action<bool> OnGrabbedLeft;
     public bool IsGrabbedLeft
@@ -76,7 +76,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
         _outline = GetComponent<Outline>();
 
-        _animationIndexes = PlayerManager.Instance.AnimationKB.GetComponent<AnimationIndexes>();
+        // _animationIndexes = PlayerManager.Instance.AnimationKB.GetComponent<AnimationIndexes>();
 
         AssignInputs();
     }
@@ -102,7 +102,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             _hud.ClearHint(HintConstants.GrabHint);
             _hud.CreateHint(HintConstants.LeftReleaseHint);
 
-            _animationIndexes.PlayAnimationLeft(_objectIndex);
+            // _animationIndexes.PlayAnimationLeft(_objectIndex);
 
             AudioSource playerAudioSource = GetComponentInParent<AudioSource>();
             AudioClip audioClip = GetComponentInParent<PlayerClipHolder>().GripClip;
@@ -131,7 +131,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             _hud.ClearHint(HintConstants.LeftReleaseHint);
             PlayerManager.Instance.LeftHandOccupied = false;
 
-            _animationIndexes.PlayAnimationLeft(-1);
+            // _animationIndexes.PlayAnimationLeft(-1);
         }
     }
 
@@ -157,7 +157,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             _hud.ClearHint(HintConstants.GrabHint);
             _hud.CreateHint(HintConstants.RightReleaseHint);
 
-            _animationIndexes.PlayAnimationRight(_objectIndex);
+            // _animationIndexes.PlayAnimationRight(_objectIndex);
 
             AudioSource playerAudioSource = GetComponentInParent<AudioSource>();
             AudioClip audioClip = GetComponentInParent<PlayerClipHolder>().GripClip;
@@ -186,7 +186,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             _hud.ClearHint(HintConstants.RightReleaseHint);
             PlayerManager.Instance.RightHandOccupied = false;
 
-            _animationIndexes.PlayAnimationRight(-1);
+            // // _animationIndexes.PlayAnimationRight(-1);
         }
     }
 
@@ -251,13 +251,13 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
             if (handedness == 1)
             {
-                _animationIndexes.PlayAnimationLeft(-1);
+                // _animationIndexes.PlayAnimationLeft(-1);
                 _hud.ClearHint(HintConstants.LeftReleaseHint);
                 PlayerManager.Instance.LeftHandOccupied = false;
             }
             else
             {
-                _animationIndexes.PlayAnimationRight(-1);
+                // _animationIndexes.PlayAnimationRight(-1);
                 _hud.ClearHint(HintConstants.RightReleaseHint);
                 PlayerManager.Instance.RightHandOccupied = false;
             }
@@ -269,7 +269,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             {
                 transform.SetParent(_playerLeftHand.transform, true);
                 transform.SetLocalPositionAndRotation(ObjectHoldPositions.Instance.GetObjectPositionLeft(_objectIndex), ObjectHoldPositions.Instance.GetObjectRotationLeft(_objectIndex));
-                _animationIndexes.PlayAnimationLeft(_objectIndex);
+                // _animationIndexes.PlayAnimationLeft(_objectIndex);
                 IsGrabbedLeft = true;
                 IsGrabbedRight = false;
                 PlayerManager.Instance.LeftHandOccupied = true;
@@ -278,7 +278,7 @@ public class PlayerKB_GrabObject : MonoBehaviour
             {
                 transform.SetParent(_playerRightHand.transform, true);
                 transform.SetLocalPositionAndRotation(ObjectHoldPositions.Instance.GetObjectPositionRight(_objectIndex), ObjectHoldPositions.Instance.GetObjectRotationRight(_objectIndex));
-                _animationIndexes.PlayAnimationRight(_objectIndex);
+                // _animationIndexes.PlayAnimationRight(_objectIndex);
                 IsGrabbedRight = true;
                 IsGrabbedLeft = false;
                 PlayerManager.Instance.RightHandOccupied = true;

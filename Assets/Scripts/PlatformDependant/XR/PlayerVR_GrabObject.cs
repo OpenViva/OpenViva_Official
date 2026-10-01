@@ -24,11 +24,11 @@ public class PlayerVR_GrabObject : XRGrabInteractable
     private HintManager _hintManager;
 
     public int ObjectIndex;
-    private AnimationIndexes _animationIndexes;
+    // private AnimationIndexes // _animationIndexes;
 
     private void Start()
     {
-        _animationIndexes = PlayerManager.Instance.AnimationVR.GetComponent<AnimationIndexes>();
+        // _animationIndexes = PlayerManager.Instance.AnimationVR.GetComponent<AnimationIndexes>();
 
         GameObject floatingHint = GameObject.Find("FloatingHint");
         _hintManager = floatingHint.GetComponent<HintManager>();
@@ -43,13 +43,13 @@ public class PlayerVR_GrabObject : XRGrabInteractable
         {
             attachTransform = _leftAttach;
             IsGrabbed = 1;
-            _animationIndexes.PlayAnimationLeft(ObjectIndex);
+            // _animationIndexes.PlayAnimationLeft(ObjectIndex);
         }
         else if (name.Contains("Right"))
         {
             attachTransform = _rightAttach;
             IsGrabbed = 2;
-            _animationIndexes.PlayAnimationRight(ObjectIndex);
+            // _animationIndexes.PlayAnimationRight(ObjectIndex);
         }
 
         FloatingCanvas.Instance.WarpToOrigin();
@@ -68,8 +68,8 @@ public class PlayerVR_GrabObject : XRGrabInteractable
     {
         base.Drop();
         IsGrabbed = 0;
-        _animationIndexes.PlayAnimationLeft(-1);
-        _animationIndexes.PlayAnimationRight(-1);
+        // _animationIndexes.PlayAnimationLeft(-1);
+        // _animationIndexes.PlayAnimationRight(-1);
         transform.SetParent(null);
         GetComponent<Rigidbody>().isKinematic = false;
     }

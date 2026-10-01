@@ -9,17 +9,10 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
-    [SerializeField] private InputActionReference _changeInputType; // Keybind to change input type ([1] key)
-    [SerializeField] private GameObject _playerKB; // Player GameObject for Keyboard/Mouse
-    [SerializeField] private GameObject _playerVR; // Player GameObject for VR
-
     [SerializeField] private SkinnedMeshRenderer _handSkin;
     [SerializeField] private GameObject _leftHandKB; // PlayerKB's left hand
     [SerializeField] private GameObject _rightHandKB; // PlayerKB's right hand
     private List<PlayerVR_GrabObject> _itemList;
-
-    public GameObject AnimationKB;
-    public GameObject AnimationVR;
 
     // Static Events
     public static event Action OnMoveCharaToCamera;
@@ -57,43 +50,6 @@ public class PlayerManager : MonoBehaviour
         InitializeInputEvents();
     }
 
-    private void FixedUpdate()
-    {
-        //UpdateBothPlayersLocation();
-    }
-
-    private void UpdateBothPlayersLocation()
-    {
-        // Sync positions between the KBM and VR player objects
-        if (Globals.isDesktopMode)
-        {
-            _playerVR.transform.position = _playerKB.transform.position;
-        }
-        else
-        {
-            _playerKB.transform.position = _playerVR.transform.position;
-        }
-    }
-
-    private void ChangeInputType()
-    {
-        // ToggleLanternLeft between Keyboard/Mouse and VR input types
-        if (Globals.isDesktopMode)
-        {
-            Globals.isDesktopMode = false;
-            _playerKB.SetActive(false);
-            _playerVR.SetActive(true);
-            Debug.Log("[Player Manager] Input type changed to VR");
-        }
-        else
-        {
-            Globals.isDesktopMode = true;
-            _playerVR.SetActive(false);
-            _playerKB.SetActive(true);
-            Debug.Log("[Player Manager] Input type changed to KBM");
-        }
-    }
-    
     // Check which items are being held in the player's hands, if any
     private GameObject CheckItemInHandsKB(Transform parent)
     {
@@ -210,9 +166,6 @@ public class PlayerManager : MonoBehaviour
     {
         _player.Controls.Viva.UniversalInteract.performed += context => RaiseMoveCharaToCamera();
         _player.Controls.Viva.ExpressionFollow.performed += context => RaiseFollowPlayer();
-
-        // TODO: Uncomment this when implementing VR
-        //_player.Controls.Viva.ChangeInputType.performed += context => ChangeInputType();
     }
 
     public void HideHands(bool input)
