@@ -71,6 +71,7 @@ public class PhysicsAttacher : MonoBehaviour
 
             cloth.name = boneData.BoneName + postfixClothName;
 
+            // ONLY start adding colliders if there have been any given for the current bone
             AddCollidersToBones(character, cloth, boneData.Colliders);
 
             // Build and start simulation
