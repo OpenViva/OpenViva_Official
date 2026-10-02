@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class VivaCharacterData
 {
-    public int Version = 3;
+    public int Version = 4;
     public string CharacterName;
     public string PrefabName;
     public int ScriptCount;
@@ -41,6 +41,7 @@ public class PhysicsBoneData
     public string GameObjectPath;
     public string BonePath;
     public string BoneName;
+    public List<ColliderData> Colliders = new();
 
     public float Gravity = 2f;
     public float Damping = 0.05f;
@@ -53,3 +54,21 @@ public class PhysicsBoneData
     public bool UseLimit = true;
     public float SpeedLimit = 3f;
 }
+
+[Serializable]
+public class ColliderData
+{
+    public string BonePath;
+
+    public ShapeType ShapeType;
+    public Direction AxisDirection;
+
+    public float Length;
+    public float Radius;
+    public Vector3 Center;
+}
+
+#region Enums
+public enum ShapeType { Sphere, Capsule }
+public enum Direction { X, Y, Z }
+#endregion
