@@ -72,7 +72,14 @@ public class PhysicsAttacher : MonoBehaviour
             cloth.name = boneData.BoneName + postfixClothName;
 
             // ONLY start adding colliders if there have been any given for the current bone
-            AddCollidersToBones(character, cloth, boneData.Colliders);
+            if (boneData.Colliders.Count > 0)
+            {
+                AddCollidersToBones(character, cloth, boneData.Colliders);
+
+                // Set the collision type of this bone, the radius and do not use curve
+                sdata.colliderCollisionConstraint.mode = ColliderCollisionConstraint.Mode.Point;
+                sdata.radius = new() { value = 0.036f, useCurve = false }; // TODO: This could be an option in the SDK
+            }
 
             // Build and start simulation
             cloth.BuildAndRun();
