@@ -22,8 +22,8 @@ public class InteractFaucet : MonoBehaviour
 
     private void AssignInputs()
     {
-        _player.Controls.Viva.LeftGrab.performed += context => Interact();
-        _player.Controls.Viva.RightGrab.performed += context => Interact();
+        _player.Controls.Viva.DesktopLeftGrab.performed += context => Interact();
+        _player.Controls.Viva.DesktopRightGrab.performed += context => Interact();
     }
 
     private void Interact()

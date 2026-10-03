@@ -31,8 +31,8 @@ public class InteractDoorKB : MonoBehaviour
 
     protected virtual void AssignInputs()
     {
-        _player.Controls.Viva.LeftGrab.performed += context => interactDoor();
-        _player.Controls.Viva.RightGrab.performed += context => interactDoor();
+        _player.Controls.Viva.DesktopLeftGrab.performed += context => interactDoor();
+        _player.Controls.Viva.DesktopRightGrab.performed += context => interactDoor();
     }
 
     protected void interactDoor()

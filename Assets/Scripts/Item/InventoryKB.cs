@@ -59,8 +59,8 @@ public class InventoryKB : MonoBehaviour
         {
             _player.Controls.Viva.InteractRight.performed -= ToggleBag;
             _player.Controls.Viva.InteractLeft.performed += ToggleBag;
-            _player.Controls.Viva.RightGrab.performed -= PlaceInBag;
-            _player.Controls.Viva.LeftGrab.performed += PlaceInBag;
+            _player.Controls.Viva.DesktopRightGrab.performed -= PlaceInBag;
+            _player.Controls.Viva.DesktopLeftGrab.performed += PlaceInBag;
             _player.Controls.Viva.InteractLeft.performed -= TakeFromBag;
             _player.Controls.Viva.InteractRight.performed += TakeFromBag;
         }
@@ -69,8 +69,8 @@ public class InventoryKB : MonoBehaviour
         {
             _player.Controls.Viva.InteractLeft.performed -= ToggleBag;
             _player.Controls.Viva.InteractRight.performed += ToggleBag;
-            _player.Controls.Viva.LeftGrab.performed -= PlaceInBag;
-            _player.Controls.Viva.RightGrab.performed += PlaceInBag;
+            _player.Controls.Viva.DesktopLeftGrab.performed -= PlaceInBag;
+            _player.Controls.Viva.DesktopRightGrab.performed += PlaceInBag;
             _player.Controls.Viva.InteractRight.performed -= TakeFromBag;
             _player.Controls.Viva.InteractLeft.performed += TakeFromBag;
         }
