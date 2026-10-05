@@ -92,7 +92,7 @@ public class FruitCutMinigame : MonoBehaviour
     private void AssignInputs()
     {
         _player.Controls.Viva.UniversalInteract.performed += EnterMinigame;
-        _player.Controls.Viva.LeftGrab.performed += PerformCut;
+        _player.Controls.Viva.DesktopLeftGrab.performed += PerformCut;
         _player.Controls.Viva.Pause.performed +=  LeaveMinigame;
         _player.Controls.Viva.Cancel.performed += QuitMinigame;
         _player.Controls.Viva.InteractLeftHold.performed += SkipMinigame;
@@ -379,7 +379,7 @@ public class FruitCutMinigame : MonoBehaviour
     private void OnDisable()
     {
         _player.Controls.Viva.UniversalInteract.performed -= EnterMinigame;
-        _player.Controls.Viva.LeftGrab.performed -= PerformCut;
+        _player.Controls.Viva.DesktopLeftGrab.performed -= PerformCut;
         _player.Controls.Viva.Pause.performed -= LeaveMinigame;
         _player.Controls.Viva.Cancel.performed -= QuitMinigame;
         _player.Controls.Viva.InteractLeftHold.performed -= SkipMinigame;

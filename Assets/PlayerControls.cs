@@ -153,7 +153,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""priority"": 0
                 },
                 {
-                    ""name"": ""Left Grab"",
+                    ""name"": ""DesktopLeftGrab"",
                     ""type"": ""Button"",
                     ""id"": ""6ce205d8-9933-471b-a8cc-f5c28e4b4e88"",
                     ""expectedControlType"": """",
@@ -163,9 +163,29 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""priority"": 0
                 },
                 {
-                    ""name"": ""Right Grab"",
+                    ""name"": ""DesktopRightGrab"",
                     ""type"": ""Button"",
                     ""id"": ""88da38ea-1011-47bd-9ba5-03712550e605"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
+                },
+                {
+                    ""name"": ""VRLeftGrab"",
+                    ""type"": ""Button"",
+                    ""id"": ""148b187e-70b9-40c6-a453-18db71857311"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
+                },
+                {
+                    ""name"": ""VRRightGrab"",
+                    ""type"": ""Button"",
+                    ""id"": ""310befb7-d6dc-471f-bfef-72cf0f7ee916"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -356,7 +376,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Left Grab"",
+                    ""action"": ""DesktopLeftGrab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -367,7 +387,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Left Grab"",
+                    ""action"": ""DesktopLeftGrab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -411,7 +431,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Right Grab"",
+                    ""action"": ""DesktopRightGrab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -422,7 +442,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Right Grab"",
+                    ""action"": ""DesktopRightGrab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -777,6 +797,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""ExpressionFollow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0ee9c3f2-6b1f-49f2-a6b0-bd01a75c0a95"",
+                    ""path"": ""<XRController>{LeftHand}/{GripButton}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";XR"",
+                    ""action"": ""VRLeftGrab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1db54b7a-480c-4e48-afb6-116aa1687a90"",
+                    ""path"": ""<XRController>{RightHand}/{GripButton}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";XR"",
+                    ""action"": ""VRRightGrab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -841,8 +883,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Viva_Crouch = m_Viva.FindAction("Crouch", throwIfNotFound: true);
         m_Viva_Jump = m_Viva.FindAction("Jump", throwIfNotFound: true);
         m_Viva_OpenMap = m_Viva.FindAction("Open Map", throwIfNotFound: true);
-        m_Viva_LeftGrab = m_Viva.FindAction("Left Grab", throwIfNotFound: true);
-        m_Viva_RightGrab = m_Viva.FindAction("Right Grab", throwIfNotFound: true);
+        m_Viva_DesktopLeftGrab = m_Viva.FindAction("DesktopLeftGrab", throwIfNotFound: true);
+        m_Viva_DesktopRightGrab = m_Viva.FindAction("DesktopRightGrab", throwIfNotFound: true);
+        m_Viva_VRLeftGrab = m_Viva.FindAction("VRLeftGrab", throwIfNotFound: true);
+        m_Viva_VRRightGrab = m_Viva.FindAction("VRRightGrab", throwIfNotFound: true);
         m_Viva_ScrollUp = m_Viva.FindAction("Scroll Up", throwIfNotFound: true);
         m_Viva_ScrollDown = m_Viva.FindAction("Scroll Down", throwIfNotFound: true);
         m_Viva_Run = m_Viva.FindAction("Run", throwIfNotFound: true);
@@ -941,8 +985,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Viva_Crouch;
     private readonly InputAction m_Viva_Jump;
     private readonly InputAction m_Viva_OpenMap;
-    private readonly InputAction m_Viva_LeftGrab;
-    private readonly InputAction m_Viva_RightGrab;
+    private readonly InputAction m_Viva_DesktopLeftGrab;
+    private readonly InputAction m_Viva_DesktopRightGrab;
+    private readonly InputAction m_Viva_VRLeftGrab;
+    private readonly InputAction m_Viva_VRRightGrab;
     private readonly InputAction m_Viva_ScrollUp;
     private readonly InputAction m_Viva_ScrollDown;
     private readonly InputAction m_Viva_Run;
@@ -991,13 +1037,21 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @OpenMap => m_Wrapper.m_Viva_OpenMap;
         /// <summary>
-        /// Provides access to the underlying input action "Viva/LeftGrab".
+        /// Provides access to the underlying input action "Viva/DesktopLeftGrab".
         /// </summary>
-        public InputAction @LeftGrab => m_Wrapper.m_Viva_LeftGrab;
+        public InputAction @DesktopLeftGrab => m_Wrapper.m_Viva_DesktopLeftGrab;
         /// <summary>
-        /// Provides access to the underlying input action "Viva/RightGrab".
+        /// Provides access to the underlying input action "Viva/DesktopRightGrab".
         /// </summary>
-        public InputAction @RightGrab => m_Wrapper.m_Viva_RightGrab;
+        public InputAction @DesktopRightGrab => m_Wrapper.m_Viva_DesktopRightGrab;
+        /// <summary>
+        /// Provides access to the underlying input action "Viva/VRLeftGrab".
+        /// </summary>
+        public InputAction @VRLeftGrab => m_Wrapper.m_Viva_VRLeftGrab;
+        /// <summary>
+        /// Provides access to the underlying input action "Viva/VRRightGrab".
+        /// </summary>
+        public InputAction @VRRightGrab => m_Wrapper.m_Viva_VRRightGrab;
         /// <summary>
         /// Provides access to the underlying input action "Viva/ScrollUp".
         /// </summary>
@@ -1090,12 +1144,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @OpenMap.started += instance.OnOpenMap;
             @OpenMap.performed += instance.OnOpenMap;
             @OpenMap.canceled += instance.OnOpenMap;
-            @LeftGrab.started += instance.OnLeftGrab;
-            @LeftGrab.performed += instance.OnLeftGrab;
-            @LeftGrab.canceled += instance.OnLeftGrab;
-            @RightGrab.started += instance.OnRightGrab;
-            @RightGrab.performed += instance.OnRightGrab;
-            @RightGrab.canceled += instance.OnRightGrab;
+            @DesktopLeftGrab.started += instance.OnDesktopLeftGrab;
+            @DesktopLeftGrab.performed += instance.OnDesktopLeftGrab;
+            @DesktopLeftGrab.canceled += instance.OnDesktopLeftGrab;
+            @DesktopRightGrab.started += instance.OnDesktopRightGrab;
+            @DesktopRightGrab.performed += instance.OnDesktopRightGrab;
+            @DesktopRightGrab.canceled += instance.OnDesktopRightGrab;
+            @VRLeftGrab.started += instance.OnVRLeftGrab;
+            @VRLeftGrab.performed += instance.OnVRLeftGrab;
+            @VRLeftGrab.canceled += instance.OnVRLeftGrab;
+            @VRRightGrab.started += instance.OnVRRightGrab;
+            @VRRightGrab.performed += instance.OnVRRightGrab;
+            @VRRightGrab.canceled += instance.OnVRRightGrab;
             @ScrollUp.started += instance.OnScrollUp;
             @ScrollUp.performed += instance.OnScrollUp;
             @ScrollUp.canceled += instance.OnScrollUp;
@@ -1161,12 +1221,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @OpenMap.started -= instance.OnOpenMap;
             @OpenMap.performed -= instance.OnOpenMap;
             @OpenMap.canceled -= instance.OnOpenMap;
-            @LeftGrab.started -= instance.OnLeftGrab;
-            @LeftGrab.performed -= instance.OnLeftGrab;
-            @LeftGrab.canceled -= instance.OnLeftGrab;
-            @RightGrab.started -= instance.OnRightGrab;
-            @RightGrab.performed -= instance.OnRightGrab;
-            @RightGrab.canceled -= instance.OnRightGrab;
+            @DesktopLeftGrab.started -= instance.OnDesktopLeftGrab;
+            @DesktopLeftGrab.performed -= instance.OnDesktopLeftGrab;
+            @DesktopLeftGrab.canceled -= instance.OnDesktopLeftGrab;
+            @DesktopRightGrab.started -= instance.OnDesktopRightGrab;
+            @DesktopRightGrab.performed -= instance.OnDesktopRightGrab;
+            @DesktopRightGrab.canceled -= instance.OnDesktopRightGrab;
+            @VRLeftGrab.started -= instance.OnVRLeftGrab;
+            @VRLeftGrab.performed -= instance.OnVRLeftGrab;
+            @VRLeftGrab.canceled -= instance.OnVRLeftGrab;
+            @VRRightGrab.started -= instance.OnVRRightGrab;
+            @VRRightGrab.performed -= instance.OnVRRightGrab;
+            @VRRightGrab.canceled -= instance.OnVRRightGrab;
             @ScrollUp.started -= instance.OnScrollUp;
             @ScrollUp.performed -= instance.OnScrollUp;
             @ScrollUp.canceled -= instance.OnScrollUp;
@@ -1338,19 +1404,33 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnOpenMap(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Left Grab" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "DesktopLeftGrab" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnLeftGrab(InputAction.CallbackContext context);
+        void OnDesktopLeftGrab(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Right Grab" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "DesktopRightGrab" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnRightGrab(InputAction.CallbackContext context);
+        void OnDesktopRightGrab(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "VRLeftGrab" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnVRLeftGrab(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "VRRightGrab" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnVRRightGrab(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Scroll Up" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

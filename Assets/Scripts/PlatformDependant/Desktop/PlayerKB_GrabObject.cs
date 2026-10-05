@@ -310,8 +310,8 @@ public class PlayerKB_GrabObject : MonoBehaviour
 
     protected virtual void AssignInputs()
     {
-        _player.Controls.Viva.LeftGrab.performed += context => GrabLeft();
-        _player.Controls.Viva.RightGrab.performed += context => GrabRight();
+        _player.Controls.Viva.DesktopLeftGrab.performed += context => GrabLeft();
+        _player.Controls.Viva.DesktopRightGrab.performed += context => GrabRight();
     }
 
     private void OnDestroy()
