@@ -8,18 +8,19 @@ public class PlayerSwitchInputMode : MonoBehaviour
 {
     [SerializeField] private Player _player;
 
-    // KB Components
+    [Header("KB Components:")]
     [SerializeField] private PlayerController _playerController;
     [SerializeField] private GameObject _playerHands;
 
-    // VR Components
+    [Header("VR Components:")]
     [SerializeField] private XROrigin _XROrigin;
+    [SerializeField] private GameObject _VRLocomotion;
     [SerializeField] private XRInputModalityManager _XRInputModalityManager;
     [SerializeField] private TrackedPoseDriver _cameraTrackedPoseDriver;
     [SerializeField] private GameObject _leftController;
     [SerializeField] private GameObject _rightController;
 
-    // Fields
+    [Header("Misc:")]
     [SerializeField] private GameObject _camera;
     private Transform _initialCameraTransform;
     [SerializeField] private bool _VRActive = false;
@@ -58,6 +59,7 @@ public class PlayerSwitchInputMode : MonoBehaviour
         _playerHands.SetActive(!_VRActive);
 
         _XROrigin.enabled = _VRActive;
+        _VRLocomotion.SetActive(_VRActive);
         _XRInputModalityManager.enabled = _VRActive;
         _cameraTrackedPoseDriver.enabled = _VRActive;
         _leftController.SetActive(_VRActive);
