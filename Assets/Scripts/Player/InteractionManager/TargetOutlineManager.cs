@@ -47,8 +47,12 @@ namespace Viva.Interaction
             {
                 if (!target.TryGetComponent(out outline))
                 {
+                    Debug.LogWarning("Outline Not Found!");
+
                     outline = target.AddComponent<Outline>();
                 }
+                Debug.LogWarning("Outline Found!");
+
                 outlineCache[target] = outline;
             }
 
