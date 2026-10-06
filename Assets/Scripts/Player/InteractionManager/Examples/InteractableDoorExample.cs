@@ -15,4 +15,8 @@ public class InteractableDoorExample : MonoBehaviour, Viva.Interaction.IInteract
         // Add animation or sound logic here
         return true;
     }
+
+    void Viva.Interaction.IInteractable.OnDropped()
+    {
+    }
 }

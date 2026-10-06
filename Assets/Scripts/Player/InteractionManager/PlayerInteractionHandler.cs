@@ -12,6 +12,7 @@ namespace Viva.Interaction
 
         // Tracks what each hand is currently holding
         private Dictionary<HandSide, IInteractable> heldObjects = new();
+        private bool _isDropModifierHeld = false;
 
         private void Awake()
         {
@@ -32,7 +33,11 @@ namespace Viva.Interaction
             // 1. If the hand is holding something, Use it.
             if (heldObjects[hand] != null)
             {
-                if (heldObjects[hand].CurrentType == InteractionType.Use)
+                if (_isDropModifierHeld)
+                {
+                    DropHeldObject(hand);
+                }
+                else if (heldObjects[hand].CurrentType == InteractionType.Use)
                 {
                     switch (hand)
                     {
@@ -79,9 +84,19 @@ namespace Viva.Interaction
                 {
                     heldObjects[hand] = interactable;
 
-                    // Optional: Clear the outline immediately upon grabbing
+                    // Disable outline script when grabbing
                     target.GetComponent<Outline>().enabled = false;
                 }
+            }
+        }
+        private void DropHeldObject(HandSide hand)
+        {
+            IInteractable interactable = heldObjects[hand];
+            if (interactable != null)
+            {
+                interactable.OnDropped();
+
+                ReleaseObject(hand);
             }
         }
 
@@ -118,6 +133,9 @@ namespace Viva.Interaction
         #region Helper Methods
         private void AssignInputs()
         {
+            _player.Controls.Viva.Run.started += context => _isDropModifierHeld = true;
+            _player.Controls.Viva.Run.canceled += context => _isDropModifierHeld = false;
+
             _player.Controls.Viva.DesktopLeftGrab.performed += context => OnDesktopLeftGrab();
             _player.Controls.Viva.DesktopRightGrab.performed += context => OnDesktopRightGrab();
 
