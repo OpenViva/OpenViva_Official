@@ -42,7 +42,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Start()
     {
-        _player = GetComponentInParent<Player>();
+        _player = FindFirstObjectByType<Player>();
 
         if (TryGetComponent(out Animator foundAnimator))
         {
