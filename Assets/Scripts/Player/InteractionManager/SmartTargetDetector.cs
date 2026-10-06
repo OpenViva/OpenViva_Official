@@ -7,9 +7,12 @@ namespace Viva.Interaction
 
     public class SmartTargetDetector : MonoBehaviour
     {
-        [SerializeField] private MonoBehaviour desktopPointerComponent;
-        [SerializeField] private MonoBehaviour leftHandVRPointerComponent;
-        [SerializeField] private MonoBehaviour rightHandVRPointerComponent;
+        [SerializeField] private DesktopPointerSource desktopPointerComponent;
+        [SerializeField] private VRPointerSource leftHandVRPointerComponent;
+        [SerializeField] private VRPointerSource rightHandVRPointerComponent;
+
+        public Transform leftHandTransform;
+        public Transform rightHandTransform;
 
         [Header("Performance & Scan Settings")]
         [SerializeField, Tooltip("Scan interval in seconds. 0.05 = 20 scans/sec")]

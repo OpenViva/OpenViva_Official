@@ -9,15 +9,15 @@ public class FlashlightGrabExample : MonoBehaviour, Viva.Interaction.IInteractab
     private bool isLightOn = false;
     [SerializeField] private Light spotLight;
 
-    public bool ExecuteAction(GameObject interactor, HandSide hand)
+    public bool ExecuteAction(GameObject interactor, HandSide hand, Transform handTransform)
     {
         if (CurrentType == InteractionType.Grab)
         {
             Debug.Log($"Grabbed Flashlight with {hand} hand.");
 
             // 1. Parent object to the hand (Assume interactor has a way to get hand transforms)
-            // transform.SetParent(handTransform); 
-            // transform.localPosition = Vector3.zero;
+            transform.SetParent(handTransform);
+            transform.localPosition = Vector3.zero;
 
             // 2. Change layer so SmartTargetDetector stops highlighting it
             gameObject.layer = LayerMask.NameToLayer("Default");

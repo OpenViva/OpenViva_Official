@@ -22,6 +22,7 @@ namespace Viva.Interaction
         private void Start()
         {
             _player = FindFirstObjectByType<Player>();
+            detector = GetComponent<SmartTargetDetector>();
 
             AssignInputs();
         }
@@ -33,7 +34,20 @@ namespace Viva.Interaction
             {
                 if (heldObjects[hand].CurrentType == InteractionType.Use)
                 {
-                    heldObjects[hand].ExecuteAction(gameObject, hand);
+                    switch (hand)
+                    {
+                        case HandSide.Any:
+                            heldObjects[hand].ExecuteAction(gameObject, hand, detector.rightHandTransform);
+                            break;
+                        case HandSide.Left:
+                            heldObjects[hand].ExecuteAction(gameObject, hand, detector.leftHandTransform);
+                            break;
+                        case HandSide.Right:
+                            heldObjects[hand].ExecuteAction(gameObject, hand, detector.rightHandTransform);
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 return; // Skip world interaction
             }
@@ -44,7 +58,21 @@ namespace Viva.Interaction
 
             if (target != null && target.TryGetComponent(out IInteractable interactable))
             {
-                bool success = interactable.ExecuteAction(gameObject, hand);
+                bool success = false;
+                switch (hand)
+                {
+                    case HandSide.Any:
+                        success = interactable.ExecuteAction(gameObject, hand, detector.rightHandTransform);
+                        break;
+                    case HandSide.Left:
+                        success = interactable.ExecuteAction(gameObject, hand, detector.leftHandTransform);
+                        break;
+                    case HandSide.Right:
+                        success = interactable.ExecuteAction(gameObject, hand, detector.rightHandTransform);
+                        break;
+                    default:
+                        break;
+                }
 
                 // 3. If the interaction was a Grab and it succeeded, register it to the hand
                 if (success && interactable.CurrentType == InteractionType.Use)

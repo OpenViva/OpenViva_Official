@@ -13,6 +13,6 @@ namespace Viva.Interaction
     {
         InteractionType CurrentType { get; }
 
-        bool ExecuteAction(GameObject interactor, HandSide hand);
+        bool ExecuteAction(GameObject interactor, HandSide hand, Transform handTransform);
     }
 }

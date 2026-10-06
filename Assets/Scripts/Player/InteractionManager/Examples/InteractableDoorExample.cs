@@ -7,7 +7,7 @@ public class InteractableDoorExample : MonoBehaviour, Viva.Interaction.IInteract
 
     private bool isOpen = false;
 
-    public bool ExecuteAction(GameObject interactor, HandSide hand)
+    public bool ExecuteAction(GameObject interactor, HandSide hand, Transform handTransform)
     {
         isOpen = !isOpen;
         Debug.Log($"Door is now {(isOpen ? "Open" : "Closed")}. Triggered by {hand} hand.");
