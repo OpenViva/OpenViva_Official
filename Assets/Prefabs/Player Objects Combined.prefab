@@ -1246,6 +1246,9 @@ GameObject:
   - component: {fileID: 1314602570009175573}
   - component: {fileID: 4203089145378078540}
   - component: {fileID: 7823025331914358110}
+  - component: {fileID: 557060222485129578}
+  - component: {fileID: 1350332620601217605}
+  - component: {fileID: 7849904878656303272}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1269,6 +1272,7 @@ Transform:
   - {fileID: 6642189077177451728}
   - {fileID: 6676871086332085093}
   - {fileID: 2158637325894285110}
+  - {fileID: 3252688546032978882}
   m_Father: {fileID: 6506884843847591171}
   m_LocalEulerAnglesHint: {x: 0, y: 92.388, z: 0}
 --- !u!114 &8033372919317139013
@@ -1431,6 +1435,63 @@ MonoBehaviour:
   _teleportStabilizedOrigin: {fileID: 2518639076942138888}
   _camera: {fileID: 8081012412789662539}
   _VRActive: 0
+--- !u!114 &557060222485129578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761827635035758295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 007430c4a45d14e479a2bbcc58e567cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Viva.Interaction.SmartTargetDetector
+  desktopPointerComponent: {fileID: 8966086145116210922}
+  leftHandVRPointerComponent: {fileID: 6240890083061669244}
+  rightHandVRPointerComponent: {fileID: 1163654866413581911}
+  leftHandTransform: {fileID: 2182222897293602840}
+  rightHandTransform: {fileID: 6300398689623042853}
+  scanInterval: 0.05
+  maxDistance: 4
+  sphereCastRadius: 0.4
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  angleWeight: 0.7
+  distanceWeight: 0.3
+  maxHitBuffer: 16
+--- !u!114 &1350332620601217605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761827635035758295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9475eb8180bb98a498ecba5ffd2fbb9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Viva.Interaction.TargetOutlineManager
+  detector: {fileID: 557060222485129578}
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+--- !u!114 &7849904878656303272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761827635035758295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bf197c3aa7d428449432a2e2c52d42c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Viva.Interaction.PlayerInteractionHandler
+  detector: {fileID: 0}
 --- !u!1 &1821072865334875359
 GameObject:
   m_ObjectHideFlags: 0
@@ -3522,6 +3583,7 @@ GameObject:
   - component: {fileID: 9145076886859997044}
   - component: {fileID: 4204109424874890398}
   - component: {fileID: 5936984731412404847}
+  - component: {fileID: 1163654866413581911}
   m_Layer: 0
   m_Name: Right Controller
   m_TagString: Untagged
@@ -3671,6 +3733,19 @@ MonoBehaviour:
     m_SingletonActionBindings: []
     m_Flags: 0
     m_Priority: 0
+--- !u!114 &1163654866413581911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4461841614723379561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61b1495060296e94b8f53873d88b04c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Viva.Interaction.VRPointerSource
+  aimTransform: {fileID: 3127934354736073138}
 --- !u!1 &4574705642987763153
 GameObject:
   m_ObjectHideFlags: 0
@@ -3703,6 +3778,37 @@ Transform:
   - {fileID: 3040673512899955231}
   m_Father: {fileID: 3399580050860931534}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4599750508526944204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3252688546032978882}
+  m_Layer: 0
+  m_Name: CharSpawnLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3252688546032978882
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4599750508526944204}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000020861623}
+  m_LocalPosition: {x: 0, y: 0, z: 3.228}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8606405741880437564}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &4720745510965643581
 GameObject:
   m_ObjectHideFlags: 0
@@ -6035,6 +6141,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3518826179044754035}
   - component: {fileID: 554165997221000822}
+  - component: {fileID: 6240890083061669244}
   m_Layer: 0
   m_Name: Left Controller
   m_TagString: Untagged
@@ -6132,6 +6239,19 @@ MonoBehaviour:
     m_SingletonActionBindings: []
     m_Flags: 0
     m_Priority: 0
+--- !u!114 &6240890083061669244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7716928589664050548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61b1495060296e94b8f53873d88b04c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Viva.Interaction.VRPointerSource
+  aimTransform: {fileID: 3518826179044754035}
 --- !u!1 &7775169876943395145
 GameObject:
   m_ObjectHideFlags: 0
@@ -6507,6 +6627,7 @@ GameObject:
   - component: {fileID: 2287110720964933235}
   - component: {fileID: 8161971719788361530}
   - component: {fileID: 8364602793740734643}
+  - component: {fileID: 8966086145116210922}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -6541,7 +6662,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.64906245, g: 0.8487813, b: 0.9979375, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -6740,6 +6861,19 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
     m_Priority: 0
+--- !u!114 &8966086145116210922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8081012412789662539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f4db7d14d49cb94a8229f90beab7b30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DesktopPointerSource
+  mainCamera: {fileID: 0}
 --- !u!1 &8132507841553996816
 GameObject:
   m_ObjectHideFlags: 0

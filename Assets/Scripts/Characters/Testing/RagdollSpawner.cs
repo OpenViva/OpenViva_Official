@@ -204,6 +204,8 @@ public class RagdollSpawner : MonoBehaviour
             Debug.LogError("Root bones List for cloth physics is empty or missing on character!");
         }
 
+        // 8. Add additional scripts
+
         Debug.Log($"Ragdoll fully auto-setup on {newChar.name}");
     }
 
