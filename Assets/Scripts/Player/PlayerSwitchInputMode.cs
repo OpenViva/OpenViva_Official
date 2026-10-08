@@ -22,9 +22,13 @@ public class PlayerSwitchInputMode : MonoBehaviour
     [SerializeField] private GameObject _leftWrist;
     [SerializeField] private GameObject _rightWrist;
 
-    private Transform _cameraOrigin;
-    private Transform _leftWristOrigin;
-    private Transform _rightWristOrigin;
+    private Vector3 _cameraOriginalPosition;
+    private Vector3 _leftWristOriginalPosition;
+    private Vector3 _rightWristOriginalPosition;
+
+    private Quaternion _cameraOriginalRotation;
+    private Quaternion _leftWristOriginalRotation;
+    private Quaternion _rightWristOriginalRotation;
 
     private TrackedPoseDriver _cameraTPD;
     private TrackedPoseDriver _leftWristTPD;
@@ -39,9 +43,12 @@ public class PlayerSwitchInputMode : MonoBehaviour
 
     private void Awake()
     {
-        _cameraOrigin = _camera.transform;
-        _leftWristOrigin = _leftWrist.transform;
-        _rightWristOrigin = _rightWrist.transform;
+        _cameraOriginalPosition = _camera.transform.localPosition;
+        _cameraOriginalRotation = _camera.transform.localRotation;
+        _leftWristOriginalPosition = _leftWrist.transform.localPosition;
+        _leftWristOriginalRotation = _leftWrist.transform.localRotation;
+        _rightWristOriginalPosition = _rightWrist.transform.localPosition;
+        _rightWristOriginalRotation = _rightWrist.transform.localRotation;
 
         _cameraTPD = _camera.GetComponent<TrackedPoseDriver>();
         _leftWristTPD = _leftWrist.GetComponent<TrackedPoseDriver>();
@@ -88,12 +95,12 @@ public class PlayerSwitchInputMode : MonoBehaviour
 
         if (!_VRActive)
         {
-            _camera.transform.position = _cameraOrigin.position;
-            _camera.transform.rotation = _cameraOrigin.rotation;
-            _leftWrist.transform.position = _leftWristOrigin.position;
-            _leftWrist.transform.rotation = _leftWristOrigin.rotation;
-            _rightWrist.transform.position = _rightWristOrigin.position;
-            _rightWrist.transform.rotation = _rightWristOrigin.rotation;
+            _camera.transform.localPosition = _cameraOriginalPosition;
+            _camera.transform.localRotation = _cameraOriginalRotation;
+            _leftWrist.transform.localPosition = _leftWristOriginalPosition;
+            _leftWrist.transform.localRotation = _leftWristOriginalRotation;
+            _rightWrist.transform.localPosition = _rightWristOriginalPosition;
+            _rightWrist.transform.localRotation = _rightWristOriginalRotation;
         }
     }
 
@@ -115,12 +122,6 @@ public class PlayerSwitchInputMode : MonoBehaviour
 
         if (!_VRActive)
         {
-            _camera.transform.position = _cameraOrigin.position;
-            _camera.transform.rotation = _cameraOrigin.rotation;
-            _leftWrist.transform.position = _leftWristOrigin.position;
-            _leftWrist.transform.rotation = _leftWristOrigin.rotation;
-            _rightWrist.transform.position = _rightWristOrigin.position;
-            _rightWrist.transform.rotation = _rightWristOrigin.rotation;
         }
     }
 
@@ -143,12 +144,6 @@ public class PlayerSwitchInputMode : MonoBehaviour
 
         if (!_VRActive)
         {
-            _camera.transform.position = _cameraOrigin.position;
-            _camera.transform.rotation = _cameraOrigin.rotation;
-            _leftWrist.transform.position = _leftWristOrigin.position;
-            _leftWrist.transform.rotation = _leftWristOrigin.rotation;
-            _rightWrist.transform.position = _rightWristOrigin.position;
-            _rightWrist.transform.rotation = _rightWristOrigin.rotation;
         }
     }
 

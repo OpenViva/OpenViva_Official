@@ -16,4 +16,10 @@ public class HandsFollowCamera : MonoBehaviour
         transform.position = _handAttach.position;
         transform.rotation = _camera.rotation * _offset;
     }
+
+    private void OnDisable()
+    {
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+    }
 }
