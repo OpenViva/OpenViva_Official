@@ -13,7 +13,7 @@ public class PhysicsAttacher : MonoBehaviour
     /// <param name="character">Character that the GameObjects will be parented to</param>
     /// <param name="boneDataList">List of PhysicsBoneData entries for each bone cloth</param>
     /// <param name="prefixClothName">Prefix name for the created MagicaCloth GameObjects</param>
-    public void CreateBoneCloth(GameObject character, List<PhysicsBoneData> boneDataList, string postfixClothName = "_BoneCloth")
+    public void CreateBoneCloth(GameObject character, List<PhysicsBoneData> boneDataList)
     {
         if (character == null || boneDataList == null || boneDataList.Count == 0)
         {
@@ -31,7 +31,7 @@ public class PhysicsAttacher : MonoBehaviour
             }
 
             // Create container GameObject for this specific bone
-            var clothObj = new GameObject(boneData.BoneName + "Cloth");
+            var clothObj = new GameObject(boneData.GameObjectName);
             clothObj.transform.SetParent(character.transform, false);
 
             // Add MagicaCloth Component
@@ -41,23 +41,22 @@ public class PhysicsAttacher : MonoBehaviour
             // Configure as BoneCloth
             sdata.clothType = ClothProcess.ClothType.BoneCloth;
 
-            // Find the bone transform using BonePath
-            if (!string.IsNullOrEmpty(boneData.BonePath))
+            // Fill in the root bones if there are any
+            if (boneData.bonePaths.Count > 0)
             {
-                Transform currentBoneTransform = FindGameObjectByPath(character, boneData.BonePath).transform;
+                List<Transform> rootBones = new();
 
-                if (currentBoneTransform != null)
+                foreach (string bonePath in boneData.bonePaths)
                 {
-                    sdata.rootBones.Add(currentBoneTransform);
+                    if (!string.IsNullOrEmpty(bonePath))
+                    {
+                        sdata.rootBones.Add(FindGameObjectByPath(character, bonePath).transform);
+                    }
+                    else
+                    {
+                        Debug.LogError($"No BonePath specified for bone '{boneData.GameObjectName}'!");
+                    }
                 }
-                else
-                {
-                    Debug.LogError($"Bone path '{boneData.BonePath}' not found on character '{character.name}' for bone '{boneData.BoneName}'!");
-                }
-            }
-            else
-            {
-                Debug.LogError($"No BonePath specified for bone '{boneData.BoneName}'!");
             }
 
             // Setup parameters from this specific bone data
@@ -69,7 +68,7 @@ public class PhysicsAttacher : MonoBehaviour
             sdata.inertiaConstraint.particleSpeedLimit.SetValue(boneData.UseLimit, boneData.SpeedLimit);
             sdata.colliderCollisionConstraint.mode = ColliderCollisionConstraint.Mode.None;
 
-            cloth.name = boneData.BoneName + postfixClothName;
+            cloth.name = boneData.GameObjectName;
 
             // ONLY start adding colliders if there have been any given for the current bone
             if (boneData.Colliders.Count > 0)
