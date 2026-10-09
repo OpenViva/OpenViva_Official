@@ -213,6 +213,8 @@ public class CharacterAssembler : MonoBehaviour
             VivaCharacterData charData = JsonUtility.FromJson<VivaCharacterData>(
                 System.Text.Encoding.UTF8.GetString(characterDataBytes));
 
+            charData.Version = VivaFormat.CurrentVersion;
+
             return new ParsedFileData
             {
                 CharData = charData,

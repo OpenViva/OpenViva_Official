@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 public static class VivaFormat
 {
     public const string VivaBytes = "VIVA";
-    public const int CurrentVersion = 4;
+    public const int CurrentVersion = 5;
     public const int MaxScriptCount = 8;
 
     public struct VivaHeader
