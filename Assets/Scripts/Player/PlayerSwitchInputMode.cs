@@ -80,7 +80,24 @@ public class PlayerSwitchInputMode : MonoBehaviour
     private void SwitchInputMode(InputAction.CallbackContext context)
     {
         _VRActive = !_VRActive;
+        PerformSwitch();
+    }
 
+    public void SwitchInputMode()
+    {
+        _VRActive = !_VRActive;
+        PerformSwitch();
+    }
+
+    // Extra overload method in case it's needed.
+    private void SwitchInputMode(bool toVRActive)
+    {
+        _VRActive = toVRActive;
+        PerformSwitch();
+    }
+
+    private void PerformSwitch()
+    {
         // KB Components
         _playerController.enabled = !_VRActive;
         // _playerPrefab.enabled = !_VRActive;
@@ -102,49 +119,8 @@ public class PlayerSwitchInputMode : MonoBehaviour
             _rightWrist.transform.localPosition = _rightWristOriginalPosition;
             _rightWrist.transform.localRotation = _rightWristOriginalRotation;
         }
-    }
 
-    private void SwitchInputMode()
-    {
-        _VRActive = !_VRActive;
-
-        // KB Components
-        _playerController.enabled = !_VRActive;
-        // _playerPrefab.enabled = !_VRActive;
-
-        // VR Components
-        _XROrigin.enabled = _VRActive;
-        _VRLocomotion.SetActive(_VRActive);
-        _teleportStabilizedOrigin.SetActive(_VRActive);
-        _cameraTPD.enabled = _VRActive;
-        _leftWristTPD.enabled = _VRActive;
-        _rightWristTPD.enabled = _VRActive;
-
-        if (!_VRActive)
-        {
-        }
-    }
-
-    // Extra overload method in case it's needed.
-    private void SwitchInputMode(bool toVRActive)
-    {
-        _VRActive = toVRActive;
-
-        // KB Components
-        _playerController.enabled = !_VRActive;
-        // _playerPrefab.enabled = !_VRActive;
-
-        // VR Components
-        _XROrigin.enabled = _VRActive;
-        _VRLocomotion.SetActive(_VRActive);
-        _teleportStabilizedOrigin.SetActive(_VRActive);
-        _cameraTPD.enabled = _VRActive;
-        _leftWristTPD.enabled = _VRActive;
-        _rightWristTPD.enabled = _VRActive;
-
-        if (!_VRActive)
-        {
-        }
+        Globals.isDesktopMode = !_VRActive;
     }
 
     private void OnDisable()
