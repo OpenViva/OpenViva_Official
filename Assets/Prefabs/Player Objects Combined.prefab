@@ -1159,7 +1159,6 @@ GameObject:
   - component: {fileID: 557060222485129578}
   - component: {fileID: 1350332620601217605}
   - component: {fileID: 7849904878656303272}
-  - component: {fileID: 4278042942232314015}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1335,14 +1334,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSwitchInputType
   _player: {fileID: 8033372919317139013}
   _playerController: {fileID: 8313880024233911054}
-  _playerPrefab: {fileID: 3188086905815639776}
-  _XROrigin: {fileID: 1271615346871163778}
+  _XRInputActionMananger: {fileID: 6096594361700212259}
+  _XRInteractionManager: {fileID: 3882782101157553618}
+  _teleportStablizedOrigin: {fileID: 3159460774320131624}
   _VRLocomotion: {fileID: 3894587600071724944}
-  _teleportStabilizedOrigin: {fileID: 2518639076942138888}
+  _XRPokeInteractor: {fileID: 7343892492002515384}
+  _nearFarInteractor: {fileID: 1976383924401048210}
+  _teleportInteractor: {fileID: 623974417328540387}
   _camera: {fileID: 8081012412789662539}
   _leftWrist: {fileID: 8132507841553996816}
   _rightWrist: {fileID: 3869457357643921461}
-  _VRActive: 1
+  _VRActive: 0
 --- !u!114 &557060222485129578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1400,28 +1402,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Viva.Interaction.PlayerInteractionHandler
   detector: {fileID: 557060222485129578}
---- !u!114 &4278042942232314015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1761827635035758295}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc2dd332e58d5d446994f80198fa9e0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerSwitchInputMode
-  _player: {fileID: 8033372919317139013}
-  _playerController: {fileID: 8313880024233911054}
-  _playerPrefab: {fileID: 3188086905815639776}
-  _XROrigin: {fileID: 1271615346871163778}
-  _VRLocomotion: {fileID: 3894587600071724944}
-  _teleportStabilizedOrigin: {fileID: 2518639076942138888}
-  _camera: {fileID: 8081012412789662539}
-  _leftWrist: {fileID: 8132507841553996816}
-  _rightWrist: {fileID: 3869457357643921461}
-  _VRActive: 0
 --- !u!1 &1821072865334875359
 GameObject:
   m_ObjectHideFlags: 0
@@ -2037,7 +2017,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7497822100496410173
 Transform:
   m_ObjectHideFlags: 0
@@ -2388,7 +2368,7 @@ GameObject:
   - component: {fileID: 8072495245365275756}
   - component: {fileID: 1198783363266185674}
   m_Layer: 0
-  m_Name: wrist_r
+  m_Name: RightWrist
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2619,7 +2599,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6676871086332085093
 Transform:
   m_ObjectHideFlags: 0
@@ -4713,7 +4693,7 @@ GameObject:
   - component: {fileID: 2976560168593987937}
   - component: {fileID: 3683583409854711613}
   m_Layer: 0
-  m_Name: wrist_l
+  m_Name: LeftWrist
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4935,7 +4915,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2168385112247175586}
-  - component: {fileID: 3188086905815639776}
+  - component: {fileID: 6966224678834644728}
+  - component: {fileID: 6433803787010500027}
   m_Layer: 0
   m_Name: Player_Prefab
   m_TagString: Untagged
@@ -4951,8 +4932,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8322511193882448591}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.19100344, z: 0.6486206}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4961,20 +4942,46 @@ Transform:
   - {fileID: 7497822100496410173}
   m_Father: {fileID: 6642189077177451728}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3188086905815639776
-MonoBehaviour:
+--- !u!1818360608 &6966224678834644728
+PositionConstraint:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8322511193882448591}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49cbc08dd4ee0394693327d73bb7ab65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HandsFollowCamera
-  _handAttach: {fileID: 3288688226300937613}
-  _camera: {fileID: 4870684011751861034}
+  serializedVersion: 2
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0, y: -0.19100344, z: 0.6486206}
+  m_TranslationOffset: {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_Active: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 3288688226300937613}
+    weight: 1
+--- !u!1818360609 &6433803787010500027
+RotationConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8322511193882448591}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
+  m_RotationOffset: {x: 0, y: 0, z: 0}
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_Active: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 4870684011751861034}
+    weight: 1
 --- !u!1 &8626789216723599109
 GameObject:
   m_ObjectHideFlags: 0
