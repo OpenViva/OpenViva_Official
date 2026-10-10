@@ -32,6 +32,9 @@ public class CharacterDetailsUI : MonoBehaviour
             DisplaySelectedCharacter(CharacterSelectionManager.Instance.SelectedCharacter);
         }
 
+        // Ensure there is text before selecting first char
+        nameElement.text = "Not selected...";
+
         HideDetailsPages();
     }
 
