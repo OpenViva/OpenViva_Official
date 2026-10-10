@@ -7,7 +7,8 @@ namespace Viva.Interaction
     {
         public static CharacterSelectionManager Instance { get; private set; }
 
-        public CharacterInteractable SelectedCharacter { get; private set; }
+        [SerializeField] private CharacterInteractable selectedCharacter;
+        public CharacterInteractable SelectedCharacter => selectedCharacter;
 
         public event Action<CharacterInteractable> OnCharacterSelected;
         public event Action OnCharacterDeselected;
@@ -24,23 +25,27 @@ namespace Viva.Interaction
 
         public void SelectCharacter(CharacterInteractable character)
         {
-            if (SelectedCharacter == character) return;
+            if (selectedCharacter == character)
+            {
+                DeselectCharacter();
+                return;
+            }
 
             DeselectCharacter();
 
-            SelectedCharacter = character;
-            SelectedCharacter.SetSelectedVisual(true);
+            selectedCharacter = character;
+            selectedCharacter.SetSelectedVisual(true);
 
-            OnCharacterSelected?.Invoke(SelectedCharacter);
+            OnCharacterSelected?.Invoke(selectedCharacter);
             Debug.Log($"[CharacterSelection] Selected: {character.gameObject.name}");
         }
 
         public void DeselectCharacter()
         {
-            if (SelectedCharacter != null)
+            if (selectedCharacter != null)
             {
-                SelectedCharacter.SetSelectedVisual(false);
-                SelectedCharacter = null;
+                selectedCharacter.SetSelectedVisual(false);
+                selectedCharacter = null;
 
                 OnCharacterDeselected?.Invoke();
                 Debug.Log("[CharacterSelection] Character deselected.");
@@ -49,13 +54,13 @@ namespace Viva.Interaction
 
         public void IssueCommandToSelected(string commandID)
         {
-            if (SelectedCharacter == null)
+            if (selectedCharacter == null)
             {
                 Debug.LogWarning("[CharacterSelection] Cannot issue command: No character selected.");
                 return;
             }
 
-            SelectedCharacter.ReceiveCommand(commandID);
+            selectedCharacter.ReceiveCommand(commandID);
         }
     }
 }
