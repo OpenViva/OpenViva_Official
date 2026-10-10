@@ -4,16 +4,10 @@ using Viva.Interaction;
 public class CharacterInteractable : MonoBehaviour, Viva.Interaction.IInteractable
 {
     [Header("Selection Visuals")]
-    [SerializeField] private GameObject selectionArrow;
+    public GameObject selectionArrow;
 
     // Pointer always interacts with characters (never grabs them)
     public InteractionType CurrentType => InteractionType.Interact;
-
-    private void Start()
-    {
-        if (selectionArrow != null)
-            selectionArrow.SetActive(false);
-    }
 
     public bool ExecuteAction(GameObject interactor, HandSide hand, Transform handTransform)
     {
