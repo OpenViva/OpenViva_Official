@@ -205,7 +205,11 @@ public class RagdollSpawner : MonoBehaviour
         }
 
         // 8. Add additional scripts
+        SpawnSelectorVisuals newSelectorScript = newChar.AddComponent<SpawnSelectorVisuals>();
+        newSelectorScript.SpawnPrefab = selectorPrefab;
+        newSelectorScript.SpawnOffset = importedModel.headBone.position + new Vector3(0, 0.5f, 0);
 
+        CharacterInteractable newInteractableScript = newChar.AddComponent<CharacterInteractable>();
 
         Debug.Log($"Ragdoll fully auto-setup on {newChar.name}");
     }
