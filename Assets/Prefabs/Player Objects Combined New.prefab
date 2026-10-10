@@ -4750,6 +4750,7 @@ GameObject:
   - component: {fileID: 4092021434044582649}
   - component: {fileID: 2055140006118745236}
   - component: {fileID: 1938616636789378280}
+  - component: {fileID: 4943978688688330644}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -4990,6 +4991,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Viva.Interaction.PlayerInteractionHandler
   detector: {fileID: 4092021434044582649}
+--- !u!114 &4943978688688330644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8992082762111392410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc2dd332e58d5d446994f80198fa9e0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSwitchInputMode
+  _player: {fileID: 6879258466367999135}
+  _playerController: {fileID: 273593692335234307}
+  _playerPrefab: {fileID: 5503123889273325546}
+  _XROrigin: {fileID: 2404883036077856908}
+  _VRLocomotion: {fileID: 6496513668038551016}
+  _teleportStabilizedOrigin: {fileID: 4622448370433815099}
+  _camera: {fileID: 732632500583079317}
+  _leftWrist: {fileID: 3838090009314395515}
+  _rightWrist: {fileID: 2090322372621585844}
+  _VRActive: 0
 --- !u!1 &9026817027436850333
 GameObject:
   m_ObjectHideFlags: 0
