@@ -16,21 +16,26 @@ public class CharacterDetailsUI : MonoBehaviour
     [SerializeField] private Button deselectButton;
     [SerializeField] private Button nameButton;
 
-    private void OnEnable()
+    private void Start()
     {
+        if (deselectButton != null) deselectButton.onClick.AddListener(OnDeselectButtonClicked);
+        if (nameButton != null) nameButton.onClick.AddListener(OpenDetailsPages);
+
         if (CharacterSelectionManager.Instance != null)
         {
             CharacterSelectionManager.Instance.OnCharacterSelected += DisplaySelectedCharacter;
             CharacterSelectionManager.Instance.OnCharacterDeselected += HideDetailsPages;
         }
 
-        if (deselectButton != null) deselectButton.onClick.AddListener(OnDeselectButtonClicked);
-        if (nameButton != null) nameButton.onClick.AddListener(OpenDetailsPages);
+        if (CharacterSelectionManager.Instance != null && CharacterSelectionManager.Instance.SelectedCharacter != null)
+        {
+            DisplaySelectedCharacter(CharacterSelectionManager.Instance.SelectedCharacter);
+        }
 
         HideDetailsPages();
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         if (CharacterSelectionManager.Instance != null)
         {
@@ -44,7 +49,7 @@ public class CharacterDetailsUI : MonoBehaviour
 
     private void DisplaySelectedCharacter(CharacterInteractable character)
     {
-
+        nameElement.text = character.characterName;
     }
 
     private void OnDeselectButtonClicked()

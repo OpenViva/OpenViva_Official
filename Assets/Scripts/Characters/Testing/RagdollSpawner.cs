@@ -219,6 +219,7 @@ public class RagdollSpawner : MonoBehaviour
         CharacterInteractable newInteractableScript = newChar.AddComponent<CharacterInteractable>();
         newInteractableScript.selectionArrow = newSelectorScript.SpawnedSelector;
         newInteractableScript.SetSelectedVisual(false);
+        newInteractableScript.characterName = importedModel.vivaCharacterData.CharacterName;
 
         Outline newOutline = newChar.AddComponent<Outline>();
         newOutline.enabled = false;

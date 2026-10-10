@@ -6,6 +6,9 @@ public class CharacterInteractable : MonoBehaviour, Viva.Interaction.IInteractab
     [Header("Selection Visuals")]
     public GameObject selectionArrow;
 
+    [HideInInspector]
+    public string characterName;
+
     // Pointer always interacts with characters (never grabs them)
     public InteractionType CurrentType => InteractionType.Interact;
 
