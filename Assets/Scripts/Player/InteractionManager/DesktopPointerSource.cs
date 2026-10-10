@@ -5,7 +5,7 @@ public class DesktopPointerSource : MonoBehaviour, IPointerSource
 {
     [SerializeField] private Camera mainCamera;
 
-    public bool IsActive => enabled && gameObject.activeInHierarchy && mainCamera != null;
+    public bool IsActive => enabled && gameObject.activeInHierarchy && (mainCamera != null || Camera.main != null);
 
     private void Awake()
     {
@@ -14,8 +14,13 @@ public class DesktopPointerSource : MonoBehaviour, IPointerSource
 
     public Ray GetRay()
     {
-        if (mainCamera == null) return new Ray(transform.position, transform.forward);
+        Camera cam = mainCamera != null ? mainCamera : Camera.main;
 
-        return mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        if (cam == null)
+        {
+            return new Ray(transform.position, transform.forward);
+        }
+
+        return cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
     }
 }
