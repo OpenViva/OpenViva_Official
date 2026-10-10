@@ -96,13 +96,16 @@ namespace Viva.Interaction
             for (int i = 0; i < hitCount; i++)
             {
                 RaycastHit hit = hitBuffer[i];
-                if (hit.collider == null)
+                if (hit.collider == null) continue;
+
+                Vector3 targetPos = hit.point;
+                if (targetPos == Vector3.zero)
                 {
-                    continue;
+                    targetPos = hit.collider.bounds.center;
                 }
 
                 Transform targetTransform = hit.transform;
-                Vector3 targetPos = targetTransform.position;
+
                 Vector3 dirToTarget = targetPos - ray.origin;
                 float sqrDist = dirToTarget.sqrMagnitude;
 
@@ -185,7 +188,12 @@ namespace Viva.Interaction
             if (CurrentTarget != null)
             {
                 Gizmos.color = selectedTargetColor;
+
                 Vector3 targetPos = CurrentTarget.transform.position;
+                if (CurrentTarget.TryGetComponent(out Collider targetCollider))
+                {
+                    targetPos = targetCollider.bounds.center;
+                }
 
                 Gizmos.DrawWireSphere(targetPos, sphereCastRadius * 1.2f);
                 Gizmos.DrawSphere(targetPos, 0.1f);

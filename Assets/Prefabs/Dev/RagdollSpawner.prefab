@@ -31,7 +31,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1889787805059607311}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1628474514004048686
@@ -46,8 +47,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f432fedd8062dd43b4acb3309b50f12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RagdollSpawner
-  characterPrefab: {fileID: 3605110169217932567, guid: 868adafc5137cbc4082485d64c6244d0, type: 3}
-  tagToGive: Character
+  tagToGive: Interactable
+  selectorPrefab: {fileID: 180888438960192724, guid: 226abf610bba52448b824b0134599252, type: 3}
+  playerFollowObject: {fileID: 0}
+  spawnLocation: {fileID: 0}
   animationControllerName: {fileID: 9100000, guid: 1857307f2327dcc4abc2b1b4c40da69e, type: 2}
   extraFeaturesList:
   - {fileID: 11400000, guid: fec516eb5421cbb4aa744a2e99ff15ef, type: 2}
@@ -56,7 +59,8 @@ MonoBehaviour:
   agentSpeed: 1.5
   agentRadius: 0.3
   agentHeight: 1.4
-  moveCoords: {x: 0, y: 0, z: -3}
+  stoppingDistance: 1
+  characterPrefab: {fileID: 3605110169217932567, guid: 868adafc5137cbc4082485d64c6244d0, type: 3}
   _physicsAttacher: {fileID: 0}
   _characterReader: {fileID: 0}
   loadedCharacters: []
@@ -74,8 +78,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PhysicsAttacher
   physicsBoneData:
     GameObjectPath: 
-    BonePath: 
-    BoneName: 
+    GameObjectName: 
+    bonePaths: []
+    Colliders: []
     Gravity: 2
     Damping: 0.05
     DistanceCompression: 0.5
@@ -98,3 +103,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e256b4bc6ff4c9a49a1ddc7d8a66883d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterAssembler
+--- !u!1 &8288076646198557377
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1889787805059607311}
+  - component: {fileID: 6872608636610831931}
+  m_Layer: 0
+  m_Name: SelectionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1889787805059607311
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8288076646198557377}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8922610627035144663}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6872608636610831931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8288076646198557377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d077b0e54e2ace9478de868c5d41f4f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Viva.Interaction.CharacterSelectionManager
+  selectedCharacter: {fileID: 0}
