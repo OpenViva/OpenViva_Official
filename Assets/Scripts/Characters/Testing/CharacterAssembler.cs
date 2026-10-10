@@ -167,6 +167,7 @@ public class CharacterAssembler : MonoBehaviour
             {
                 bundleName = bundleName,
                 prefab = prefab,
+                headBone = VivaUtilities.FindGameObjectByPath(prefab.gameObject, fileData.CharData.Info.HeadBonePath).transform,
                 vivaCharacterData = fileData.CharData
             };
 
@@ -240,6 +241,7 @@ public class CharacterAssembler : MonoBehaviour
     {
         public string bundleName;
         public GameObject prefab;
+        public Transform headBone;
         public VivaCharacterData vivaCharacterData;
     }
     #endregion
