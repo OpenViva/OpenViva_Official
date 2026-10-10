@@ -10,7 +10,7 @@ public class PlayerSwitchInputMode : MonoBehaviour
 
     [Header("KB Components:")]
     [SerializeField] private PlayerController _playerController;
-    [SerializeField] private HandsFollowCamera _playerPrefab;
+    // [SerializeField] private HandsFollowCamera _playerPrefab;
 
     [Header("VR Components:")]
     [SerializeField] private XROrigin _XROrigin;
@@ -83,7 +83,7 @@ public class PlayerSwitchInputMode : MonoBehaviour
 
         // KB Components
         _playerController.enabled = !_VRActive;
-        _playerPrefab.enabled = !_VRActive;
+        // _playerPrefab.enabled = !_VRActive;
 
         // VR Components
         _XROrigin.enabled = _VRActive;
@@ -110,7 +110,7 @@ public class PlayerSwitchInputMode : MonoBehaviour
 
         // KB Components
         _playerController.enabled = !_VRActive;
-        _playerPrefab.enabled = !_VRActive;
+        // _playerPrefab.enabled = !_VRActive;
 
         // VR Components
         _XROrigin.enabled = _VRActive;
@@ -132,7 +132,7 @@ public class PlayerSwitchInputMode : MonoBehaviour
 
         // KB Components
         _playerController.enabled = !_VRActive;
-        _playerPrefab.enabled = !_VRActive;
+        // _playerPrefab.enabled = !_VRActive;
 
         // VR Components
         _XROrigin.enabled = _VRActive;
