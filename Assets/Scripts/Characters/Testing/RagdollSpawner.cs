@@ -8,37 +8,37 @@ using UnityEngine.AI;
 [RequireComponent(typeof(PhysicsAttacher))]
 public class RagdollSpawner : MonoBehaviour
 {
-    [Header("Prefab to Spawn")]
-    public GameObject characterPrefab;
-    public string tagToGive = "Character";
+    [Header("Prefab Settings")]
+    [SerializeField] private string tagToGive = "Character";
+    [SerializeField] private GameObject selectorPrefab;
     [Tooltip("Drag the object named Player that will move")]
-    public Transform playerFollowObject;
-    public Transform spawnLocation;
+    [SerializeField] private Transform playerFollowObject;
+    [SerializeField] private Transform spawnLocation;
 
     [Header("Animation Settings")]
-    public RuntimeAnimatorController animationControllerName;
+    [SerializeField] private RuntimeAnimatorController animationControllerName;
 
     [Header("Ragdoll Extra Features")]
-    public List<RagdollAnimatorFeatureBase> extraFeaturesList;
+    [SerializeField] private List<RagdollAnimatorFeatureBase> extraFeaturesList;
 
     [Header("UI Reference")]
-    public GameObject listContentObject;
-    public GameObject characterItemPrefab;
+    [SerializeField] private GameObject listContentObject;
+    [SerializeField] private GameObject characterItemPrefab;
 
-    [Header("NavMeshAgent Settings")]
-    public float agentSpeed = 1.5f;
-    public float agentRadius = 0.3f;
-    public float agentHeight = 1.4f;
-    public float stoppingDistance = 1f;
+    [Header("NavMesh Agent Settings")]
+    [SerializeField] private float agentSpeed = 1.5f;
+    [SerializeField] private float agentRadius = 0.3f;
+    [SerializeField] private float agentHeight = 1.4f;
+    [SerializeField] private float stoppingDistance = 1f;
 
     [Header("Debug")]
+    [SerializeField] private GameObject characterPrefab;
     [SerializeField] private PhysicsAttacher _physicsAttacher;
     [SerializeField] private CharacterAssembler _characterReader;
-    public List<GameObject> loadedCharacters;
+    [SerializeField] private List<GameObject> loadedCharacters;
     
-
     private Vector3 _startingCoords;
-    List<PhysicsBoneData> physicsBoneDataList;
+    private List<PhysicsBoneData> physicsBoneDataList;
 
     #region Unity Methods
     private void Start()
@@ -205,6 +205,7 @@ public class RagdollSpawner : MonoBehaviour
         }
 
         // 8. Add additional scripts
+
 
         Debug.Log($"Ragdoll fully auto-setup on {newChar.name}");
     }
