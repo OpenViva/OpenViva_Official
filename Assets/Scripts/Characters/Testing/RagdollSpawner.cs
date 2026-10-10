@@ -9,7 +9,7 @@ using UnityEngine.AI;
 public class RagdollSpawner : MonoBehaviour
 {
     [Header("Prefab Settings")]
-    [SerializeField] private string tagToGive = "Character";
+    [SerializeField] private string tagToGive = "Interactable";
     [SerializeField] private GameObject selectorPrefab;
     [Tooltip("Drag the object named Player that will move")]
     [SerializeField] private Transform playerFollowObject;
@@ -128,6 +128,13 @@ public class RagdollSpawner : MonoBehaviour
 
         GameObject newChar = SpawnCharacter(characterPrefab);
 
+        newChar.layer = LayerMask.NameToLayer(tagToGive);
+
+        BoxCollider newCollider = newChar.AddComponent<BoxCollider>();
+        newCollider.size = new Vector3(0.6f, 2, 0.6f);
+        newCollider.center = new Vector3(0, 1, 0);
+        newCollider.isTrigger = true;
+
         AssignAnimatorController(newChar, animationControllerName);
 
         // Find root bones for cloth physics if script is present
@@ -207,9 +214,14 @@ public class RagdollSpawner : MonoBehaviour
         // 8. Add additional scripts
         SpawnSelectorVisuals newSelectorScript = newChar.AddComponent<SpawnSelectorVisuals>();
         newSelectorScript.SpawnPrefab = selectorPrefab;
-        newSelectorScript.SpawnOffset = importedModel.headBone.position + new Vector3(0, 0.5f, 0);
+        newSelectorScript.SpawnSelectorVisual(newChar.transform);
 
         CharacterInteractable newInteractableScript = newChar.AddComponent<CharacterInteractable>();
+        newInteractableScript.selectionArrow = newSelectorScript.SpawnedSelector;
+        newInteractableScript.SetSelectedVisual(false);
+
+        Outline newOutline = newChar.AddComponent<Outline>();
+        newOutline.enabled = false;
 
         Debug.Log($"Ragdoll fully auto-setup on {newChar.name}");
     }
