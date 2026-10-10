@@ -1,28 +1,15 @@
-using System.Collections;
 using UnityEngine;
 
 public class SpawnSelectorVisuals : MonoBehaviour
 {
     public GameObject SpawnPrefab;
-    public Vector3 SpawnOffset = new(0, 0.5f, 0);
-
+    public Vector3 SpawnOffset = new(0, 1.3f, 0);
     public GameObject SpawnedSelector;
 
-    private WaitForSeconds SpawnTime;
-
-    void Awake()
+    public void SpawnSelectorVisual(Transform parent)
     {
-        SpawnTime = new WaitForSeconds(0.1f);
-
-        StartCoroutine(SpawnSelectorVisual());
-    }
-
-    IEnumerator SpawnSelectorVisual()
-    {
-        yield return SpawnTime;
-
-        SpawnedSelector = Instantiate(SpawnPrefab, SpawnOffset, Quaternion.identity);
-
-        yield return null;
+        SpawnedSelector = Instantiate(SpawnPrefab, parent);
+        SpawnedSelector.transform.localPosition = Vector3.up + SpawnOffset;
+        SpawnedSelector.transform.localRotation = Quaternion.identity;
     }
 }
