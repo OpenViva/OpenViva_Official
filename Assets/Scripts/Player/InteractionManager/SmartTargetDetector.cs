@@ -29,7 +29,13 @@ namespace Viva.Interaction
         [Header("Buffer Limits")]
         [SerializeField] private int maxHitBuffer = 16;
 
-        public GameObject CurrenTarget { get; private set; }
+        [Header("Gizmos Debug Settings")]
+        [SerializeField] private bool showGizmos = true;
+        [SerializeField] private Color rayColor = new Color(0f, 0.8f, 1f, 0.5f); // Cyan
+        [SerializeField] private Color candidateColor = Color.red;
+        [SerializeField] private Color selectedTargetColor = Color.green;
+
+        public GameObject CurrentTarget { get; private set; }
         public event Action<GameObject> OnTargetChanged;
 
         private IPointerSource desktopPointer;
@@ -126,11 +132,66 @@ namespace Viva.Interaction
 
         private void SetTarget(GameObject newTarget)
         {
-            if (CurrenTarget != newTarget)
+            if (CurrentTarget != newTarget)
             {
-                CurrenTarget = newTarget;
-                OnTargetChanged?.Invoke(CurrenTarget);
+                CurrentTarget = newTarget;
+                OnTargetChanged?.Invoke(CurrentTarget);
             }
         }
+
+        #region Debug Gizmos
+        private void OnDrawGizmos()
+        {
+            if (!showGizmos) return;
+
+            // Resolve active pointer (handles both Edit Mode and Play Mode previewing)
+            IPointerSource pointer = null;
+            if (Application.isPlaying)
+            {
+                pointer = GetActivePointer();
+            }
+            else
+            {
+                pointer = (desktopPointerComponent as IPointerSource) ?? (rightHandVRPointerComponent as IPointerSource);
+            }
+
+            if (pointer == null || !pointer.IsActive) return;
+
+            Ray ray = pointer.GetRay();
+
+            Gizmos.color = rayColor;
+            Gizmos.DrawRay(ray.origin, ray.direction * maxDistance);
+
+            // Start and End boundary spheres of the SphereCast
+            Gizmos.DrawWireSphere(ray.origin, sphereCastRadius);
+            Gizmos.DrawWireSphere(ray.origin + ray.direction * maxDistance, sphereCastRadius);
+
+            if (Application.isPlaying && hitBuffer != null)
+            {
+                for (int i = 0; i < hitBuffer.Length; i++)
+                {
+                    RaycastHit hit = hitBuffer[i];
+                    if (hit.collider == null) continue;
+
+                    // Skip drawing candidate if it's the winning target
+                    if (CurrentTarget != null && hit.transform.gameObject == CurrentTarget) continue;
+
+                    Gizmos.color = candidateColor;
+                    Gizmos.DrawWireSphere(hit.transform.position, sphereCastRadius * 0.8f);
+                    Gizmos.DrawLine(ray.origin, hit.transform.position);
+                }
+            }
+
+            if (CurrentTarget != null)
+            {
+                Gizmos.color = selectedTargetColor;
+                Vector3 targetPos = CurrentTarget.transform.position;
+
+                Gizmos.DrawWireSphere(targetPos, sphereCastRadius * 1.2f);
+                Gizmos.DrawSphere(targetPos, 0.1f);
+                Gizmos.DrawLine(ray.origin, targetPos);
+            }
+        }
+        #endregion
     }
 }
