@@ -11,7 +11,11 @@ using UnityEngine.XR.Management;
 public class PlayerSwitchInputMode : MonoBehaviour
 {
     [SerializeField] private Player _player;
-    [SerializeField] private GameObject _playerPrefab;
+    [SerializeField] private GameObject _cameraOffset;
+    [SerializeField] private GameObject _playerArmature;
+
+    private Vector3 _playerOriginalPosition;
+    private Quaternion _playerOriginalRotation;
 
     [Header("KB Components:")]
     [SerializeField] private PlayerController _playerController;
@@ -37,17 +41,15 @@ public class PlayerSwitchInputMode : MonoBehaviour
     [SerializeField] private GameObject _leftWrist;
     [SerializeField] private GameObject _rightWrist;
 
-    private Vector3 _cameraOriginalPosition;
-    private Vector3 _leftWristOriginalPosition;
-    private Vector3 _rightWristOriginalPosition;
-
-    private Quaternion _cameraOriginalRotation;
-    private Quaternion _leftWristOriginalRotation;
-    private Quaternion _rightWristOriginalRotation;
-
     private TrackedPoseDriver _cameraTPD;
     private TrackedPoseDriver _leftWristTPD;
     private TrackedPoseDriver _rightWristTPD;
+
+    private Vector3 _leftWristOriginalPosition;
+    private Vector3 _rightWristOriginalPosition;
+
+    private Quaternion _leftWristOriginalRotation;
+    private Quaternion _rightWristOriginalRotation;
 
     [Header("Development:")]
     [Tooltip("Can be used to immediately enter playmode in VR, if you wish.")]
@@ -63,18 +65,17 @@ public class PlayerSwitchInputMode : MonoBehaviour
         _controllerInputActionManager = _rightWrist.GetComponent<ControllerInputActionManager>();
         _XRInteractionGroup = _rightWrist.GetComponent<XRInteractionGroup>();
 
-        _cameraOriginalPosition = _camera.transform.localPosition;
-        _cameraOriginalRotation = _camera.transform.localRotation;
-
-        _leftWristOriginalPosition = _leftWrist.transform.localPosition;
-        _leftWristOriginalRotation = _leftWrist.transform.localRotation;
-
-        _rightWristOriginalPosition = _rightWrist.transform.localPosition;
-        _rightWristOriginalRotation = _rightWrist.transform.localRotation;
+        _playerOriginalPosition = _playerArmature.transform.localPosition;
+        _playerOriginalRotation = _playerArmature.transform.localRotation;
 
         _cameraTPD = _camera.GetComponent<TrackedPoseDriver>();
         _leftWristTPD = _leftWrist.GetComponent<TrackedPoseDriver>();
         _rightWristTPD = _rightWrist.GetComponent<TrackedPoseDriver>();
+
+        _leftWristOriginalPosition = _leftWrist.transform.localPosition;
+        _rightWristOriginalPosition = _rightWrist.transform.localPosition;
+        _leftWristOriginalRotation = _leftWrist.transform.localRotation;
+        _rightWristOriginalRotation = _rightWrist.transform.localRotation;
     }
 
     private void OnEnable()
@@ -141,22 +142,31 @@ public class PlayerSwitchInputMode : MonoBehaviour
         _leftWristTPD.enabled = _VRActive;
         _rightWristTPD.enabled = _VRActive;
 
-        if (!_VRActive)
+        if (_VRActive)
         {
-            _playerPrefab.transform.SetParent(_camera.transform);
+            _leftWrist.transform.SetParent(_cameraOffset.transform);
+            _rightWrist.transform.SetParent(_cameraOffset.transform);
 
-            _camera.transform.localPosition = _cameraOriginalPosition;
-            _camera.transform.localRotation = _cameraOriginalRotation;
+            _leftWrist.transform.localPosition = Vector3.zero;
+            _rightWrist.transform.localPosition = Vector3.zero;
+            _leftWrist.transform.localRotation = Quaternion.identity;
+            _rightWrist.transform.localRotation = Quaternion.identity;
+            // _playerPrefab.transform.localPosition = Vector3.zero;
+            // _playerPrefab.transform.localRotation = Quaternion.identity;
+        }
+        else
+        {
+            _leftWrist.transform.SetParent(_playerArmature.transform);
+            _rightWrist.transform.SetParent(_playerArmature.transform);
+
             _leftWrist.transform.localPosition = _leftWristOriginalPosition;
-            _leftWrist.transform.localRotation = _leftWristOriginalRotation;
             _rightWrist.transform.localPosition = _rightWristOriginalPosition;
+            _leftWrist.transform.localRotation = _leftWristOriginalRotation;
             _rightWrist.transform.localRotation = _rightWristOriginalRotation;
         }
 
         if (_VRActive)
         {
-            _playerPrefab.transform.SetParent(_player.transform);
-
             XRGeneralSettings.Instance.Manager.InitializeLoader();
             XRGeneralSettings.Instance.Manager.StartSubsystems();
         }
