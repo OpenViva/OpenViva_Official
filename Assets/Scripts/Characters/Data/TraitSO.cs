@@ -4,6 +4,12 @@ using static Viva.CharacterFramework.CharacterEnums;
 
 namespace Viva.CharacterFramework
 {
+    /// <summary>
+    /// A personality trait.
+    /// All modifiers are percentage changes, 0 means unchanged.
+    /// Modifiers can be restricted to situations with <see cref="ConditionMask">
+    /// (for example: Workaholic - Energy decay -25% while working)
+    /// </summary>
     [CreateAssetMenu(fileName = "Trait_New", menuName = "Character Framework/Trait", order = 10)]
     public sealed class TraitSO : ScriptableObject
     {
@@ -64,6 +70,11 @@ namespace Viva.CharacterFramework
         public string Description => description;
         public Sprite Icon => icon;
 
+        /// <summary>
+        /// True when either trait lists the other as conflicting.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool ConflictsWith(TraitSO other)
         {
             if (other == null || other == this) return false;
@@ -71,6 +82,12 @@ namespace Viva.CharacterFramework
         }
 
         #region PUBLIC GETTERS
+        /// <summary>
+        /// Multiplier for a need's decay rate under the active conditions.
+        /// </summary>
+        /// <param name="need"></param>
+        /// <param name="active"></param>
+        /// <returns></returns>
         public float GetNeedDecayMultiplier(NeedType need, ConditionMask active)
         {
             float multiplier = 1f;
@@ -84,6 +101,12 @@ namespace Viva.CharacterFramework
             return Mathf.Max(0f, multiplier);
         }
 
+        /// <summary>
+        /// Multipliers for a core stat under the active conditions.
+        /// </summary>
+        /// <param name="stat"></param>
+        /// <param name="active"></param>
+        /// <returns></returns>
         public float GetStatMultiplier(CharacterStat stat, ConditionMask active)
         {
             float multiplier = 1f;
@@ -97,6 +120,13 @@ namespace Viva.CharacterFramework
             return Mathf.Max(0f, multiplier);
         }
 
+        /// <summary>
+        /// Multiplier for an affinity delta of the given interaction.
+        /// isGain selects the gain or loss percent.
+        /// </summary>
+        /// <param name="interaction"></param>
+        /// <param name="isGain"></param>
+        /// <returns></returns>
         public float GetAffinityMultiplier(InteractionType interaction, bool isGain)
         {
             float multiplier = 1f + (isGain ? globalGainChangePercent : globalLossChangePercent) * 0.01f;
