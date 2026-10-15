@@ -21,12 +21,12 @@ public class PlayerSwitchInputMode : MonoBehaviour
     [SerializeField] private PlayerController _playerController;
 
     [Header("VR Components:")]
-    private XROrigin _XROrigin;
-    private XRInputModalityManager _XRInputModalityManager;
     [SerializeField] private InputActionManager _XRInputActionMananger;
     [SerializeField] private XRInteractionManager _XRInteractionManager;
     [SerializeField] private XRTransformStabilizer _teleportStablizedOrigin;
 
+    private XROrigin _XROrigin;
+    private XRInputModalityManager _XRInputModalityManager;
     private ControllerInputActionManager _controllerInputActionManager;
     private XRInteractionGroup _XRInteractionGroup;
 
