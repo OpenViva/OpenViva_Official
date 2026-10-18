@@ -22,20 +22,20 @@ public class MapCapture : MonoBehaviour
             return;
         }
 
-        // 1. Temporarily disable fog directly
+        // 1. Disable fog
         bool oldFogState = RenderSettings.fog;
         RenderSettings.fog = false;
 
-        // 2. Create a temporary render texture matching the desired resolution
+        // 2. Create a temporary render texture
         RenderTexture rt = new RenderTexture(imageWidth, imageHeight, 24);
         cam.targetTexture = rt;
 
-        // 3. Manually trigger the camera render
+        // 3. Trigger the camera render
         cam.Render();
 
         // 4. Read the pixels from the render texture into a Texture2D
         RenderTexture.active = rt;
-        Texture2D mapTexture = new Texture2D(imageWidth, imageHeight, TextureFormat.RGB24, false);
+        Texture2D mapTexture = new(imageWidth, imageHeight, TextureFormat.RGB24, false);
         mapTexture.ReadPixels(new Rect(0, 0, imageWidth, imageHeight), 0, 0);
         mapTexture.Apply();
 
@@ -44,7 +44,7 @@ public class MapCapture : MonoBehaviour
         RenderTexture.active = null;
         DestroyImmediate(rt);
 
-        // 6. Restore the original fog state immediately
+        // 6. Restore the original fog state
         RenderSettings.fog = oldFogState;
 
         // 7. Save the texture as a PNG file inside the Assets folder
@@ -57,7 +57,7 @@ public class MapCapture : MonoBehaviour
         Debug.Log($"Map successfully captured and saved to: {path}");
 
 #if UNITY_EDITOR
-        UnityEditor.AssetDatabase.Refresh(); // Refreshes Unity editor so the image appears instantly
+        UnityEditor.AssetDatabase.Refresh(); // Refreshes Unity editor so the image appears
 #endif
     }
 }
