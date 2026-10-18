@@ -1406,10 +1406,14 @@ MonoBehaviour:
     m_Bits: 512
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   angleWeight: 0.7
   distanceWeight: 0.3
   maxHitBuffer: 16
+  showGizmos: 1
+  rayColor: {r: 0, g: 0.8, b: 1, a: 0.5}
+  candidateColor: {r: 1, g: 0, b: 0, a: 1}
+  selectedTargetColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!114 &1350332620601217605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2586,7 +2590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61b1495060296e94b8f53873d88b04c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Viva.Interaction.VRPointerSource
-  aimTransform: {fileID: 676745230835489612}
+  aimTransform: {fileID: 3158354197060841947}
 --- !u!1 &3878867567410478676
 GameObject:
   m_ObjectHideFlags: 0
@@ -4525,8 +4529,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 0.1
+  far clip plane: 2000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -4906,7 +4910,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement.ContinuousMoveProvider
   m_Mediator: {fileID: 4265016260232093721}
   m_TransformationPriority: 0
-  m_MoveSpeed: 2
+  m_MoveSpeed: 1
   m_InAirControlModifier: 0.5
   m_EnableStrafe: 1
   m_EnableFly: 0
