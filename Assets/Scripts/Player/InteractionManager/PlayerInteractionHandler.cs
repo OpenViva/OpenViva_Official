@@ -28,12 +28,16 @@ namespace Viva.Interaction
             AssignInputs();
         }
 
-        private void ProcessInteraction(HandSide hand)
+        private void ProcessInteraction(HandSide hand, bool isVRDropButtonPressed = false)
         {
             // 1. If the hand is holding something, Use it.
             if (heldObjects[hand] != null)
             {
-                if (_isDropModifierHeld)
+                if (_isDropModifierHeld && Globals.isDesktopMode)
+                {
+                    DropHeldObject(hand);
+                }
+                else if (heldObjects[hand].CurrentType == InteractionType.Grab && !Globals.isDesktopMode && isVRDropButtonPressed)
                 {
                     DropHeldObject(hand);
                 }
@@ -89,6 +93,7 @@ namespace Viva.Interaction
                 }
             }
         }
+
         private void DropHeldObject(HandSide hand)
         {
             IInteractable interactable = heldObjects[hand];
@@ -130,6 +135,18 @@ namespace Viva.Interaction
             ProcessInteraction(HandSide.Right);
         }
 
+        private void OnVRLeftDrop()
+        {
+            if (Globals.isDesktopMode) return;
+            ProcessInteraction(HandSide.Left, true);
+        }
+
+        private void OnVRRightDrop()
+        {
+            if (Globals.isDesktopMode) return;
+            ProcessInteraction(HandSide.Right, true);
+        }
+
         #region Helper Methods
         private void AssignInputs()
         {
@@ -141,6 +158,9 @@ namespace Viva.Interaction
 
             _player.Controls.Viva.VRLeftGrab.performed += context => OnVRLeftGrab();
             _player.Controls.Viva.VRRightGrab.performed += context => OnVRRightGrab();
+
+            _player.Controls.Viva.VRLeftDrop.performed += context => OnVRLeftDrop();
+            _player.Controls.Viva.VRRightDrop.performed += context => OnVRRightDrop();
         }
         #endregion
     }

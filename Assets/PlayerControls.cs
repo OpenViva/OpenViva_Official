@@ -193,6 +193,26 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""priority"": 0
                 },
                 {
+                    ""name"": ""VRLeftDrop"",
+                    ""type"": ""Button"",
+                    ""id"": ""d9c91349-9600-4083-835a-105460badc3b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
+                },
+                {
+                    ""name"": ""VRRightDrop"",
+                    ""type"": ""Button"",
+                    ""id"": ""1a056313-208a-466c-8410-0adbb3d1b92b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
+                },
+                {
                     ""name"": ""Scroll Up"",
                     ""type"": ""Value"",
                     ""id"": ""d320a995-535e-42db-b028-fa94a415368a"",
@@ -801,7 +821,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""0ee9c3f2-6b1f-49f2-a6b0-bd01a75c0a95"",
-                    ""path"": ""<XRController>{LeftHand}/{GripButton}"",
+                    ""path"": ""<XRController>{LeftHand}/triggerPressed"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";XR"",
@@ -812,11 +832,33 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""1db54b7a-480c-4e48-afb6-116aa1687a90"",
-                    ""path"": ""<XRController>{RightHand}/{GripButton}"",
+                    ""path"": ""<XRController>{RightHand}/triggerPressed"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";XR"",
                     ""action"": ""VRRightGrab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ee9c298c-a092-4122-95a4-46fe867def3c"",
+                    ""path"": ""<XRController>{LeftHand}/gripPressed"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";XR"",
+                    ""action"": ""VRLeftDrop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""19792f73-a5f1-4df5-b7a1-a83fdd3cdc55"",
+                    ""path"": ""<XRController>{RightHand}/gripPressed"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";XR"",
+                    ""action"": ""VRRightDrop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -887,6 +929,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Viva_DesktopRightGrab = m_Viva.FindAction("DesktopRightGrab", throwIfNotFound: true);
         m_Viva_VRLeftGrab = m_Viva.FindAction("VRLeftGrab", throwIfNotFound: true);
         m_Viva_VRRightGrab = m_Viva.FindAction("VRRightGrab", throwIfNotFound: true);
+        m_Viva_VRLeftDrop = m_Viva.FindAction("VRLeftDrop", throwIfNotFound: true);
+        m_Viva_VRRightDrop = m_Viva.FindAction("VRRightDrop", throwIfNotFound: true);
         m_Viva_ScrollUp = m_Viva.FindAction("Scroll Up", throwIfNotFound: true);
         m_Viva_ScrollDown = m_Viva.FindAction("Scroll Down", throwIfNotFound: true);
         m_Viva_Run = m_Viva.FindAction("Run", throwIfNotFound: true);
@@ -989,6 +1033,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Viva_DesktopRightGrab;
     private readonly InputAction m_Viva_VRLeftGrab;
     private readonly InputAction m_Viva_VRRightGrab;
+    private readonly InputAction m_Viva_VRLeftDrop;
+    private readonly InputAction m_Viva_VRRightDrop;
     private readonly InputAction m_Viva_ScrollUp;
     private readonly InputAction m_Viva_ScrollDown;
     private readonly InputAction m_Viva_Run;
@@ -1052,6 +1098,14 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Viva/VRRightGrab".
         /// </summary>
         public InputAction @VRRightGrab => m_Wrapper.m_Viva_VRRightGrab;
+        /// <summary>
+        /// Provides access to the underlying input action "Viva/VRLeftDrop".
+        /// </summary>
+        public InputAction @VRLeftDrop => m_Wrapper.m_Viva_VRLeftDrop;
+        /// <summary>
+        /// Provides access to the underlying input action "Viva/VRRightDrop".
+        /// </summary>
+        public InputAction @VRRightDrop => m_Wrapper.m_Viva_VRRightDrop;
         /// <summary>
         /// Provides access to the underlying input action "Viva/ScrollUp".
         /// </summary>
@@ -1156,6 +1210,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @VRRightGrab.started += instance.OnVRRightGrab;
             @VRRightGrab.performed += instance.OnVRRightGrab;
             @VRRightGrab.canceled += instance.OnVRRightGrab;
+            @VRLeftDrop.started += instance.OnVRLeftDrop;
+            @VRLeftDrop.performed += instance.OnVRLeftDrop;
+            @VRLeftDrop.canceled += instance.OnVRLeftDrop;
+            @VRRightDrop.started += instance.OnVRRightDrop;
+            @VRRightDrop.performed += instance.OnVRRightDrop;
+            @VRRightDrop.canceled += instance.OnVRRightDrop;
             @ScrollUp.started += instance.OnScrollUp;
             @ScrollUp.performed += instance.OnScrollUp;
             @ScrollUp.canceled += instance.OnScrollUp;
@@ -1233,6 +1293,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @VRRightGrab.started -= instance.OnVRRightGrab;
             @VRRightGrab.performed -= instance.OnVRRightGrab;
             @VRRightGrab.canceled -= instance.OnVRRightGrab;
+            @VRLeftDrop.started -= instance.OnVRLeftDrop;
+            @VRLeftDrop.performed -= instance.OnVRLeftDrop;
+            @VRLeftDrop.canceled -= instance.OnVRLeftDrop;
+            @VRRightDrop.started -= instance.OnVRRightDrop;
+            @VRRightDrop.performed -= instance.OnVRRightDrop;
+            @VRRightDrop.canceled -= instance.OnVRRightDrop;
             @ScrollUp.started -= instance.OnScrollUp;
             @ScrollUp.performed -= instance.OnScrollUp;
             @ScrollUp.canceled -= instance.OnScrollUp;
@@ -1431,6 +1497,20 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnVRRightGrab(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "VRLeftDrop" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnVRLeftDrop(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "VRRightDrop" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnVRRightDrop(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Scroll Up" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

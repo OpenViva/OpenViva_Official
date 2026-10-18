@@ -107,6 +107,26 @@
                     "priority": 0
                 },
                 {
+                    "name": "VRLeftDrop",
+                    "type": "Button",
+                    "id": "d9c91349-9600-4083-835a-105460badc3b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "VRRightDrop",
+                    "type": "Button",
+                    "id": "1a056313-208a-466c-8410-0adbb3d1b92b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
                     "name": "Scroll Up",
                     "type": "Value",
                     "id": "d320a995-535e-42db-b028-fa94a415368a",
@@ -715,7 +735,7 @@
                 {
                     "name": "",
                     "id": "0ee9c3f2-6b1f-49f2-a6b0-bd01a75c0a95",
-                    "path": "<XRController>{LeftHand}/{GripButton}",
+                    "path": "<XRController>{LeftHand}/triggerPressed",
                     "interactions": "",
                     "processors": "",
                     "groups": ";XR",
@@ -726,11 +746,33 @@
                 {
                     "name": "",
                     "id": "1db54b7a-480c-4e48-afb6-116aa1687a90",
-                    "path": "<XRController>{RightHand}/{GripButton}",
+                    "path": "<XRController>{RightHand}/triggerPressed",
                     "interactions": "",
                     "processors": "",
                     "groups": ";XR",
                     "action": "VRRightGrab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ee9c298c-a092-4122-95a4-46fe867def3c",
+                    "path": "<XRController>{LeftHand}/gripPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";XR",
+                    "action": "VRLeftDrop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "19792f73-a5f1-4df5-b7a1-a83fdd3cdc55",
+                    "path": "<XRController>{RightHand}/gripPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";XR",
+                    "action": "VRRightDrop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
