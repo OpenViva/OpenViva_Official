@@ -15,15 +15,6 @@ public static class Globals
     public static bool isDesktopMode = true;
 
     // --- Events ---
-    public static event Action<Camera> OnCameraChanged;
-
-    // Call this method whenever you toggle between Desktop and VR
-    public static void SetGameMode(bool desktopMode, Camera activeCamera)
-    {
-        isDesktopMode = desktopMode;
-        OnCameraChanged?.Invoke(activeCamera);
-    }
-
     public static event Action OnBookOpened;
     public static event Action OnFollowCalled;
 

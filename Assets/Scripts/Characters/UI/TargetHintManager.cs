@@ -15,7 +15,8 @@ namespace Viva.Interaction
         [SerializeField] private GameObject characterHintObject;
 
         [Header("Positioning Settings")]
-        [SerializeField] private Vector3 worldOffset = new Vector3(0.6f, 0.6f, 0f);
+        [SerializeField] private float leftOffsetDistance = 1.2f;
+        [SerializeField] private float verticalOffset = 0.5f;
 
         private GameObject activeHint;
         private Transform activeHintTransform;
@@ -49,8 +50,6 @@ namespace Viva.Interaction
                 detector.OnTargetChanged += HandleTargetChanged;
             }
 
-            Globals.OnCameraChanged += HandleCameraChanged;
-
             // Initialize camera reference if already available
             if (Camera.main != null)
             {
@@ -64,8 +63,6 @@ namespace Viva.Interaction
             {
                 detector.OnTargetChanged -= HandleTargetChanged;
             }
-
-            Globals.OnCameraChanged -= HandleCameraChanged;
         }
 
         private void OnDestroy()
@@ -74,13 +71,6 @@ namespace Viva.Interaction
             {
                 detector.OnTargetChanged -= HandleTargetChanged;
             }
-
-            Globals.OnCameraChanged -= HandleCameraChanged;
-        }
-
-        private void HandleCameraChanged(Camera newCamera)
-        {
-            cachedCamera = newCamera;
         }
 
         private void HandleTargetChanged(GameObject newTarget)
@@ -148,25 +138,30 @@ namespace Viva.Interaction
             if (activeHint != null && activeHint.activeSelf && targetTransform != null)
             {
                 UpdateHintPosition();
-
-                if (cachedCamera != null)
-                {
-                    activeHintTransform.LookAt(activeHintTransform.position + cachedCamera.transform.rotation * Vector3.forward,
-                                         cachedCamera.transform.rotation * Vector3.up);
-                }
             }
         }
 
         private void UpdateHintPosition()
         {
-            Vector3 targetPos = targetTransform.position;
-
+            Vector3 targetCenter = targetTransform.position;
             if (hasCollider && targetCollider != null)
             {
-                targetPos = targetTransform.TransformPoint(cachedLocalCenterOffset);
+                targetCenter = targetTransform.TransformPoint(cachedLocalCenterOffset);
             }
 
-            activeHintTransform.position = targetPos + worldOffset;
+            if (cachedCamera != null)
+            {
+                Vector3 leftDirection = -cachedCamera.transform.right;
+                activeHintTransform.position = targetCenter + (leftDirection * leftOffsetDistance) + (Vector3.up * verticalOffset);
+
+                //activeHintTransform.rotation = cachedCamera.transform.rotation;
+                activeHintTransform.LookAt(cachedCamera.transform);
+            }
+            else
+            {
+                // Fallback if camera reference isn't set yet
+                activeHintTransform.position = targetCenter + new Vector3(0f, verticalOffset, 0f);
+            }
         }
 
         private void SetHintActive(GameObject hint, bool active)
