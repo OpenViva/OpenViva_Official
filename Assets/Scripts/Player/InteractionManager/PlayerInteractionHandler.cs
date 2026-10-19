@@ -37,7 +37,7 @@ namespace Viva.Interaction
                 {
                     DropHeldObject(hand);
                 }
-                else if (heldObjects[hand].CurrentType == InteractionType.Grab && !Globals.isDesktopMode && isVRDropButtonPressed)
+                else if (isVRDropButtonPressed && !Globals.isDesktopMode)
                 {
                     DropHeldObject(hand);
                 }
