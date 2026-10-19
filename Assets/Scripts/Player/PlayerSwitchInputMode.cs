@@ -34,7 +34,6 @@ public class PlayerSwitchInputMode : MonoBehaviour
     [SerializeField] private GameObject _VRLocomotion;
     [SerializeField] private GameObject _XRPokeInteractor;
     [SerializeField] private GameObject _nearFarInteractor;
-    [SerializeField] private GameObject _teleportInteractor;
 
     [Header("Tracked GameObjects:")]
     [SerializeField] private GameObject _camera;
@@ -95,7 +94,7 @@ public class PlayerSwitchInputMode : MonoBehaviour
             _assignmentFailed = false;
         }
 
-        // Editor intervention. Default should be false
+        // Editor intervention. Default for _VRActive should be false
         if (_VRActive) { SwitchInputMode(true); }
     }
 
@@ -136,7 +135,6 @@ public class PlayerSwitchInputMode : MonoBehaviour
         _VRLocomotion.SetActive(_VRActive);
         _XRPokeInteractor.SetActive(_VRActive);
         _nearFarInteractor.SetActive(_VRActive);
-        _teleportInteractor.SetActive(_VRActive);
 
         _cameraTPD.enabled = _VRActive;
         _leftWristTPD.enabled = _VRActive;
