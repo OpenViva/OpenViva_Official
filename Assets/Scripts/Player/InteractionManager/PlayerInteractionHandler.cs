@@ -61,6 +61,9 @@ namespace Viva.Interaction
                 return; // Skip world interaction
             }
 
+            // (VR) If hand is empty and drop was pressed, end interaction.
+            if (isVRDropButtonPressed && !Globals.isDesktopMode) { return; }
+
             // 2. If hand is empty, check the world.
             IPointerSource pointerSource = detector.GetActivePointer(hand);
             GameObject target = detector.PerformCast(pointerSource);

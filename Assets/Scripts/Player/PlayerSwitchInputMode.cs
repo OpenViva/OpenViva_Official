@@ -14,9 +14,6 @@ public class PlayerSwitchInputMode : MonoBehaviour
     [SerializeField] private GameObject _cameraOffset;
     [SerializeField] private GameObject _playerArmature;
 
-    private Vector3 _playerOriginalPosition;
-    private Quaternion _playerOriginalRotation;
-
     [Header("KB Components:")]
     [SerializeField] private PlayerController _playerController;
 
@@ -24,16 +21,14 @@ public class PlayerSwitchInputMode : MonoBehaviour
     [SerializeField] private InputActionManager _XRInputActionMananger;
     [SerializeField] private XRInteractionManager _XRInteractionManager;
     [SerializeField] private XRTransformStabilizer _teleportStablizedOrigin;
+    [SerializeField] private GameObject _VRLocomotion;
+    [SerializeField] private GameObject _leftWristVRObjects;
+    [SerializeField] private GameObject _rightWristVRObjects;
 
     private XROrigin _XROrigin;
     private XRInputModalityManager _XRInputModalityManager;
     private ControllerInputActionManager _controllerInputActionManager;
     private XRInteractionGroup _XRInteractionGroup;
-
-    [Header("VR Locomotion")]
-    [SerializeField] private GameObject _VRLocomotion;
-    [SerializeField] private GameObject _XRPokeInteractor;
-    [SerializeField] private GameObject _nearFarInteractor;
 
     [Header("Tracked GameObjects:")]
     [SerializeField] private GameObject _camera;
@@ -63,9 +58,6 @@ public class PlayerSwitchInputMode : MonoBehaviour
         _XRInputModalityManager = GetComponent<XRInputModalityManager>();
         _controllerInputActionManager = _rightWrist.GetComponent<ControllerInputActionManager>();
         _XRInteractionGroup = _rightWrist.GetComponent<XRInteractionGroup>();
-
-        _playerOriginalPosition = _playerArmature.transform.localPosition;
-        _playerOriginalRotation = _playerArmature.transform.localRotation;
 
         _cameraTPD = _camera.GetComponent<TrackedPoseDriver>();
         _leftWristTPD = _leftWrist.GetComponent<TrackedPoseDriver>();
@@ -133,8 +125,8 @@ public class PlayerSwitchInputMode : MonoBehaviour
         _XRInteractionGroup.enabled = _VRActive;
 
         _VRLocomotion.SetActive(_VRActive);
-        _XRPokeInteractor.SetActive(_VRActive);
-        _nearFarInteractor.SetActive(_VRActive);
+        _leftWristVRObjects.SetActive(_VRActive);
+        _rightWristVRObjects.SetActive(_VRActive);
 
         _cameraTPD.enabled = _VRActive;
         _leftWristTPD.enabled = _VRActive;
@@ -179,7 +171,7 @@ public class PlayerSwitchInputMode : MonoBehaviour
 
     private void OnDisable()
     {
-        _player.Controls.Viva.ChangeInputType.performed += SwitchInputMode;
+        _player.Controls.Viva.ChangeInputType.performed -= SwitchInputMode;
     }
 
 }

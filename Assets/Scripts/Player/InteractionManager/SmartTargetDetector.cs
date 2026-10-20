@@ -114,7 +114,7 @@ namespace Viva.Interaction
                 float distance = Mathf.Sqrt(sqrDist);
                 Vector3 dirNoarmalized = dirToTarget / distance;
 
-                // Linen of sight check
+                // Line of sight check
                 if (Physics.Linecast(ray.origin, targetPos, obstacleLayer)) continue;
 
                 float dot = Vector3.Dot(ray.direction, dirNoarmalized);
