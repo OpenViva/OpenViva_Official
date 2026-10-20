@@ -22,7 +22,7 @@ public class CharacterInteractable : MonoBehaviour, Viva.Interaction.IInteractab
         return false;
     }
 
-    public void OnDropped()
+    public void OnDropped(HandSide hand)
     {
 
     }

@@ -15,6 +15,6 @@ namespace Viva.Interaction
 
         bool ExecuteAction(GameObject interactor, HandSide hand, Transform handTransform);
 
-        void OnDropped();
+        void OnDropped(HandSide hand);
     }
 }

@@ -16,7 +16,7 @@ public class InteractableDoorExample : MonoBehaviour, Viva.Interaction.IInteract
         return true;
     }
 
-    void Viva.Interaction.IInteractable.OnDropped()
+    void Viva.Interaction.IInteractable.OnDropped(HandSide hand)
     {
     }
 }

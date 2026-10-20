@@ -19,7 +19,7 @@ public class GenericGrab : MonoBehaviour, Viva.Interaction.IInteractable
         return false;
     }
 
-    public void OnDropped()
+    public void OnDropped(HandSide hand)
     {
         transform.SetParent(null);
         gameObject.layer = LayerMask.NameToLayer("Interactable");

@@ -33,6 +33,11 @@ public class FlashlightGrabExample : MonoBehaviour, Viva.Interaction.IInteractab
 
             // 3. Transition State so the next click triggers "Use"
             CurrentType = InteractionType.Use;
+
+            // (VR) Send strong haptics to controllers
+            if (hand == HandSide.Left && !Globals.isDesktopMode) PlayerManager.Instance.VRLeftHaptics.SendHapticImpulse(0.5f, 0.25f);
+            else if (hand == HandSide.Right && !Globals.isDesktopMode) PlayerManager.Instance.VRRightHaptics.SendHapticImpulse(0.5f, 0.25f);
+
             return true;
         }
         else if (CurrentType == InteractionType.Use)
@@ -42,13 +47,18 @@ public class FlashlightGrabExample : MonoBehaviour, Viva.Interaction.IInteractab
             if (spotLight != null) spotLight.enabled = isLightOn;
 
             Debug.Log("Flashlight Toggled!");
+
+            // (VR) Send weak haptics to controllers
+            if (hand == HandSide.Left) PlayerManager.Instance.VRLeftHaptics.SendHapticImpulse(0.25f, 0.1f);
+            else if (hand == HandSide.Right) PlayerManager.Instance.VRRightHaptics.SendHapticImpulse(0.25f, 0.1f);
+
             return true;
         }
 
         return false;
     }
 
-    public void OnDropped()
+    public void OnDropped(HandSide hand)
     {
         // 1. Remove the parent so it falls loose in the world
         transform.SetParent(null);
@@ -62,5 +72,9 @@ public class FlashlightGrabExample : MonoBehaviour, Viva.Interaction.IInteractab
 
         // 4. Reset state back to Grab
         CurrentType = InteractionType.Grab;
+
+        // (VR) Send weak haptics to controllers
+        if (hand == HandSide.Left && !Globals.isDesktopMode) PlayerManager.Instance.VRLeftHaptics.SendHapticImpulse(0.25f, 0.1f);
+        else if (hand == HandSide.Right && !Globals.isDesktopMode) PlayerManager.Instance.VRRightHaptics.SendHapticImpulse(0.25f, 0.1f);
     }
 }

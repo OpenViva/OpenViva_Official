@@ -102,7 +102,7 @@ namespace Viva.Interaction
             IInteractable interactable = heldObjects[hand];
             if (interactable != null)
             {
-                interactable.OnDropped();
+                interactable.OnDropped(hand);
 
                 ReleaseObject(hand);
             }
