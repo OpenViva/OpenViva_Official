@@ -45,6 +45,7 @@ namespace Viva.CharacterFramework
         public enum InteractionType
         {
             None = 0,
+            Wave,
             Poke,
             Headpat,
             Hug,
