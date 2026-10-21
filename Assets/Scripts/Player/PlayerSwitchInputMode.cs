@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -157,13 +158,12 @@ public class PlayerSwitchInputMode : MonoBehaviour
 
         if (_VRActive)
         {
-            XRGeneralSettings.Instance.Manager.InitializeLoader();
-            XRGeneralSettings.Instance.Manager.StartSubsystems();
+            StartCoroutine(StartXRRoutine());
+
         }
         else if (!_VRActive && XRGeneralSettings.Instance.Manager.isInitializationComplete)
         {
-            XRGeneralSettings.Instance.Manager.StopSubsystems();
-            XRGeneralSettings.Instance.Manager.DeinitializeLoader();
+            StopXR();
         }
 
         Globals.isDesktopMode = !_VRActive;
@@ -174,4 +174,26 @@ public class PlayerSwitchInputMode : MonoBehaviour
         _player.Controls.Viva.ChangeInputType.performed -= SwitchInputMode;
     }
 
+    private IEnumerator StartXRRoutine()
+    {
+        yield return XRGeneralSettings.Instance.Manager.InitializeLoader();
+
+        if (XRGeneralSettings.Instance.Manager.activeLoader == null)
+        {
+            Debug.LogError("Failed to initialize XR Loader. Ensure VR headset is connected.");
+            yield break;
+        }
+
+        XRGeneralSettings.Instance.Manager.StartSubsystems();
+    }
+
+    private void StopXR()
+    {
+        if (XRGeneralSettings.Instance.Manager.isInitializationComplete)
+        {
+            // Stop subsystems and de-initialize loader to return to desktop mode
+            XRGeneralSettings.Instance.Manager.StopSubsystems();
+            XRGeneralSettings.Instance.Manager.DeinitializeLoader();
+        }
+    }
 }
