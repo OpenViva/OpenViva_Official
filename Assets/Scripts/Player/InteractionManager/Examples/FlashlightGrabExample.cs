@@ -1,7 +1,7 @@
 using UnityEngine;
 using Viva.Interaction;
 
-public class FlashlightGrabExample : MonoBehaviour, Viva.Interaction.IInteractable
+public class FlashlightGrabExample : MonoBehaviour, IItemInteractable
 {
     public InteractionType CurrentType { get; private set; } = InteractionType.Grab;
 

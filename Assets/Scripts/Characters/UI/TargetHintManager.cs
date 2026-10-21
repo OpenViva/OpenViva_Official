@@ -107,7 +107,7 @@ namespace Viva.Interaction
             {
                 targetHint = characterHintObject != null ? characterHintObject : interactHintObject;
             }
-            else if (newTarget.TryGetComponent(out IInteractable interactable))
+            else if (newTarget.TryGetComponent(out IItemInteractable interactable))
             {
                 switch (interactable.CurrentType)
                 {

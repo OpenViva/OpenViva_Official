@@ -1,7 +1,7 @@
 using UnityEngine;
 using Viva.Interaction;
 
-public class CharacterInteractable : MonoBehaviour, Viva.Interaction.IInteractable
+public class CharacterInteractable : MonoBehaviour, IItemInteractable
 {
     [Header("Selection Visuals")]
     public GameObject selectionArrow;

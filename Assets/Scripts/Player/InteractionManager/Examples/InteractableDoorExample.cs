@@ -1,7 +1,7 @@
 using UnityEngine;
 using Viva.Interaction;
 
-public class InteractableDoorExample : MonoBehaviour, Viva.Interaction.IInteractable
+public class InteractableDoorExample : MonoBehaviour, IItemInteractable
 {
     public InteractionType CurrentType => InteractionType.Interact;
 
@@ -16,7 +16,7 @@ public class InteractableDoorExample : MonoBehaviour, Viva.Interaction.IInteract
         return true;
     }
 
-    void Viva.Interaction.IInteractable.OnDropped(HandSide hand)
+    void IItemInteractable.OnDropped(HandSide hand)
     {
     }
 }

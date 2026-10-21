@@ -9,7 +9,7 @@ namespace Viva.Interaction
         Use
     }
 
-    public interface IInteractable
+    public interface IItemInteractable
     {
         InteractionType CurrentType { get; }
 

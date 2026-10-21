@@ -1,7 +1,7 @@
 using UnityEngine;
 using Viva.Interaction;
 
-public class GenericGrab : MonoBehaviour, Viva.Interaction.IInteractable
+public class GenericGrab : MonoBehaviour, IItemInteractable
 {
     public InteractionType CurrentType { get; private set; } = InteractionType.Grab;
 

@@ -11,7 +11,7 @@ namespace Viva.Interaction
         protected Player _player;
 
         // Tracks what each hand is currently holding
-        private Dictionary<HandSide, IInteractable> heldObjects = new();
+        private Dictionary<HandSide, IItemInteractable> heldObjects = new();
         private bool _isDropModifierHeld = false;
 
         private void Awake()
@@ -68,7 +68,7 @@ namespace Viva.Interaction
             IPointerSource pointerSource = detector.GetActivePointer(hand);
             GameObject target = detector.PerformCast(pointerSource);
 
-            if (target != null && target.TryGetComponent(out IInteractable interactable))
+            if (target != null && target.TryGetComponent(out IItemInteractable interactable))
             {
                 bool success = false;
                 switch (hand)
@@ -99,7 +99,7 @@ namespace Viva.Interaction
 
         private void DropHeldObject(HandSide hand)
         {
-            IInteractable interactable = heldObjects[hand];
+            IItemInteractable interactable = heldObjects[hand];
             if (interactable != null)
             {
                 interactable.OnDropped(hand);
