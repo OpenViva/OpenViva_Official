@@ -143,8 +143,8 @@ public class SettingsManager : MonoBehaviour
         resolutionOptions = Screen.resolutions
             .GroupBy(r => (r.width, r.height))
             .Select(g => g.OrderByDescending(r => r.refreshRateRatio.value).First())
-            .OrderBy(r => r.width)
-            .ThenBy(r => r.height)
+            .OrderByDescending(r => r.width)
+            .ThenByDescending(r => r.height)
             .ToArray();
 
         if (resolutionOptions.Length == 0)
