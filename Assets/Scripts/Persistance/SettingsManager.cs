@@ -524,7 +524,7 @@ public class SettingsManager : MonoBehaviour
     #endregion
 
     #region Text Display
-    public string GetDisplayText(SettingType type, string[] customCycleTexts = null)
+    public string GetDisplayText(SettingType type)
     {
         GameSettingsData s = currentSettings;
         switch (type)
