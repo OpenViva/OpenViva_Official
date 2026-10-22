@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Events;
-using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
@@ -61,7 +60,6 @@ public class SettingsManager : MonoBehaviour
 
     // --- Runtime State ---
     private string savePath;
-    private UniversalRenderPipelineAsset runtimeCustomAsset;
     private Light mainDirLight;
     private Resolution[] resolutionOptions;
     private bool appliedFullscreen;
@@ -102,7 +100,6 @@ public class SettingsManager : MonoBehaviour
         savePath = Path.Combine(Application.persistentDataPath, "gameSettings.json");
 
         BuildResolutionList();
-        CreateRuntimeAsset();
         CacheMainLight();
 
         LoadSettings();
@@ -153,17 +150,6 @@ public class SettingsManager : MonoBehaviour
         {
             resolutionOptions = new[] { Screen.currentResolution };
         }
-    }
-
-    private void CreateRuntimeAsset()
-    {
-        if (customAssetTemplate == null)
-        {
-            Debug.LogError("[Settings Manager] Assign a Custom Asset Template in the Inspector!");
-            return;
-        }
-        runtimeCustomAsset = Instantiate(customAssetTemplate);
-        runtimeCustomAsset.name = "Runtime Custom URP Asset";
     }
 
     private void CacheMainLight()
@@ -449,20 +435,15 @@ public class SettingsManager : MonoBehaviour
     #region Apply to Engine
     private void ApplyGraphicsSettings()
     {
-        if (IsCustomPreset)
+        int level = currentSettings.qualityLevel;
+        if (QualitySettings.GetQualityLevel() != level)
         {
-            if (runtimeCustomAsset != null)
-            {
-                ApplyCustomURPOverrides(runtimeCustomAsset);
-                SetActivePipeline(runtimeCustomAsset);
-            }
+            QualitySettings.SetQualityLevel(level, true);
         }
-        else
-        {
-            QualitySettings.SetQualityLevel(currentSettings.qualityLevel, true);
 
-            UniversalRenderPipelineAsset preset = presetAssets[currentSettings.qualityLevel];
-            if (preset != null) SetActivePipeline(preset);
+        if (IsCustomPreset && QualitySettings.renderPipeline is UniversalRenderPipelineAsset urp)
+        {
+            ApplyCustomURPOverrides(urp);
         }
 
         QualitySettings.vSyncCount = currentSettings.vSync ? 1 : 0;
@@ -470,15 +451,6 @@ public class SettingsManager : MonoBehaviour
         Application.targetFrameRate = currentSettings.targetFramerate;
 
         ApplyWindowMode();
-    }
-
-    private void SetActivePipeline(UniversalRenderPipelineAsset asset)
-    {
-        // Reassigning the pipeline is expensive, so only do it when it actually changes
-        if (QualitySettings.renderPipeline == asset) return;
-
-        QualitySettings.renderPipeline = asset;
-        GraphicsSettings.defaultRenderPipeline = asset;
     }
 
     private void ApplyCustomURPOverrides(UniversalRenderPipelineAsset urp)
