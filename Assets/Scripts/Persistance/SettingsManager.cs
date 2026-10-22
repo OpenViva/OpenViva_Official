@@ -64,6 +64,8 @@ public class SettingsManager : MonoBehaviour
     private UniversalRenderPipelineAsset runtimeCustomAsset;
     private Light mainDirLight;
     private Resolution[] resolutionOptions;
+    private bool appliedFullscreen;
+    private Vector2Int appliedSize = new Vector2Int(-1, -1);
 
     private bool saveDirty;
     private float saveTimer;
@@ -187,33 +189,66 @@ public class SettingsManager : MonoBehaviour
     #region Save / Load
     public void LoadSettings()
     {
+        currentSettings = NewDefaults();
+
+        if (TryLoad(savePath) || TryLoad(savePath + ".bak"))
+        {
+            SanitizeSettings();
+            return;
+        }
+
         if (File.Exists(savePath))
         {
             try
             {
-                currentSettings = NewDefaults();
-                JsonUtility.FromJsonOverwrite(File.ReadAllText(savePath), currentSettings);
+                File.Copy(savePath, savePath + ".corrupt", true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.LogError($"[Settings Manager] Failed to load settings: {ex.Message}\nUsing defaults.");
-                currentSettings = NewDefaults();
             }
-        }
-        else
-        {
-            currentSettings = NewDefaults();
-            SaveSettings();
+
+            Debug.LogError($"[Settings Manager] Settings were unreadable. Using defaults.");
         }
 
+        SaveSettings();
         SanitizeSettings();
+    }
+
+    private bool TryLoad(string path)
+    {
+        if (!File.Exists(path)) return false;
+
+        try
+        {
+            GameSettingsData loaded = NewDefaults();
+            JsonUtility.FromJsonOverwrite(File.ReadAllText(path), loaded);
+            currentSettings = loaded;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[Settings Manager] Could not read '{path}': {ex.Message}");
+            return false;
+        }
     }
 
     public void SaveSettings()
     {
         try
         {
-            File.WriteAllText(savePath, JsonUtility.ToJson(currentSettings, true));
+            string json = JsonUtility.ToJson(currentSettings, true);
+            string tmp = savePath + ".tmp";
+            File.WriteAllText(tmp, json);
+
+            if (File.Exists(savePath))
+            {
+                File.Replace(tmp, savePath, savePath + ".bak");
+            }
+            else
+            {
+                File.Move(tmp, savePath);
+            }
+
             saveDirty = true;
         }
         catch (Exception ex)
@@ -449,7 +484,9 @@ public class SettingsManager : MonoBehaviour
     private void ApplyCustomURPOverrides(UniversalRenderPipelineAsset urp)
     {
         urp.renderScale = currentSettings.resolutionScale / 100f;
-        urp.msaaSampleCount = Mathf.Max(1, AntiAliasingValues[currentSettings.antiAliasing]);
+
+        int samples = Mathf.Max(1, AntiAliasingValues[currentSettings.antiAliasing]);
+        if (urp.msaaSampleCount != samples) urp.msaaSampleCount = samples;
 
         ShadowProfile profile = ShadowProfiles[currentSettings.shadowLevel];
         urp.shadowDistance = profile.distance;
@@ -466,13 +503,15 @@ public class SettingsManager : MonoBehaviour
     private void ApplyWindowMode()
     {
         bool fullscreen = currentSettings.fullscreen;
-        FullScreenMode mode = fullscreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
         Vector2Int size = GetTargetSize();
 
-        if (Screen.fullScreenMode == mode && Screen.width == size.x && Screen.height == size.y)
-            return;
+        if (fullscreen == appliedFullscreen && size == appliedSize) return;
 
+        FullScreenMode mode = fullscreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
         Screen.SetResolution(size.x, size.y, mode);
+
+        appliedFullscreen = fullscreen;
+        appliedSize = size;
     }
 
     private Vector2Int GetTargetSize()
