@@ -14,9 +14,8 @@ public class GameSettingsData
     public int qualityLevel = 3;
 
     public int resolutionScale = 100;
-    public int resolutionIndex = 100;
-    public float reflectionDistance = 200f;
-    public float lodDistance = 200f;
+    public int resolutionIndex = 0;
+    public float lodBias = 1f;
     public int antiAliasing = 1;
     public int shadowLevel = 3;
     public int targetFramerate = 90;
