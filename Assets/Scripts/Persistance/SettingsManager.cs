@@ -1,518 +1,559 @@
 using System;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class SettingsManager : MonoBehaviour
 {
     public static SettingsManager Instance { get; private set; }
 
     [SerializeField] private GameSettingsData currentSettings = new();
-    private string savePath;
 
     [Header("URP Quality Presets")]
     [SerializeField] private UniversalRenderPipelineAsset[] presetAssets;
-
     [SerializeField] private UniversalRenderPipelineAsset customAssetTemplate;
 
-    [SerializeField] private UniversalRenderPipelineAsset runtimeCustomAsset;
+    [Header("Audio")]
+    [SerializeField] private AudioMixer audioMixer;
 
-    [Header("Audio Settings")]
-    [SerializeField] private AudioMixer _audioMixer;
+    [Header("Lighting")]
+    [SerializeField] private string mainLightTag = "MainLight";
 
-    // Getter helpers
+    [Header("Events")]
+    public UnityEvent OnSettingsChanged = new();
+
+    // --- Constants & lookup tables ---
+    private const float LodBiasMin = 0.5f;
+    private const float LodBiasMax = 3f;
+    private const float LodBiasStep = 0.5f;
+
+    private const int ScaleMin = 70;
+    private const int ScaleMax = 150;
+    private const int ScaleStep = 10;
+
+    private const float SaveDelay = 0.5f;
+
+    private static readonly int[] AntiAliasingValues = { 0, 2, 4, 8 };
+    private static readonly string[] AntiAliasingNames = { "OFF", "2X", "4X", "8X" };
+    private static readonly string[] PresetNames = { "Potato", "Low", "Medium", "High", "Ultra" };
+    private static readonly string[] ShadowNames = { "OFF", "Low", "Medium", "High" };
+
+    private struct ShadowProfile
+    {
+        public float distance;
+        public int resolution;
+        public int cascades;
+    }
+
+    private static readonly ShadowProfile[] ShadowProfiles =
+    {
+        new() { distance = 64f,  resolution = 512,  cascades = 1 },
+        new() { distance = 128f, resolution = 512,  cascades = 2 },
+        new() { distance = 256f, resolution = 1024, cascades = 3 },
+        new() { distance = 512f, resolution = 2048, cascades = 4 },
+    };
+
+    // --- Runtime State ---
+    private string savePath;
+    private UniversalRenderPipelineAsset runtimeCustomAsset;
+    private Light mainDirLight;
+    private Resolution[] resolutionOptions;
+
+    private bool saveDirty;
+    private float saveTimer;
+
+    // --- Getters ---
     public GameSettingsData Current => currentSettings;
+    public int PresetCount => presetAssets != null ? presetAssets.Length : 0;
+    public int CustomPresetIndex => PresetCount;
+    public bool IsCustomPreset => currentSettings.qualityLevel >= CustomPresetIndex;
     public int CurrentPresetIndex => currentSettings.qualityLevel;
     public int CurrentResolutionIndex => currentSettings.resolutionIndex;
     public bool IsFullscreen => currentSettings.fullscreen;
+    public int ResolutionScale => currentSettings.resolutionScale;
+    public float LodBias => currentSettings.lodBias;
     public float MasterVolume => currentSettings.masterVolume;
     public float MusicVolume => currentSettings.musicVolume;
     public float SFXVolume => currentSettings.sfxVolume;
     public float VoiceVolume => currentSettings.voiceVolume;
 
-    [Header("Events")]
-    public UnityEvent OnSettingsChanged = new();
-
-    private readonly int[] aaValues = { 0, 2, 4, 8 };
-
-    [Header("Sun/Directional Tag")]
-    [SerializeField] private string mainLightTag = "MainLight";
-
-    private Light _mainDirLight;
+    /// <summary> Labels for the resolution dropdown: "1920 x 1080".</summary>
+    public string[] ResolutionOptions =>
+        resolutionOptions.Select(r => $"{r.width} x {r.height}").ToArray();
 
     #region Unity Methods
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
+        Instance = this;
 
         savePath = Path.Combine(Application.persistentDataPath, "gameSettings.json");
 
-        if (customAssetTemplate != null)
-        {
-            runtimeCustomAsset = Instantiate(customAssetTemplate);
-            runtimeCustomAsset.name = "Runtime Custom URP Asset";
-        }
-        else
-        {
-            Debug.LogError("[Settings Manager] Please assign a Custom Asset Template in the Inspector!");
-        }
-
-        var mainLight = GameObject.FindGameObjectWithTag(mainLightTag);
-        if (mainLight != null)
-        {
-            _mainDirLight = mainLight.GetComponent<Light>();
-            if (_mainDirLight == null || _mainDirLight.type != LightType.Directional)
-            {
-                Debug.LogError($"Tagget object '{mainLight.name}' not a directional light!");
-            }
-        }
-        else
-        {
-            Debug.LogWarning($"No GameObject with tag '{mainLightTag}'. Light overrides might fail.");
-        }
+        BuildResolutionList();
+        CreateRuntimeAsset();
+        CacheMainLight();
 
         LoadSettings();
         ApplyAllSettings();
         OnSettingsChanged.Invoke();
     }
-    #endregion
 
-    #region Structs & Enums
-    public enum SettingType
+    private void OnEnable()
     {
-        QualityPreset,
-        Fullscreen, VSync, Bloom, AntiAliasing, ShadowQuality,
-        FPSLimit, ReflectionDistance, ResolutionScale, LODDistance
-    }
-    #endregion
-
-    #region Auto-Custom Logic
-    /// <summary>
-    /// If on standard preset, change to the custom one.
-    /// Call this inside any specific graphics settings.
-    /// </summary>
-    private void EnsureCustomPreset()
-    {
-        int customIndex = presetAssets != null ? presetAssets.Length : 0;
-
-        if (currentSettings.qualityLevel != customIndex)
-        {
-            currentSettings.qualityLevel = customIndex;
-        }
-    }
-    #endregion
-
-    #region UI Helpers
-    private void CycleFPSLimit(int direction)
-    {
-        int currentIndex = Array.IndexOf(currentSettings.allowedFpsValues, currentSettings.targetFramerate);
-        currentIndex = Mathf.Clamp(currentIndex + direction, 0, currentSettings.allowedFpsValues.Length - 1);
-        SetFPSLimit(currentIndex);
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    public void CycleAntiAliasing()
+    private void OnDisable()
     {
-        SetAntiAliasing(currentSettings.antiAliasing + 1);
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    public void CycleShadowQuality()
+    private void Update()
     {
-        SetShadowQuality((currentSettings.shadowLevel + 1) % 4);
+        if (!saveDirty) return;
+        saveTimer -= Time.unscaledDeltaTime;
+        if (saveTimer <= 0f) FlushSave();
+    }
+
+    private void OnApplicationPause(bool paused) { if (paused) FlushSave(); }
+    private void OnApplicationQuit() => FlushSave();
+    private void OnDestroy() { if (Instance == this) FlushSave(); }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // The directional light is scene-specific, so re-find it after every load
+        CacheMainLight();
+        ApplyGraphicsSettings();
     }
     #endregion
 
-    #region Methods
-    public void SetQualityPreset(int presetIndex)
+    #region Setup Helpers
+    private void BuildResolutionList()
     {
-        // Clamp to allowed preset + 1 for custom
-        int maxIndex = presetAssets != null ? presetAssets.Length : 0;
-        presetIndex = Mathf.Clamp(presetIndex, 0, maxIndex);
+        resolutionOptions = Screen.resolutions
+            .GroupBy(r => (r.width, r.height))
+            .Select(g => g.OrderByDescending(r => r.refreshRateRatio.value).First())
+            .OrderBy(r => r.width)
+            .ThenBy(r => r.height)
+            .ToArray();
 
-        currentSettings.qualityLevel = presetIndex;
-
-        ApplyGraphicsSettings();
-        OnSettingsChanged.Invoke();
-    }
-
-    public void SetQualityPresetFromSlider(float sliderValue)
-    {
-        int presetIndex = Mathf.RoundToInt(sliderValue);
-
-        SetQualityPreset(presetIndex);
-    }
-
-    public void SetFullscreen(bool isFullscreen)
-    {
-        currentSettings.fullscreen = isFullscreen;
-
-        ApplyGraphicsSettings();
-        OnSettingsChanged.Invoke();
-    }
-
-    public void SetVSync(bool enabled)
-    {
-        currentSettings.vSync = enabled;
-
-        ApplyGraphicsSettings();
-        OnSettingsChanged.Invoke();
-    }
-
-    public void SetAntiAliasing(int index)
-    {
-        EnsureCustomPreset();
-        index = ((index % aaValues.Length) + aaValues.Length) % aaValues.Length;
-        currentSettings.antiAliasing = index;
-
-        ApplyGraphicsSettings();
-        OnSettingsChanged.Invoke();
-    }
-
-    public void SetShadowQuality(int index)
-    {
-        EnsureCustomPreset();
-        index = Mathf.Clamp(index, 0, 3);
-        currentSettings.shadowLevel = index;
-
-        ApplyGraphicsSettings();
-        OnSettingsChanged.Invoke();
-    }
-
-    private void SetReflectionDistance(float delta)
-    {
-        EnsureCustomPreset();
-        ChangeFloatSetting(ref currentSettings.reflectionDistance, delta, 100, 2000);
-
-        ApplyGraphicsSettings();
-    }
-
-    public void SetFPSLimit(int index)
-    {
-        if (index >= 0 && index < currentSettings.allowedFpsValues.Length)
+        if (resolutionOptions.Length == 0)
         {
-            int value = currentSettings.allowedFpsValues[index];
-            currentSettings.targetFramerate = value;
-
-            ApplyGraphicsSettings();
+            resolutionOptions = new[] { Screen.currentResolution };
         }
     }
 
-    // Audio Setters
-    public void SetMasterVolume(float volume)
+    private void CreateRuntimeAsset()
     {
-        currentSettings.masterVolume = Mathf.Clamp01(volume);
-
-        ApplyAudioSettings();
-        OnSettingsChanged.Invoke();
-    }
-
-    public void SetMusicVolume(float volume)
-    {
-        currentSettings.musicVolume = Mathf.Clamp01(volume);
-
-        ApplyAudioSettings();
-        OnSettingsChanged.Invoke();
-    }
-
-    public void SetSfxVolume(float volume)
-    {
-        currentSettings.sfxVolume = Mathf.Clamp01(volume);
-
-        ApplyAudioSettings();
-        OnSettingsChanged.Invoke();
-    }
-
-    public void SetVoiceVolume(float volume)
-    {
-        currentSettings.voiceVolume = Mathf.Clamp01(volume);
-
-        ApplyAudioSettings();
-        OnSettingsChanged.Invoke();
-    }
-
-    // Cycles
-
-    public void IncreaseFpsLimit() => CycleFPSLimit(+1);
-    public void DecreaseFpsLimit() => CycleFPSLimit(-1);
-
-    public void IncreaseReflectionDistance() => SetReflectionDistance(+100f);
-    public void DecreaseReflectionDistance() => SetReflectionDistance(-100f);
-
-    public void IncreaseResolutionScale()
-    {
-        EnsureCustomPreset();
-        ChangeIntSetting(ref currentSettings.resolutionScale, 10, 70, 150);
-    }
-    public void DecreaseResolutionScale()
-    {
-        EnsureCustomPreset();
-        ChangeIntSetting(ref currentSettings.resolutionScale, -10, 70, 150);
-    }
-
-    public void IncreaseLodDistance()
-    {
-        EnsureCustomPreset();
-        ChangeFloatSetting(ref currentSettings.lodDistance, 100f, 100f, 1000f);
-    }
-    public void DecreaseLodDistance()
-    {
-        EnsureCustomPreset();
-        ChangeFloatSetting(ref currentSettings.lodDistance, -100f, 100f, 1000f);
-    }
-
-    private void ChangeFloatSetting(ref float field, float delta, float min = float.MinValue, float max = float.MaxValue)
-    {
-        field = Mathf.Clamp(field + delta, min, max);
-
-        ApplyGraphicsSettings();
-    }
-
-    private void ChangeIntSetting(ref int field, int delta, int min, int max)
-    {
-        field = Mathf.Clamp(field + delta, min, max);
-
-        ApplyGraphicsSettings();
-    }
-
-    public void ChangeSetting(SettingType type, ButtonTextUpdater.ButtonMode mode)
-    {
-        var s = currentSettings;
-
-        switch (type)
+        if (customAssetTemplate == null)
         {
-            // ── Toggles ─────────────────────────────────────
-            case SettingType.Fullscreen: SetFullscreen(mode == ButtonTextUpdater.ButtonMode.Toggle ? !s.fullscreen : s.fullscreen); break;
-            case SettingType.VSync: SetVSync(!s.vSync); break;
+            Debug.LogError("[Settings Manager] Assign a Custom Asset Template in the Inspector!");
+            return;
+        }
+        runtimeCustomAsset = Instantiate(customAssetTemplate);
+        runtimeCustomAsset.name = "Runtime Custom URP Asset";
+    }
 
-            // ── Cycle (multiple states) ───────────────────────
-            case SettingType.AntiAliasing: CycleAntiAliasing(); break;
-            case SettingType.ShadowQuality: CycleShadowQuality(); break;
-
-            // ── Numeric + / – ─────────────────────────────────
-            case SettingType.FPSLimit: if (mode == ButtonTextUpdater.ButtonMode.Plus) IncreaseFpsLimit(); else DecreaseFpsLimit(); break;
-            case SettingType.ReflectionDistance: if (mode == ButtonTextUpdater.ButtonMode.Plus) IncreaseReflectionDistance(); else DecreaseReflectionDistance(); break;
-            case SettingType.ResolutionScale: if (mode == ButtonTextUpdater.ButtonMode.Plus) IncreaseResolutionScale(); else DecreaseResolutionScale(); break;
-            case SettingType.LODDistance: if (mode == ButtonTextUpdater.ButtonMode.Plus) IncreaseLodDistance(); else DecreaseLodDistance(); break;
+    private void CacheMainLight()
+    {
+        mainDirLight = null;
+        GameObject go = GameObject.FindGameObjectWithTag(mainLightTag);
+        if (go == null)
+        {
+            Debug.LogWarning($"[Settings Manager] No GameObject with tag '{mainLightTag}'. Shadow overrides won't apply.");
+            return;
         }
 
-        OnSettingsChanged.Invoke(); // Always refresh UI
+        Light light = go.GetComponent<Light>();
+        if (light == null || light.type != LightType.Directional)
+        {
+            Debug.LogError($"[Settings Manager] Tagged object '{go.name}' is not a directional light!");
+            return;
+        }
+        mainDirLight = light;
     }
     #endregion
 
-    private void ApplyAllSettings()
-    {
-        ApplyGraphicsSettings();
-        ApplyAudioSettings();
-    }
-
-    private void ApplyGraphicsSettings()
-    {
-        // Determine which URP Asset to use (Preset vs Custom)
-        bool isCustom = currentSettings.qualityLevel >= (presetAssets != null ? presetAssets.Length : 0);
-        UniversalRenderPipelineAsset activeAsset = isCustom ? runtimeCustomAsset : presetAssets[currentSettings.qualityLevel];
-
-        if (activeAsset != null)
-        {
-            // Apply custom overrides to the custom asset
-            if (isCustom)
-            {
-                ApplyCustomURPOverrides(activeAsset);
-            }
-
-            // Sync the Unity graphics level if using preset
-            if (!isCustom)
-            {
-                QualitySettings.SetQualityLevel(currentSettings.qualityLevel, true);
-            }
-
-            // Set URP Asset
-            QualitySettings.renderPipeline = activeAsset;
-            GraphicsSettings.defaultRenderPipeline = activeAsset;
-        }
-
-        // Apply global settings that do not concern the URP Asset
-        Application.targetFrameRate = currentSettings.targetFramerate;
-        Screen.fullScreen = currentSettings.fullscreen;
-        Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-        QualitySettings.vSyncCount = currentSettings.vSync ? 1 : 0;
-        QualitySettings.lodBias = currentSettings.lodDistance / 1000f;
-
-        SaveSettings();
-    }
-
-    private void ApplyCustomURPOverrides(UniversalRenderPipelineAsset urpAsset)
-    {
-        // Resolution scale
-        urpAsset.renderScale = currentSettings.resolutionScale / 100f;
-
-        // Anti Aliasing
-        int msaaSamples = aaValues[currentSettings.antiAliasing % aaValues.Length];
-        urpAsset.msaaSampleCount = msaaSamples <= 0 ? 1 : msaaSamples;
-
-        switch (currentSettings.shadowLevel)
-        {
-            case 0:
-                urpAsset.shadowCascadeCount = 1;
-                urpAsset.shadowDistance = 64f;
-                break;
-            case 1:
-                urpAsset.shadowDistance = 128f;
-                urpAsset.mainLightShadowmapResolution = 512;
-                urpAsset.additionalLightsShadowmapResolution = 512;
-                urpAsset.shadowCascadeCount = 2;
-                break;
-            case 2:
-                urpAsset.shadowDistance = 256f;
-                urpAsset.mainLightShadowmapResolution = 1024;
-                urpAsset.additionalLightsShadowmapResolution = 1024;
-                urpAsset.shadowCascadeCount = 3;
-                break;
-            case 3:
-                urpAsset.shadowDistance = 512f;
-                urpAsset.mainLightShadowmapResolution = 2048;
-                urpAsset.additionalLightsShadowmapResolution = 2048;
-                urpAsset.shadowCascadeCount = 4;
-                break;
-            default:
-                urpAsset.shadowDistance = 128f;
-                urpAsset.mainLightShadowmapResolution = 1024;
-                urpAsset.additionalLightsShadowmapResolution = 1024;
-                urpAsset.shadowCascadeCount = 3;
-                break;
-        }
-
-        // Change Light shadows separately if it's not missing
-        if (_mainDirLight != null)
-        {
-            _mainDirLight.shadows = currentSettings.shadowLevel == 0 ? LightShadows.None : LightShadows.Soft;
-        }
-    }
-
-    private void ApplyAudioSettings()
-    {
-        if (_audioMixer != null)
-        {
-            _audioMixer.SetFloat("MasterVolume", Mathf.Log10(Mathf.Clamp(currentSettings.masterVolume, 0.0001f, 1f)) * 20);
-            _audioMixer.SetFloat("MusicVolume", Mathf.Log10(Mathf.Clamp(currentSettings.musicVolume, 0.0001f, 1f)) * 20);
-            _audioMixer.SetFloat("SFXVolume", Mathf.Log10(Mathf.Clamp(currentSettings.sfxVolume, 0.0001f, 1f)) * 20);
-            _audioMixer.SetFloat("VoiceVolume", Mathf.Log10(Mathf.Clamp(currentSettings.voiceVolume, 0.0001f, 1f)) * 20);
-        }
-
-        SaveSettings();
-    }
-
+    #region Save / Load
     public void LoadSettings()
     {
         if (File.Exists(savePath))
         {
             try
             {
-                string json = File.ReadAllText(savePath);
-                JsonUtility.FromJsonOverwrite(json, currentSettings);
+                currentSettings = NewDefaults();
+                JsonUtility.FromJsonOverwrite(File.ReadAllText(savePath), currentSettings);
             }
             catch (Exception ex)
             {
-                Debug.LogError("Failed to load settings: " + ex.Message + "\nUsing defaults.");
-                SetDefaultSettings();
+                Debug.LogError($"[Settings Manager] Failed to load settings: {ex.Message}\nUsing defaults.");
+                currentSettings = NewDefaults();
             }
         }
         else
         {
-            SetDefaultSettings();
+            currentSettings = NewDefaults();
+            SaveSettings();
         }
+
+        SanitizeSettings();
     }
 
     public void SaveSettings()
     {
         try
         {
-            string json = JsonUtility.ToJson(currentSettings, true);
-            File.WriteAllText(savePath, json);
+            File.WriteAllText(savePath, JsonUtility.ToJson(currentSettings, true));
+            saveDirty = true;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Debug.LogError("Failed to save settings: " + e.Message);
+            Debug.LogError($"[Settings Manager] Failed to save settings: {ex.Message}");
         }
     }
 
     public void SetDefaultSettings()
     {
-        currentSettings = new GameSettingsData();
-
+        currentSettings = NewDefaults();
+        ApplyAllSettings();
         SaveSettings();
         OnSettingsChanged.Invoke();
     }
 
-    #region Public UI Access
-    public string GetDisplayText(SettingType type, string[] customCycleTexts = null)
+    public void ResetToDefaults() => SetDefaultSettings();
+
+    private GameSettingsData NewDefaults()
     {
-        var s = currentSettings;
+        GameSettingsData s = new GameSettingsData();
+        s.resolutionIndex = FindCurrentResolutionIndex();
+        return s;
+    }
+
+    private void SanitizeSettings()
+    {
+        GameSettingsData s = currentSettings;
+        s.qualityLevel = Mathf.Clamp(s.qualityLevel, 0, CustomPresetIndex);
+        s.antiAliasing = Wrap(s.antiAliasing, AntiAliasingValues.Length);
+        s.shadowLevel = Mathf.Clamp(s.shadowLevel, 0, ShadowProfiles.Length - 1);
+        s.resolutionScale = Mathf.Clamp(s.resolutionScale, ScaleMin, ScaleMax);
+        s.resolutionIndex = Mathf.Clamp(s.resolutionIndex, 0, resolutionOptions.Length - 1);
+        s.lodBias = SnapLodBias(s.lodBias);
+        s.masterVolume = Mathf.Clamp01(s.masterVolume);
+        s.musicVolume = Mathf.Clamp01(s.musicVolume);
+        s.sfxVolume = Mathf.Clamp01(s.sfxVolume);
+        s.voiceVolume = Mathf.Clamp01(s.voiceVolume);
+    }
+
+    // Only mark as dirty and save later to not save to disk every time a slider is moved
+    private void MarkDirty()
+    {
+        saveDirty = true;
+        saveTimer = SaveDelay;
+        OnSettingsChanged.Invoke();
+    }
+
+    private void FlushSave()
+    {
+        if (saveDirty) SaveSettings();
+    }
+    #endregion
+
+    #region Commit Helpers
+    private void CommitGraphics()
+    {
+        ApplyGraphicsSettings();
+        MarkDirty();
+    }
+
+    private void CommitAudio()
+    {
+        ApplyAudioSettings();
+        MarkDirty();
+    }
+
+    private void ApplyAllSettings()
+    {
+        ApplyGraphicsSettings();
+        ApplyAudioSettings();
+    }
+    #endregion
+
+    #region Quality / Graphics Setters
+    public void SetQualityPreset(int index)
+    {
+        currentSettings.qualityLevel = Mathf.Clamp(index, 0, CustomPresetIndex);
+        CommitGraphics();
+    }
+
+    public void SetQualityPresetFromSlider(float sliderValue) =>
+        SetQualityPreset(Mathf.RoundToInt(sliderValue));
+
+    public void SetFullscreen(bool on)
+    {
+        currentSettings.fullscreen = on;
+        CommitGraphics();
+    }
+
+    public void ToggleFullscreen() => SetFullscreen(!currentSettings.fullscreen);
+
+    public void SetVSync(bool on)
+    {
+        currentSettings.vSync = on;
+        CommitGraphics();
+    }
+
+    public void SetAntiAliasing(int index)
+    {
+        EnsureCustomPreset();
+        currentSettings.antiAliasing = Wrap(index, AntiAliasingValues.Length);
+        CommitGraphics();
+    }
+
+    public void CycleAntiAliasing() => SetAntiAliasing(currentSettings.antiAliasing + 1);
+
+    public void SetShadowQuality(int index)
+    {
+        EnsureCustomPreset();
+        currentSettings.shadowLevel = Mathf.Clamp(index, 0, ShadowProfiles.Length - 1);
+        CommitGraphics();
+    }
+
+    public void CycleShadowQuality() =>
+        SetShadowQuality((currentSettings.shadowLevel + 1) % ShadowProfiles.Length);
+
+    public void SetFPSLimit(int index)
+    {
+        int[] values = currentSettings.allowedFpsValues;
+        if (values == null || index < 0 || index >= values.Length) return;
+
+        currentSettings.targetFramerate = values[index];
+        CommitGraphics();
+    }
+
+    public void IncreaseFpsLimit() => CycleFPSLimit(+1);
+    public void DecreaseFpsLimit() => CycleFPSLimit(-1);
+
+    private void CycleFPSLimit(int direction)
+    {
+        int[] values = currentSettings.allowedFpsValues;
+        if (values == null || values.Length == 0) return;
+
+        int idx = Array.IndexOf(values, currentSettings.targetFramerate);
+        SetFPSLimit(Mathf.Clamp(idx + direction, 0, values.Length - 1));
+    }
+
+    public void SetResolutionScale(int percent)
+    {
+        EnsureCustomPreset();
+        currentSettings.resolutionScale = Mathf.Clamp(percent, ScaleMin, ScaleMax);
+        CommitGraphics();
+    }
+
+    public void IncreaseResolutionScale() => SetResolutionScale(currentSettings.resolutionScale + ScaleStep);
+    public void DecreaseResolutionScale() => SetResolutionScale(currentSettings.resolutionScale - ScaleStep);
+
+    public void SetResolutionIndex(int index)
+    {
+        currentSettings.resolutionIndex = Mathf.Clamp(index, 0, resolutionOptions.Length - 1);
+        CommitGraphics();
+    }
+
+    public void IncreaseResolution() => SetResolutionIndex(currentSettings.resolutionIndex + 1);
+    public void DecreaseResolution() => SetResolutionIndex(currentSettings.resolutionIndex - 1);
+
+    public void SetLodBias(float value)
+    {
+        currentSettings.lodBias = SnapLodBias(value);
+        CommitGraphics();
+    }
+
+    public void IncreaseLodBias() => SetLodBias(currentSettings.lodBias + LodBiasStep);
+    public void DecreaseLodBias() => SetLodBias(currentSettings.lodBias - LodBiasStep);
+    #endregion
+
+    #region Audio Setters
+    public void SetMasterVolume(float volume) { currentSettings.masterVolume = Mathf.Clamp01(volume); CommitAudio(); }
+    public void SetMusicVolume(float volume) { currentSettings.musicVolume = Mathf.Clamp01(volume); CommitAudio(); }
+    public void SetSfxVolume(float volume) { currentSettings.sfxVolume = Mathf.Clamp01(volume); CommitAudio(); }
+    public void SetVoiceVolume(float volume) { currentSettings.voiceVolume = Mathf.Clamp01(volume); CommitAudio(); }
+    #endregion
+
+    #region Button Dispatcher
+    public void ChangeSetting(SettingType type, ButtonTextUpdater.ButtonMode mode)
+    {
+        bool plus = mode == ButtonTextUpdater.ButtonMode.Plus;
+
         switch (type)
         {
-            case SettingType.QualityPreset: return ReturnQualityLevel();
+            case SettingType.Fullscreen:
+                if (mode == ButtonTextUpdater.ButtonMode.Toggle) ToggleFullscreen();
+                break;
+            case SettingType.VSync: SetVSync(!currentSettings.vSync); break;
+            case SettingType.AntiAliasing: CycleAntiAliasing(); break;
+            case SettingType.ShadowQuality: CycleShadowQuality(); break;
+            case SettingType.FPSLimit: if (plus) IncreaseFpsLimit(); else DecreaseFpsLimit(); break;
+            case SettingType.ResolutionScale: if (plus) IncreaseResolutionScale(); else DecreaseResolutionScale(); break;
+            case SettingType.Resolution: if (plus) IncreaseResolution(); else DecreaseResolution(); break;
+            case SettingType.LODBias: if (plus) IncreaseLodBias(); else DecreaseLodBias(); break;
+        }
+
+        OnSettingsChanged.Invoke();
+    }
+    #endregion
+
+    #region Apply to Engine
+    private void ApplyGraphicsSettings()
+    {
+        if (IsCustomPreset)
+        {
+            if (runtimeCustomAsset != null)
+            {
+                ApplyCustomURPOverrides(runtimeCustomAsset);
+                SetActivePipeline(runtimeCustomAsset);
+            }
+        }
+        else
+        {
+            QualitySettings.SetQualityLevel(currentSettings.qualityLevel, true);
+
+            UniversalRenderPipelineAsset preset = presetAssets[currentSettings.qualityLevel];
+            if (preset != null) SetActivePipeline(preset);
+        }
+
+        QualitySettings.vSyncCount = currentSettings.vSync ? 1 : 0;
+        QualitySettings.lodBias = currentSettings.lodBias;
+        Application.targetFrameRate = currentSettings.targetFramerate;
+
+        ApplyWindowMode();
+    }
+
+    private void SetActivePipeline(UniversalRenderPipelineAsset asset)
+    {
+        // Reassigning the pipeline is expensive, so only do it when it actually changes
+        if (QualitySettings.renderPipeline == asset) return;
+
+        QualitySettings.renderPipeline = asset;
+        GraphicsSettings.defaultRenderPipeline = asset;
+    }
+
+    private void ApplyCustomURPOverrides(UniversalRenderPipelineAsset urp)
+    {
+        urp.renderScale = currentSettings.resolutionScale / 100f;
+        urp.msaaSampleCount = Mathf.Max(1, AntiAliasingValues[currentSettings.antiAliasing]);
+
+        ShadowProfile profile = ShadowProfiles[currentSettings.shadowLevel];
+        urp.shadowDistance = profile.distance;
+        urp.shadowCascadeCount = profile.cascades;
+        urp.mainLightShadowmapResolution = profile.resolution;
+        urp.additionalLightsShadowmapResolution = profile.resolution;
+
+        if (mainDirLight != null)
+        {
+            mainDirLight.shadows = currentSettings.shadowLevel == 0 ? LightShadows.None : LightShadows.Soft;
+        }
+    }
+
+    private void ApplyWindowMode()
+    {
+        bool fullscreen = currentSettings.fullscreen;
+        FullScreenMode mode = fullscreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
+        Vector2Int size = GetTargetSize();
+
+        if (Screen.fullScreenMode == mode && Screen.width == size.x && Screen.height == size.y)
+            return;
+
+        Screen.SetResolution(size.x, size.y, mode);
+    }
+
+    private Vector2Int GetTargetSize()
+    {
+        int i = Mathf.Clamp(currentSettings.resolutionIndex, 0, resolutionOptions.Length - 1);
+        Resolution r = resolutionOptions[i];
+        Vector2Int size = new Vector2Int(r.width, r.height);
+
+        if (!currentSettings.fullscreen)
+        {
+            Display display = Display.main;
+            size.x = Mathf.Min(size.x, display.systemWidth);
+            size.y = Mathf.Min(size.y, display.systemHeight);
+        }
+        return size;
+    }
+
+    private void ApplyAudioSettings()
+    {
+        if (audioMixer == null) return;
+
+        SetMixerVolume("MasterVolume", currentSettings.masterVolume);
+        SetMixerVolume("MusicVolume", currentSettings.musicVolume);
+        SetMixerVolume("SFXVolume", currentSettings.sfxVolume);
+        SetMixerVolume("VoiceVolume", currentSettings.voiceVolume);
+    }
+
+    private void SetMixerVolume(string param, float linear) =>
+        audioMixer.SetFloat(param, Mathf.Log10(Mathf.Max(linear, 0.0001f)) * 20);
+    #endregion
+
+    #region Helpers
+    private void EnsureCustomPreset()
+    {
+        if (!IsCustomPreset) currentSettings.qualityLevel = CustomPresetIndex;
+    }
+
+    private int FindCurrentResolutionIndex()
+    {
+        Resolution curr = Screen.currentResolution;
+        int idx = Array.FindIndex(resolutionOptions, r => r.width == curr.width && r.height == curr.height);
+        return idx >= 0 ? idx : resolutionOptions.Length - 1;
+    }
+
+    private static float SnapLodBias(float value) =>
+        Mathf.Clamp(Mathf.Round(value / LodBiasStep) * LodBiasStep, LodBiasMin, LodBiasMax);
+
+    private static int Wrap(int value, int count) => ((value % count) + count) % count;
+    #endregion
+
+    #region Text Display
+    public string GetDisplayText(SettingType type, string[] customCycleTexts = null)
+    {
+        GameSettingsData s = currentSettings;
+        switch (type)
+        {
+            case SettingType.QualityPreset:
+                return IsCustomPreset ? "Custom" : PresetNames[Mathf.Clamp(s.qualityLevel, 0, PresetNames.Length - 1)];
             case SettingType.Fullscreen: return s.fullscreen ? "Fullscreen" : "Windowed";
             case SettingType.VSync: return s.vSync ? "Enabled" : "Disabled";
-            case SettingType.ShadowQuality: return ReturnShadowLevel();
-            case SettingType.AntiAliasing: return ReturnAntiAliasingLevel();
+            case SettingType.Bloom:
+            case SettingType.AntiAliasing: return AntiAliasingNames[s.antiAliasing];
+            case SettingType.ShadowQuality: return ShadowNames[s.shadowLevel];
             case SettingType.FPSLimit: return s.targetFramerate == -1 ? "Unlimited" : s.targetFramerate.ToString();
-            case SettingType.ResolutionScale: return s.resolutionScale.ToString();
-            default: return "meow";
-        }
-    }
-
-    string ReturnQualityLevel()
-    {
-        switch (currentSettings.qualityLevel)
-        {
-            case 0: return "Potato";
-            case 1: return "Low";
-            case 2: return "Medium";
-            case 3: return "High";
-            case 4: return "Ultra";
-            case 5: return "Custom";
-            default: return "meow";
-        }
-    }
-
-    string ReturnShadowLevel()
-    {
-        switch (currentSettings.shadowLevel)
-        {
-            case 0: return "OFF";
-            case 1: return "Low";
-            case 2: return "Medium";
-            case 3: return "High";
-            default: return "meow";
-        }
-    }
-
-    string ReturnAntiAliasingLevel()
-    {
-        switch (currentSettings.antiAliasing)
-        {
-            case 0: return "OFF";
-            case 1: return "2X";
-            case 2: return "4X";
-            case 3: return "8X";
-            default: return "meow";
+            case SettingType.ResolutionScale: return $"{s.resolutionScale}%";
+            case SettingType.LODBias: return s.lodBias.ToString("0.#", CultureInfo.InvariantCulture);
+            case SettingType.Resolution:
+                Resolution r = resolutionOptions[s.resolutionIndex];
+                return $"{r.width} x {r.height}";
+            default: return "Unknown";
         }
     }
     #endregion
 
-    public void ResetToDefaults()
+    #region Enums
+    public enum SettingType
     {
-        SetDefaultSettings();
-        ApplyAllSettings();
-        SaveSettings();
+        QualityPreset,
+        Fullscreen, VSync, Bloom, AntiAliasing, ShadowQuality,
+        FPSLimit, ResolutionScale, LODBias,
+        Resolution
     }
+    #endregion
 }
