@@ -4,50 +4,61 @@ using UnityEngine.UI;
 
 public class ButtonTextUpdater : MonoBehaviour
 {
-    [Header("What setting does this button control?")]
-    public SettingsManager.SettingType setting;
-
-    [Header("Button Behavior")]
-    public ButtonMode mode = ButtonMode.Toggle; // Toggle = ON/OFF, Cycle = next state, Plus/Minus = numeric
-
     public enum ButtonMode { Toggle, CycleNext, CyclePrevious, Plus, Minus }
 
+    [Header("Setting")]
+    [SerializeField] private SettingsManager.SettingType setting;
+
+    [Header("Behavior")]
+    [Tooltip("Toggle/Cycle for on/off or multi-state. Plus/Minus for numeric steps")]
+    [SerializeField] private ButtonMode mode = ButtonMode.Toggle;
+
     [Header("Display")]
-    public TextMeshProUGUI displayText;
-    public string[] cycleTexts;         // e.g. "Off", "2x", "4x", "8x" for AA
-    public string suffix = "";          // e.g. "%", " m", " fps"
+    [SerializeField] private TMP_Text displayText;
 
     private Button button;
+    private SettingsManager settings;
 
     private void Awake()
     {
         button = GetComponent<Button>();
+
         if (displayText == null)
-            displayText = GetComponentInChildren<TextMeshProUGUI>();
+            displayText = GetComponentInChildren<TMP_Text>();
+
+        button.onClick.AddListener(OnClick);
     }
 
     private void OnEnable()
     {
-        button.onClick.AddListener(OnClick);
-        SettingsManager.Instance.OnSettingsChanged.AddListener(UpdateDisplay);
-        UpdateDisplay();
+        settings = SettingsManager.Instance;
+        settings.OnSettingsChanged.AddListener(Refresh);
+        Refresh();
     }
 
     private void OnDisable()
     {
+        if (settings != null)
+        {
+            settings.OnSettingsChanged.RemoveListener(Refresh);
+        }
+    }
+
+    private void OnDestroy()
+    {
         button.onClick.RemoveListener(OnClick);
-        SettingsManager.Instance.OnSettingsChanged.RemoveListener(UpdateDisplay);
     }
 
     void OnClick()
     {
-        SettingsManager.Instance.ChangeSetting(setting, mode);
+        settings.ChangeSetting(setting, mode);
     }
 
-    void UpdateDisplay()
+    private void Refresh()
     {
-        string text = SettingsManager.Instance.GetDisplayText(setting, cycleTexts);
         if (displayText != null)
-            displayText.text = text + suffix;
+        {
+            displayText.text = settings.GetDisplayText(setting);
+        }
     }
 }

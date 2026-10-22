@@ -1,44 +1,53 @@
-
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Slider))]
 public class QualitySliderSync : MonoBehaviour
 {
-    private Slider _slider;
+    [SerializeField] private TMP_Text presetLabel;
 
-    [SerializeField] private TMP_Text _presetLabel;
+    private Slider slider;
+    private SettingsManager settings;
 
     private void Awake()
     {
-        _slider = GetComponent<Slider>();
+        slider = GetComponent<Slider>();
+        slider.onValueChanged.AddListener(OnSliderChanged);
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        SettingsManager.Instance.OnSettingsChanged.AddListener(UpdateSliderUI);
-        UpdateSliderUI();
+        settings = SettingsManager.Instance;
+        settings.OnSettingsChanged.AddListener(Refresh);
+        Refresh();
     }
 
-    private void UpdateSliderUI()
+    private void OnDisable()
     {
-        _slider.onValueChanged.RemoveAllListeners();
-
-        _slider.value = SettingsManager.Instance.CurrentPresetIndex;
-
-        if (_presetLabel != null)
+        if (settings != null)
         {
-            _presetLabel.text = SettingsManager.Instance.GetDisplayText(SettingsManager.SettingType.QualityPreset);
+            settings.OnSettingsChanged.RemoveListener(Refresh);
         }
-
-        _slider.onValueChanged.AddListener(SettingsManager.Instance.SetQualityPresetFromSlider);
     }
 
     private void OnDestroy()
     {
-        if(SettingsManager.Instance != null)
+        slider.onValueChanged.RemoveListener(OnSliderChanged);
+    }
+
+    private void OnSliderChanged(float value)
+    {
+        settings.SetQualityPresetFromSlider(value);
+    }
+
+    private void Refresh()
+    {
+        slider.SetValueWithoutNotify(settings.CurrentPresetIndex);
+
+        if (presetLabel != null)
         {
-            SettingsManager.Instance.OnSettingsChanged.RemoveListener(UpdateSliderUI);
+            presetLabel.text = settings.GetDisplayText(SettingsManager.SettingType.QualityPreset);
         }
     }
 }
