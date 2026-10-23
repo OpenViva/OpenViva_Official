@@ -47,9 +47,9 @@ namespace Viva.CharacterFramework
             None = 0,
             Wave,
             Poke,
-            Headpat,
+            HeadPat,
             Hug,
-            HoldingHands, // Refuse this for now
+            HoldHands, // Refuse this for now
             Follow,
             GoToLocation,
             Gift,
@@ -90,22 +90,24 @@ namespace Viva.CharacterFramework
 
         public enum InteractionResult
         {
-            /// <summary>
-            /// Invalid target, impossible task or something else
-            /// </summary>
+            /// <summary>Invalid target, impossible task or something else</summary>
             Rejected,
-            /// <summary>
-            /// Valid interaction but no effect
-            /// </summary>
+            /// <summary>Valid interaction but no effect</summary>
             Ignored,
-            /// <summary>
-            /// Accepted and reacted
-            /// </summary>
+            /// <summary>Accepted and reacted</summary>
             Accepted,
-            /// <summary>
-            /// Understood but refused
-            /// </summary>
+            /// <summary>Understood but refused</summary>
             Refused,
+        }
+
+        public enum RepeatMode
+        {
+            /// <summary>No repeat rules</summary>
+            None,
+            /// <summary>Harmful interactions. Uses beyond the allowed count inside the window cost extra affinity</summary>
+            HarmfulPenalty,
+            /// <summary>Positive interactions. Each repeat gives less, then the interaction rests for a cooldown</summary>
+            DiminishingGain
         }
 
         public enum HandSide
@@ -195,16 +197,15 @@ namespace Viva.CharacterFramework
                         return BodyRegion.Other;
                 }
             }
-        }
+            public static BodyRegionMask ToMask(BodyRegion region)
+            {
+                return (BodyRegionMask)(1 << (int)region);
+            }
 
-        public static BodyRegionMask ToMask(BodyRegion region)
-        {
-            return (BodyRegionMask)(1 << (int)region);
-        }
-
-        public static bool Contains(BodyRegionMask mask, BodyRegion region)
-        {
-            return (mask & ToMask(region)) != 0;
+            public static bool Contains(BodyRegionMask mask, BodyRegion region)
+            {
+                return (mask & ToMask(region)) != 0;
+            }
         }
     }
 }
