@@ -2,11 +2,13 @@ using System.Collections;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
+using UnityEngine.XR.Interaction.Toolkit.UI;
 using UnityEngine.XR.Management;
 
 public class PlayerSwitchInputMode : MonoBehaviour
@@ -18,6 +20,8 @@ public class PlayerSwitchInputMode : MonoBehaviour
     [Header("KB Components:")]
     [SerializeField] private PlayerController _playerController;
 
+    private InputSystemUIInputModule _UIInputModule;
+
     [Header("VR Components:")]
     [SerializeField] private InputActionManager _XRInputActionMananger;
     [SerializeField] private XRInteractionManager _XRInteractionManager;
@@ -26,15 +30,17 @@ public class PlayerSwitchInputMode : MonoBehaviour
     [SerializeField] private GameObject _leftWristVRObjects;
     [SerializeField] private GameObject _rightWristVRObjects;
 
+    private XRUIInputModule _XRUIInputModule;
     private XROrigin _XROrigin;
     private XRInputModalityManager _XRInputModalityManager;
     private ControllerInputActionManager _controllerInputActionManager;
     private XRInteractionGroup _XRInteractionGroup;
 
-    [Header("Tracked GameObjects:")]
+    [Header("Universal GameObjects:")]
     [SerializeField] private GameObject _camera;
     [SerializeField] private GameObject _leftWrist;
     [SerializeField] private GameObject _rightWrist;
+    [SerializeField] private GameObject _eventSystem;
 
     private TrackedPoseDriver _cameraTPD;
     private TrackedPoseDriver _leftWristTPD;
@@ -55,6 +61,9 @@ public class PlayerSwitchInputMode : MonoBehaviour
 
     private void Awake()
     {
+        _UIInputModule = _eventSystem.GetComponent<InputSystemUIInputModule>();
+
+        _XRUIInputModule = _eventSystem.GetComponent<XRUIInputModule>();
         _XROrigin = GetComponent<XROrigin>();
         _XRInputModalityManager = GetComponent<XRInputModalityManager>();
         _controllerInputActionManager = _rightWrist.GetComponent<ControllerInputActionManager>();
@@ -115,8 +124,10 @@ public class PlayerSwitchInputMode : MonoBehaviour
     {
         // KB Components
         _playerController.enabled = !_VRActive;
+        _UIInputModule.enabled = !_VRActive;
 
         // VR Components
+        _XRUIInputModule.enabled = _VRActive;
         _XROrigin.enabled = _VRActive;
         _XRInputModalityManager.enabled = _VRActive;
         _XRInputModalityManager.enabled = _VRActive;
