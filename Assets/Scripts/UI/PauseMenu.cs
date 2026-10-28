@@ -89,6 +89,12 @@ public class PauseMenu : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        if (!Globals.isDesktopMode)
+        {
+            PlayerManager.Instance.VRLeftInteractor.enableFarCasting = true;
+            PlayerManager.Instance.VRRightInteractor.enableFarCasting = true;
+        }
     }
 
     void OnExitPauseInput()
@@ -99,6 +105,12 @@ public class PauseMenu : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        if (!Globals.isDesktopMode)
+        {
+            PlayerManager.Instance.VRLeftInteractor.enableFarCasting = false;
+            PlayerManager.Instance.VRRightInteractor.enableFarCasting = false;
+        }
     }
     #endregion
 

@@ -1593,6 +1593,8 @@ MonoBehaviour:
   RightHandOccupied: 0
   VRLeftHaptics: {fileID: 1585075419162113755}
   VRRightHaptics: {fileID: 4086725110861898489}
+  VRLeftInteractor: {fileID: 8112912660784801626}
+  VRRightInteractor: {fileID: 7026624312503529517}
 --- !u!114 &7823025331914358110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1618,6 +1620,7 @@ MonoBehaviour:
   _camera: {fileID: 8081012412789662539}
   _leftWrist: {fileID: 8132507841553996816}
   _rightWrist: {fileID: 3869457357643921461}
+  _eventSystem: {fileID: 0}
   _VRActive: 0
 --- !u!114 &557060222485129578
 MonoBehaviour:
@@ -2099,7 +2102,7 @@ MonoBehaviour:
   m_AimTargetObject: {fileID: 0}
   m_PhysicsLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 128
   m_PhysicsTriggerInteraction: 1
   m_CastRadius: 0.1
 --- !u!114 &2858958010444250935
@@ -2121,7 +2124,7 @@ MonoBehaviour:
   m_AimTargetObject: {fileID: 7026624312503529517}
   m_RaycastMask:
     serializedVersion: 2
-    m_Bits: 2147483681
+    m_Bits: 2147483776
   m_RaycastTriggerInteraction: 1
   m_RaycastSnapVolumeInteraction: 1
   m_RaycastUIDocumentTriggerInteraction: 1
@@ -4857,8 +4860,7 @@ MonoBehaviour:
     qualityLevel: 3
     resolutionScale: 100
     resolutionIndex: 0
-    reflectionDistance: 100
-    lodDistance: 200
+    lodBias: 1
     antiAliasing: 3
     shadowLevel: 3
     targetFramerate: 90
@@ -4874,12 +4876,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9fa850a7c16e86f4e9120adecb80c482, type: 2}
   - {fileID: 11400000, guid: 32057d9a59cc4064a9d60c5f74606254, type: 2}
   customAssetTemplate: {fileID: 11400000, guid: a826ec4f74c48444ab77fdc5ed6d7b1e, type: 2}
-  runtimeCustomAsset: {fileID: 0}
-  _audioMixer: {fileID: 24100000, guid: b0fb938c0102c7f45858aa76cf10e36e, type: 2}
+  audioMixer: {fileID: 0}
+  mainLightTag: MainLight
   OnSettingsChanged:
     m_PersistentCalls:
       m_Calls: []
-  mainLightTag: MainLight
 --- !u!1 &6065233365435563000
 GameObject:
   m_ObjectHideFlags: 0
@@ -5456,7 +5457,7 @@ MonoBehaviour:
   m_AimTargetObject: {fileID: 0}
   m_PhysicsLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 128
   m_PhysicsTriggerInteraction: 1
   m_CastRadius: 0.1
 --- !u!114 &2882857223496971854
@@ -5478,7 +5479,7 @@ MonoBehaviour:
   m_AimTargetObject: {fileID: 8112912660784801626}
   m_RaycastMask:
     serializedVersion: 2
-    m_Bits: 2147483681
+    m_Bits: 2147483776
   m_RaycastTriggerInteraction: 1
   m_RaycastSnapVolumeInteraction: 1
   m_RaycastUIDocumentTriggerInteraction: 1

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 // Class that manages the player
 [RequireComponent(typeof(Player))]
@@ -23,8 +24,10 @@ public class PlayerManager : MonoBehaviour
     public bool LeftHandOccupied = false;
     public bool RightHandOccupied = false;
 
-    [SerializeField] public HapticImpulsePlayer VRLeftHaptics;
-    [SerializeField] public HapticImpulsePlayer VRRightHaptics;
+    public HapticImpulsePlayer VRLeftHaptics;
+    public HapticImpulsePlayer VRRightHaptics;
+    public NearFarInteractor VRLeftInteractor;
+    public NearFarInteractor VRRightInteractor;
 
     private void Awake()
     {
