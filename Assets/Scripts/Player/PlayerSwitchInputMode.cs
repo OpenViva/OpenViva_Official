@@ -33,8 +33,10 @@ public class PlayerSwitchInputMode : MonoBehaviour
     private XRUIInputModule _XRUIInputModule;
     private XROrigin _XROrigin;
     private XRInputModalityManager _XRInputModalityManager;
-    private ControllerInputActionManager _controllerInputActionManager;
-    private XRInteractionGroup _XRInteractionGroup;
+    private ControllerInputActionManager _leftControllerInputActionManager;
+    private ControllerInputActionManager _rightControllerInputActionManager;
+    private XRInteractionGroup _leftXRInteractionGroup;
+    private XRInteractionGroup _rightXRInteractionGroup;
 
     [Header("Universal GameObjects:")]
     [SerializeField] private GameObject _camera;
@@ -66,8 +68,11 @@ public class PlayerSwitchInputMode : MonoBehaviour
         _XRUIInputModule = _eventSystem.GetComponent<XRUIInputModule>();
         _XROrigin = GetComponent<XROrigin>();
         _XRInputModalityManager = GetComponent<XRInputModalityManager>();
-        _controllerInputActionManager = _rightWrist.GetComponent<ControllerInputActionManager>();
-        _XRInteractionGroup = _rightWrist.GetComponent<XRInteractionGroup>();
+
+        _leftControllerInputActionManager = _leftWrist.GetComponent<ControllerInputActionManager>();
+        _rightControllerInputActionManager = _rightWrist.GetComponent<ControllerInputActionManager>();
+        _leftXRInteractionGroup = _leftWrist.GetComponent<XRInteractionGroup>();
+        _rightXRInteractionGroup = _rightWrist.GetComponent<XRInteractionGroup>();
 
         _cameraTPD = _camera.GetComponent<TrackedPoseDriver>();
         _leftWristTPD = _leftWrist.GetComponent<TrackedPoseDriver>();
@@ -133,8 +138,11 @@ public class PlayerSwitchInputMode : MonoBehaviour
         _XRInputModalityManager.enabled = _VRActive;
         _XRInteractionManager.enabled = _VRActive;
         _teleportStablizedOrigin.enabled = _VRActive;
-        _controllerInputActionManager.enabled = _VRActive;
-        _XRInteractionGroup.enabled = _VRActive;
+
+        _leftControllerInputActionManager.enabled = _VRActive;
+        _rightControllerInputActionManager.enabled = _VRActive;
+        _leftXRInteractionGroup.enabled = _VRActive;
+        _rightXRInteractionGroup.enabled = _VRActive;
 
         _VRLocomotion.SetActive(_VRActive);
         _leftWristVRObjects.SetActive(_VRActive);
