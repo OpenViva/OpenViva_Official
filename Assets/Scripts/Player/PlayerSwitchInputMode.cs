@@ -25,6 +25,7 @@ public class PlayerSwitchInputMode : MonoBehaviour
     [Header("VR Components:")]
     [SerializeField] private InputActionManager _XRInputActionMananger;
     [SerializeField] private XRInteractionManager _XRInteractionManager;
+    [SerializeField] private TrackedPoseDriver _cameraTPD;
     [SerializeField] private XRTransformStabilizer _teleportStablizedOrigin;
     [SerializeField] private GameObject _VRLocomotion;
     [SerializeField] private GameObject _leftWristVRObjects;
@@ -39,12 +40,10 @@ public class PlayerSwitchInputMode : MonoBehaviour
     private XRInteractionGroup _rightXRInteractionGroup;
 
     [Header("Universal GameObjects:")]
-    [SerializeField] private GameObject _camera;
     [SerializeField] private GameObject _leftWrist;
     [SerializeField] private GameObject _rightWrist;
     [SerializeField] private GameObject _eventSystem;
 
-    private TrackedPoseDriver _cameraTPD;
     private TrackedPoseDriver _leftWristTPD;
     private TrackedPoseDriver _rightWristTPD;
 
@@ -73,8 +72,6 @@ public class PlayerSwitchInputMode : MonoBehaviour
         _rightControllerInputActionManager = _rightWrist.GetComponent<ControllerInputActionManager>();
         _leftXRInteractionGroup = _leftWrist.GetComponent<XRInteractionGroup>();
         _rightXRInteractionGroup = _rightWrist.GetComponent<XRInteractionGroup>();
-
-        _cameraTPD = _camera.GetComponent<TrackedPoseDriver>();
         _leftWristTPD = _leftWrist.GetComponent<TrackedPoseDriver>();
         _rightWristTPD = _rightWrist.GetComponent<TrackedPoseDriver>();
 
@@ -135,7 +132,7 @@ public class PlayerSwitchInputMode : MonoBehaviour
         _XRUIInputModule.enabled = _VRActive;
         _XROrigin.enabled = _VRActive;
         _XRInputModalityManager.enabled = _VRActive;
-        _XRInputModalityManager.enabled = _VRActive;
+        _XRInputActionMananger.enabled = _VRActive;
         _XRInteractionManager.enabled = _VRActive;
         _teleportStablizedOrigin.enabled = _VRActive;
 
@@ -161,8 +158,6 @@ public class PlayerSwitchInputMode : MonoBehaviour
             _rightWrist.transform.localPosition = Vector3.zero;
             _leftWrist.transform.localRotation = Quaternion.identity;
             _rightWrist.transform.localRotation = Quaternion.identity;
-            // _playerPrefab.transform.localPosition = Vector3.zero;
-            // _playerPrefab.transform.localRotation = Quaternion.identity;
         }
         else
         {
