@@ -40,6 +40,7 @@ public class PlayerSwitchInputMode : MonoBehaviour
     private XRInteractionGroup _rightXRInteractionGroup;
 
     [Header("Universal GameObjects:")]
+    [SerializeField] private Transform _mainCamera;
     [SerializeField] private GameObject _leftWrist;
     [SerializeField] private GameObject _rightWrist;
     [SerializeField] private GameObject _eventSystem;
@@ -151,6 +152,8 @@ public class PlayerSwitchInputMode : MonoBehaviour
 
         if (_VRActive)
         {
+            _mainCamera.localPosition = Vector3.zero;
+
             _leftWrist.transform.SetParent(_cameraOffset.transform);
             _rightWrist.transform.SetParent(_cameraOffset.transform);
 
@@ -161,6 +164,8 @@ public class PlayerSwitchInputMode : MonoBehaviour
         }
         else
         {
+            _mainCamera.localPosition = Vector3.up * 1.65f;
+
             _leftWrist.transform.SetParent(_playerArmature.transform);
             _rightWrist.transform.SetParent(_playerArmature.transform);
 
