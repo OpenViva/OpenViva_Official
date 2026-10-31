@@ -99,7 +99,7 @@ public class PlayerSwitchInputMode : MonoBehaviour
         }
 
         // Editor intervention. Default for _VRActive should be false
-        if (_VRActive) { SwitchInputMode(true); }
+        SwitchInputMode(_VRActive);
     }
 
     // This method will be replaced by one below once this script is attached to UI
