@@ -245,6 +245,26 @@
                     "interactions": "",
                     "initialStateCheck": false,
                     "priority": 0
+                },
+                {
+                    "name": "VRLeftThumbstickTouched",
+                    "type": "Button",
+                    "id": "9441eb67-60f2-4c61-9b1c-15a5ca73f417",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "VRRightThumbstickTouched",
+                    "type": "Button",
+                    "id": "7c384fe8-72ed-47e9-973f-e5d6f599de0f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
                 }
             ],
             "bindings": [
@@ -784,6 +804,28 @@
                     "processors": "",
                     "groups": ";XR",
                     "action": "VRRightDrop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7de4a8be-67ca-4565-842c-0f4ade9dacd2",
+                    "path": "<XRController>{LeftHand}/thumbstickTouched",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "VRLeftThumbstickTouched",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9b9a4b13-6ab1-4df7-bf17-dbfb0b2ff780",
+                    "path": "<XRController>{RightHand}/thumbstickTouched",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "VRRightThumbstickTouched",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

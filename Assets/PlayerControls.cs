@@ -331,6 +331,26 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""initialStateCheck"": false,
                     ""priority"": 0
+                },
+                {
+                    ""name"": ""VRLeftThumbstickTouched"",
+                    ""type"": ""Button"",
+                    ""id"": ""9441eb67-60f2-4c61-9b1c-15a5ca73f417"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
+                },
+                {
+                    ""name"": ""VRRightThumbstickTouched"",
+                    ""type"": ""Button"",
+                    ""id"": ""7c384fe8-72ed-47e9-973f-e5d6f599de0f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
                 }
             ],
             ""bindings"": [
@@ -872,6 +892,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""VRRightDrop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7de4a8be-67ca-4565-842c-0f4ade9dacd2"",
+                    ""path"": ""<XRController>{LeftHand}/thumbstickTouched"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""VRLeftThumbstickTouched"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9b9a4b13-6ab1-4df7-bf17-dbfb0b2ff780"",
+                    ""path"": ""<XRController>{RightHand}/thumbstickTouched"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""VRRightThumbstickTouched"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -954,6 +996,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Viva_UniversalInteractHold = m_Viva.FindAction("UniversalInteractHold", throwIfNotFound: true);
         m_Viva_Cancel = m_Viva.FindAction("Cancel", throwIfNotFound: true);
         m_Viva_ExpressionFollow = m_Viva.FindAction("ExpressionFollow", throwIfNotFound: true);
+        m_Viva_VRLeftThumbstickTouched = m_Viva.FindAction("VRLeftThumbstickTouched", throwIfNotFound: true);
+        m_Viva_VRRightThumbstickTouched = m_Viva.FindAction("VRRightThumbstickTouched", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -1058,6 +1102,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Viva_UniversalInteractHold;
     private readonly InputAction m_Viva_Cancel;
     private readonly InputAction m_Viva_ExpressionFollow;
+    private readonly InputAction m_Viva_VRLeftThumbstickTouched;
+    private readonly InputAction m_Viva_VRRightThumbstickTouched;
     /// <summary>
     /// Provides access to input actions defined in input action map "Viva".
     /// </summary>
@@ -1166,6 +1212,14 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @ExpressionFollow => m_Wrapper.m_Viva_ExpressionFollow;
         /// <summary>
+        /// Provides access to the underlying input action "Viva/VRLeftThumbstickTouched".
+        /// </summary>
+        public InputAction @VRLeftThumbstickTouched => m_Wrapper.m_Viva_VRLeftThumbstickTouched;
+        /// <summary>
+        /// Provides access to the underlying input action "Viva/VRRightThumbstickTouched".
+        /// </summary>
+        public InputAction @VRRightThumbstickTouched => m_Wrapper.m_Viva_VRRightThumbstickTouched;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Viva; }
@@ -1263,6 +1317,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @ExpressionFollow.started += instance.OnExpressionFollow;
             @ExpressionFollow.performed += instance.OnExpressionFollow;
             @ExpressionFollow.canceled += instance.OnExpressionFollow;
+            @VRLeftThumbstickTouched.started += instance.OnVRLeftThumbstickTouched;
+            @VRLeftThumbstickTouched.performed += instance.OnVRLeftThumbstickTouched;
+            @VRLeftThumbstickTouched.canceled += instance.OnVRLeftThumbstickTouched;
+            @VRRightThumbstickTouched.started += instance.OnVRRightThumbstickTouched;
+            @VRRightThumbstickTouched.performed += instance.OnVRRightThumbstickTouched;
+            @VRRightThumbstickTouched.canceled += instance.OnVRRightThumbstickTouched;
         }
 
         /// <summary>
@@ -1346,6 +1406,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @ExpressionFollow.started -= instance.OnExpressionFollow;
             @ExpressionFollow.performed -= instance.OnExpressionFollow;
             @ExpressionFollow.canceled -= instance.OnExpressionFollow;
+            @VRLeftThumbstickTouched.started -= instance.OnVRLeftThumbstickTouched;
+            @VRLeftThumbstickTouched.performed -= instance.OnVRLeftThumbstickTouched;
+            @VRLeftThumbstickTouched.canceled -= instance.OnVRLeftThumbstickTouched;
+            @VRRightThumbstickTouched.started -= instance.OnVRRightThumbstickTouched;
+            @VRRightThumbstickTouched.performed -= instance.OnVRRightThumbstickTouched;
+            @VRRightThumbstickTouched.canceled -= instance.OnVRRightThumbstickTouched;
         }
 
         /// <summary>
@@ -1606,5 +1672,19 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnExpressionFollow(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "VRLeftThumbstickTouched" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnVRLeftThumbstickTouched(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "VRRightThumbstickTouched" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnVRRightThumbstickTouched(InputAction.CallbackContext context);
     }
 }
