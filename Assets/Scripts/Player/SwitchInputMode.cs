@@ -11,7 +11,7 @@ using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 using UnityEngine.XR.Interaction.Toolkit.UI;
 using UnityEngine.XR.Management;
 
-public class PlayerSwitchInputMode : MonoBehaviour
+public class SwitchInputMode : MonoBehaviour
 {
     [SerializeField] private Player _player;
     [SerializeField] private GameObject _cameraOffset;
@@ -86,7 +86,7 @@ public class PlayerSwitchInputMode : MonoBehaviour
     {
         if (_player.Controls != null) 
         { 
-            _player.Controls.Viva.ChangeInputType.performed += SwitchInputMode;
+            _player.Controls.Viva.ChangeInputType.performed += ChangeInputMode;
             _assignmentFailed = false;
         }
     }
@@ -95,29 +95,29 @@ public class PlayerSwitchInputMode : MonoBehaviour
     {
         if (_assignmentFailed)
         {
-            _player.Controls.Viva.ChangeInputType.performed += SwitchInputMode;
+            _player.Controls.Viva.ChangeInputType.performed += ChangeInputMode;
             _assignmentFailed = false;
         }
 
         // Editor intervention. Default for _VRActive should be false
-        SwitchInputMode(_VRActive);
+        ChangeInputMode(_VRActive);
     }
 
     // This method will be replaced by one below once this script is attached to UI
-    private void SwitchInputMode(InputAction.CallbackContext context)
+    private void ChangeInputMode(InputAction.CallbackContext context)
     {
         _VRActive = !_VRActive;
         PerformSwitch();
     }
 
-    public void SwitchInputMode()
+    public void ChangeInputMode()
     {
         _VRActive = !_VRActive;
         PerformSwitch();
     }
 
     // Extra overload method in case it's needed.
-    private void SwitchInputMode(bool toVRActive)
+    private void ChangeInputMode(bool toVRActive)
     {
         _VRActive = toVRActive;
         PerformSwitch();
@@ -190,7 +190,7 @@ public class PlayerSwitchInputMode : MonoBehaviour
 
     private void OnDisable()
     {
-        _player.Controls.Viva.ChangeInputType.performed -= SwitchInputMode;
+        _player.Controls.Viva.ChangeInputType.performed -= ChangeInputMode;
     }
 
     private IEnumerator StartXRRoutine()
