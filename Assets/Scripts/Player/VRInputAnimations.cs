@@ -55,8 +55,8 @@ public class VRInputAnimations : MonoBehaviour
         else
         {
             _player.Controls.Viva.VRLeftThumbstickTouched.started += context => _leftAnimator.SetBool(THUMBSTICK_TOUCHED, true);
-            _player.Controls.Viva.VRLeftThumbstickTouched.started += context => _rightAnimator.SetBool(THUMBSTICK_TOUCHED, true);
-            _player.Controls.Viva.VRRightThumbstickTouched.canceled += context => _leftAnimator.SetBool(THUMBSTICK_TOUCHED, false);
+            _player.Controls.Viva.VRRightThumbstickTouched.started += context => _rightAnimator.SetBool(THUMBSTICK_TOUCHED, true);
+            _player.Controls.Viva.VRLeftThumbstickTouched.canceled += context => _leftAnimator.SetBool(THUMBSTICK_TOUCHED, false);
             _player.Controls.Viva.VRRightThumbstickTouched.canceled += context => _rightAnimator.SetBool(THUMBSTICK_TOUCHED, false);
         }
 
