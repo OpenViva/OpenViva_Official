@@ -124,6 +124,7 @@ namespace Viva.CharacterFramework
             Neutral,
             Friendly,
             Trusted,
+            Companion,
         }
 
         // Cycle through these when in negative affinity
