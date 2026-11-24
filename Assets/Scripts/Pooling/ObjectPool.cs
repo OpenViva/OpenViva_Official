@@ -13,11 +13,7 @@ public class ObjectPool : MonoBehaviour
     [Header("Pools Prefabs")]
     // [SerializeField] private GameObject examplePool;
     // Add more pool types here (and initialize on Start below)
-    [SerializeField] private GameObject cantaloupePool;
     [SerializeField] private GameObject wheatPool;
-    [SerializeField] private GameObject blueberryPool;
-    [SerializeField] private GameObject peachPool;
-    [SerializeField] private GameObject strawberryPool;
 
     private Dictionary<GameObject, Queue<GameObject>> poolDictionary = new();
 
@@ -27,12 +23,7 @@ public class ObjectPool : MonoBehaviour
 
         // Add more pools to initialize here when needed...
 
-        InitializeNewPool(cantaloupePool);
         InitializeNewPool(wheatPool);
-        InitializeNewPool(blueberryPool);
-        InitializeNewPool(peachPool);
-        InitializeNewPool(strawberryPool);
-
     }
 
     private void Awake()
