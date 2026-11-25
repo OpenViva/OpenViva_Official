@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using static Viva.CharacterFramework.CharacterEnums;
 
 namespace Viva.CharacterFramework
 {
