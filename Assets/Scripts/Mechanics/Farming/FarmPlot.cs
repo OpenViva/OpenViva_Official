@@ -5,12 +5,21 @@ public class FarmPlot : MonoBehaviour
 {
     [SerializeField][Min(0.01f)] private float _plotArea = 7.5f;
     [SerializeField][Min(0.01f)] private float _cropSpacing = 1.5f;
+    [SerializeField] private string _name = "Small Plot";
+
+    public string Name { private set; get; }
+    public int CropAmount { private set; get; } = 0;
+    public bool IsOccupied { private set; get; } = false;
+    public float TimeLeft { private set; get; } = 0;
+    public float Irrigation { private set; get; } = 0;
+    public float Condition { private set; get; } = 100;
 
     private List<Vector3> _cropPositions;
-    private int _cropAmount;
+    private PlotUIPanel _plotUIPanel;
 
     private void Awake()
     {
+        Name = _name;
         GenerateGrid();
     }
 
@@ -18,7 +27,7 @@ public class FarmPlot : MonoBehaviour
     {
         if (_plotArea <= 0 || _cropSpacing <= 0)
         {
-            Debug.LogWarning("What are you trying to achieve?" +
+            Debug.LogError("What are you trying to achieve?" +
                 "\nSet Plot Area and Crop Spacing to positive values in the editor, then re-enter play mode." +
                 "\nThis plot has been destroyed.");
             Destroy(this);
@@ -26,28 +35,31 @@ public class FarmPlot : MonoBehaviour
         }
 
         _cropPositions = new();
-        _cropAmount = 0;
+        CropAmount = 0;
         Vector3 current = new(-_cropSpacing, -_cropSpacing);
 
         while (current.x > -_plotArea)
         {
             while (current.y > -_plotArea)
             {
-                if (_cropAmount > MAX_CROPS)
+                if (CropAmount > MAX_CROPS)
                 {
                     Debug.LogWarning("The amount of crops has exceeded a safe amount." +
                         "\nDecrease Plot Area or increase Crop Spacing." +
                         "\nAborting.");
+                    Gizmos.color = Color.red;
                     return;
                 }
                 _cropPositions.Add(current);
-                _cropAmount++;
+                CropAmount++;
                 current.y -= _cropSpacing;
             }
             current.y = -_cropSpacing;
             current.x -= _cropSpacing;
         }
     }
+
+    public void AssignUIPanel(PlotUIPanel panel) { _plotUIPanel = panel; }
 
     #region Development
     private float _gizmoPlotArea;
@@ -73,7 +85,7 @@ public class FarmPlot : MonoBehaviour
         Gizmos_DrawArea();
         GenerateGrid();
 
-        if (_cropAmount > MAX_GIZMO_DRAWS)
+        if (CropAmount > MAX_GIZMO_DRAWS)
         {
             Debug.LogWarning("You are attempting to draw too many gizmos in one frame." +
                 "\nYou're going to crash your editor at this rate." +
