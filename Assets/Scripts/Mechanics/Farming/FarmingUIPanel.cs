@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlotUIPanel : MonoBehaviour
+public class FarmingUIPanel : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _plotNumber;
     [SerializeField] private TextMeshProUGUI _plotName;
